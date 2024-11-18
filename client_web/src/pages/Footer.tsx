@@ -18,7 +18,7 @@ const AppFooter: React.FC = () => {
                 color: theme === 'dark' ? 'white' : 'black',
             }}
         >
-            ©2024 ASM. All Rights Reserved.
+        ©2024 ASM. All Rights Reserved.
         </Footer>
     );
 };

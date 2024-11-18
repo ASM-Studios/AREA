@@ -9,7 +9,7 @@ interface LayoutProps {
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
     const location = useLocation();
-    const headerExcludedPaths: (string | RegExp)[] = ['/login', '/register'];
+    const headerExcludedPaths: (string | RegExp)[] = ['/', '/login', '/register'];
     const footerExcludedPaths: (string | RegExp)[] = ['/login', '/register'];
 
     const isHeaderExcluded = headerExcludedPaths.some(path =>
