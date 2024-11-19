@@ -1,14 +1,34 @@
 import { Form, Input, Button, Card } from 'antd';
 import { Link } from 'react-router-dom';
+import GoogleAuth from '../../Components/auth/GoogleAuth';
+import MicrosoftAuth from '../../Components/auth/MicrosoftAuth';
 
 const Login = () => {
-    const onFinish = (values: any) => {
+    const onFinish = (values: { email: string, password: string }) => {
         console.log('Success:', values);
-        // Call login API function here
+        // TODO: Call login API function here
     };
 
-    const onFinishFailed = (errorInfo: any) => {
+    const onFinishFailed = (errorInfo: unknown) => {
         console.log('Failed:', errorInfo);
+    };
+
+    const handleGoogleSuccess = (credentialResponse: unknown) => {
+        console.log('Google Login Success:', credentialResponse);
+        // Call your API to verify the Google token and log in the user
+    };
+
+    const handleGoogleError = () => {
+        console.log('Google Login Failed');
+    };
+
+    const handleMicrosoftSuccess = (response: unknown) => {
+        console.log('Microsoft Login Success:', response);
+        // Call your API to verify the Microsoft token and log in the user
+    };
+
+    const handleMicrosoftError = (error: unknown) => {
+        console.error('Microsoft Login Failed:', error);
     };
 
     return (
@@ -20,10 +40,13 @@ const Login = () => {
                 onFinishFailed={onFinishFailed}
             >
                 <Form.Item
-                    name="username"
-                    rules={[{ required: true, message: 'Please input your username!' }]}
+                    name="email"
+                    rules={[
+                        { required: true, message: 'Please input your email!' },
+                        { type: 'email', message: 'Please input your valid email!' }
+                    ]}
                 >
-                    <Input placeholder="Username" />
+                    <Input placeholder="Email" />
                 </Form.Item>
 
                 <Form.Item
@@ -45,6 +68,19 @@ const Login = () => {
                         Login
                     </Button>
                 </Form.Item>
+
+                <GoogleAuth 
+                    onSuccess={handleGoogleSuccess}
+                    onError={handleGoogleError}
+                    buttonText="signin_with"
+                />
+
+                <MicrosoftAuth
+                    onSuccess={handleMicrosoftSuccess}
+                    onError={handleMicrosoftError}
+                    buttonText="Sign in with Microsoft"
+                />
+
                 <Form.Item>
                     <Link to="/register">
                         <Button type="link" style={{ padding: 0 }}>
