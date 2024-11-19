@@ -43,6 +43,14 @@ func getServiceList() []service {
 	}
 }
 
+// About godoc
+// @Summary About
+// @Description about
+// @Tags about
+// @Accept  json
+// @Produce  json
+// @Success 200 {msg} string
+// @Router /about.json [get]
 func About(c *gin.Context) {
 	var msg struct {
 		Client struct {
