@@ -16,6 +16,6 @@ func AuthMiddleware() gin.HandlerFunc {
 }
 
 func isAuthenticated(c *gin.Context) bool {
-	// Do some JWT token authentication;
+	// TODO: Implement authentication
 	return true
 }
