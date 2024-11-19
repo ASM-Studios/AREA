@@ -1,6 +1,7 @@
 package routers
 
 import (
+	_ "AREA/docs"
 	"AREA/internal/config"
 	"AREA/internal/controllers"
 	"AREA/internal/middleware"
