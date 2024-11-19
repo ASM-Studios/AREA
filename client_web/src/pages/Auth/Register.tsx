@@ -2,12 +2,12 @@ import { Form, Input, Button, Card } from 'antd';
 import { Link } from 'react-router-dom';
 
 const Register = () => {
-    const onFinish = (values: any) => {
+    const onFinish = (values: unknown) => {
         console.log('Success:', values);
         // Call register API function here
     };
 
-    const onFinishFailed = (errorInfo: any) => {
+    const onFinishFailed = (errorInfo: unknown) => {
         console.log('Failed:', errorInfo);
     };
 
