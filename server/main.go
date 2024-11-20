@@ -3,6 +3,7 @@ package main
 import (
 	"AREA/internal/config"
 	"AREA/internal/routers"
+	"AREA/pkg/db"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"log"
@@ -26,6 +27,7 @@ import (
 func main() {
 	config.LoadConfig()
 	gin.SetMode(config.AppConfig.GinMode)
+	db.InitMongoDb()
 	router := routers.SetupRouter()
 	port := strconv.Itoa(config.AppConfig.Port)
 	log.Printf("Starting %s on port %s in %s mode", config.AppConfig.AppName, port, config.AppConfig.GinMode)

@@ -29,7 +29,7 @@ func SetupRouter() *gin.Engine {
 	protected := router.Group("/")
 	protected.Use(middleware.AuthMiddleware())
 	{
-		//protected.GET("/users", controllers.GetUsers)
+		protected.GET("/users", controllers.GetUsers)
 	}
 	return router
 }

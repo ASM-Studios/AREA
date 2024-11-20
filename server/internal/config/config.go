@@ -16,6 +16,11 @@ type Config struct {
 	CorsOrigins []string `mapstructure:"cors_origins"`
 	SecretKey   string   `mapstructure:"secret_key"`
 	Swagger     bool     `mapstructure:"swagger"`
+	DB          struct {
+		DbUrl        string `mapstructure:"db_url"`
+		DbNAME       string `mapstructure:"db_name"`
+		DbCollection string `mapstructure:"db_collection"`
+	} `mapstructure:"db"`
 }
 
 func LoadConfig() {

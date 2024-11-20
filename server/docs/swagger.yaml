@@ -24,7 +24,7 @@ paths:
         "200":
           description: OK
           schema:
-            type: string
+            type: msg
       summary: About
       tags:
       - about
@@ -111,4 +111,19 @@ paths:
       summary: Register a user
       tags:
       - auth
+  /users:
+    get:
+      consumes:
+      - application/json
+      description: GetUsers
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: Object
+      summary: GetUsers
+      tags:
+      - about
 swagger: "2.0"

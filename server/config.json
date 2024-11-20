@@ -5,6 +5,11 @@
   "secret_key": "your-secure-secret-key",
   "cors": true,
   "swagger": true,
+  "db" : {
+    "db_url" : "put-url-here",
+    "db_name": "area-db",
+    "db_collection": "user-auth"
+  },
   "cors_origins": [
     "http://localhost:3000",
     "http://example.com"
