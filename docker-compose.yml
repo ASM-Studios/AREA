@@ -1,0 +1,32 @@
+services:
+  # server:
+  #   build: ./server
+  #   ports:
+  #     - "8080:8080"
+  #   networks:
+  #     - app_network
+
+  # client_mobile:
+  #   build: ./client_mobile
+  #   volumes:
+  #     - client_build:/app/build
+  #   networks:
+  #     - app_network
+
+  client_web:
+    build: ./client_web
+    ports:
+      - "8081:8081"
+    volumes:
+      - client_build:/usr/share/nginx/html/mobile_builds
+    # depends_on:
+    #   - client_mobile
+    #   - server
+    networks:
+      - app_network
+
+volumes:
+  client_build:
+
+networks:
+  app_network:
