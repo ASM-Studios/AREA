@@ -7,6 +7,7 @@ import Layout from './Layout';
 import Login from './pages/Auth/Login.tsx';
 import Register from './pages/Auth/Register.tsx';
 
+import LinkedinCallback from "./pages/Auth/LinkedinCallback.tsx";
 import SpotifyCallback from './pages/Auth/SpotifyCallback.tsx';
 import MicrosoftCallback from './pages/Auth/MicrosoftCallback.tsx';
 
@@ -21,9 +22,10 @@ const App = () => {
                         <Route path="/" element={<Home />} />
                         <Route path="/login" element={<Login />} />
                         <Route path="/register" element={<Register />} />
+                        <Route path="/dashboard" element={<Dashboard />} />
                         <Route path="/auth/spotify/callback" element={<SpotifyCallback />} />
                         <Route path="/auth/microsoft/callback" element={<MicrosoftCallback />} />
-                        <Route path="/dashboard" element={<Dashboard />} />
+                        <Route path="/auth/linkedin/callback" element={<LinkedinCallback />} />
                         <Route path="*" element={<NotFound />} />
                     </Routes>
                 </Layout>

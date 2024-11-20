@@ -1,8 +1,9 @@
-import { Form, Input, Button, Card } from 'antd';
+import { Form, Input, Button, Card, Divider } from 'antd';
 import { Link } from 'react-router-dom';
-import GoogleAuth from '../../Components/auth/GoogleAuth';
-import MicrosoftAuth from '../../Components/auth/MicrosoftAuth';
-import SpotifyAuth from "../../Components/auth/SpotifyAuth.tsx";
+import GoogleAuth from '../../components/auth/GoogleAuth';
+import MicrosoftAuth from '../../components/auth/MicrosoftAuth';
+import LinkedinAuth from "../../components/auth/LinkedinAuth.tsx";
+import SpotifyAuth from "../../components/auth/SpotifyAuth.tsx";
 
 const Register = () => {
     const onFinish = (values: unknown) => {
@@ -30,6 +31,15 @@ const Register = () => {
 
     const handleMicrosoftError = (error: unknown) => {
         console.error('Microsoft Register Failed:', error);
+    };
+
+    const handleLinkedinSuccess = (response: unknown) => {
+        console.log('LinkedIn Register Success:', response);
+        // Call your API to verify the LinkedIn token and register the user
+    };
+
+    const handleLinkedinError = (error: unknown) => {
+        console.error('LinkedIn Register Failed:', error);
     };
 
     return (
@@ -93,6 +103,8 @@ const Register = () => {
                     </Button>
                 </Form.Item>
 
+                <Divider>Or</Divider>
+
                 <GoogleAuth
                     onSuccess={handleGoogleSuccess}
                     onError={handleGoogleError}
@@ -103,6 +115,12 @@ const Register = () => {
                     onSuccess={handleMicrosoftSuccess}
                     onError={handleMicrosoftError}
                     buttonText="Sign up with Microsoft"
+                />
+
+                <LinkedinAuth
+                    onSuccess={handleLinkedinSuccess}
+                    onError={handleLinkedinError}
+                    buttonText="Sign up with LinkedIn"
                 />
 
                 <SpotifyAuth

@@ -26,9 +26,8 @@ const MicrosoftCallback = () => {
                     // TODO: Send the token to your backend
 
                     localStorage.setItem('microsoft_access_token', response.accessToken);
-                    // Only navigate to dashboard if we reach this point successfully
 
-                    navigate('/');
+                    // navigate('/dashboard'); //TODO: The navigate function is to be put in the onSuccess function
                 }
             } catch (error) {
                 console.error('Microsoft authentication error:', error);
