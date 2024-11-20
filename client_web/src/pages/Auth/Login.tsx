@@ -2,6 +2,7 @@ import { Form, Input, Button, Card } from 'antd';
 import { Link } from 'react-router-dom';
 import GoogleAuth from '../../Components/auth/GoogleAuth';
 import MicrosoftAuth from '../../Components/auth/MicrosoftAuth';
+import SpotifyAuth from '../../Components/auth/SpotifyAuth.tsx';
 
 const Login = () => {
     const onFinish = (values: { email: string, password: string }) => {
@@ -79,6 +80,10 @@ const Login = () => {
                     onSuccess={handleMicrosoftSuccess}
                     onError={handleMicrosoftError}
                     buttonText="Sign in with Microsoft"
+                />
+
+                <SpotifyAuth
+                    buttonText="Sign in with Spotify"
                 />
 
                 <Form.Item>

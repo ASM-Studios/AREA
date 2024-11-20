@@ -1,6 +1,7 @@
 import { Form, Button, Divider } from 'antd';
 import { PublicClientApplication } from '@azure/msal-browser';
 import { useEffect, useState } from 'react';
+import { uri } from '../../uri.ts';
 
 interface MicrosoftAuthProps {
     onSuccess: (response: unknown) => void;
@@ -14,11 +15,9 @@ const MicrosoftAuth = ({ onSuccess, onError, buttonText }: MicrosoftAuthProps) =
     useEffect(() => {
         const msalConfig = {
             auth: {
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-expect-error
-                clientId: import.meta.env.VITE_MICROSOFT_CLIENT_ID as string,
+                clientId: uri.microsoft.auth.clientId,
                 authority: "https://login.microsoftonline.com/common",
-                redirectUri: "https://localhost:" + window.location.port
+                redirectUri: uri.microsoft.auth.redirectUri
             }
         };
 
@@ -42,9 +41,7 @@ const MicrosoftAuth = ({ onSuccess, onError, buttonText }: MicrosoftAuthProps) =
         }
     };
 
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-expect-error
-    if (!import.meta.env.VITE_MICROSOFT_CLIENT_ID || !msalInstance) {
+    if (!uri.microsoft.auth.clientId || !msalInstance) {
         return null;
     }
 

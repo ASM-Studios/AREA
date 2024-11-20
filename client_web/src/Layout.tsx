@@ -9,8 +9,8 @@ interface LayoutProps {
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
     const location = useLocation();
-    const headerExcludedPaths: (string | RegExp)[] = ['/', '/login', '/register'];
-    const footerExcludedPaths: (string | RegExp)[] = ['/login', '/register'];
+    const headerExcludedPaths: (string | RegExp)[] = [/.*/, '/', '/login', '/register', /^\/auth\/.*\/callback$/];
+    const footerExcludedPaths: (string | RegExp)[] = [/.*/, '/login', '/register', /^\/auth\/.*\/callback$/];
 
     const isHeaderExcluded = headerExcludedPaths.some(path =>
         typeof path === 'string' ? path === location.pathname : path.test(location.pathname)
@@ -26,7 +26,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             <div style={{ flexGrow: 1 }}>
                 {children}
             </div>
-            {/* {!isFooterExcluded && <AppFooter />} */}
+            {!isFooterExcluded && <AppFooter />}
         </div>
     );
 };
