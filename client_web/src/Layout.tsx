@@ -26,7 +26,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             <div style={{ flexGrow: 1 }}>
                 {children}
             </div>
-            {!isFooterExcluded && <AppFooter />}
+            {/* {!isFooterExcluded && <AppFooter />} */}
         </div>
     );
 };

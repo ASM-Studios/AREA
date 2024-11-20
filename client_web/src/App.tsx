@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { ContextManager } from "./Context/ContextManager.tsx";
 
+import Home from './pages/Home';
 import NotFound from './pages/NotFound';
 import Layout from './Layout';
 import Login from './pages/Auth/Login.tsx';
@@ -12,7 +13,7 @@ const App = () => {
             <Router>
                 <Layout>
                     <Routes>
-                        <Route path="/" element={<><p>Home</p></>} />
+                        <Route path="/" element={<Home />} />
                         <Route path="/login" element={<Login />} />
                         <Route path="/register" element={<Register />} />
                         <Route path="*" element={<NotFound />} />
