@@ -1,4 +1,4 @@
-import { Form, Divider } from 'antd';
+import { Form } from 'antd';
 import { GoogleLogin, GoogleOAuthProvider } from '@react-oauth/google';
 
 interface GoogleAuthProps {
@@ -18,7 +18,6 @@ const GoogleAuth = ({ onSuccess, onError, buttonText = "signin_with"}: GoogleAut
 
     return (
         <GoogleOAuthProvider clientId={googleClientId}>
-            <Divider>Or</Divider>
             <Form.Item style={{ textAlign: 'center' }}>
                 <GoogleLogin
                     onSuccess={onSuccess}

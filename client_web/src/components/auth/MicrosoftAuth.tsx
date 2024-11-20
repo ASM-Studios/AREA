@@ -1,4 +1,4 @@
-import { Form, Button, Divider } from 'antd';
+import { Form, Button } from 'antd';
 import { PublicClientApplication } from '@azure/msal-browser';
 import { useEffect, useState } from 'react';
 import { uri } from '../../uri.ts';
@@ -47,7 +47,6 @@ const MicrosoftAuth = ({ onSuccess, onError, buttonText }: MicrosoftAuthProps) =
 
     return (
         <>
-            <Divider>Or</Divider>
             <Form.Item style={{ textAlign: 'center' }}>
                 <Button
                     onClick={handleMicrosoftAuth}

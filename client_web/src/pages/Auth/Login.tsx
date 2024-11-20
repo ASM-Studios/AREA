@@ -1,8 +1,9 @@
-import { Form, Input, Button, Card } from 'antd';
+import {Form, Input, Button, Card, Divider} from 'antd';
 import { Link } from 'react-router-dom';
-import GoogleAuth from '../../Components/auth/GoogleAuth';
-import MicrosoftAuth from '../../Components/auth/MicrosoftAuth';
-import SpotifyAuth from '../../Components/auth/SpotifyAuth.tsx';
+import GoogleAuth from '../../components/auth/GoogleAuth';
+import MicrosoftAuth from '../../components/auth/MicrosoftAuth';
+import LinkedinAuth from '../../components/auth/LinkedinAuth';
+import SpotifyAuth from '../../components/auth/SpotifyAuth.tsx';
 
 const Login = () => {
     const onFinish = (values: { email: string, password: string }) => {
@@ -30,6 +31,15 @@ const Login = () => {
 
     const handleMicrosoftError = (error: unknown) => {
         console.error('Microsoft Login Failed:', error);
+    };
+
+    const handleLinkedinSuccess = (response: unknown) => {
+        console.log('LinkedIn Login Success:', response);
+        // Handle successful LinkedIn login
+    };
+
+    const handleLinkedinError = (error: unknown) => {
+        console.error('LinkedIn Login Failed:', error);
     };
 
     return (
@@ -70,7 +80,9 @@ const Login = () => {
                     </Button>
                 </Form.Item>
 
-                <GoogleAuth 
+                <Divider>Or</Divider>
+
+                <GoogleAuth
                     onSuccess={handleGoogleSuccess}
                     onError={handleGoogleError}
                     buttonText="signin_with"
@@ -80,6 +92,12 @@ const Login = () => {
                     onSuccess={handleMicrosoftSuccess}
                     onError={handleMicrosoftError}
                     buttonText="Sign in with Microsoft"
+                />
+
+                <LinkedinAuth
+                    onSuccess={handleLinkedinSuccess}
+                    onError={handleLinkedinError}
+                    buttonText="Sign in with LinkedIn"
                 />
 
                 <SpotifyAuth
