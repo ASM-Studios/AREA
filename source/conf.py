@@ -8,8 +8,8 @@ import sphinx_rtd_theme
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = 'AREA'
-copyright = '2024, Maël RABOT, Mathieu COULET, Mathieu BOREL, Charles MADJERIS, Samuel BRUSCHET'
-author = 'Maël RABOT, Mathieu COULET, Mathieu BOREL, Charles MADJERIS, Samuel BRUSCHET'
+copyright = '2024, Maël RABOT, Mathieu COULET, Mathieu BOREL, Charles MADJERI, Samuel BRUSCHET'
+author = 'Maël RABOT, Mathieu COULET, Mathieu BOREL, Charles MADJERI, Samuel BRUSCHET'
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
