@@ -1,0 +1,12 @@
+{
+  "app_name": "AREA",
+  "port": 8080,
+  "gin_mode": "debug",
+  "secret_key": "your-secure-secret-key",
+  "cors": true,
+  "swagger": true,
+  "cors_origins": [
+    "http://localhost:3000",
+    "http://example.com"
+  ]
+}
