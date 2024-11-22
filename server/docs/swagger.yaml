@@ -24,7 +24,7 @@ paths:
         "200":
           description: OK
           schema:
-            type: string
+            type: msg
       summary: About
       tags:
       - about
@@ -83,6 +83,27 @@ paths:
       summary: Ping
       tags:
       - ping
+  /publish/message:
+    post:
+      consumes:
+      - application/json
+      description: publish/Message
+      parameters:
+      - description: Message
+        in: formData
+        name: message
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: Message
+      tags:
+      - publish/Message
   /register:
     post:
       consumes:
