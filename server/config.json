@@ -1,6 +1,6 @@
 {
   "app_name": "AREA",
-  "port": 8080,
+  "port": 8081,
   "gin_mode": "debug",
   "secret_key": "your-secure-secret-key",
   "cors": true,

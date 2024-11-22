@@ -25,6 +25,7 @@ func SetupRouter() *gin.Engine {
 		public.POST("/login", controllers.Login)
 		public.GET("/about.json", controllers.About)
 		public.GET("/ping", controllers.Ping)
+		public.POST("/publish/message", controllers.Message)
 	}
 	protected := router.Group("/")
 	protected.Use(middleware.AuthMiddleware())

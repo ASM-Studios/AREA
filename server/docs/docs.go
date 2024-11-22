@@ -41,7 +41,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "string"
+                            "type": "msg"
                         }
                     }
                 }
@@ -120,6 +120,38 @@ const docTemplate = `{
                     "ping"
                 ],
                 "summary": "Ping",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/publish/message": {
+            "post": {
+                "description": "publish/Message",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "publish/Message"
+                ],
+                "summary": "Message",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Message",
+                        "name": "message",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
