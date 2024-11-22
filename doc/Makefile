@@ -11,6 +11,7 @@ BUILDDIR      = build
 # Put it first so that "make" without argument is like "make help".
 help:
 	@$(SPHINXBUILD) -M help "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
+	@printf "\033[34m  doc\033[0m         to build the HTML documentation and open it in the default web browser\n"
 
 .PHONY: help Makefile
 
@@ -19,5 +20,5 @@ help:
 %: Makefile
 	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 
-run: html
+doc: html
 	xdg-open build/html/index.html

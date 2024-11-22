@@ -26,4 +26,6 @@ To get started with AREA, follow the installation and setup instructions in the 
    :maxdepth: 2
    :caption: Contents:
 
+   index
    contributing
+   Project/index
