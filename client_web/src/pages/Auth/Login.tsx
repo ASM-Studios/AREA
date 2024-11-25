@@ -1,14 +1,45 @@
-import { Form, Input, Button, Card } from 'antd';
+import {Form, Input, Button, Card, Divider} from 'antd';
 import { Link } from 'react-router-dom';
+import GoogleAuth from '../../components/auth/GoogleAuth';
+import MicrosoftAuth from '../../components/auth/MicrosoftAuth';
+import LinkedinAuth from '../../components/auth/LinkedinAuth';
+import SpotifyAuth from '../../components/auth/SpotifyAuth.tsx';
 
 const Login = () => {
-    const onFinish = (values: any) => {
+    const onFinish = (values: { email: string, password: string }) => {
         console.log('Success:', values);
-        // Call login API function here
+        // TODO: Call login API function here
     };
 
-    const onFinishFailed = (errorInfo: any) => {
+    const onFinishFailed = (errorInfo: unknown) => {
         console.log('Failed:', errorInfo);
+    };
+
+    const handleGoogleSuccess = (credentialResponse: unknown) => {
+        console.log('Google Login Success:', credentialResponse);
+        // Call your API to verify the Google token and log in the user
+    };
+
+    const handleGoogleError = () => {
+        console.log('Google Login Failed');
+    };
+
+    const handleMicrosoftSuccess = (response: unknown) => {
+        console.log('Microsoft Login Success:', response);
+        // Call your API to verify the Microsoft token and log in the user
+    };
+
+    const handleMicrosoftError = (error: unknown) => {
+        console.error('Microsoft Login Failed:', error);
+    };
+
+    const handleLinkedinSuccess = (response: unknown) => {
+        console.log('LinkedIn Login Success:', response);
+        // Handle successful LinkedIn login
+    };
+
+    const handleLinkedinError = (error: unknown) => {
+        console.error('LinkedIn Login Failed:', error);
     };
 
     return (
@@ -20,10 +51,13 @@ const Login = () => {
                 onFinishFailed={onFinishFailed}
             >
                 <Form.Item
-                    name="username"
-                    rules={[{ required: true, message: 'Please input your username!' }]}
+                    name="email"
+                    rules={[
+                        { required: true, message: 'Please input your email!' },
+                        { type: 'email', message: 'Please input your valid email!' }
+                    ]}
                 >
-                    <Input placeholder="Username" />
+                    <Input placeholder="Email" />
                 </Form.Item>
 
                 <Form.Item
@@ -45,6 +79,31 @@ const Login = () => {
                         Login
                     </Button>
                 </Form.Item>
+
+                <Divider>Or</Divider>
+
+                <GoogleAuth
+                    onSuccess={handleGoogleSuccess}
+                    onError={handleGoogleError}
+                    buttonText="signin_with"
+                />
+
+                <MicrosoftAuth
+                    onSuccess={handleMicrosoftSuccess}
+                    onError={handleMicrosoftError}
+                    buttonText="Sign in with Microsoft"
+                />
+
+                <LinkedinAuth
+                    onSuccess={handleLinkedinSuccess}
+                    onError={handleLinkedinError}
+                    buttonText="Sign in with LinkedIn"
+                />
+
+                <SpotifyAuth
+                    buttonText="Sign in with Spotify"
+                />
+
                 <Form.Item>
                     <Link to="/register">
                         <Button type="link" style={{ padding: 0 }}>

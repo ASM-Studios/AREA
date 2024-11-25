@@ -1,6 +1,9 @@
 # IDE
 .idea/
 
+# Documentation
+build/
+
 # Logs
 logs
 *.log
