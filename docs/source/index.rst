@@ -20,12 +20,17 @@ Features
 Getting Started
 ---------------
 
-To get started with AREA, follow the installation and setup instructions in the :doc:`installation` section.
+To get started with AREA, follow the installation instructions for the respective components
+
+Table of Contents
+-----------------
 
 .. toctree::
-   :maxdepth: 2
-   :caption: Contents:
+    :maxdepth: 5
 
-   index
-   contributing
-   Project/index
+    index
+    contributing
+    Project/index
+    client_web/index
+    client_mobile/index
+    server/index
