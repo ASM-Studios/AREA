@@ -5,6 +5,7 @@
   "type": "module",
   "main": "electron.js",
   "scripts": {
+    "start": "mkcert -install && mkcert localhost && vite",
     "dev": "mkcert -install && mkcert localhost && vite",
     "production": "vite --mode production",
     "build": "tsc -b && vite build",
