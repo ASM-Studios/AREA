@@ -73,7 +73,9 @@ sphinx and sphinx_rtd_theme can be installed using pip
 
 #### Usage
 
-The documentation is available at [AREA Documentation](). // TODO: Add link
+The documentation is automatically built and deployed to GitHub Pages when a push is made to the `main` branch.
+
+You can consult the documentation online at [AREA Documentation](https://asm-studios.github.io/AREA/).
 
 You can build the documentation locally by running the following command:
 ```sh
