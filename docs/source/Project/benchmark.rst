@@ -112,7 +112,7 @@ Mobile: Flutter
      - Native-specific
 
 **Conclusion**:
-Flutter’s cross-platform capabilities, performance, and comprehensive widget library make it ideal for quickly developing a polished mobile app.
+Flutter’s cross-platform capabilities, performance and comprehensive widget library make it ideal for quickly developing a polished mobile app.
 
 Server: Go
 -----------
