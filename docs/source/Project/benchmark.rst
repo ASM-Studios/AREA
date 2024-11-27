@@ -86,6 +86,8 @@ Mobile: Flutter
 - **Performance**: Near-native performance due to Dart compiling to native machine code.
 - **Customizable UI**: Powerful widgets for designing complex UIs.
 - **Fast Development**: Hot reload and an extensive library of plugins.
+- **Comprehensive Documentation**: Detailed and well-maintained documentation, making it easy to learn and use.
+- **Familiarity**: Already comfortable with the technology, speeding up development and reducing the learning curve.
 
 **Comparisons**:
 
@@ -110,7 +112,7 @@ Mobile: Flutter
      - Native-specific
 
 **Conclusion**:
-Flutter’s cross-platform capabilities and performance make it ideal for quickly developing a polished mobile app.
+Flutter’s cross-platform capabilities, performance and comprehensive widget library make it ideal for quickly developing a polished mobile app.
 
 Server: Go
 -----------
