@@ -70,53 +70,55 @@ class _RegisterPageState extends State<RegisterPage> {
         child: client == null
             ? Container(
                 padding: const EdgeInsets.all(20),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SimpleText(
-                      "Email",
-                      bold: true,
-                    ),
-                    const AreaFormField(label: "Value"),
-                    const SizedBox(height: 50),
-                    const SimpleText("Password", bold: true),
-                    const AreaFormField(label: "Value"),
-                    const SizedBox(height: 15),
-                    Align(
-                      alignment: Alignment.center,
-                      child: AreaButton(
-                        label: "Register",
-                        onPressed: () {},
-                        color: Colors.black,
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SimpleText(
+                        "Email",
+                        bold: true,
                       ),
-                    ),
-                    const SizedBox(height: 30),
-                    Align(
-                      alignment: Alignment.center,
-                      child: SignInButton(
-                        onPressed: () {
-                          authenticateWithSpotifyOld();
-                        },
-                        label: "Sign in with Spotify",
-                        icon: const FaIcon(
-                          size: 34,
-                          FontAwesomeIcons.spotify,
-                          color: Colors.green,
+                      const AreaFormField(label: "Value"),
+                      const SizedBox(height: 50),
+                      const SimpleText("Password", bold: true),
+                      const AreaFormField(label: "Value"),
+                      const SizedBox(height: 15),
+                      Align(
+                        alignment: Alignment.center,
+                        child: AreaButton(
+                          label: "Register",
+                          onPressed: () {},
+                          color: Colors.black,
                         ),
                       ),
-                    ),
-                    const SizedBox(height: 5),
-                    Align(
-                      alignment: Alignment.center,
-                      child: SmallClickableText(
-                        "I already have an account",
-                        onPressed: () {
-                          context.pop();
-                        },
+                      const SizedBox(height: 30),
+                      Align(
+                        alignment: Alignment.center,
+                        child: SignInButton(
+                          onPressed: () {
+                            authenticateWithSpotifyOld();
+                          },
+                          label: "Sign in with Spotify",
+                          icon: const FaIcon(
+                            size: 34,
+                            FontAwesomeIcons.spotify,
+                            color: Colors.green,
+                          ),
+                        ),
                       ),
-                    )
-                  ],
+                      const SizedBox(height: 5),
+                      Align(
+                        alignment: Alignment.center,
+                        child: SmallClickableText(
+                          "I already have an account",
+                          onPressed: () {
+                            context.pop();
+                          },
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               )
             : Text(

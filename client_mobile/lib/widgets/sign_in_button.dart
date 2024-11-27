@@ -20,7 +20,7 @@ class SignInButton extends StatelessWidget {
           shape: WidgetStatePropertyAll(
             RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(6.0),
-              side: BorderSide(
+              side: const BorderSide(
                 color: Color.fromARGB(255, 221, 228,
                     222), // Couleur de la bordure lorsque le champ est actif
                 width: 2.0, // Largeur de la bordure
