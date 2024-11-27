@@ -154,6 +154,46 @@ Server: Go
 **Conclusion**:
 Go’s high performance and concurrency handling make it a better choice for a scalable automation service backend.
 
+ORM Server: Gorm
+-----------------
+**Justification**:
+
+.. list-table::
+
+- **User-friendly**: Easy to learn and use
+- **Flexibility**: Supports auto migration and complex queries
+- **Large Community**: Extensive resources and support
+
+**Comparison with Alternatives**:
+
+.. list-table::
+    :header-rows: 1
+
+    * - **Pros/Cons**
+      - **Pros**
+      - **Cons**
+    * - GORM
+      - User-friendly
+
+        Flexible
+
+        Large community
+
+      - A bit less performant than some alternatives
+
+    * - EntGo
+      - Strongly typed
+
+        Can handle complex type
+
+      - Long compile times
+
+        Hard learning curve
+
+    * - SQLx
+      - Strongly typed
+      - Raw SQL
+
 Database: MariaDB
 -----------------
 **Justification**:
