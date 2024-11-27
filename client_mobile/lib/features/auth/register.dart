@@ -76,12 +76,15 @@ class _RegisterPageState extends State<RegisterPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const SimpleText(
-                        "Email",
+                        "Username",
                         bold: true,
                       ),
                       const AreaFormField(label: "Value"),
-                      const SizedBox(height: 50),
+                      const SizedBox(height: 25),
                       const SimpleText("Password", bold: true),
+                      const AreaFormField(label: "Value"),
+                      const SizedBox(height: 15),
+                      const SimpleText("Confirm password", bold: true),
                       const AreaFormField(label: "Value"),
                       const SizedBox(height: 15),
                       Align(

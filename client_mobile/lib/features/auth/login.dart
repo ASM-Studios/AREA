@@ -180,7 +180,7 @@ class _LoginPageState extends State<LoginPage> {
                         alignment: Alignment.center,
                         child: SignInButton(
                           onPressed: () {
-                            authenticateWithSpotify();
+                            authenticateWithSpotifyOld();
                           },
                           label: "Sign in with Spotify",
                           icon: const FaIcon(
