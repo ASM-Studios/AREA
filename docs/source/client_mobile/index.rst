@@ -8,7 +8,7 @@ Welcome to the AREA Client Mobile documentation!
 Overview
 --------
 
-The AREA Client Mobile is the mobile application part of the AREA project, built using React Native and TypeScript. It provides a user-friendly interface for setting up and managing automated workflows that integrate various services on mobile devices.
+The AREA Client Mobile is the mobile application part of the AREA project, built using Flutter and Dart. It provides a user-friendly interface for setting up and managing automated workflows that integrate various services on mobile devices.
 
 Key Features
 ------------
