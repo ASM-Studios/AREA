@@ -1,7 +1,12 @@
 import 'dart:io';
+import 'package:client_mobile/widgets/button.dart';
+import 'package:client_mobile/widgets/form_field.dart';
+import 'package:client_mobile/widgets/sign_in_button.dart';
+import 'package:client_mobile/widgets/simple_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_appauth/flutter_appauth.dart';
 import 'package:flutter_web_auth/flutter_web_auth.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:oauth2/oauth2.dart' as oauth2;
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -15,21 +20,19 @@ class SpotifyOAuthApp extends StatelessWidget {
     return MaterialApp(
       title: 'Spotify OAuth2 Example',
       theme: ThemeData(primarySwatch: Colors.green),
-      home: SpotifyAuthScreen(),
+      home: AuthScreen(),
     );
   }
 }
 
-class SpotifyAuthScreen extends StatefulWidget {
+class AuthScreen extends StatefulWidget {
   @override
-  _SpotifyAuthScreenState createState() => _SpotifyAuthScreenState();
+  _AuthScreenState createState() => _AuthScreenState();
 }
 
-class _SpotifyAuthScreenState extends State<SpotifyAuthScreen> {
-
+class _AuthScreenState extends State<AuthScreen> {
   final String callbackUrlScheme = 'my.area.app';
   String get redirectUrlMobile => '$callbackUrlScheme://callback';
-
 
   final String clientId = dotenv.env["VITE_SPOTIFY_CLIENT_ID"] ?? "";
   final appAuth = FlutterAppAuth();
@@ -38,35 +41,30 @@ class _SpotifyAuthScreenState extends State<SpotifyAuthScreen> {
   final Uri authorizationEndpoint =
       Uri.parse('https://accounts.spotify.com/authorize');
   final Uri tokenEndpoint = Uri.parse('https://accounts.spotify.com/api/token');
-  final String redirectUrlWeb =
-      "https://localhost:8081/auth/spotify/callback";
+  final String redirectUrlWeb = "https://localhost:8081/auth/spotify/callback";
   final Uri redirectUri =
       Uri.parse('https://localhost:8081/auth/spotify/callback');
   oauth2.Client? client;
 
+  Future<void> authenticateWithSpotify() async {
+    try {
+      final String spotifyUrl = 'https://accounts.spotify.com/authorize'
+          '&client_id=$clientId'
+          '&redirect_uri=$redirectUrlMobile';
 
-Future<void> authenticateWithSpotify() async {
-  try {
-    final String spotifyUrl = 'https://accounts.spotify.com/authorize'
-    '&client_id=$clientId'
-    '&redirect_uri=$redirectUrlMobile';
-
-    print("Authentification en cours ...");
-    final result = await FlutterWebAuth.authenticate(
+      print("Authentification en cours ...");
+      final result = await FlutterWebAuth.authenticate(
         url: redirectUrlMobile,
         callbackUrlScheme: callbackUrlScheme,
       );
-    
-    print("voici le résultat : ${result}");
 
-
-
-  } catch (e) {
-    print("erreur d'authentification : ${e}");
+      print("voici le résultat : ${result}");
+    } catch (e) {
+      print("erreur d'authentification : ${e}");
+    }
   }
-}
 
-Future<void> authenticateWithSpotifyOld() async {  
+  Future<void> authenticateWithSpotifyOld() async {
     try {
       // print("client id : ${clientId}");
       // AccessTokenResponse? accessToken;
@@ -90,17 +88,14 @@ Future<void> authenticateWithSpotifyOld() async {
       // print("auth code : ${authCode}");
 
       final authorizationTokenRequest = AuthorizationTokenRequest(
-        clientId,
-        redirectUrlMobile,
-        issuer: issuer,
-        clientSecret: clientSecret,
-        scopes: ["openid", "profile", "email", "offline_access"],
-        additionalParameters: {
-          'show_dialog': 'true'
-        }
-      );
+          clientId, redirectUrlMobile,
+          issuer: issuer,
+          clientSecret: clientSecret,
+          scopes: ["openid", "profile", "email", "offline_access"],
+          additionalParameters: {'show_dialog': 'true'});
 
-      final result = await appAuth.authorizeAndExchangeCode(authorizationTokenRequest);
+      final result =
+          await appAuth.authorizeAndExchangeCode(authorizationTokenRequest);
 
       print("--------------------------------");
       print("");
@@ -163,14 +158,48 @@ Future<void> authenticateWithSpotifyOld() async {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Spotify OAuth2')),
       body: Center(
         child: client == null
-            ? ElevatedButton(
-                onPressed: () {
-                  authenticateWithSpotifyOld();
-                },
-                child: Text('Login with Spotify'),
+            ? Container(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SimpleText(
+                      "Email",
+                      bold: true,
+                    ),
+                    const AreaFormField(label: "Value"),
+                    const SizedBox(height: 50),
+                    const SimpleText("Password", bold: true),
+                    const AreaFormField(label: "Value"),
+                    const SizedBox(height: 15),
+                    Align(
+                      alignment: Alignment.center,
+                      child: AreaButton(
+                        label: "Register",
+                        onPressed: () {},
+                        color: Colors.black,
+                      ),
+                    ),
+                    const SizedBox(height: 30),
+                    Align(
+                      alignment: Alignment.center,
+                      child: SignInButton(
+                        onPressed: () {
+                          authenticateWithSpotifyOld();
+                        },
+                        label: "Sign in with Spotify",
+                        icon: const FaIcon(
+                          size: 34,
+                          FontAwesomeIcons.spotify,
+                          color: Colors.green,
+                        ),
+                      ),
+                    )
+                  ],
+                ),
               )
             : Text(
                 'Authenticated! Access token: ${client?.credentials.accessToken}'),
