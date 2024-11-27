@@ -6,7 +6,7 @@ import 'package:client_mobile/widgets/sign_in_button.dart';
 import 'package:client_mobile/widgets/simple_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_appauth/flutter_appauth.dart';
-import 'package:flutter_web_auth/flutter_web_auth.dart';
+// import 'package:flutter_web_auth/flutter_web_auth.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:oauth2/oauth2.dart' as oauth2;
@@ -16,12 +16,12 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 // import 'package:oauth2_client/authorization_response.dart';
 // import 'package:oauth2_client/spotify_oauth2_client.dart';
 
-class LoginPage extends StatefulWidget {
+class RegisterPage extends StatefulWidget {
   @override
-  _LoginPageState createState() => _LoginPageState();
+  _RegisterPageState createState() => _RegisterPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _RegisterPageState extends State<RegisterPage> {
   final String callbackUrlScheme = 'my.area.app';
   String get redirectUrlMobile => '$callbackUrlScheme://callback';
 
@@ -37,47 +37,8 @@ class _LoginPageState extends State<LoginPage> {
       Uri.parse('https://localhost:8081/auth/spotify/callback');
   oauth2.Client? client;
 
-  Future<void> authenticateWithSpotify() async {
-    try {
-      final String spotifyUrl = 'https://accounts.spotify.com/authorize'
-          '&client_id=$clientId'
-          '&redirect_uri=$redirectUrlMobile';
-
-      print("Authentification en cours ...");
-      final result = await FlutterWebAuth.authenticate(
-        url: spotifyUrl,
-        callbackUrlScheme: callbackUrlScheme,
-      );
-
-      print("voici le résultat : ${result}");
-    } catch (e) {
-      print("erreur d'authentification : ${e}");
-    }
-  }
-
   Future<void> authenticateWithSpotifyOld() async {
     try {
-      // print("client id : ${clientId}");
-      // AccessTokenResponse? accessToken;
-      // SpotifyOAuth2Client client = SpotifyOAuth2Client(
-      //     redirectUri: redirectUrlMobile,
-      //     customUriScheme: "my.area.app"
-      //     );
-
-      // var authResp =
-      //     await client.requestAuthorization(clientId: clientId, customParams: {
-      //   // 'show_dialog': 'true'
-      // }, scopes: [
-      //   'user-read-private',
-      //   'user-read-playback-state',
-      //   'user-modify-playback-state',
-      //   'user-read-currently-playing',
-      //   'user-read-email'
-      // ]);
-      // var authCode = authResp.code;
-
-      // print("auth code : ${authCode}");
-
       final authorizationTokenRequest = AuthorizationTokenRequest(
           clientId, redirectUrlMobile,
           issuer: issuer,
@@ -96,51 +57,7 @@ class _LoginPageState extends State<LoginPage> {
       print("");
       print("--------------------------------");
 
-      return;
-      // Start a small HTTP server to capture the callback
-      // final server = await HttpServer.bind(InternetAddress.loopbackIPv4, 8080);
-      // print("Listening on ${server.address}:${server.port}");
-
-      // // Build the OAuth2 flow
-      // final grant = oauth2.AuthorizationCodeGrant(
-      //   clientId,
-      //   authorizationEndpoint,
-      //   tokenEndpoint,
-      //   secret: clientSecret,
-      //   httpClient: http.Client(),
-      // );
-
-      // // Generate the authorization URL
-      // final authorizationUrl = grant.getAuthorizationUrl(redirectUri, scopes: [
-      //   'user-read-email',
-      //   'user-read-private',
-      // ]);
-
-      // // Open the browser for user login
-      // print('Opening browser: $authorizationUrl');
-      // await Process.run('open', [authorizationUrl.toString()]);
-
-      // // Wait for the callback
-      // final request = await server.first;
-
-      // // Validate and close the server
-      // final queryParameters = request.uri.queryParameters;
-      // final code = queryParameters['code'];
-      // final state = queryParameters['state'];
-      // request.response
-      //   ..statusCode = 200
-      //   ..headers.set('Content-Type', ContentType.html.mimeType)
-      //   ..write('You can now close this page.')
-      //   ..close();
-      // await server.close();
-
-      // // Exchange the authorization code for tokens
-      // if (code != null) {
-      //   client = await grant.handleAuthorizationCode(code);
-      //   setState(() {});
-      //   print(
-      //       'Authenticated successfully! Access token: ${client?.credentials.accessToken}');
-      // }
+      return;     
     } catch (e) {
       print('Authentication failed: $e');
     }
@@ -169,7 +86,7 @@ class _LoginPageState extends State<LoginPage> {
                     Align(
                       alignment: Alignment.center,
                       child: AreaButton(
-                        label: "Login",
+                        label: "Register",
                         onPressed: () {},
                         color: Colors.black,
                       ),
@@ -179,7 +96,7 @@ class _LoginPageState extends State<LoginPage> {
                       alignment: Alignment.center,
                       child: SignInButton(
                         onPressed: () {
-                          authenticateWithSpotify();
+                          authenticateWithSpotifyOld();
                         },
                         label: "Sign in with Spotify",
                         icon: const FaIcon(
@@ -193,9 +110,9 @@ class _LoginPageState extends State<LoginPage> {
                     Align(
                       alignment: Alignment.center,
                       child: SmallClickableText(
-                        "I don't have an account",
+                        "I already have an account",
                         onPressed: () {
-                          context.push("/register");
+                          context.pop();
                         },
                       ),
                     )
