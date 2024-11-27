@@ -13,16 +13,25 @@ Below is the detailed analysis of the stack and comparisons with alternatives.
 Web: Vite + React + TypeScript
 ------------------------------
 **Justification**:
+
+.. list-table::
+
 - **React**:
+    .. list-table::
+
   - **Mature Ecosystem**: A well-established library with vast community support, making development fast and reliable.
   - **Declarative UI**: Simplifies the creation of dynamic, interactive user interfaces.
   - **Component Reusability**: Promotes modular and maintainable code.
 
 - **Vite**:
+    .. list-table::
+
   - **Fast Development**: Extremely fast build and hot module replacement (HMR) compared to alternatives like Webpack.
   - **Optimized Builds**: Produces smaller and faster production builds.
 
 - **TypeScript**:
+    .. list-table::
+
   - **Type Safety**: Reduces runtime errors and enhances code maintainability.
   - **Better Tooling**: Superior editor autocompletion and refactoring support.
 
@@ -70,6 +79,9 @@ React, Vite, and TypeScript combine speed, maintainability, and a robust ecosyst
 Mobile: Flutter
 ----------------
 **Justification**:
+
+.. list-table::
+
 - **Single Codebase**: Write once, deploy to Android, iOS, and web.
 - **Performance**: Near-native performance due to Dart compiling to native machine code.
 - **Customizable UI**: Powerful widgets for designing complex UIs.
@@ -103,6 +115,9 @@ Flutter’s cross-platform capabilities and performance make it ideal for quickl
 Server: Go
 -----------
 **Justification**:
+
+.. list-table::
+
 - **Performance**: Compiles to native machine code, offering fast execution and low resource usage.
 - **Scalability**: Excellent concurrency model using goroutines and channels.
 - **Minimalistic**: Clean syntax and reduced dependencies compared to verbose frameworks.
@@ -142,6 +157,9 @@ Go’s high performance and concurrency handling make it a better choice for a s
 Database: MariaDB
 -----------------
 **Justification**:
+
+.. list-table::
+
 - **Relational Structure**: Supports complex queries and ensures data consistency, ideal for user workflows and triggers.
 - **Performance**: Optimized for high transaction rates with multi-threading and memory improvements.
 - **Compatibility**: Drop-in replacement for MySQL with a large community and ecosystem.
@@ -177,6 +195,9 @@ MariaDB balances simplicity, performance, and compatibility, fitting the automat
 Overall Synergy
 ---------------
 The selected tech stack optimizes for:
+
+.. list-table::
+
 - **Performance**: Go and Flutter ensure fast server and mobile app execution.
 - **Scalability**: Go and MariaDB handle high concurrency and transaction rates.
 - **Developer Experience**: React, Vite, and TypeScript streamline web development.
