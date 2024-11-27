@@ -1,0 +1,26 @@
+FROM ghcr.io/cirruslabs/flutter:stable
+
+WORKDIR /app
+
+ARG VITE_PORT
+ARG VITE_ENDPOINT
+ARG VITE_GOOGLE_CLIENT_ID
+ARG VITE_GOOGLE_CLIENT_SECRET
+ARG VITE_MICROSOFT_CLIENT_ID
+ARG VITE_LINKEDIN_CLIENT_ID
+ARG VITE_LINKEDIN_CLIENT_SECRET
+ARG VITE_SPOTIFY_CLIENT_ID
+ARG VITE_SPOTIFY_CLIENT_SECRET
+ARG API_URL
+ARG WEB_CLIENT_URL
+ARG MOBILE_CLIENT_URL
+ARG GITHUB_CLIENT_ID
+ARG GITHUB_CLIENT_SECRET
+
+COPY . .
+
+RUN flutter pub get
+RUN flutter build apk --release
+
+RUN mv build/app/outputs/flutter-apk/app-release.apk build/app/outputs/flutter-apk/client.apk
+RUN chmod -R 755 build/app/outputs/flutter-apk/

@@ -42,5 +42,6 @@ Contents
 
 .. toctree::
    :maxdepth: 2
+   :caption: Project Overview
 
-   benchmark
+   devops/index
