@@ -2,6 +2,8 @@ package main
 
 import (
 	"AREA/internal/config"
+	"AREA/internal/models"
+	"AREA/internal/pkg"
 	"AREA/internal/routers"
 	"fmt"
 	"github.com/gin-gonic/gin"
@@ -25,6 +27,11 @@ import (
 // @BasePath  /
 func main() {
 	config.LoadConfig()
+	db.InitDB()
+	err := db.DB.AutoMigrate(&models.Users{})
+	if err != nil {
+		return
+	}
 	gin.SetMode(config.AppConfig.GinMode)
 	router := routers.SetupRouter()
 	port := strconv.Itoa(config.AppConfig.Port)
