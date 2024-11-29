@@ -1,6 +1,8 @@
 package middleware
 
 import (
+	"AREA/internal/models"
+	db "AREA/internal/pkg"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -16,6 +18,14 @@ func AuthMiddleware() gin.HandlerFunc {
 }
 
 func isAuthenticated(c *gin.Context) bool {
-	// TODO: Implement authentication
+	token := c.GetHeader("Authorization")
+	if token == "" {
+		return false
+	}
+	user := models.User{}
+	db.DB.Where("token = ?", token).First(&user)
+	if user.ID == 0 {
+		return false
+	}
 	return true
 }

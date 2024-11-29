@@ -23,13 +23,13 @@ func SetupRouter() *gin.Engine {
 	{
 		public.POST("/register", controllers.Register)
 		public.POST("/login", controllers.Login)
-		public.GET("/about.json", controllers.About)
 		public.GET("/ping", controllers.Ping)
 		public.POST("/publish/message", controllers.Message)
 	}
 	protected := router.Group("/")
 	protected.Use(middleware.AuthMiddleware())
 	{
+		protected.GET("/about.json", controllers.About)
 		//protected.GET("/users", controllers.GetUsers)
 	}
 	return router

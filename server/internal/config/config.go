@@ -8,6 +8,14 @@ import (
 
 var AppConfig *Config
 
+type DB struct {
+	Host     string `mapstructure:"host"`
+	Port     int    `mapstructure:"port"`
+	Name     string `mapstructure:"name"`
+	User     string `mapstructure:"user"`
+	Password string `mapstructure:"password"`
+}
+
 type Config struct {
 	AppName     string   `mapstructure:"app_name"`
 	Port        int      `mapstructure:"port"`
@@ -16,6 +24,7 @@ type Config struct {
 	CorsOrigins []string `mapstructure:"cors_origins"`
 	SecretKey   string   `mapstructure:"secret_key"`
 	Swagger     bool     `mapstructure:"swagger"`
+	DB          DB       `mapstructure:"db"`
 }
 
 func LoadConfig() {
