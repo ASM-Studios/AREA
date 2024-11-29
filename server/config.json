@@ -3,6 +3,13 @@
   "port": 8081,
   "gin_mode": "debug",
   "cors": true,
+  "db": {
+    "host": "127.0.1",
+    "port": 3306,
+    "name": "area",
+    "user": "root",
+    "password": "root"
+  },
   "swagger": true,
   "cors_origins": [
     "http://localhost:8081",
