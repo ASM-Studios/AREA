@@ -20,8 +20,8 @@ import (
 // @contact.url    http://www.swagger.io/support
 // @contact.email  support@example.com
 
-// @license.name  Apache 2.0
-// @license.url   http://www.apache.org/licenses/LICENSE-2.0.html
+// @license.name  GPL-3.0
+// @license.url   https://www.gnu.org/licenses/gpl-3.0.en.html#license-text
 
 // @host      localhost:8080
 // @BasePath  /

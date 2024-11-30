@@ -1,7 +1,6 @@
 package utils
 
 import (
-	"AREA/internal/config"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -13,7 +12,7 @@ func NewToken(c *gin.Context, email string) string {
 		"email": email,
 		"exp":   time.Now().Add(time.Hour * 1).Unix(),
 	})
-	tokenString, err := token.SignedString([]byte(config.AppConfig.SecretKey))
+	tokenString, err := token.SignedString([]byte(GetEnvVar("SECRET_KEY")))
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to generate token"})
 	}

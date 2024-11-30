@@ -1,19 +1,11 @@
 {
   "app_name": "AREA",
-  "port": 8081,
+  "port": 8080,
   "gin_mode": "debug",
-  "secret_key": "your-secure-secret-key",
   "cors": true,
-  "db": {
-    "host": "127.0.1",
-    "port": 3306,
-    "name": "area",
-    "user": "root",
-    "password": "root"
-  },
   "swagger": true,
   "cors_origins": [
-    "http://localhost:3000",
+    "http://localhost:8081",
     "http://example.com"
   ]
 }
