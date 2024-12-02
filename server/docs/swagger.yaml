@@ -1,0 +1,135 @@
+basePath: /
+host: localhost:8080
+info:
+  contact:
+    email: support@example.com
+    name: API Support
+    url: http://www.swagger.io/support
+  description: API documentation for AREA backend
+  license:
+    name: GPL-3.0
+    url: https://www.gnu.org/licenses/gpl-3.0.en.html#license-text
+  termsOfService: http://swagger.io/terms/
+  title: AREA API
+  version: "1.0"
+paths:
+  /about.json:
+    get:
+      consumes:
+      - application/json
+      description: about
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: msg
+      summary: About
+      tags:
+      - about
+  /login:
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: Authenticate a user and return a JWT token
+      parameters:
+      - description: Email
+        in: formData
+        name: email
+        required: true
+        type: string
+      - description: Password
+        in: formData
+        name: password
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Login a user
+      tags:
+      - auth
+  /ping:
+    get:
+      consumes:
+      - application/json
+      description: ping
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: Ping
+      tags:
+      - ping
+  /publish/message:
+    post:
+      consumes:
+      - application/json
+      description: publish/Message
+      parameters:
+      - description: Message
+        in: formData
+        name: message
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: Message
+      tags:
+      - publish/Message
+  /register:
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: Create a new user account
+      parameters:
+      - description: Email
+        in: formData
+        name: email
+        required: true
+        type: string
+      - description: Password
+        in: formData
+        name: password
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Register a user
+      tags:
+      - auth
+swagger: "2.0"
