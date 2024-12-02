@@ -22,6 +22,14 @@ Getting Started
 
 To get started with the AREA Server, follow the installation and setup instructions in the :doc:`installation` section.
 
+Developer Guide
+---------------
+For more details on developing with the AREA Server, refer to the :doc:`developer` section.
+
+Deployment
+----------
+For information on deploying the AREA Server, refer to the :doc:`deployment` section.
+
 Contents
 --------
 
@@ -29,3 +37,5 @@ Contents
    :maxdepth: 2
 
    installation
+    developer
+    deployment
