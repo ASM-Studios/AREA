@@ -33,7 +33,16 @@ With AREA, you can create automated workflows that integrate various services an
 git clone git@github.com:ASM-Studios/AREA.git
 ```
 
-2. Install NPM packages
+2. Create .env files
+- Run the following command to create private env files
+```sh
+cp .env.example .env
+cp client_web/.env.local.example .env.local
+cp client_mobile/.env.mobile.example .env.mobile
+```
+- Fill the .env, .env.web and .env.mobile files
+
+3. Install NPM packages
 ```sh
 cd AREA/client-web
 npm install
