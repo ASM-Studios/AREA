@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { PublicClientApplication } from '@azure/msal-browser';
-import { uri } from '../../uri';
+import { uri } from '../../../Config/uri.ts';
 
 const MicrosoftCallback = () => {
     const navigate = useNavigate();

@@ -1,7 +1,8 @@
 import { Form, Button } from 'antd';
 import { PublicClientApplication } from '@azure/msal-browser';
 import { useEffect, useState } from 'react';
-import { uri } from '../../uri.ts';
+// @ts-ignore
+import { uri } from '@Config/uri';
 
 interface MicrosoftAuthProps {
     onSuccess: (response: unknown) => void;

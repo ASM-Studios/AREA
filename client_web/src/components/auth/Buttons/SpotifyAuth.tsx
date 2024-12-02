@@ -1,6 +1,7 @@
 import { Form, Button } from 'antd';
 import { FC } from 'react';
-import { uri } from '../../uri.ts';
+// @ts-ignore
+import { uri } from '@Config/uri';
 
 interface SpotifyOAuthProps {
     buttonText: string;
