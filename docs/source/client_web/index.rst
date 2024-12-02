@@ -32,7 +32,8 @@ Contents
 --------
 
 .. toctree::
-   :maxdepth: 2
+    :maxdepth: 2
 
-   installation
-   context
+    installation
+    context
+    workflowCreation

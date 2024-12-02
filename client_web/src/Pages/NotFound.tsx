@@ -1,5 +1,6 @@
-import { Result, Button } from 'antd';
-import { Link } from 'react-router-dom';
+import { Result } from 'antd';
+// @ts-ignore
+import LinkButton from "@/Components/LinkButton";
 import React from 'react';
 
 const NotFound: React.FC = () => {
@@ -9,9 +10,7 @@ const NotFound: React.FC = () => {
             title="404"
             subTitle="Sorry, the page you visited does not exist."
             extra={
-                <Button type="primary">
-                    <Link to="/">Back Home</Link>
-                </Button>
+                <LinkButton text="Back Home" url="/" />
             }
         />
     );

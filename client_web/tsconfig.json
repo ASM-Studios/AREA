@@ -1,5 +1,12 @@
 {
   "compilerOptions": {
+    "baseUrl": "./",
+    "paths": {
+      "@/*": ["src/*"],
+      "@Config/*": ["src/Config/*"]
+    },
+    "skipLibCheck": true,
+    "strict": true,
     "forceConsistentCasingInFileNames": true,
     "module": "commonjs",
     "target": "es2015",
