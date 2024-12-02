@@ -20,6 +20,9 @@ FROM node:latest AS builder
 
 WORKDIR /app
 
+COPY --from=cert-builder /localhost.pem /app/localhost.pem
+COPY --from=cert-builder /localhost-key.pem /app/localhost-key.pem
+
 ARG VITE_PORT
 ARG VITE_ENDPOINT
 ARG VITE_GOOGLE_CLIENT_ID
