@@ -63,8 +63,7 @@ const uri: UriConfig = {
         auth: {
             // @ts-expect-error
             clientId: import.meta.env.VITE_DISCORD_CLIENT_ID as string,
-            // @ts-expect-error
-            clientSecret: import.meta.env.VITE_DISCORD_CLIENT_SECRET as string,
+            clientSecret: "", // Not expected to be provided
             redirectUri: `${window.location.origin}/auth/discord/callback`
         }
     }

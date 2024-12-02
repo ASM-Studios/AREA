@@ -1,9 +1,6 @@
-import { Form, Input, Button, Card, Divider } from 'antd';
+import { Form, Input, Button, Card } from 'antd';
 import { Link } from 'react-router-dom';
-import GoogleAuth from '../../components/auth/GoogleAuth';
-import MicrosoftAuth from '../../components/auth/MicrosoftAuth';
-import LinkedinAuth from "../../components/auth/LinkedinAuth.tsx";
-import SpotifyAuth from "../../components/auth/SpotifyAuth.tsx";
+import OAuthButtons from '../../../components/auth/OAuthButtons.tsx';
 
 const Register = () => {
     const onFinish = (values: unknown) => {
@@ -116,28 +113,14 @@ const Register = () => {
                         </Button>
                     </Form.Item>
 
-                    <Divider>Or</Divider>
-
-                    <GoogleAuth
-                        onSuccess={handleGoogleSuccess}
-                        onError={handleGoogleError}
-                        buttonText="signup_with"
-                    />
-
-                    <MicrosoftAuth
-                        onSuccess={handleMicrosoftSuccess}
-                        onError={handleMicrosoftError}
-                        buttonText="Sign up with Microsoft"
-                    />
-
-                    <LinkedinAuth
-                        onSuccess={handleLinkedinSuccess}
-                        onError={handleLinkedinError}
-                        buttonText="Sign up with LinkedIn"
-                    />
-
-                    <SpotifyAuth
-                        buttonText="Sign in with Spotify"
+                    <OAuthButtons
+                        mode="signup"
+                        onGoogleSuccess={handleGoogleSuccess}
+                        onGoogleError={handleGoogleError}
+                        onMicrosoftSuccess={handleMicrosoftSuccess}
+                        onMicrosoftError={handleMicrosoftError}
+                        onLinkedinSuccess={handleLinkedinSuccess}
+                        onLinkedinError={handleLinkedinError}
                     />
 
                     <Form.Item>

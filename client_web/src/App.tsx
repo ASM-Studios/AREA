@@ -1,17 +1,19 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { ContextManager } from "./Context/ContextManager.tsx";
+import { uri } from './Config/uri.ts';
 
-import Home from './pages/Home';
-import NotFound from './pages/NotFound';
-import Layout from './Layout';
-import Login from './pages/Auth/Login.tsx';
-import Register from './pages/Auth/Register.tsx';
+import Home from './Pages/Home';
+import NotFound from './Pages/NotFound';
+import Layout from './components/Layout/Layout.tsx';
+import Login from './Pages/Auth/Forms/Login.tsx';
+import Register from './Pages/Auth/Forms/Register.tsx';
 
-import LinkedinCallback from "./pages/Auth/LinkedinCallback.tsx";
-import SpotifyCallback from './pages/Auth/SpotifyCallback.tsx';
-import MicrosoftCallback from './pages/Auth/MicrosoftCallback.tsx';
+import LinkedinCallback from "./Pages/Auth/Callback/LinkedinCallback.tsx";
+import SpotifyCallback from './Pages/Auth/Callback/SpotifyCallback.tsx';
+import MicrosoftCallback from './Pages/Auth/Callback/MicrosoftCallback.tsx';
+import DiscordCallback from './Pages/Auth/Callback/DiscordCallback.tsx';
 
-import Dashboard from './pages/Dashboard/Dashboard.tsx';
+import Dashboard from './Pages/Dashboard/Dashboard.tsx';
 
 const App = () => {
     return (
@@ -23,9 +25,10 @@ const App = () => {
                         <Route path="/login" element={<Login />} />
                         <Route path="/register" element={<Register />} />
                         <Route path="/dashboard" element={<Dashboard />} />
-                        <Route path="/auth/spotify/callback" element={<SpotifyCallback />} />
-                        <Route path="/auth/microsoft/callback" element={<MicrosoftCallback />} />
-                        <Route path="/auth/linkedin/callback" element={<LinkedinCallback />} />
+                        <Route path={uri.spotify.auth.redirectUri.replace(window.location.origin, "")} element={<SpotifyCallback />} />
+                        <Route path={uri.microsoft.auth.redirectUri.replace(window.location.origin, "")} element={<MicrosoftCallback />} />
+                        <Route path={uri.linkedin.auth.redirectUri.replace(window.location.origin, "")} element={<LinkedinCallback />} />
+                        <Route path={uri.discord.auth.redirectUri.replace(window.location.origin, "")} element={<DiscordCallback />} />
                         <Route path="*" element={<NotFound />} />
                     </Routes>
                 </Layout>

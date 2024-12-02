@@ -1,5 +1,7 @@
 import { Form } from 'antd';
 import { GoogleLogin, GoogleOAuthProvider } from '@react-oauth/google';
+// @ts-ignore
+import { uri } from '@Config/uri';
 
 interface GoogleAuthProps {
     onSuccess: (response: unknown) => void;
@@ -8,16 +10,12 @@ interface GoogleAuthProps {
 }
 
 const GoogleAuth = ({ onSuccess, onError, buttonText = "signin_with"}: GoogleAuthProps) => {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-expect-error
-    const googleClientId: string = import.meta.env.VITE_GOOGLE_CLIENT_ID as string;
-
-    if (!googleClientId || googleClientId === '') {
+    if (!uri.google.auth.clientId || uri.google.auth.clientId === '') {
         return null;
     }
 
     return (
-        <GoogleOAuthProvider clientId={googleClientId}>
+        <GoogleOAuthProvider clientId={ uri.google.auth.clientId }>
             <Form.Item style={{ textAlign: 'center' }}>
                 <GoogleLogin
                     onSuccess={onSuccess}

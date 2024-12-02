@@ -1,6 +1,6 @@
 import { useLocation } from 'react-router-dom';
-import Header from './pages/Header';
-import AppFooter from './pages/Footer';
+import Header from './Header.tsx';
+import AppFooter from './Footer.tsx';
 import React from "react";
 
 interface LayoutProps {
