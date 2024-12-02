@@ -1,6 +1,6 @@
 import { createContext, useState, ReactNode, useContext } from 'react';
 
-interface AuthContextType {
+export interface AuthContextType {
     isAuthenticated: boolean;
     jsonWebToken: string;
     setIsAuthenticated: (isAuthenticated: boolean) => void;

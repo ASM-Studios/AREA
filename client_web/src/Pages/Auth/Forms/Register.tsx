@@ -1,6 +1,6 @@
 import { Form, Input, Button, Card } from 'antd';
 import { Link } from 'react-router-dom';
-import OAuthButtons from '../../../components/auth/OAuthButtons.tsx';
+import OAuthButtons from '../../../components/auth/OAuthButtons';
 
 const Register = () => {
     const onFinish = (values: unknown) => {

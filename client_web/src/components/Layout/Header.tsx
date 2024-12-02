@@ -1,6 +1,6 @@
 import { Layout, Menu } from 'antd';
 import { Link } from 'react-router-dom';
-import { useTheme } from '../../Context/ContextHooks.ts';
+import { useTheme } from '../../Context/ContextHooks';
 import React from "react";
 
 const { Header: AntHeader } = Layout;

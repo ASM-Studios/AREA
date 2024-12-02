@@ -1,7 +1,7 @@
 import { useContext } from 'react';
-import { UserContext } from './Scopes/UserContext.tsx';
-import { ThemeContext } from './Scopes/ThemeContext.tsx';
-import { AuthContext } from './Scopes/AuthContext.tsx';
+import { UserContext } from './Scopes/UserContext';
+import { ThemeContext } from './Scopes/ThemeContext';
+import { AuthContext } from './Scopes/AuthContext';
 
 export const useUser = () => {
     const context = useContext(UserContext);

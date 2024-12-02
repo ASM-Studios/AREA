@@ -1,8 +1,8 @@
-import GoogleAuth from './Buttons/GoogleAuth.tsx';
-import MicrosoftAuth from './Buttons/MicrosoftAuth.tsx';
-import LinkedinAuth from './Buttons/LinkedinAuth.tsx';
-import SpotifyAuth from './Buttons/SpotifyAuth.tsx';
-import DiscordAuth from './Buttons/DiscordAuth.tsx';
+import GoogleAuth from './Buttons/GoogleAuth';
+import MicrosoftAuth from './Buttons/MicrosoftAuth';
+import LinkedinAuth from './Buttons/LinkedinAuth';
+import SpotifyAuth from './Buttons/SpotifyAuth';
+import DiscordAuth from './Buttons/DiscordAuth';
 import { Divider } from 'antd';
 
 interface OAuthButtonsProps {

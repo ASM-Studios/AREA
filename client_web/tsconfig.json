@@ -1,18 +1,11 @@
 {
-  "files": [],
-  "references": [
-    { "path": "./tsconfig.app.json" },
-    { "path": "./tsconfig.node.json" }
-  ],
   "compilerOptions": {
-    "baseUrl": "./",
-    "paths": {
-      "@/*": ["src/*"],
-      "@Config/*": ["src/Config/*"]
-    },
-    "suppress": [
-      2307
-    ]
+    "forceConsistentCasingInFileNames": true,
+    "module": "commonjs",
+    "target": "es2015",
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "esModuleInterop": true,
   },
   "include": ["src"]
 }

@@ -1,5 +1,5 @@
 import { Layout } from 'antd';
-import { useTheme } from '../../Context/ContextHooks.ts';
+import { useTheme } from '../../Context/ContextHooks';
 import React from "react";
 
 const { Footer } = Layout;

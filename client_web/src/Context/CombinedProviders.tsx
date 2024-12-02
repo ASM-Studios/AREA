@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
-import { UserProvider } from './Scopes/UserContext.tsx';
-import { ThemeProvider } from './Scopes/ThemeContext.tsx';
-import { AuthProvider } from './Scopes/AuthContext.tsx';
+import { UserProvider } from './Scopes/UserContext';
+import { ThemeProvider } from './Scopes/ThemeContext';
+import { AuthProvider } from './Scopes/AuthContext';
 
 const providers = [
     UserProvider,

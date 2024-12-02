@@ -5,7 +5,7 @@ interface User {
     name: string;
 }
 
-interface UserContextType {
+export interface UserContextType {
     user: User | null;
     setUser: (user: User | null) => void;
 }

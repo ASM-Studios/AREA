@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { Row, Col, Card, Typography, Space } from "antd";
 import { RobotOutlined, BarChartOutlined, SettingOutlined } from "@ant-design/icons";
-import Security from "../../components/Security.tsx";
+import Security from "../../components/Security";
 
 const { Title } = Typography;
 

@@ -1,19 +1,19 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import { ContextManager } from "./Context/ContextManager.tsx";
-import { uri } from './Config/uri.ts';
+import { ContextManager } from "./Context/ContextManager";
+import { uri } from './Config/uri';
 
 import Home from './Pages/Home';
 import NotFound from './Pages/NotFound';
-import Layout from './components/Layout/Layout.tsx';
-import Login from './Pages/Auth/Forms/Login.tsx';
-import Register from './Pages/Auth/Forms/Register.tsx';
+import Layout from './components/Layout/Layout';
+import Login from './Pages/Auth/Forms/Login';
+import Register from './Pages/Auth/Forms/Register';
 
-import LinkedinCallback from "./Pages/Auth/Callback/LinkedinCallback.tsx";
-import SpotifyCallback from './Pages/Auth/Callback/SpotifyCallback.tsx';
-import MicrosoftCallback from './Pages/Auth/Callback/MicrosoftCallback.tsx';
-import DiscordCallback from './Pages/Auth/Callback/DiscordCallback.tsx';
+import LinkedinCallback from "./Pages/Auth/Callback/LinkedinCallback";
+import SpotifyCallback from './Pages/Auth/Callback/SpotifyCallback';
+import MicrosoftCallback from './Pages/Auth/Callback/MicrosoftCallback';
+import DiscordCallback from './Pages/Auth/Callback/DiscordCallback';
 
-import Dashboard from './Pages/Dashboard/Dashboard.tsx';
+import Dashboard from './Pages/Dashboard/Dashboard';
 
 const App = () => {
     return (

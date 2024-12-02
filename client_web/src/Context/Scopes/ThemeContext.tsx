@@ -1,7 +1,7 @@
 import { createContext, useState, useEffect, ReactNode } from 'react';
 import Cookies from 'js-cookie';
 
-type ThemeContextType = {
+export type ThemeContextType = {
     theme: 'light' | 'dark';
     setTheme: (theme: 'light' | 'dark') => void;
 };
