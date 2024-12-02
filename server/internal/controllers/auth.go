@@ -18,7 +18,6 @@ import (
 // @Param        password  formData  string  true  "Password"
 // @Success      200  {object}  map[string]string
 // @Failure      401  {object}  map[string]string
-// @Failure      500  {object}  map[string]string
 // @Router       /login [post]
 func Login(c *gin.Context) {
 	email := c.PostForm("email")
@@ -35,24 +34,29 @@ func Login(c *gin.Context) {
 	}
 
 	tokenString := utils.NewToken(c, email)
-	db.DB.Model(&user).Update("token", tokenString)
-	c.JSON(http.StatusOK, gin.H{"token": tokenString})
+	db.DB.Model(&user).Update("jwt", tokenString)
+	c.JSON(http.StatusOK, gin.H{"jwt": tokenString})
 }
 
 // Register godoc
 // @Summary      Register a user
-// @Description  Create a new user account
+// @Description  Create a new user and return a JWT token
 // @Tags         auth
 // @Accept       x-www-form-urlencoded
 // @Produce      json
-// @Param        email     formData  string  true  "Email"
+// @Param        email  formData  string  true  "Email"
+// @Param        username  formData  string  true  "Username"
 // @Param        password  formData  string  true  "Password"
-// @Success      201  {object}  map[string]string
+// @Success      200  {object}  map[string]string
+// @Failure      409  {object}  map[string]string
+// @Failure      500  {object}  map[string]string
 // @Router       /register [post]
 func Register(c *gin.Context) {
-	tokenString := utils.NewToken(c, c.PostForm("email"))
+	email := c.PostForm("email")
+	tokenString := utils.NewToken(c, email)
+	username := c.PostForm("username")
 	var user models.User
-	db.DB.Where("email = ?", c.PostForm("email")).First(&user)
+	db.DB.Where("email = ?", email).First(&user)
 	if user.ID != 0 {
 		c.JSON(http.StatusConflict, gin.H{"error": "User already exists"})
 		return
@@ -60,10 +64,10 @@ func Register(c *gin.Context) {
 	password, salt := utils.HashPassword(c.PostForm("password"))
 
 	db.DB.Create(&models.User{
-		Email:    c.PostForm("email"),
+		Email:    email,
 		Password: password,
 		Salt:     salt,
 		Token:    tokenString,
 	})
-	c.JSON(http.StatusOK, gin.H{"token": tokenString})
+	c.JSON(http.StatusOK, gin.H{"username": username, "email": email, "jwt": tokenString})
 }

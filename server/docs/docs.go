@@ -94,15 +94,6 @@ const docTemplate = `{
                                 "type": "string"
                             }
                         }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
-                        }
                     }
                 }
             }
@@ -164,7 +155,7 @@ const docTemplate = `{
         },
         "/register": {
             "post": {
-                "description": "Create a new user account",
+                "description": "Create a new user and return a JWT token",
                 "consumes": [
                     "application/x-www-form-urlencoded"
                 ],
@@ -185,6 +176,13 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
+                        "description": "Username",
+                        "name": "username",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
                         "description": "Password",
                         "name": "password",
                         "in": "formData",
@@ -192,8 +190,26 @@ const docTemplate = `{
                     }
                 ],
                 "responses": {
-                    "201": {
-                        "description": "Created",
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
                         "schema": {
                             "type": "object",
                             "additionalProperties": {
