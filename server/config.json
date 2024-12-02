@@ -1,6 +1,6 @@
 {
   "app_name": "AREA",
-  "port": 8081,
+  "port": 8080,
   "gin_mode": "debug",
   "cors": true,
   "swagger": true,

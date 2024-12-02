@@ -59,12 +59,6 @@ paths:
             additionalProperties:
               type: string
             type: object
-        "500":
-          description: Internal Server Error
-          schema:
-            additionalProperties:
-              type: string
-            type: object
       summary: Login a user
       tags:
       - auth
@@ -108,11 +102,16 @@ paths:
     post:
       consumes:
       - application/x-www-form-urlencoded
-      description: Create a new user account
+      description: Create a new user and return a JWT token
       parameters:
       - description: Email
         in: formData
         name: email
+        required: true
+        type: string
+      - description: Username
+        in: formData
+        name: username
         required: true
         type: string
       - description: Password
@@ -123,8 +122,20 @@ paths:
       produces:
       - application/json
       responses:
-        "201":
-          description: Created
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "409":
+          description: Conflict
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
           schema:
             additionalProperties:
               type: string

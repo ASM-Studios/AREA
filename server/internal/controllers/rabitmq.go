@@ -23,7 +23,6 @@ func Message(c *gin.Context) {
 	msg.Message = message
 
 	connectionString := utils.GetEnvVar("RMQ_URL")
-
 	rmqProducer := utils.RMQProducer{
 		consts.MessageQueue,
 		connectionString,
