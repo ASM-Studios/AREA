@@ -4,6 +4,7 @@
 
 # Documentation
 build/
+!server/build/
 
 # Logs
 logs
