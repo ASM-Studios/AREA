@@ -1,6 +1,7 @@
 import { Form, Input, Button, Card } from 'antd';
 import { Link } from 'react-router-dom';
-import OAuthButtons from '../../../components/auth/OAuthButtons';
+// @ts-ignore
+import OAuthButtons from '@/Components/Auth/OAuthButtons';
 
 const Register = () => {
     const onFinish = (values: unknown) => {
@@ -41,9 +42,6 @@ const Register = () => {
 
     return (
         <div style={{
-            backgroundImage: 'url("/background.png")',
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
             minHeight: '100vh',
             display: 'flex',
             alignItems: 'center',
@@ -52,7 +50,7 @@ const Register = () => {
             width: '100%',
             top: 0,
             left: 0
-        }}>
+        }} role="main">
             <Card title="Register" style={{ width: 400 }}>
                 <Form
                     name="register"

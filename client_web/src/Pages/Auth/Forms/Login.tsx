@@ -1,6 +1,6 @@
 import {Form, Input, Button, Card } from 'antd';
 import { Link } from 'react-router-dom';
-import OAuthButtons from '../../../components/auth/OAuthButtons';
+import OAuthButtons from '../../../Components/Auth/OAuthButtons';
 
 const Login = () => {
     const onFinish = (values: { email: string, password: string }) => {
@@ -41,9 +41,6 @@ const Login = () => {
 
     return (
         <div style={{
-            backgroundImage: 'url("/background.png")',
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
             minHeight: '100vh',
             display: 'flex',
             alignItems: 'center',
@@ -52,7 +49,7 @@ const Login = () => {
             width: '100%',
             top: 0,
             left: 0
-        }}>
+        }} role="main">
             <Card title="Login" style={{ width: 400 }}>
                 <Form
                     name="login"

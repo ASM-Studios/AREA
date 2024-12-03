@@ -31,7 +31,7 @@ const OAuthButtons = ({
             <GoogleAuth
                 onSuccess={onGoogleSuccess}
                 onError={onGoogleError}
-                buttonText={`${mode}_with`}
+                buttonText={`Sign ${mode === 'signin' ? 'in' : 'up'} with Google`}
             />
 
             <MicrosoftAuth
