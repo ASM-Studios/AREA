@@ -1,16 +1,38 @@
 import { Form, Input, Button, Card } from 'antd';
 import { Link } from 'react-router-dom';
-// @ts-ignore
 import OAuthButtons from '@/Components/Auth/OAuthButtons';
+import { instance, auth } from "@Config/backend.routes";
+import { useAuth } from "@/Context/ContextHooks";
+import { useNavigate } from 'react-router-dom';
+import {toast} from "react-toastify";
 
 const Register = () => {
+    const { setJsonWebToken, isAuthenticated, setIsAuthenticated } = useAuth();
+
+    const navigate = useNavigate();
+
     const onFinish = (values: unknown) => {
-        console.log('Success:', values);
-        // TODO: Call register API function here
+        instance.post(auth.register, values)
+            .then((response) => {
+                if (!response?.data?.jwt) {
+                    console.error('JWT not found in response');
+                    return;
+                }
+                localStorage.setItem('jsonWebToken', response?.data?.jwt);
+                setJsonWebToken(response?.data?.jwt);
+                setIsAuthenticated(true);
+                if(isAuthenticated) {
+                    navigate('/dashboard');
+                }
+            })
+            .catch((error) => {
+                console.error('Failed:', error);
+                toast.error('Failed to register: ' + error?.response?.data?.error);
+            });
     };
 
     const onFinishFailed = (errorInfo: unknown) => {
-        console.log('Failed:', errorInfo);
+        console.error('Failed:', errorInfo);
     };
 
     const handleGoogleSuccess = (credentialResponse: unknown) => {

@@ -9,24 +9,24 @@ interface LayoutProps {
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
     const location = useLocation();
-    const headerExcludedPaths: (string | RegExp)[] = [/.*/, '/', '/login', '/register', /^\/auth\/.*\/callback$/];
-    const footerExcludedPaths: (string | RegExp)[] = [/.*/, '/login', '/register', /^\/auth\/.*\/callback$/];
+    const headerIncludedPaths: (string | RegExp)[] = ['/', '/dashboard', '/workflow/create', '/workflows'];
+    const footerIncludedPaths: (string | RegExp)[] = ['/', '/dashboard'];
 
-    const isHeaderExcluded = headerExcludedPaths.some(path =>
+    const isHeaderIncluded = headerIncludedPaths.some(path =>
         typeof path === 'string' ? path === location.pathname : path.test(location.pathname)
     );
 
-    const isFooterExcluded = footerExcludedPaths.some(path =>
+    const isFooterIncluded = footerIncludedPaths.some(path =>
         typeof path === 'string' ? path === location.pathname : path.test(location.pathname)
     );
 
     return (
         <div style={{ display: 'flex', flexDirection: 'column', minHeight: '98vh', overflowX: 'hidden' }}>
-            {!isHeaderExcluded && <Header />}
+            {isHeaderIncluded && <Header />}
             <div style={{ flexGrow: 1 }}>
                 {children}
             </div>
-            {!isFooterExcluded && <AppFooter />}
+            {isFooterIncluded && <AppFooter />}
         </div>
     );
 };

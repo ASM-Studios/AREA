@@ -1,5 +1,4 @@
 import { Result } from 'antd';
-// @ts-ignore
 import LinkButton from "@/Components/LinkButton";
 import React from 'react';
 
@@ -12,6 +11,7 @@ const NotFound: React.FC = () => {
             extra={
                 <LinkButton text="Back Home" url="/" />
             }
+            style={{ zIndex: 1, position: 'relative' }}
         />
     );
 };

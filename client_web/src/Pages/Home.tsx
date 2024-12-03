@@ -1,10 +1,13 @@
-import React, { useState } from 'react';
-import { Layout, Typography, Row, Col, Button, Card, Space, Modal } from 'antd';
+import React from 'react';
+import { Layout, Typography, Row, Col, Button, Card, Modal } from 'antd';
 import { ThunderboltOutlined, ApiOutlined, SafetyCertificateOutlined } from '@ant-design/icons';
 import { motion } from 'framer-motion';
 // @ts-ignore
 import { BlockPicker } from 'react-color';
-import LinkButton from "@/Components/LinkButton";
+import { instance, root } from "@Config/backend.routes";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/Context/ContextHooks";
 
 const { Content } = Layout;
 const { Title, Paragraph } = Typography;
@@ -15,8 +18,13 @@ interface HomeProps {
 }
 
 const Home: React.FC<HomeProps> = ({ backgroundColor, setBackgroundColor }) => {
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const [tempColor, setTempColor] = useState(backgroundColor);
+  const [isModalVisible, setIsModalVisible] = React.useState(false);
+  const [tempColor, setTempColor] = React.useState(backgroundColor);
+  const [pingResponse, setPingResponse] = React.useState<boolean>(false);
+  const hasPinged = React.useRef(false);
+  const navigate = useNavigate();
+
+  const { isAuthenticated } = useAuth();
 
   const handleColorChange = (color: { hex: any; }) => {
     setTempColor(color.hex);
@@ -37,6 +45,33 @@ const Home: React.FC<HomeProps> = ({ backgroundColor, setBackgroundColor }) => {
     setIsModalVisible(false);
   };
 
+  const ping =  () => {
+    const response = instance.get(root.ping)
+        .then((response) => {
+          setPingResponse(true);
+        })
+        .catch((error) => {
+          setPingResponse(false);
+          console.error(error);
+          toast.error('Failed to ping the server');
+        });
+  };
+
+  React.useEffect(() => {
+    if (!hasPinged.current) {
+      ping();
+      hasPinged.current = true;
+    }
+  }, []);
+
+  const handleGetStarted = () => {
+    if (isAuthenticated) {
+      navigate('/dashboard');
+    } else {
+      navigate('/login');
+    }
+  };
+
   return (
       <Layout>
         <motion.div
@@ -54,9 +89,9 @@ const Home: React.FC<HomeProps> = ({ backgroundColor, setBackgroundColor }) => {
               <Paragraph style={{ color: 'white', fontSize: 18, marginBottom: 32 }}>
                 Automate your life by connecting your favorite services. Create powerful automation flows with just a few clicks.
               </Paragraph>
-              <Space direction="horizontal" style={{ width: '100%', justifyContent: 'center', marginTop: 16 }}>
-                <LinkButton text={'Get Started'} url={'/login'} type={'primary'} />
-              </Space>
+              <Button type="primary" disabled={!pingResponse} onClick={() => { handleGetStarted() }}>
+                Get Started
+              </Button>
             </Col>
             <Col xs={24} md={12}>
               <img
