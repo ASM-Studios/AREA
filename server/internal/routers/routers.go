@@ -44,6 +44,7 @@ func SetupRouter() *gin.Engine {
 	{
 		public.GET("/ping", controllers.Ping)
 		public.POST("/publish/message", controllers.Message)
+		public.GET("/try/queue", controllers.TryQueue)
 	}
 	setUpAuthGroup(router)
 	setUpOauthGroup(router)

@@ -26,7 +26,7 @@ import (
 // @BasePath  /
 func main() {
 	config.LoadConfig()
-	err := db.InitDB()
+	err := pkg.InitDB()
 	if err != nil {
 		return
 	}

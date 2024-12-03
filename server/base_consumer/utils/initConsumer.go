@@ -34,11 +34,11 @@ func (ec *EventConsumer) Init(rabbitMQConnection string, db *gorm.DB) error {
 		nil,                 // Arguments
 	)
 	err = ch.QueueBind(
-		q.Name,                 // Queue name
-		"google.api",           // Routing key for Google API
-		"api_service_exchange", // Exchange name
-		false,                  // No-wait
-		nil,                    // Arguments
+		q.Name,              // Queue name
+		consts.Key,          // Routing key for Google API
+		consts.ExchangeName, // Exchange name
+		false,               // No-wait
+		nil,                 // Arguments
 	)
 	if err != nil {
 		return fmt.Errorf("failed to declare queue: %w", err)

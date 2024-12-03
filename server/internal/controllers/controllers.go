@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"AREA/internal/utils"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -16,5 +17,12 @@ import (
 func Ping(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"message": "pong",
+	})
+}
+
+func TryQueue(c *gin.Context) {
+	utils.TryQueue()
+	c.JSON(http.StatusOK, gin.H{
+		"message": "message published",
 	})
 }

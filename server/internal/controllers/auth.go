@@ -23,7 +23,7 @@ func Login(c *gin.Context) {
 	email := c.PostForm("email")
 	password := c.PostForm("password")
 	var user models.User
-	db.DB.Where("email = ?", email).First(&user)
+	pkg.DB.Where("email = ?", email).First(&user)
 	if user.ID == 0 {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid credentials"})
 		return
@@ -34,7 +34,7 @@ func Login(c *gin.Context) {
 	}
 
 	tokenString := utils.NewToken(c, email)
-	db.DB.Model(&user).Update("jwt", tokenString)
+	pkg.DB.Model(&user).Update("jwt", tokenString)
 	c.JSON(http.StatusOK, gin.H{"jwt": tokenString})
 }
 
@@ -56,14 +56,14 @@ func Register(c *gin.Context) {
 	tokenString := utils.NewToken(c, email)
 	username := c.PostForm("username")
 	var user models.User
-	db.DB.Where("email = ?", email).First(&user)
+	pkg.DB.Where("email = ?", email).First(&user)
 	if user.ID != 0 {
 		c.JSON(http.StatusConflict, gin.H{"error": "User already exists"})
 		return
 	}
 	password, salt := utils.HashPassword(c.PostForm("password"))
 
-	db.DB.Create(&models.User{
+	pkg.DB.Create(&models.User{
 		Email:    email,
 		Password: password,
 		Salt:     salt,
