@@ -2,7 +2,6 @@ package main
 
 import (
 	"AREA/internal/config"
-	"AREA/internal/models"
 	"AREA/internal/pkg"
 	"AREA/internal/routers"
 	"fmt"
@@ -27,8 +26,7 @@ import (
 // @BasePath  /
 func main() {
 	config.LoadConfig()
-	db.InitDB()
-	err := db.DB.AutoMigrate(&models.Users{})
+	err := db.InitDB()
 	if err != nil {
 		return
 	}
