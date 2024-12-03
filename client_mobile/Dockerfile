@@ -20,7 +20,7 @@ ARG GITHUB_CLIENT_SECRET
 COPY . .
 
 RUN flutter pub get
-RUN flutter build apk --release
+RUN flutter build apk
 
 RUN mv build/app/outputs/flutter-apk/app-release.apk build/app/outputs/flutter-apk/client.apk
 RUN chmod -R 755 build/app/outputs/flutter-apk/

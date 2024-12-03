@@ -1,0 +1,117 @@
+name: PR Check Pipeline
+
+on:
+  pull_request:
+    branches: [ master, dev, cma/feat-ci-build-docker ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    environment: docker-build
+    outputs:
+      has_apk: ${{ steps.check_pr.outputs.is_master }}
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Check if PR targets master or test branch
+      id: check_pr
+      run: |
+        echo "is_master=${{ github.base_ref == 'master' || github.base_ref == 'cma/feat-ci-build-docker' }}" >> $GITHUB_OUTPUT
+    
+    - name: Create env files
+      run: |
+        # Create mobile env file
+        cat << EOF > client_mobile/.env.mobile
+        VITE_PORT=${{ secrets.VITE_PORT }}
+        VITE_ENDPOINT=${{ secrets.VITE_ENDPOINT }}
+        VITE_GOOGLE_CLIENT_ID=${{ secrets.VITE_GOOGLE_CLIENT_ID }}
+        VITE_GOOGLE_CLIENT_SECRET=${{ secrets.VITE_GOOGLE_CLIENT_SECRET }}
+        VITE_MICROSOFT_CLIENT_ID=${{ secrets.VITE_MICROSOFT_CLIENT_ID }}
+        VITE_LINKEDIN_CLIENT_ID=${{ secrets.VITE_LINKEDIN_CLIENT_ID }}
+        VITE_LINKEDIN_CLIENT_SECRET=${{ secrets.VITE_LINKEDIN_CLIENT_SECRET }}
+        VITE_SPOTIFY_CLIENT_ID=${{ secrets.VITE_SPOTIFY_CLIENT_ID }}
+        VITE_SPOTIFY_CLIENT_SECRET=${{ secrets.VITE_SPOTIFY_CLIENT_SECRET }}
+        API_URL=${{ secrets.API_URL }}
+        WEB_CLIENT_URL=${{ secrets.WEB_CLIENT_URL }}
+        MOBILE_CLIENT_URL=${{ secrets.MOBILE_CLIENT_URL }}
+        GITHUB_CLIENT_ID=${{ secrets.GH_CLIENT_ID }}
+        GITHUB_CLIENT_SECRET=${{ secrets.GH_CLIENT_SECRET }}
+        EOF
+
+        # Create web env file
+        cat << EOF > client_web/.env.local
+        VITE_PORT=${{ secrets.VITE_PORT }}
+        VITE_ENDPOINT=${{ secrets.VITE_ENDPOINT }}
+        VITE_GOOGLE_CLIENT_ID=${{ secrets.VITE_GOOGLE_CLIENT_ID }}
+        VITE_GOOGLE_CLIENT_SECRET=${{ secrets.VITE_GOOGLE_CLIENT_SECRET }}
+        VITE_MICROSOFT_CLIENT_ID=${{ secrets.VITE_MICROSOFT_CLIENT_ID }}
+        VITE_LINKEDIN_CLIENT_ID=${{ secrets.VITE_LINKEDIN_CLIENT_ID }}
+        VITE_LINKEDIN_CLIENT_SECRET=${{ secrets.VITE_LINKEDIN_CLIENT_SECRET }}
+        VITE_SPOTIFY_CLIENT_ID=${{ secrets.VITE_SPOTIFY_CLIENT_ID }}
+        VITE_SPOTIFY_CLIENT_SECRET=${{ secrets.VITE_SPOTIFY_CLIENT_SECRET }}
+        API_URL=${{ secrets.API_URL }}
+        WEB_CLIENT_URL=${{ secrets.WEB_CLIENT_URL }}
+        MOBILE_CLIENT_URL=${{ secrets.MOBILE_CLIENT_URL }}
+        GITHUB_CLIENT_ID=${{ secrets.GH_CLIENT_ID }}
+        GITHUB_CLIENT_SECRET=${{ secrets.GH_CLIENT_SECRET }}
+        EOF
+
+        # Create root env file if needed
+        cat << EOF > .env
+        VITE_PORT=${{ secrets.VITE_PORT }}
+        EOF
+      
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+      
+    - name: Build Docker images
+      run: |
+        docker compose up --build -d
+        
+    - name: Extract APK
+      if: github.base_ref == 'master'
+      run: |
+        mkdir -p artifacts
+        docker cp $(docker ps -qf "name=area-client-web"):/usr/share/nginx/html/mobile_builds/client.apk ./artifacts/
+        
+    - name: Upload APK artifact
+      if: github.base_ref == 'master'
+      uses: actions/upload-artifact@v4
+      with:
+        name: mobile-apk
+        path: artifacts/client.apk
+        retention-days: 1
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    environment: docker-build
+    
+    steps:
+    - name: Download APK from build
+      uses: actions/download-artifact@v4
+      with:
+        name: mobile-apk
+        path: artifacts
+        
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: v${{ github.run_number }}
+        release_name: Release v${{ github.run_number }}
+        draft: false
+        prerelease: false
+        
+    - name: Upload Release APK
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./artifacts/client.apk
+        asset_name: area-mobile-v${{ github.run_number }}.apk
+        asset_content_type: application/vnd.android.package-archive       
