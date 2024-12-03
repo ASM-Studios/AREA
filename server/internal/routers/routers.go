@@ -28,6 +28,7 @@ func setUpAuthGroup(router *gin.Engine) {
 	{
 		auth.POST("/register", controllers.Register)
 		auth.POST("/login", controllers.Login)
+		auth.GET("/health", controllers.Health)
 	}
 }
 

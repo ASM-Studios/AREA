@@ -34,7 +34,7 @@ func Login(c *gin.Context) {
 	}
 
 	tokenString := utils.NewToken(c, email)
-	db.DB.Model(&user).Update("jwt", tokenString)
+	db.DB.Model(&user).Update("token", tokenString)
 	c.JSON(http.StatusOK, gin.H{"jwt": tokenString})
 }
 
@@ -61,13 +61,43 @@ func Register(c *gin.Context) {
 		c.JSON(http.StatusConflict, gin.H{"error": "User already exists"})
 		return
 	}
+	db.DB.Where("username = ?", username).First(&user)
+	if user.ID != 0 {
+		c.JSON(http.StatusConflict, gin.H{"error": "Username already exists"})
+		return
+	}
 	password, salt := utils.HashPassword(c.PostForm("password"))
 
 	db.DB.Create(&models.User{
 		Email:    email,
+		Username: username,
 		Password: password,
 		Salt:     salt,
 		Token:    tokenString,
 	})
 	c.JSON(http.StatusOK, gin.H{"username": username, "email": email, "jwt": tokenString})
+}
+
+// Health godoc
+// @Summary      Check if the JWT is valid
+// @Description  Validate the token and return 200 if valid, 401 if expired or invalid
+// @Tags         auth
+// @Accept       json
+// @Produce      json
+// @Success      200  {object}  map[string]string
+// @Failure      401  {object}  map[string]string
+// @Router       /auth/health [get]
+func Health(c *gin.Context) {
+	token := c.GetHeader("Authorization")
+	if token == "" {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized: No token provided"})
+		return
+	}
+	_, err := utils.VerifyToken(c)
+
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized: " + err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"status": "healthy"})
 }
