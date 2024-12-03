@@ -31,14 +31,20 @@ instanceWithAuth.interceptors.request.use(
     }
 );
 
+const root = {
+    ping: `${endpoint}/ping`,
+    about: `${endpoint}/about.json`,
+};
+
 const auth = {
     login: `${endpoint}/auth/login`,
     register: `${endpoint}/auth/register`,
-    google: `${endpoint}/auth/google`,
+    health: `${endpoint}/auth/health`,
 }
 
 export {
     instance,
     instanceWithAuth,
+    root,
     auth
 }

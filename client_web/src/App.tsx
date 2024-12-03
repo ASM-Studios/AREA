@@ -47,9 +47,7 @@ const App = () => {
         setBackgroundColor(sessionStorage.getItem("backgroundColor") || "#FFA500");
     }, []);
 
-    const particlesLoaded = async (container?: Container): Promise<void> => {
-        console.log(container);
-    };
+    const particlesLoaded = async (container?: Container): Promise<void> => {};
 
     const options: ISourceOptions = useMemo(
         () => ({
@@ -141,6 +139,7 @@ const App = () => {
                     id="tsparticles"
                     particlesLoaded={particlesLoaded}
                     options={options}
+                    style={{ position: 'absolute', zIndex: 0 }}
                 />
             )}
             <ContextManager>

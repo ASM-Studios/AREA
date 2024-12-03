@@ -263,8 +263,7 @@ const CreateWorkflow: React.FC = () => {
                 };
             })
         };
-        
-        console.log('Create Workflow', workflow);
+
         toast.error("API not connected yet");
     };
 

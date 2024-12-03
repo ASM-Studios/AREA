@@ -19,7 +19,7 @@ const SpotifyAuth: FC<SpotifyOAuthProps> = ({ buttonText }) => {
         const state = crypto.randomUUID().substring(0, 16);
         localStorage.setItem('spotify_auth_state', state);
 
-        console.log("Set state: ", state);
+        console.log("Set state: ", state); // TODO: Remove after api connection
 
         const authUrl = new URL('https://accounts.spotify.com/authorize');
         const params = {

@@ -8,9 +8,10 @@ interface LinkButtonProps {
     style?: React.CSSProperties;
     type?: "primary" | "default" | "dashed" | "link" | "text" | "danger" | undefined;
     goBack?: boolean;
+    disabled?: boolean;
 }
 
-const LinkButton: React.FC<LinkButtonProps> = ({ text, url, type = "primary", style = {}, goBack = false }) => {
+const LinkButton: React.FC<LinkButtonProps> = ({ text, url, type = "primary", style = {}, goBack = false, disabled = false }) => {
     const navigate = useNavigate();
 
     const handleClick = () => {
@@ -24,7 +25,16 @@ const LinkButton: React.FC<LinkButtonProps> = ({ text, url, type = "primary", st
     const buttonStyle = type === "danger" ? { ...style, backgroundColor: 'red', borderColor: 'red', color: 'white' } : style;
 
     return (
-        <Button type={type === "danger" ? "default" : type} style={buttonStyle} onClick={handleClick}>
+        <Button
+            type={
+                type === "danger"
+                    ? "default"
+                    : type
+            }
+            style={buttonStyle}
+            onClick={handleClick}
+            disabled={disabled}
+        >
             {text}
         </Button>
     );

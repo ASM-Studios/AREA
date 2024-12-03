@@ -1,7 +1,7 @@
 import { Layout, Menu } from 'antd';
-import { Link } from 'react-router-dom';
-import { useTheme } from '../../Context/ContextHooks';
-import React from "react";
+import { Link, useLocation } from 'react-router-dom';
+import { useTheme } from '@/Context/ContextHooks';
+import React, { useEffect, useState } from "react";
 
 const { Header: AntHeader } = Layout;
 
@@ -12,16 +12,30 @@ interface MenuItems {
 
 const menuItems: MenuItems[] = [
     { key: '/', label: <Link to="/">Home</Link> },
-    { key: '/about', label: <Link to="/about">About</Link> },
+    { key: '/dashboard', label: <Link to="/dashboard">Dashboard</Link> },
 ];
 
 const Header: React.FC = () => {
     const { theme } = useTheme();
+    const location = useLocation();
+    const [selectedKey, setSelectedKey] = useState<string>(location.pathname);
+
+    useEffect(() => {
+        setSelectedKey(location.pathname);
+    }, [location.pathname]);
 
     return (
-        <AntHeader style={{ backgroundColor: theme === "dark" ? '#001529' : 'white', display: 'flex' }}>
-            <Menu theme={theme} mode="horizontal" style={{ flex: 1 }} items={menuItems} />
-        </AntHeader>
+        <div style={{ padding: 24, position: 'relative', zIndex: 1 }}>
+            <AntHeader style={{ backgroundColor: theme === "dark" ? '#001529' : 'white', display: 'flex', zIndex: 1, borderRadius: '8px' }}>
+                <Menu
+                    theme={theme}
+                    mode="horizontal"
+                    style={{ flex: 1 }}
+                    items={menuItems}
+                    selectedKeys={[selectedKey]}
+                />
+            </AntHeader>
+        </div>
     );
 };
 

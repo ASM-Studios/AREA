@@ -1,4 +1,4 @@
-import { createContext, useState, ReactNode, useContext } from 'react';
+import {createContext, useState, ReactNode, useContext, useEffect} from 'react';
 
 export interface AuthContextType {
     isAuthenticated: boolean;
@@ -12,6 +12,14 @@ export const AuthContext = createContext<AuthContextType | undefined>(undefined)
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [jsonWebToken, setJsonWebToken] = useState('');
+
+    useEffect(() => {
+        const token = localStorage.getItem('jsonWebToken');
+        if (token) {
+            setJsonWebToken(token);
+            setIsAuthenticated(true);
+        }
+    }, []);
 
     return (
         <AuthContext.Provider
