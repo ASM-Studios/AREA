@@ -17,7 +17,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("Failed to initialize event consumer: %v", err)
 	}
-	err = consumer.ConsumeTriggerEvents()
+	err = consumer.ConsumeEvents()
 	if err != nil {
 		log.Fatalf("Failed to consume trigger events: %v", err)
 	}

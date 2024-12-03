@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"AREA/internal/consts"
 	"AREA/internal/models"
 	"encoding/json"
 	"fmt"
@@ -15,7 +16,6 @@ type RabbitMQMessage struct {
 	Type      string          `json:"type"`
 	Payload   json.RawMessage `json:"payload"`
 	Timestamp time.Time       `json:"timestamp"`
-	AppletID  uint            `json:"applet_id"`
 }
 
 type EventPublisher struct {
@@ -54,10 +54,10 @@ func (x RMQProducer) PublishMessage(contentType string, body []byte) {
 	x.OnError(err, "Failed to declare a queue")
 
 	err = ch.Publish(
-		"",     // exchange
-		q.Name, // routing key
-		false,  // mandatory
-		false,  // immediate
+		consts.ExchangeName, // exchange
+		q.Name,              // routing key
+		false,               // mandatory
+		false,               // immediate
 		amqp.Publishing{
 			ContentType: contentType,
 			Body:        body,
@@ -79,23 +79,32 @@ func TryQueue() {
 	err := publisher.Init(GetEnvVar("RMQ_URL"))
 	if err != nil {
 		log.Printf("Failed to initialize EventPublisher: %v", err)
+		return
 	}
 	defer publisher.Close()
-
-	rawPayload, err := json.Marshal(map[string]interface{}{
-		"key": "value",
-		"foo": "bar",
-	})
-	triggerEvent := models.TriggerEvent{
-		AppletID:  1,
-		TriggerID: 123,
-		Payload:   rawPayload,
+	actionPayload := map[string]interface{}{
+		"service_name": "facebook",
+		"action_name":  "new_message_in_group_w/o",
+		"parameters":   []string{},
 	}
-	err = publisher.PublishTriggerEvent(triggerEvent)
+	rawPayload, err := json.Marshal(actionPayload)
 	if err != nil {
-		log.Printf("%v\n", err)
+		log.Printf("Failed to marshal payload: %v", err)
+		return
+	}
+	actionEvent := models.Action{
+		ServiceID:   1,
+		Service:     models.Service{Name: "facebook"},
+		Name:        "new_message_in_group_w/o",
+		Description: "A new message is posted in the group",
+		Parameters:  []models.ActionParam{},
+	}
+
+	err = publisher.PublishActionEvent(actionEvent, rawPayload)
+	if err != nil {
+		log.Printf("Failed to publish action event: %v", err)
 	} else {
-		log.Printf("Trigger event published successfully\n")
+		log.Printf("Action event published successfully")
 	}
 }
 
@@ -111,13 +120,13 @@ func (p *EventPublisher) Init(connectionString string) error {
 	}
 	p.channel = ch
 	err = ch.ExchangeDeclare(
-		"api_service_exchange", // exchange name
-		"direct",               // exchange type
-		true,                   // durable
-		false,                  // auto-deleted
-		false,                  // internal
-		false,                  // no-wait
-		nil,                    // arguments
+		consts.ExchangeName, // exchange name
+		"direct",            // exchange type
+		true,                // durable
+		false,               // auto-deleted
+		false,               // internal
+		false,               // no-wait
+		nil,                 // arguments
 	)
 	if err != nil {
 		return fmt.Errorf("failed to declare exchange: %w", err)
@@ -126,29 +135,39 @@ func (p *EventPublisher) Init(connectionString string) error {
 	return nil
 }
 
-func (p *EventPublisher) PublishTriggerEvent(event models.TriggerEvent) error {
+func (p *EventPublisher) PublishActionEvent(action models.Action, rawPayload []byte) error {
+	if action.ServiceID == 0 || action.Name == "" {
+		return fmt.Errorf("invalid action: ServiceID or Name is missing")
+	}
 	payloadData := map[string]interface{}{
-		"applet_id":  event.AppletID,
-		"trigger_id": event.TriggerID,
-		"data":       event.Payload,
+		"service_name": action.Service.Name,
+		"action_name":  action.Name,
+		"description":  action.Description,
+		"parameters":   action.Parameters,
+		"data":         rawPayload,
 	}
 
-	rawPayload, err := json.Marshal(payloadData)
-	message := RabbitMQMessage{
-		ID:        uuid.New().String(),
-		Type:      "trigger_event",
-		Payload:   rawPayload,
-		Timestamp: time.Now(),
-	}
-
-	body, err := json.Marshal(message)
+	rawPayloadData, err := json.Marshal(payloadData)
 	if err != nil {
+		log.Printf("Failed to marshal action event payload: %v", err)
 		return err
 	}
 
-	return p.channel.Publish(
-		"api_service_exchange",
-		"google.api",
+	message := RabbitMQMessage{
+		ID:        uuid.New().String(),
+		Type:      "action_event",
+		Payload:   rawPayloadData,
+		Timestamp: time.Now(),
+	}
+	body, err := json.Marshal(message)
+	if err != nil {
+		log.Printf("Failed to marshal RabbitMQ message: %v", err)
+		return err
+	}
+	log.Printf("Publishing action event to RabbitMQ on key %s.api", action.Service.Name)
+	err = p.channel.Publish(
+		consts.ExchangeName,
+		action.Service.Name+".api",
 		false,
 		false,
 		amqp.Publishing{
@@ -156,4 +175,11 @@ func (p *EventPublisher) PublishTriggerEvent(event models.TriggerEvent) error {
 			Body:        body,
 		},
 	)
+	if err != nil {
+		log.Printf("Failed to publish message to RabbitMQ: %v", err)
+		return err
+	}
+
+	log.Printf("Action event successfully published to RabbitMQ")
+	return nil
 }

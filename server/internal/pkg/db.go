@@ -24,19 +24,17 @@ func InitDB() error {
 		log.Fatalf("Failed to connect database: %v", err)
 	}
 	err = DB.AutoMigrate(
-		&models.User{},
 		&models.Service{},
-		&models.Trigger{},
 		&models.Action{},
-		&models.Applet{},
-		&models.AppletTrigger{},
-		&models.AppletAction{},
-		&models.TriggerEvent{},
+		&models.ActionParam{},
+		&models.Reaction{},
+		&models.ReactionParam{},
 	)
 	if err != nil {
 		log.Fatalf("Failed to migrate database: %v", err)
 		return err
 	}
+	utils.SeedData(DB)
 	log.Println("Database connection established")
 	return nil
 }

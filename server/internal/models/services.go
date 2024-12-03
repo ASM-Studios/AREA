@@ -4,16 +4,39 @@ import "gorm.io/gorm"
 
 type Service struct {
 	gorm.Model
-	Name        string
-	Description string
-	BaseURL     string
-	APIKey      string
-	Type        ServiceType
+	Name      string     `gorm:"unique;not null" json:"name"`
+	Actions   []Action   `json:"actions"`
+	Reactions []Reaction `json:"reactions"`
 }
 
-type ServiceType string
+type Action struct {
+	gorm.Model
+	ServiceID   uint          `json:"service_id"`
+	Service     Service       `json:"service"`
+	Name        string        `json:"name"`
+	Description string        `json:"description"`
+	Parameters  []ActionParam `json:"parameters"`
+}
 
-const (
-	ServiceTypeTrigger ServiceType = "trigger"
-	ServiceTypeAction  ServiceType = "action"
-)
+type ActionParam struct {
+	Name        string `json:"name"`
+	Description string `json:"description"`
+	Type        string `json:"type"`
+	ActionID    uint
+}
+
+type Reaction struct {
+	gorm.Model
+	ServiceID   uint            `json:"service_id"`
+	Service     Service         `json:"service"`
+	Name        string          `json:"name"`
+	Description string          `json:"description"`
+	Parameters  []ReactionParam `json:"parameters"`
+}
+
+type ReactionParam struct {
+	Name        string `json:"name"`
+	Description string `json:"description"`
+	Type        string `json:"type"`
+	ReactionID  uint
+}

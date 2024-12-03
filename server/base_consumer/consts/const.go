@@ -5,4 +5,4 @@ const EnvFileDirectory = "."
 
 const MessageQueue = "google_queue"
 const ExchangeName = "api_service_exchange"
-const Key = "google.api"
+const Key = "facebook.api"

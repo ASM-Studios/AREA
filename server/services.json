@@ -1,0 +1,107 @@
+[
+  {
+    "name": "facebook",
+    "actions": [
+      {
+        "name": "new_message_in_group_w/o",
+        "description": "A new message is posted in the group",
+        "parameters": []
+      },
+      {
+        "name": "new_message_inbox",
+        "description": "A new private message is received by the user",
+        "parameters": [
+          {
+            "name": "message_id",
+            "description": "ID of the message",
+            "type": "number"
+          }
+        ]
+      },
+      {
+        "name": "new_like_w/o",
+        "description": "The user gains a like from one of their messages",
+        "parameters": []
+      }
+    ],
+    "reactions": [
+      {
+        "name": "like_message",
+        "description": "The user likes a message",
+        "parameters": [
+          {
+            "name": "message_id",
+            "description": "ID of the message to like",
+            "type": "string"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "google",
+    "actions": [
+      {
+        "name": "new_email",
+        "description": "Triggers when a new email is received in Gmail",
+        "parameters": [
+          {
+            "name": "label",
+            "description": "Label of the email (e.g., INBOX)",
+            "type": "string"
+          },
+          {
+            "name": "unread",
+            "description": "Whether the email is unread",
+            "type": "boolean"
+          }
+        ]
+      },
+      {
+        "name": "email_starred",
+        "description": "Triggers when an email is starred in Gmail",
+        "parameters": [
+          {
+            "name": "email_id",
+            "description": "ID of the starred email",
+            "type": "string"
+          }
+        ]
+      }
+    ],
+    "reactions": [
+      {
+        "name": "send_email",
+        "description": "Sends an email via Gmail",
+        "parameters": [
+          {
+            "name": "recipient",
+            "description": "Recipient email address",
+            "type": "string"
+          },
+          {
+            "name": "subject",
+            "description": "Subject of the email",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "description": "Body of the email",
+            "type": "string"
+          }
+        ]
+      },
+      {
+        "name": "mark_as_read",
+        "description": "Marks an email as read in Gmail",
+        "parameters": [
+          {
+            "name": "email_id",
+            "description": "ID of the email to mark as read",
+            "type": "string"
+          }
+        ]
+      }
+    ]
+  }
+]
