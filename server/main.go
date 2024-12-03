@@ -28,7 +28,7 @@ import (
 func main() {
 	config.LoadConfig()
 	db.InitDB()
-	err := db.DB.AutoMigrate(&models.Users{})
+	err := db.DB.AutoMigrate(&models.User{})
 	if err != nil {
 		return
 	}

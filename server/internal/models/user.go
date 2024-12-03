@@ -10,5 +10,5 @@ type User struct {
 	Username string `gorm:"unique;not null" json:"username" binding:"required"`
 	Password string `gorm:"not null" json:"password" binding:"required"`
 	Salt     string `gorm:"not null" json:"salt"`
-	Token    string `gorm:"not null" json:"jwt"`
+	Token    string `gorm:"not null" json:"token"`
 }

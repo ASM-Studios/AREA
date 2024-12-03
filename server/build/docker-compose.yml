@@ -2,7 +2,7 @@ services:
   rabbitmq:
     image: rabbitmq:3-management
     ports:
-      - "8080:15672"
+      - "8082:15672"
       - "5000:5673"
     networks:
       - app_network
