@@ -3,10 +3,10 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class SignInButton extends StatelessWidget {
   const SignInButton(
-      {super.key, required this.label, this.icon, this.onPressed});
+      {super.key, required this.label, this.image, this.onPressed});
 
   final String label;
-  final FaIcon? icon;
+  final Image? image;
   final void Function()? onPressed;
 
   @override
@@ -16,6 +16,7 @@ class SignInButton extends StatelessWidget {
       child: FilledButton(
         onPressed: onPressed ?? () {},
         style: ButtonStyle(
+          padding: const WidgetStatePropertyAll(EdgeInsets.all(10)),
           backgroundColor: WidgetStateProperty.all(Colors.white),
           shape: WidgetStatePropertyAll(
             RoundedRectangleBorder(
@@ -34,8 +35,8 @@ class SignInButton extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            if (icon != null) icon!,
-            const SizedBox(width: 5),
+            if (image != null) image!,
+            // const SizedBox(width: 5),
             Text(label,
                 style: const TextStyle(
                   fontFamily: "CoolveticaCondensed",

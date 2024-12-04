@@ -1,4 +1,5 @@
 // import 'dart:io';
+import 'package:client_mobile/services/microsoft/MicrosoftAuthService.dart';
 import 'package:client_mobile/widgets/button.dart';
 import 'package:client_mobile/widgets/clickable_text.dart';
 import 'package:client_mobile/widgets/form_field.dart';
@@ -6,15 +7,9 @@ import 'package:client_mobile/widgets/sign_in_button.dart';
 import 'package:client_mobile/widgets/simple_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_appauth/flutter_appauth.dart';
-// import 'package:flutter_web_auth/flutter_web_auth.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:oauth2/oauth2.dart' as oauth2;
-// import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-// import 'package:oauth2_client/access_token_response.dart';
-// import 'package:oauth2_client/authorization_response.dart';
-// import 'package:oauth2_client/spotify_oauth2_client.dart';
 
 class RegisterPage extends StatefulWidget {
   @override
@@ -57,7 +52,7 @@ class _RegisterPageState extends State<RegisterPage> {
       print("");
       print("--------------------------------");
 
-      return;     
+      return;
     } catch (e) {
       print('Authentication failed: $e');
     }
@@ -100,13 +95,13 @@ class _RegisterPageState extends State<RegisterPage> {
                         alignment: Alignment.center,
                         child: SignInButton(
                           onPressed: () {
-                            authenticateWithSpotifyOld();
+                            MicrosoftAuthService.auth(context);
                           },
-                          label: "Sign in with Spotify",
-                          icon: const FaIcon(
-                            size: 34,
-                            FontAwesomeIcons.spotify,
-                            color: Colors.green,
+                          label: "Sign in with Microsoft",
+                          image: Image.asset(
+                            "assets/images/microsoft_logo.png",
+                            width: 40,
+                            height: 30,
                           ),
                         ),
                       ),
