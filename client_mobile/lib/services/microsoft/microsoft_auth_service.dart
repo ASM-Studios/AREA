@@ -1,4 +1,3 @@
-// import 'package:aad_oauth/model/config.dart';
 import 'package:aad_oauth/model/config.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -8,10 +7,10 @@ import '../../main.dart';
 
 class MicrosoftAuthService {
   static final String clientId = dotenv.env["VITE_MICROSOFT_CLIENT_ID"] ?? "";
-  static final String redirectUri =
+  static const String redirectUri =
       "msauth://my.area.app/lvGC0B4SWYU8tNPHg%2FbdMjQinZQ%3D";
-  static final String authority = "https://login.microsoftonline.com/common";
-  static final FlutterSecureStorage secureStorage = FlutterSecureStorage();
+  static const String authority = "https://login.microsoftonline.com/common";
+  static const FlutterSecureStorage secureStorage = FlutterSecureStorage();
 
   static Future<void> auth(BuildContext context) async {
     final Config config = Config(

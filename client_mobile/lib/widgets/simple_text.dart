@@ -22,7 +22,6 @@ class SimpleText extends StatelessWidget {
       text,
       textAlign: textAlign,
       style: TextStyle(
-        // fontFamily: HodFonts.coolvetica,
         fontWeight: bold ? FontWeight.bold : null,
         fontSize: textSize,
         color: color,

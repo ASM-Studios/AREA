@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class SignInButton extends StatelessWidget {
   const SignInButton(
@@ -22,9 +21,8 @@ class SignInButton extends StatelessWidget {
             RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(6.0),
               side: const BorderSide(
-                color: Color.fromARGB(255, 221, 228,
-                    222), // Couleur de la bordure lorsque le champ est actif
-                width: 2.0, // Largeur de la bordure
+                color: Color.fromARGB(255, 221, 228, 222),
+                width: 2.0,
               ),
             ),
           ),
@@ -36,13 +34,14 @@ class SignInButton extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             if (image != null) image!,
-            // const SizedBox(width: 5),
-            Text(label,
-                style: const TextStyle(
-                  fontFamily: "CoolveticaCondensed",
-                  fontSize: 12,
-                  color: Colors.black,
-                )),
+            Text(
+              label,
+              style: const TextStyle(
+                fontFamily: "CoolveticaCondensed",
+                fontSize: 12,
+                color: Colors.black,
+              ),
+            ),
           ],
         ),
       ),

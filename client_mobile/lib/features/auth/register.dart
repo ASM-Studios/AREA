@@ -1,5 +1,5 @@
 // import 'dart:io';
-import 'package:client_mobile/services/microsoft/MicrosoftAuthService.dart';
+import 'package:client_mobile/services/microsoft/microsoft_auth_service.dart';
 import 'package:client_mobile/widgets/button.dart';
 import 'package:client_mobile/widgets/clickable_text.dart';
 import 'package:client_mobile/widgets/form_field.dart';
@@ -8,7 +8,6 @@ import 'package:client_mobile/widgets/simple_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_appauth/flutter_appauth.dart';
 import 'package:go_router/go_router.dart';
-import 'package:oauth2/oauth2.dart' as oauth2;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -21,7 +20,7 @@ class _RegisterPageState extends State<RegisterPage> {
   String get spotifyRedirectUrlMobile => '$callbackUrlScheme://callback';
 
   final String clientId = dotenv.env["VITE_SPOTIFY_CLIENT_ID"] ?? "";
-  final appAuth = FlutterAppAuth();
+  final appAuth = const FlutterAppAuth();
 
   @override
   Widget build(BuildContext context) {

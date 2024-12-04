@@ -1,5 +1,5 @@
 // import 'dart:io';
-import 'package:client_mobile/services/microsoft/MicrosoftAuthService.dart';
+import 'package:client_mobile/services/microsoft/microsoft_auth_service.dart';
 import 'package:client_mobile/widgets/button.dart';
 import 'package:client_mobile/widgets/clickable_text.dart';
 import 'package:client_mobile/widgets/form_field.dart';
@@ -20,7 +20,7 @@ class _LoginPageState extends State<LoginPage> {
   String get spotifyRedirectUrlMobile => '$callbackUrlScheme://callback';
 
   final String clientId = dotenv.env["VITE_SPOTIFY_CLIENT_ID"] ?? "";
-  final appAuth = FlutterAppAuth();
+  final appAuth = const FlutterAppAuth();
 
   @override
   Widget build(BuildContext context) {
