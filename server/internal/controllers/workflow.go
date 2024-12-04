@@ -19,7 +19,6 @@ import (
 // @Failure      400  {object}  map[string]string
 // @Router       /workflow/create [post]
 func WorkflowCreate(c *gin.Context) {
-	pkg.PrintRequestJSON(c)
 	var workflow models.Workflow
 	err := c.BindJSON(&workflow)
 	if err != nil {
