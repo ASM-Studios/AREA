@@ -1,32 +1,63 @@
 services:
-  # server:
-  #   build: ./server
-  #   ports:
-  #     - "8080:8080"
-  #   networks:
-  #     - app_network
-
-  # client_mobile:
-  #   build: ./client_mobile
-  #   volumes:
-  #     - client_build:/app/build
-  #   networks:
-  #     - app_network
-
-  client_web:
-    build: ./client_web
-    ports:
-      - "8081:8081"
+  area-client-mobile:
+    build:
+      context: ./client_mobile
+      dockerfile: Dockerfile
+      args:
+        - VITE_PORT
+        - VITE_ENDPOINT
+        - VITE_GOOGLE_CLIENT_ID
+        - VITE_GOOGLE_CLIENT_SECRET
+        - VITE_MICROSOFT_CLIENT_ID
+        - VITE_LINKEDIN_CLIENT_ID
+        - VITE_LINKEDIN_CLIENT_SECRET
+        - VITE_SPOTIFY_CLIENT_ID
+        - VITE_SPOTIFY_CLIENT_SECRET
+        - API_URL
+        - WEB_CLIENT_URL
+        - MOBILE_CLIENT_URL
+        - GITHUB_CLIENT_ID
+        - GITHUB_CLIENT_SECRET
     volumes:
-      - client_build:/usr/share/nginx/html/mobile_builds
-    # depends_on:
-    #   - client_mobile
-    #   - server
+      - area-client-data:/app/build/app/outputs/flutter-apk
     networks:
-      - app_network
+      - area-network
+    env_file:
+      - ./client_mobile/.env.mobile
+
+  area-client-web:
+    build:
+      context: ./client_web
+      dockerfile: Dockerfile
+      args:
+        - VITE_PORT
+        - VITE_ENDPOINT
+        - VITE_GOOGLE_CLIENT_ID
+        - VITE_GOOGLE_CLIENT_SECRET
+        - VITE_MICROSOFT_CLIENT_ID
+        - VITE_LINKEDIN_CLIENT_ID
+        - VITE_LINKEDIN_CLIENT_SECRET
+        - VITE_SPOTIFY_CLIENT_ID
+        - VITE_SPOTIFY_CLIENT_SECRET
+        - API_URL
+        - WEB_CLIENT_URL
+        - MOBILE_CLIENT_URL
+        - GITHUB_CLIENT_ID
+        - GITHUB_CLIENT_SECRET
+    ports:
+      - "${VITE_PORT}:${VITE_PORT}"
+    volumes:
+      - area-client-data:/usr/share/nginx/html/mobile_builds
+    depends_on:
+      - area-client-mobile
+    networks:
+      - area-network
+    env_file:
+      - ./client_web/.env.local
 
 volumes:
-  client_build:
+  area-client-data:
+
 
 networks:
-  app_network:
+  area-network:
