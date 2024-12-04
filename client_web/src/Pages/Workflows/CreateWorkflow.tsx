@@ -240,42 +240,52 @@ const CreateWorkflow: React.FC = () => {
         const workflow: Workflow = {
             name: workflowName,
             description: workflowDescription,
-            actions: selectedActions.map(action => {
-                const actionDef = about?.server.services
+            service: about?.server.services.find(service =>
+                service.actions.some(action => action.name === selectedActions[0]?.name)
+            )?.name ?? "unknown",
+            events:
+            [
+                ...selectedActions.map(action => {
+                    const actionDef = about?.server.services
                     .flatMap((s: Service) => s.actions)
                     .find((a: Action) => a.name === action.name);
 
-                return {
-                    name: action.name,
-                    parameters: Object.entries(action.parameters || {}).map(([name, value]) => {
-                        const paramDef = actionDef?.parameters.find((p: Parameter) => p.name === name);
-                        return {
-                            name,
-                            type: paramDef?.type || 'string',
-                            value
-                        };
-                    })
-                };
-            }),
-            reactions: selectedReactions.map(reaction => {
-                const reactionDef = about?.server.services
-                    .flatMap((s: Service) => s.reactions)
-                    .find((r: Reaction) => r.name === reaction.name);
+                    return {
+                        name: action.name,
+                        type: 'action' as "action",
+                        description: action.description,
+                        parameters: Object.entries(action.parameters || {}).map(([name, value]) => {
+                            const paramDef = actionDef?.parameters.find((p: Parameter) => p.name === name);
+                            return {
+                                name,
+                                type: paramDef?.type || 'string',
+                                value
+                            };
+                        })
+                    }
+                }),
+                ...selectedReactions.map(reaction => {
+                    const reactionDef = about?.server.services
+                        .flatMap((s: Service) => s.reactions)
+                        .find((r: Reaction) => r.name === reaction.name);
 
-                return {
-                    name: reaction.name,
-                    parameters: Object.entries(reaction.parameters || {}).map(([name, value]) => {
-                        const paramDef = reactionDef?.parameters.find((p: Parameter) => p.name === name);
-                        return {
-                            name,
-                            type: paramDef?.type || 'string',
-                            value
-                        };
-                    })
-                };
-            })
-        };
-
+                    return {
+                        name: reaction.name,
+                        type: 'reaction' as "reaction",
+                        description: reaction.description,
+                        parameters: Object.entries(reaction.parameters || {}).map(([name, value]) => {
+                            const paramDef = reactionDef?.parameters.find((p: Parameter) => p.name === name);
+                            return {
+                                name,
+                                type: paramDef?.type || 'string',
+                                value
+                            };
+                        })
+                    };
+                })
+            ]
+        }
+        console.log(workflow);
         instanceWithAuth.post(workflowRoute.create, workflow)
             .then(() => {
                 toast.success("Workflow successfully published")
