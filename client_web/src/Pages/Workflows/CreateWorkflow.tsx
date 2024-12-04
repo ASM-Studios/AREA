@@ -175,6 +175,11 @@ const CreateWorkflow: React.FC = () => {
     }, []);
 
     const toggleAction = (action: Action) => {
+
+        if (selectedActions.length > 0) {
+            return toast.error("Only one action is allowed for now");
+        }
+
         const parameters = action.parameters?.length 
             ? action.parameters.reduce((acc: Record<string, string>, param: Parameter) => ({...acc, [param.name]: ''}), {})
             : undefined;
@@ -192,6 +197,11 @@ const CreateWorkflow: React.FC = () => {
     };
 
     const toggleReaction = (reaction: Reaction) => {
+
+        if (selectedReactions.length > 0) {
+            return toast.error("Only one reaction is allowed for now");
+        }
+
         const parameters = reaction.parameters?.length 
             ? reaction.parameters.reduce((acc: Record<string, string>, param: Parameter) => ({...acc, [param.name]: ''}), {})
             : undefined;

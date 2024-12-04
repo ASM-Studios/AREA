@@ -14,7 +14,8 @@ import {
 import { loadSlim } from "@tsparticles/slim";
 
 import Home from './Pages/Home';
-import NotFound from './Pages/NotFound';
+import NotFound from './Pages/Errors/NotFound';
+import ApiNotConnected from "@/Pages/Errors/ApiNotConnected";
 // @ts-ignore
 import Layout from '@/Components/Layout/Layout';
 import Login from './Pages/Auth/Forms/Login';
@@ -159,6 +160,8 @@ const App = () => {
                             <Route path="/workflow/create" element={<CreateWorkflow />} />
                             <Route path="/workflows" element={<WorkflowsTable />} />
                             <Route path="/workflow/:id" element={<NotFound />} />
+
+                            <Route path="/error/connection" element={<ApiNotConnected />} />
                             <Route path="*" element={<NotFound />} />
                         </Routes>
                     </Layout>
