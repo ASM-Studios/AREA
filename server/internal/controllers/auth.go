@@ -2,7 +2,7 @@ package controllers
 
 import (
 	"AREA/internal/models"
-	"AREA/internal/pkg"
+	db "AREA/internal/pkg"
 	"AREA/internal/utils"
 	"github.com/gin-gonic/gin"
 	"log"
@@ -13,13 +13,12 @@ import (
 // @Summary      Login a user
 // @Description  Authenticate a user and return a JWT token
 // @Tags         auth
-// @Accept       x-www-form-urlencoded
+// @Accept       json
 // @Produce      json
-// @Param        email  json  string  true  "email"
-// @Param        password  json  string  true  "password"
+// @Param        Login body models.LoginRequest true  "Login"
 // @Success      200  {object}  map[string]string
 // @Failure      401  {object}  map[string]string
-// @Router       /login [post]
+// @Router       /auth/login [post]
 func Login(c *gin.Context) {
 	var LoginData models.LoginRequest
 	err := c.ShouldBindJSON(&LoginData)
@@ -48,15 +47,13 @@ func Login(c *gin.Context) {
 // @Summary      Register a user
 // @Description  Create a new user and return a JWT token
 // @Tags         auth
-// @Accept       x-www-form-urlencoded
+// @Accept       json
 // @Produce      json
-// @Param        email  json  string  true  "email"
-// @Param        username  json  string  true  "username"
-// @Param        password  json  string  true  "password"
+// @Param        Register body models.RegisterRequest true  "Register"
 // @Success      200  {object}  map[string]string
 // @Failure      409  {object}  map[string]string
 // @Failure      500  {object}  map[string]string
-// @Router       /register [post]
+// @Router       /auth/register [post]
 func Register(c *gin.Context) {
 	var RegisterData models.RegisterRequest
 	err := c.ShouldBindJSON(&RegisterData)

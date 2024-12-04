@@ -46,22 +46,16 @@ export interface WorkflowParameter {
 
 export interface WorkflowDefinition {
     name: string;
+    type: "action" | "reaction";
+    description: string;
     parameters: WorkflowParameter[];
-}
-
-export interface WorkflowAction extends WorkflowDefinition {
-
-}
-
-export interface WorkflowReaction extends WorkflowDefinition {
-
 }
 
 export type Workflow = {
     name: string;
+    service: string;
     description: string;
-    actions: WorkflowAction[];
-    reactions: WorkflowReaction[];
+    events: WorkflowDefinition[];
 };
 
 export interface WorkflowItem {

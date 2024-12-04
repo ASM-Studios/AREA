@@ -32,6 +32,16 @@ func setUpAuthGroup(router *gin.Engine) {
 	}
 }
 
+func setUpWorkflowGroup(router *gin.Engine) {
+	workflow := router.Group("/workflow")
+	workflow.Use(middleware.AuthMiddleware())
+	{
+		workflow.POST("/create", controllers.WorkflowCreate)
+		workflow.GET("/list", controllers.WorkflowList)
+		workflow.DELETE("/delete/:id", controllers.WorkflowDelete)
+	}
+}
+
 func SetupRouter() *gin.Engine {
 	router := gin.Default()
 	router.Use(middleware.ErrorHandlerMiddleware())
@@ -48,6 +58,7 @@ func SetupRouter() *gin.Engine {
 	}
 	setUpAuthGroup(router)
 	setUpOauthGroup(router)
+	setUpWorkflowGroup(router)
 	protected := router.Group("/")
 	protected.Use(middleware.AuthMiddleware())
 	{
