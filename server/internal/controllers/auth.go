@@ -97,11 +97,6 @@ func Register(c *gin.Context) {
 // @Failure      401  {object}  map[string]string
 // @Router       /auth/health [get]
 func Health(c *gin.Context) {
-	token := c.GetHeader("Authorization")
-	if token == "" {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized: No token provided"})
-		return
-	}
 	_, err := utils.VerifyToken(c)
 
 	if err != nil {
