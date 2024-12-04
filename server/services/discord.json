@@ -1,0 +1,118 @@
+{
+  "name": "discord",
+  "actions": [
+    {
+      "name": "A new message is sent",
+      "description": "Triggered when a new message is sent in a Discord channel.",
+      "parameters": [
+        {
+          "name": "channel_id",
+          "description": "The ID of the Discord channel where the message was sent.",
+          "type": "string"
+        },
+        {
+          "name": "message_content",
+          "description": "The content of the message.",
+          "type": "string"
+        },
+        {
+          "name": "author_id",
+          "description": "The ID of the user who sent the message.",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "A message is deleted",
+      "description": "Triggered when a message is deleted in a Discord channel.",
+      "parameters": [
+        {
+          "name": "channel_id",
+          "description": "The ID of the Discord channel where the message was deleted.",
+          "type": "string"
+        },
+        {
+          "name": "message_id",
+          "description": "The ID of the deleted message.",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "A message is edited",
+      "description": "Triggered when a message is edited in a Discord channel.",
+      "parameters": [
+        {
+          "name": "channel_id",
+          "description": "The ID of the Discord channel where the message was edited.",
+          "type": "string"
+        },
+        {
+          "name": "message_id",
+          "description": "The ID of the edited message.",
+          "type": "string"
+        },
+        {
+          "name": "new_content",
+          "description": "The new content of the edited message.",
+          "type": "string"
+        }
+      ]
+    }
+  ],
+  "reactions": [
+    {
+      "name": "Send a message in a channel",
+      "description": "Send a message to a specific Discord channel.",
+      "parameters": [
+        {
+          "name": "channel_id",
+          "description": "The ID of the Discord channel where the message should be sent.",
+          "type": "string"
+        },
+        {
+          "name": "message_content",
+          "description": "The content of the message to send.",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "Delete a message",
+      "description": "Delete a specific message in a Discord channel.",
+      "parameters": [
+        {
+          "name": "channel_id",
+          "description": "The ID of the Discord channel where the message should be deleted.",
+          "type": "string"
+        },
+        {
+          "name": "message_id",
+          "description": "The ID of the message to delete.",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "Pin/Unpin a message",
+      "description": "Pin or unpin a specific message in a Discord channel.",
+      "parameters": [
+        {
+          "name": "channel_id",
+          "description": "The ID of the Discord channel where the message should be pinned or unpinned.",
+          "type": "string"
+        },
+        {
+          "name": "message_id",
+          "description": "The ID of the message to pin or unpin.",
+          "type": "string"
+        },
+        {
+          "name": "is_pinned",
+          "description": "Set to true to pin the message, or false to unpin it.",
+          "type": "bool"
+        }
+      ]
+    }
+  ]
+}

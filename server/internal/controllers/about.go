@@ -1,68 +1,28 @@
 package controllers
 
 import (
+	"AREA/internal/models"
+	"AREA/internal/pkg"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"strconv"
 	"time"
 )
 
-type action struct {
-	Name        string `json:"name"`
-	Description string `json:"description"`
-}
-
-type reaction struct {
-	Name        string `json:"name"`
-	Description string `json:"description"`
-}
-
-type service struct {
-	Name     string     `json:"name"`
-	Actions  []action   `json:"actions"`
-	Reaction []reaction `json:"reaction"`
-}
-
-func getServiceList() []service {
-	return []service{
-		{
-			Name: "mail",
-			Actions: []action{
-				{
-					Name:        "send",
-					Description: "send mail",
-				},
-			},
-			Reaction: []reaction{
-				{
-					Name:        "receive",
-					Description: "receive mail",
-				},
-			},
-		},
-	}
-}
-
-// About godoc
-// @Summary About
-// @Description about
-// @Tags about
-// @Accept  json
-// @Produce  json
-// @Success 200 {msg} string
-// @Router /about.json [get]
+// About handler with cached service data
 func About(c *gin.Context) {
 	var msg struct {
 		Client struct {
 			Host string `json:"host"`
 		} `json:"client"`
 		Server struct {
-			CurrentTime string `json:"current_time"`
-			Services    []service
+			CurrentTime string               `json:"current_time"`
+			Services    []models.ServiceList `json:"services"`
 		} `json:"server"`
 	}
+
 	msg.Client.Host = c.ClientIP()
 	msg.Server.CurrentTime = strconv.FormatInt(time.Now().Unix(), 10)
-	msg.Server.Services = getServiceList()
+	msg.Server.Services = pkg.CachedServices
 	c.JSON(http.StatusOK, msg)
 }
