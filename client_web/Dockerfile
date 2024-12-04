@@ -16,51 +16,39 @@ RUN curl -JLO "https://dl.filippo.io/mkcert/latest?for=linux/amd64" \
 
 
 ###----------------------- Build stage for Node.js application -----------------------###
-FROM node:18-alpine AS app-builder
+FROM node:latest AS builder
 
 WORKDIR /app
 
-# Copy certificates from cert-builder
-COPY --from=cert-builder /localhost* ./
+ARG VITE_PORT
+ARG VITE_ENDPOINT
+ARG VITE_GOOGLE_CLIENT_ID
+ARG VITE_GOOGLE_CLIENT_SECRET
+ARG VITE_MICROSOFT_CLIENT_ID
+ARG VITE_LINKEDIN_CLIENT_ID
+ARG VITE_LINKEDIN_CLIENT_SECRET
+ARG VITE_SPOTIFY_CLIENT_ID
+ARG VITE_SPOTIFY_CLIENT_SECRET
+ARG API_URL
+ARG WEB_CLIENT_URL
+ARG MOBILE_CLIENT_URL
+ARG GITHUB_CLIENT_ID
+ARG GITHUB_CLIENT_SECRET
 
-# Copy only package files first for better layer caching
-COPY package*.json ./
+COPY ./package*.json ./
 RUN npm install
-
-# Copy source files and build
 COPY . .
+
 RUN npm run build
 
 
-###----------------------- Python tools stage -----------------------###
-FROM alpine:3.19 AS tools-builder
-
-# Install Python and tools
-RUN apk add --no-cache \
-    python3 \
-    py3-virtualenv \
-    py3-pip
-
-# Setup Python environment
-RUN python3 -m venv /opt/venv
-ENV PATH="/opt/venv/bin:$PATH"
-RUN pip3 install --no-cache-dir sphinx sphinx_rtd_theme
-
-
 ###----------------------- Production stage -----------------------###
-FROM nginx:alpine
+FROM nginx:alpine AS production
 
-# Create directory for mobile builds
+COPY --from=builder /app/dist /usr/share/nginx/html
+COPY ./nginx.conf /etc/nginx/conf.d/default.conf
 RUN mkdir -p /usr/share/nginx/html/mobile_builds
 
-# Copy production assets
-COPY --from=app-builder /app/dist /usr/share/nginx/html
-COPY --from=cert-builder /localhost* /etc/nginx/certs/
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-
-# Create volume mount point for shared mobile builds
-VOLUME /usr/share/nginx/html/mobile_builds
-
-EXPOSE 8081
+EXPOSE ${VITE_PORT}
 
 CMD ["nginx", "-g", "daemon off;"]

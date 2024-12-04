@@ -1,0 +1,11 @@
+{
+  "app_name": "AREA",
+  "port": 8080,
+  "gin_mode": "debug",
+  "cors": true,
+  "swagger": true,
+  "cors_origins": [
+    "https://localhost:8081",
+    "http://localhost:8080"
+  ]
+}
