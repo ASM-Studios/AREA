@@ -285,7 +285,6 @@ const CreateWorkflow: React.FC = () => {
                 })
             ]
         }
-        console.log(workflow);
         instanceWithAuth.post(workflowRoute.create, workflow)
             .then(() => {
                 toast.success("Workflow successfully published")
