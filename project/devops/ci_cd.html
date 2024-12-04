@@ -1,0 +1,207 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CI/CD Pipeline &mdash; AREA  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            AREA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing.html">Contribution Guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../client_web/index.html">AREA Client Web</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../client_mobile/index.html">AREA Client Mobile</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../server/index.html">AREA Server</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">AREA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">CI/CD Pipeline</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/project/devops/ci_cd.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="ci-cd-pipeline">
+<h1>CI/CD Pipeline<a class="headerlink" href="#ci-cd-pipeline" title="Link to this heading"></a></h1>
+<p>This page details our Continuous Integration and Continuous Deployment (CI/CD) pipelines implemented using GitHub Actions.</p>
+<section id="documentation-deployment">
+<h2>Documentation Deployment<a class="headerlink" href="#documentation-deployment" title="Link to this heading"></a></h2>
+<p>Our documentation is automatically built and deployed using GitHub Actions whenever changes are pushed to the main branch.</p>
+<section id="workflow-configuration">
+<h3>Workflow Configuration<a class="headerlink" href="#workflow-configuration" title="Link to this heading"></a></h3>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Deploy Documentation</span>
+
+<span class="nt">on</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">push</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">branches</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">main</span>
+<span class="w">    </span><span class="nt">paths</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;docs/**&#39;</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;.github/workflows/deploy-documentation.yml&#39;</span>
+
+<span class="nt">jobs</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">deploy-documentation</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ubuntu-latest</span>
+
+<span class="w">    </span><span class="nt">steps</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/checkout@v4</span>
+
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Set up Python</span>
+<span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/setup-python@v4</span>
+<span class="w">        </span><span class="nt">with</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">python-version</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;3.x&#39;</span>
+
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Install dependencies</span>
+<span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="w">          </span><span class="no">python -m pip install --upgrade pip</span>
+<span class="w">          </span><span class="no">pip install sphinx sphinx_rtd_theme</span>
+
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Build documentation</span>
+<span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="w">          </span><span class="no">cd docs</span>
+<span class="w">          </span><span class="no">make html</span>
+
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Deploy to GitHub Pages</span>
+<span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">peaceiris/actions-gh-pages@v3</span>
+<span class="w">        </span><span class="nt">with</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">github_token</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ secrets.GITHUB_TOKEN }}</span>
+<span class="w">          </span><span class="nt">publish_dir</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./docs/build/html</span>
+</pre></div>
+</div>
+</section>
+<section id="workflow-details">
+<h3>Workflow Details<a class="headerlink" href="#workflow-details" title="Link to this heading"></a></h3>
+<section id="triggers">
+<h4>Triggers<a class="headerlink" href="#triggers" title="Link to this heading"></a></h4>
+<p>The workflow is triggered on:</p>
+<ul class="simple">
+<li><p>Push events to the <code class="docutils literal notranslate"><span class="pre">main</span></code> branch</p></li>
+<li><p>Changes to files in the <code class="docutils literal notranslate"><span class="pre">docs/</span></code> directory</p></li>
+<li><p>Changes to the workflow file itself</p></li>
+</ul>
+</section>
+<section id="steps-explanation">
+<h4>Steps Explanation<a class="headerlink" href="#steps-explanation" title="Link to this heading"></a></h4>
+<ol class="arabic simple">
+<li><p><strong>Checkout Repository</strong></p>
+<ul class="simple">
+<li><p>Uses <code class="docutils literal notranslate"><span class="pre">actions/checkout&#64;v4</span></code> to clone the repository</p></li>
+<li><p>Ensures all documentation source files are available</p></li>
+</ul>
+</li>
+<li><p><strong>Python Setup</strong></p>
+<ul class="simple">
+<li><p>Sets up Python environment using <code class="docutils literal notranslate"><span class="pre">actions/setup-python&#64;v4</span></code></p></li>
+<li><p>Uses latest Python version</p></li>
+</ul>
+</li>
+<li><p><strong>Dependencies Installation</strong></p>
+<ul class="simple">
+<li><p>Upgrades pip to latest version</p></li>
+<li><p>Installs Sphinx and Read the Docs theme</p></li>
+</ul>
+</li>
+<li><p><strong>Documentation Build</strong></p>
+<ul class="simple">
+<li><p>Changes to docs directory</p></li>
+<li><p>Runs <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">html</span></code> to build documentation</p></li>
+<li><p>Generates HTML files in <code class="docutils literal notranslate"><span class="pre">docs/build/html</span></code></p></li>
+</ul>
+</li>
+<li><p><strong>GitHub Pages Deployment</strong></p>
+<ul class="simple">
+<li><p>Uses <code class="docutils literal notranslate"><span class="pre">peaceiris/actions-gh-pages&#64;v3</span></code></p></li>
+<li><p>Deploys built documentation to GitHub Pages</p></li>
+<li><p>Uses <code class="docutils literal notranslate"><span class="pre">GITHUB_TOKEN</span></code> for authentication</p></li>
+<li><p>Publishes content from <code class="docutils literal notranslate"><span class="pre">./docs/build/html</span></code></p></li>
+</ul>
+</li>
+</ol>
+</section>
+</section>
+</section>
+<section id="access-points">
+<h2>Access Points<a class="headerlink" href="#access-points" title="Link to this heading"></a></h2>
+<p>The deployed documentation can be accessed at:<code class="docutils literal notranslate"><span class="pre">https://asm-studios.github.io/AREA/</span></code></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Maël RABOT, Mathieu COULET, Mathieu BOREL, Charles MADJERI, Samuel BRUSCHET.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

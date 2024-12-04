@@ -1,0 +1,184 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contribution Guidelines &mdash; AREA  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="AREA Client Web" href="client_web/index.html" />
+    <link rel="prev" title="AREA documentation" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            AREA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Contribution Guidelines</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#coding-style">Coding Style</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pull-request-process">Pull Request Process</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#naming-conventions">Naming Conventions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#branches">Branches</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#commits">Commits</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#ci-cd">CI/CD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#branching-strategy">Branching Strategy</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="client_web/index.html">AREA Client Web</a></li>
+<li class="toctree-l1"><a class="reference internal" href="client_mobile/index.html">AREA Client Mobile</a></li>
+<li class="toctree-l1"><a class="reference internal" href="server/index.html">AREA Server</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">AREA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Contribution Guidelines</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/contributing.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="contribution-guidelines">
+<h1>Contribution Guidelines<a class="headerlink" href="#contribution-guidelines" title="Link to this heading"></a></h1>
+<section id="coding-style">
+<h2>Coding Style<a class="headerlink" href="#coding-style" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Use meaningful variable and function names.</p></li>
+<li><p>Write clear and concise docstring comments when necessary.</p></li>
+<li><p>Create usage documentation for new features in the <cite>docs</cite> folder.</p></li>
+</ul>
+</section>
+<section id="pull-request-process">
+<h2>Pull Request Process<a class="headerlink" href="#pull-request-process" title="Link to this heading"></a></h2>
+<ol class="arabic simple">
+<li><p>Create a new branch for your feature or bug fix, starting from <cite>dev</cite>.</p></li>
+<li><p>Commit your changes and push your branch to the repository.</p></li>
+<li><p>Squash your commits into a single commit before creating a pull request.</p></li>
+<li><p>Create a pull request from your branch to the <cite>dev</cite> branch.</p></li>
+<li><p>Wait for the code review and address any comments or feedback.</p></li>
+</ol>
+</section>
+<section id="naming-conventions">
+<h2>Naming Conventions<a class="headerlink" href="#naming-conventions" title="Link to this heading"></a></h2>
+<section id="branches">
+<h3>Branches<a class="headerlink" href="#branches" title="Link to this heading"></a></h3>
+<p>Use the following naming convention for branches:
+<cite>&lt;trigram&gt;/&lt;action&gt;-&lt;short-description&gt;</cite></p>
+<p>Example: <cite>mra/feat-add-controller</cite></p>
+</section>
+<section id="commits">
+<h3>Commits<a class="headerlink" href="#commits" title="Link to this heading"></a></h3>
+<p>Use the following naming convention for commits:
+<cite>&lt;type&gt;(scope): &lt;description&gt;</cite></p>
+<p>Example: <cite>feat(client): add new feature</cite></p>
+<p>Types can be:</p>
+<ul class="simple">
+<li><p>feat: a new feature</p></li>
+<li><p>evol: an improvement or enhancement</p></li>
+<li><p>fix: a bug fix</p></li>
+<li><p>hotfix: a critical bug fix</p></li>
+<li><p>docs: documentation changes</p></li>
+<li><p>refact: code refactoring</p></li>
+<li><p>test: adding or updating tests</p></li>
+<li><p>ci: changes to CI/CD configuration</p></li>
+<li><p>wip: work in progress (for temporary commits)</p></li>
+</ul>
+</section>
+</section>
+<section id="ci-cd">
+<h2>CI/CD<a class="headerlink" href="#ci-cd" title="Link to this heading"></a></h2>
+<p>The project uses GitHub Actions for continuous integration and deployment. The CI/CD pipeline runs on every push to the repository and checks the code quality, runs the tests, and builds the project.</p>
+<ul class="simple">
+<li><p>Check the compilation status.</p></li>
+<li><p>Create a release on the GitHub repository.</p></li>
+</ul>
+</section>
+<section id="branching-strategy">
+<h2>Branching Strategy<a class="headerlink" href="#branching-strategy" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Use <cite>master</cite> for stable releases.</p></li>
+<li><p>Use <cite>dev</cite> for ongoing development.</p></li>
+<li><p>Create feature branches from <cite>dev</cite> for new features.</p></li>
+<li><p>Create hotfix branches from <cite>master</cite> for urgent fixes.</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="AREA documentation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="client_web/index.html" class="btn btn-neutral float-right" title="AREA Client Web" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Maël RABOT, Mathieu COULET, Mathieu BOREL, Charles MADJERI, Samuel BRUSCHET.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
