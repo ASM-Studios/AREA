@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from "@/Context/ContextHooks";
 import { useNavigate } from "react-router-dom";
-// import { instance, auth } from "@/Config/backend.routes";
 import { Spin } from 'antd';
-import {instance, root} from "@Config/backend.routes";
+import { instance, instanceWithAuth, root, auth } from "@Config/backend.routes";
 import {toast} from "react-toastify";
 
 type SecurityProps = {
@@ -21,8 +20,7 @@ const Security = ({ children }: SecurityProps) => {
         const checkAuth = () => {
             if (!isAuthenticated || !jsonWebToken) {
                 if (localStorage.getItem("jsonWebToken")) {
-                    // instance.post(auth.health, {jwt: localStorage.getItem("jsonWebToken")}) //TODO: Create /health endpoint
-                    Promise.resolve()
+                    instanceWithAuth.get(auth.health)
                         .then(() => {
                             setIsAuthenticated(true);
                             setJsonWebToken(localStorage.getItem("jsonWebToken") as string);
@@ -50,27 +48,7 @@ const Security = ({ children }: SecurityProps) => {
         };
 
         checkAuth();
-    }, [isAuthenticated, jsonWebToken, navigate, setIsAuthenticated, setJsonWebToken]);
-
-    const ping =  () => {
-        const response = instance.get(root.ping)
-            .then((response) => {
-                setPingResponse(true);
-            })
-            .catch((error) => {
-                setPingResponse(false);
-                console.error(error);
-                navigate("/error/connection");
-                toast.error('Failed to ping the server');
-            });
-    };
-
-    React.useEffect(() => {
-        if (!hasPinged.current) {
-            ping();
-            hasPinged.current = true;
-        }
-    }, []);
+    }, [isAuthenticated, jsonWebToken]);
 
     if (loading) {
         return <Spin size="large" />;

@@ -19,17 +19,8 @@ func AuthMiddleware() gin.HandlerFunc {
 }
 
 func isAuthenticated(c *gin.Context) bool {
-	token := c.GetHeader("Authorization")
-	if token == "" {
-		return false
-	}
-
 	user := models.User{}
-	db.DB.Where("token = ?", token).First(&user)
-	if user.ID == 0 {
-		return false
-	}
-	_, err := utils.VerifyToken(c)
+	email, err := utils.VerifyToken(c)
 	if err != nil {
 		if err.Error() == "Token is expired" {
 			c.JSON(http.StatusUnauthorized, gin.H{"error": "Token is expired"})
@@ -38,5 +29,10 @@ func isAuthenticated(c *gin.Context) bool {
 		}
 		return false
 	}
+    db.DB.Where("email = ?", email).First(&user)
+    if user.ID == 0 {
+        c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+        return false
+    }
 	return true
 }

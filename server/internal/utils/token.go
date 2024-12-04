@@ -6,6 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"time"
+	"strings"
 )
 
 func NewToken(c *gin.Context, email string) string {
@@ -21,7 +22,14 @@ func NewToken(c *gin.Context, email string) string {
 }
 
 func VerifyToken(c *gin.Context) (string, error) {
-	tokenString := c.GetHeader("Authorization")
+	authHeader := c.GetHeader("Authorization")
+
+    if !strings.HasPrefix(authHeader, "Bearer ") {
+        return "", errors.New("Bearer token is missing")
+    }
+
+    tokenString := strings.TrimPrefix(authHeader, "Bearer ")
+
 	if tokenString == "" {
 		return "", errors.New("Authorization token is missing")
 	}
