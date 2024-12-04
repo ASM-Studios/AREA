@@ -23,5 +23,14 @@ type Workflow struct {
 	Name        string         `json:"name"`
 	Description string         `json:"description"`
 	Status      WorkflowStatus `gorm:"type:enum('pending', 'processed', 'failed')" json:"status"`
+	IsActive    bool           `json:"is_active"`
 	Events      []Event        `gorm:"many2many:workflow_events" json:"events"`
+}
+
+func (w *Workflow) BeforeCreate(tx *gorm.DB) (err error) {
+	if w.Status == "" {
+		w.Status = WorkflowStatusPending
+	}
+	w.IsActive = true
+	return
 }

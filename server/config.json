@@ -6,6 +6,6 @@
   "swagger": true,
   "cors_origins": [
     "https://localhost:8081",
-    "http://example.com"
+    "http://localhost:8080"
   ]
 }

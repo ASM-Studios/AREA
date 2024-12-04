@@ -42,9 +42,14 @@ const auth = {
     health: `${endpoint}/auth/health`,
 }
 
+const workflow = {
+    create: `${endpoint}/workflow/create`,
+}
+
 export {
     instance,
     instanceWithAuth,
     root,
-    auth
+    auth,
+    workflow
 }

@@ -7,6 +7,8 @@ import { normalizeName } from "@/Pages/Workflows/CreateWorkflow.utils";
 // Import types correctly
 import { About, Service, Action, Reaction, Workflow, Parameter } from "@/types";
 import {toast} from "react-toastify";
+import {instanceWithAuth} from "@/Config/backend.routes";
+import {workflow as workflowRoute} from "@/Config/backend.routes";
 
 const { Title, Text } = Typography;
 const { Panel } = Collapse;
@@ -274,7 +276,14 @@ const CreateWorkflow: React.FC = () => {
             })
         };
 
-        toast.error("API not connected yet");
+        instanceWithAuth.post(workflowRoute.create, workflow)
+            .then(() => {
+                toast.success("Workflow successfully published")
+                //TODO: Go to /workflow/{id}
+            })
+            .catch((error) => {
+                console.error(error);
+            });
     };
 
     const handleFoldAllActions = () => {

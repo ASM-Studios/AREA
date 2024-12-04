@@ -3,7 +3,7 @@ package main
 import (
 	"AREA/internal/config"
 	"AREA/internal/models"
-	"AREA/internal/pkg"
+	db "AREA/internal/pkg"
 	"AREA/internal/routers"
 	"fmt"
 	"github.com/gin-gonic/gin"
