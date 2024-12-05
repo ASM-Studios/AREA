@@ -1,9 +1,10 @@
 {
   "name": "google",
-  "actions": [
+  "events": [
     {
       "name": "Email Received",
       "description": "Triggered when a new email is received in your Gmail inbox.",
+      "type": "action",
       "parameters": [
         {
           "name": "sender_email",
@@ -25,6 +26,7 @@
     {
       "name": "Email Sent",
       "description": "Triggered when an email is sent from your Gmail account.",
+      "type": "action",
       "parameters": [
         {
           "name": "recipient_email",
@@ -42,12 +44,11 @@
           "type": "string"
         }
       ]
-    }
-  ],
-  "reactions": [
+    },
     {
       "name": "Send an Email",
       "description": "Send an email using your Gmail account.",
+      "type": "reaction",
       "parameters": [
         {
           "name": "recipient_email",
@@ -69,6 +70,7 @@
     {
       "name": "Reply to an Email",
       "description": "Reply to a specific email in your Gmail inbox.",
+      "type": "reaction",
       "parameters": [
         {
           "name": "email_id",
@@ -85,6 +87,7 @@
     {
       "name": "Marked as read/unread",
       "description": "Mark an email as read or unread in your Gmail inbox.",
+      "type": "reaction",
       "parameters": [
         {
           "name": "email_id",

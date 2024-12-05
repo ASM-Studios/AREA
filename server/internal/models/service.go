@@ -4,5 +4,6 @@ import "gorm.io/gorm"
 
 type Service struct {
 	gorm.Model
-	Label string `json:"label"`
+	Name   string  `json:"name"`
+	Events []Event `json:"events"`
 }

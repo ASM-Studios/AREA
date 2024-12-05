@@ -1,19 +1,22 @@
 {
   "name": "microsoft",
-  "actions": [
+  "events": [
     {
       "name": "New Email Received",
       "description": "Triggered when a new email is received in your mailbox.",
+      "type": "action",
       "parameters": []
     },
     {
       "name": "Email Sent",
       "description": "Triggered when an email is sent from your mailbox.",
+      "type": "action",
       "parameters": []
     },
     {
       "name": "New message in channel",
       "description": "Triggered when a new message is posted in a Teams channel.",
+      "type": "action",
       "parameters": [
         {
           "name": "channel_id",
@@ -25,6 +28,7 @@
     {
       "name": "New channel created",
       "description": "Triggered when a new channel is created in Teams.",
+      "type": "action",
       "parameters": [
         {
           "name": "team_id",
@@ -36,6 +40,7 @@
     {
       "name": "File uploaded",
       "description": "Triggered when a new file is uploaded to OneDrive.",
+      "type": "action",
       "parameters": [
         {
           "name": "folder_path",
@@ -47,6 +52,7 @@
     {
       "name": "File updated",
       "description": "Triggered when a file is updated in OneDrive.",
+      "type": "action",
       "parameters": [
         {
           "name": "file_id",
@@ -58,6 +64,7 @@
     {
       "name": "File deleted",
       "description": "Triggered when a file is deleted from OneDrive.",
+      "type": "action",
       "parameters": [
         {
           "name": "file_id",
@@ -65,12 +72,11 @@
           "type": "string"
         }
       ]
-    }
-  ],
-  "reactions": [
+    },
     {
       "name": "Send an Email",
       "description": "Send an email from your mailbox.",
+      "type": "reaction",
       "parameters": [
         {
           "name": "recipient",
@@ -92,6 +98,7 @@
     {
       "name": "Mark Email as read/unread",
       "description": "Mark an email as read or unread.",
+      "type": "reaction",
       "parameters": [
         {
           "name": "email_id",
@@ -108,6 +115,7 @@
     {
       "name": "Send a message to a channel",
       "description": "Send a message to a Teams channel.",
+      "type": "reaction",
       "parameters": [
         {
           "name": "channel_id",
@@ -124,6 +132,7 @@
     {
       "name": "Create a new channel",
       "description": "Create a new channel in a Teams team.",
+      "type": "reaction",
       "parameters": [
         {
           "name": "team_id",
@@ -140,6 +149,7 @@
     {
       "name": "Add a team member",
       "description": "Add a member to a Teams team.",
+      "type": "reaction",
       "parameters": [
         {
           "name": "team_id",
@@ -156,6 +166,7 @@
     {
       "name": "Upload a file",
       "description": "Upload a file to OneDrive.",
+      "type": "reaction",
       "parameters": [
         {
           "name": "folder_path",
@@ -177,6 +188,7 @@
     {
       "name": "Update file metadata",
       "description": "Update the metadata of a file in OneDrive.",
+      "type": "reaction",
       "parameters": [
         {
           "name": "file_id",
@@ -193,6 +205,7 @@
     {
       "name": "Create a folder",
       "description": "Create a new folder in OneDrive.",
+      "type": "reaction",
       "parameters": [
         {
           "name": "parent_folder_path",

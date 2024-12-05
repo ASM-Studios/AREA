@@ -1,9 +1,10 @@
 {
   "name": "discord",
-  "actions": [
+  "events": [
     {
       "name": "A new message is sent",
       "description": "Triggered when a new message is sent in a Discord channel.",
+      "type" : "action",
       "parameters": [
         {
           "name": "channel_id",
@@ -25,6 +26,7 @@
     {
       "name": "A message is deleted",
       "description": "Triggered when a message is deleted in a Discord channel.",
+      "type" : "action",
       "parameters": [
         {
           "name": "channel_id",
@@ -41,6 +43,7 @@
     {
       "name": "A message is edited",
       "description": "Triggered when a message is edited in a Discord channel.",
+      "type" : "action",
       "parameters": [
         {
           "name": "channel_id",
@@ -58,12 +61,11 @@
           "type": "string"
         }
       ]
-    }
-  ],
-  "reactions": [
+    },
     {
       "name": "Send a message in a channel",
       "description": "Send a message to a specific Discord channel.",
+      "type" : "reaction",
       "parameters": [
         {
           "name": "channel_id",
@@ -80,6 +82,7 @@
     {
       "name": "Delete a message",
       "description": "Delete a specific message in a Discord channel.",
+      "type" : "reaction",
       "parameters": [
         {
           "name": "channel_id",
@@ -96,6 +99,7 @@
     {
       "name": "Pin/Unpin a message",
       "description": "Pin or unpin a specific message in a Discord channel.",
+      "type" : "reaction",
       "parameters": [
         {
           "name": "channel_id",

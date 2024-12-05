@@ -1,9 +1,10 @@
 {
   "name": "spotify",
-  "actions": [
+  "events": [
     {
       "name": "A track start playing",
       "description": "Triggered when a track starts playing on Spotify.",
+      "type": "action",
       "parameters": [
         {
           "name": "track_id",
@@ -20,6 +21,7 @@
     {
       "name": "A track is paused/stopped",
       "description": "Triggered when a track is paused or stopped on Spotify.",
+      "type": "action",
       "parameters": [
         {
           "name": "track_id",
@@ -32,12 +34,11 @@
           "type": "string"
         }
       ]
-    }
-  ],
-  "reactions": [
+    },
     {
       "name": "Pause a track",
       "description": "Pause the currently playing track on Spotify.",
+      "type": "reaction",
       "parameters": [
         {
           "name": "device_id",
@@ -49,6 +50,7 @@
     {
       "name": "Add track to a playlist",
       "description": "Add a track to a specific Spotify playlist.",
+      "type": "reaction",
       "parameters": [
         {
           "name": "track_id",
