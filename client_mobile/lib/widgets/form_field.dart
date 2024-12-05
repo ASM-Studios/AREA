@@ -48,13 +48,12 @@ class AreaFormField extends StatelessWidget {
           color: Theme.of(context).colorScheme.onSurface,
         ),
         decoration: InputDecoration(
-          // fillColor: Theme.of(context).colorScheme.,
           labelText: label, // Placeholder text
           border: const OutlineInputBorder(),
           enabledBorder: const OutlineInputBorder(
             borderSide: BorderSide(
-              color: Color.fromARGB(255, 221, 228, 222), // Couleur de la bordure lorsque le champ est actif
-              width: 2.0, // Largeur de la bordure
+              color: Color.fromARGB(255, 221, 228, 222),
+              width: 2.0,
             ),
           ),
           suffixIcon: suffixIcon,
