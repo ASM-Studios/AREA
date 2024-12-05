@@ -11,7 +11,8 @@ import (
 )
 
 func setUpOauthGroup(router *gin.Engine) {
-	oauth := router.Group("/oauth")
+        router.POST("/oauth/:service", controllers.OAuth)
+	/*oauth := router.Group("/oauth")
 	{
 
 		oauth.POST("/google", controllers.Google)
@@ -19,8 +20,8 @@ func setUpOauthGroup(router *gin.Engine) {
 		oauth.POST("/github", controllers.Github)
 		oauth.POST("/linkedin", controllers.Linkedin)
 		oauth.POST("/discord", controllers.Discord)
-		auth.POST("/twitch", controllers.Twitch)*/
-	}
+		auth.POST("/twitch", controllers.Twitch)
+	}*/
 }
 
 func setUpAuthGroup(router *gin.Engine) {

@@ -11,4 +11,6 @@ type User struct {
 	Password string `gorm:"not null" json:"password" binding:"required"`
 	Salt     string `gorm:"not null" json:"salt"`
 	Token    string `gorm:"not null" json:"token"`
+        Workflows []Workflow `gorm:"constraint:OnDelete:CASCADE;"`
+        Tokens []Token `gorm:"constraint:OnDelete:CASCADE;"`
 }

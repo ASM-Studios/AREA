@@ -18,6 +18,7 @@ func migrateDB() error {
 		&models.Service{},
 		&models.Event{},
 		&models.Parameters{},
+		&models.Token{},
 	)
 	if err != nil {
 		log.Fatalf("Failed to migrate DB: %v", err)

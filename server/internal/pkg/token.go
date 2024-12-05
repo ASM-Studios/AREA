@@ -19,3 +19,11 @@ func GetUserFromToken(c *gin.Context) (uint, error) {
 	}
 	return user.ID, nil
 }
+
+func GetServiceFromName(serviceName string) (uint, error) {
+        service := models.Service{}
+        if err := DB.Where("name = ?", serviceName).First(&service); err != nil {
+            return 0, errors.New("Service not found")
+        }
+        return service.ID, nil
+}
