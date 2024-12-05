@@ -9,7 +9,7 @@ TARGET_MAX_CHAR_NUM=20
 
 .PHONY: start build stop restart reset logs clean help
 
-PROJECT_IMAGES = area-client-web area-client-mobile
+PROJECT_IMAGES = area-client-web area-client-mobile area-server mariadb rabbitmq
 
 ## Show help
 help:
@@ -57,3 +57,15 @@ logs:
 ## Clean up containers, images, volumes and orphans
 clean:
 	docker compose down --rmi local -v --remove-orphans
+
+# Flutter mobile client commands
+flutter-build:
+	docker build -t flutter-app ./client_mobile
+
+flutter-run:
+	docker run -it \
+		--network host \
+		-v $(PWD)/client_mobile:/app \
+		-v /tmp/.X11-unix:/tmp/.X11-unix \
+		-e DISPLAY=${DISPLAY} \
+		flutter-app

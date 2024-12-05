@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"log"
+	"net/http"
 	"strconv"
 )
 
@@ -36,7 +37,13 @@ func main() {
 	router := routers.SetupRouter()
 	port := strconv.Itoa(config.AppConfig.Port)
 	log.Printf("Starting %s on port %s in %s mode", config.AppConfig.AppName, port, config.AppConfig.GinMode)
-	if err := router.Run(fmt.Sprintf(":%s", port)); err != nil {
-		log.Fatalf("Failed to start server: %v", err)
+
+	server := &http.Server{
+		Addr:    fmt.Sprintf(":%s", port),
+		Handler: router,
+	}
+
+	if err := server.ListenAndServe(); err != nil {
+		log.Printf("Server error: %v", err)
 	}
 }

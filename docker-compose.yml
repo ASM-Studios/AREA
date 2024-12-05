@@ -1,27 +1,81 @@
 services:
+  rabbitmq:
+    image: rabbitmq:4.0.4-management-alpine
+    ports:
+      - "8082:15672"
+      - "5000:5673"
+    networks:
+      - area_network
+    volumes:
+      - ./rabbit-mq/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf:ro
+    healthcheck:
+      test: [ "CMD", "rabbitmqctl", "status" ]
+      interval: 5s
+      timeout: 15s
+      retries: 5
+    restart: unless-stopped
+
+  mariadb:
+    image: mariadb:11.4.4
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_ROOT_HOST: "%"
+    volumes:
+      - mariadb_data:/var/lib/mysql
+      - ./server/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    networks:
+      - area_network
+    healthcheck:
+      test: [ "CMD", "mariadb-admin", "ping", "-h", "localhost", "-u", "root", "-p${DB_PASSWORD}" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    env_file:
+      - .env
+    restart: unless-stopped
+
+  area-server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./ssl:/app/ssl:ro
+    environment:
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
+      DB_USER: ${DB_USER}
+      DB_NAME: ${DB_NAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+    depends_on:
+      mariadb:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - area_network
+    env_file:
+      - server/.env.server
+    restart: unless-stopped
+
   area-client-mobile:
     build:
       context: ./client_mobile
       dockerfile: Dockerfile
       args:
-        - VITE_PORT
-        - VITE_ENDPOINT
-        - VITE_GOOGLE_CLIENT_ID
-        - VITE_GOOGLE_CLIENT_SECRET
-        - VITE_MICROSOFT_CLIENT_ID
-        - VITE_LINKEDIN_CLIENT_ID
-        - VITE_LINKEDIN_CLIENT_SECRET
-        - VITE_SPOTIFY_CLIENT_ID
-        - VITE_SPOTIFY_CLIENT_SECRET
         - API_URL
         - WEB_CLIENT_URL
         - MOBILE_CLIENT_URL
         - GITHUB_CLIENT_ID
         - GITHUB_CLIENT_SECRET
     volumes:
-      - area-client-data:/app/build/app/outputs/flutter-apk
+      - area_client_data:/app/build/app/outputs/flutter-apk
     networks:
-      - area-network
+      - area_network
     env_file:
       - ./client_mobile/.env.mobile
 
@@ -47,17 +101,21 @@ services:
     ports:
       - "${VITE_PORT}:${VITE_PORT}"
     volumes:
-      - area-client-data:/usr/share/nginx/html/mobile_builds
+      - area_client_data:/usr/share/nginx/html/mobile_builds:ro
     depends_on:
       - area-client-mobile
+      - area-server
     networks:
-      - area-network
+      - area_network
     env_file:
       - ./client_web/.env.local
+    restart: unless-stopped
 
 volumes:
-  area-client-data:
+  area_client_data:
+  mariadb_data:
 
 
 networks:
-  area-network:
+  area_network:
+    driver: bridge

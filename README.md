@@ -6,11 +6,11 @@ With AREA, you can create automated workflows that integrate various services an
 ## Table of Contents
 
 - [Getting Started](#getting-started)
-    - [Prerequisites](#prerequisites)
-    - [Installation & Usage](#installation--usage)
+  - [Prerequisites](#prerequisites)
+  - [Installation & Usage](#installation--usage)
 - [Documentation](#documentation)
-    - [Requirements](#requirements)
-    - [Usage](#usage)
+  - [Requirements](#requirements)
+  - [Usage](#usage)
 - [Tests](#tests)
 - [License](#license)
 - [Contributors](#contributors)
@@ -19,9 +19,8 @@ With AREA, you can create automated workflows that integrate various services an
 
 ### Prerequisites
 
-- vite js
-- go
 - docker
+- make
 
 ### Installation & Usage
 
@@ -29,40 +28,30 @@ With AREA, you can create automated workflows that integrate various services an
 <summary>Click to expand</summary>
 
 1. Clone the repo
+
 ```sh
 git clone git@github.com:ASM-Studios/AREA.git
 ```
 
 2. Create .env files
+
 - Run the following command to create private env files
+
 ```sh
 cp .env.example .env
+cp server/.env.server.example server/.env.server
 cp client_web/.env.local.example .env.local
 cp client_mobile/.env.mobile.example .env.mobile
 ```
+
 - Fill the .env, .env.web and .env.mobile files
 
-3. Install NPM packages
-```sh
-cd AREA/client-web
-npm install
-```
-
-3. Install Go packages
-```sh
-cd AREA/server
-<TODO>
-```
-
 4. Run the project
+
 ```sh
-cd AREA/client-web
-npm run start
+make start
 ```
-```sh
-cd AREA/server
-go run ./...
-```
+
 </details>
 
 ### Documentation
@@ -87,6 +76,7 @@ The documentation is automatically built and deployed to GitHub Pages when a pus
 You can consult the documentation online at [AREA Documentation](https://asm-studios.github.io/AREA/).
 
 You can build the documentation locally by running the following command:
+
 ```sh
 cd AREA/docs
 make docs
