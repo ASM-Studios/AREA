@@ -1,5 +1,28 @@
 basePath: /
 definitions:
+  models.EventDTO:
+    properties:
+      description:
+        type: string
+      name:
+        type: string
+      parameters:
+        items:
+          $ref: '#/definitions/models.ParametersDTO'
+        type: array
+      service_id:
+        type: integer
+      type:
+        $ref: '#/definitions/models.EventType'
+    type: object
+  models.EventType:
+    enum:
+    - action
+    - reaction
+    type: string
+    x-enum-varnames:
+    - ActionEventType
+    - ReactionEventType
   models.LoginRequest:
     properties:
       email:
@@ -9,6 +32,17 @@ definitions:
     required:
     - email
     - password
+    type: object
+  models.ParametersDTO:
+    properties:
+      description:
+        type: string
+      event_id:
+        type: integer
+      name:
+        type: string
+      type:
+        type: string
     type: object
   models.RegisterRequest:
     properties:
@@ -23,8 +57,33 @@ definitions:
     - password
     - username
     type: object
-  models.Workflow:
+  models.WorkflowDTO:
+    properties:
+      description:
+        type: string
+      events:
+        items:
+          $ref: '#/definitions/models.EventDTO'
+        type: array
+      is_active:
+        type: boolean
+      name:
+        type: string
+      status:
+        $ref: '#/definitions/models.WorkflowStatus'
+      user_id:
+        type: integer
     type: object
+  models.WorkflowStatus:
+    enum:
+    - pending
+    - processed
+    - failed
+    type: string
+    x-enum-varnames:
+    - WorkflowStatusPending
+    - WorkflowStatusProcessed
+    - WorkflowStatusFailed
 host: localhost:8080
 info:
   contact:
@@ -43,15 +102,18 @@ paths:
     get:
       consumes:
       - application/json
-      description: about
+      description: Get information about the server
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            type: msg
-      summary: About
+            additionalProperties: true
+            type: object
+      security:
+      - Bearer: []
+      summary: Get information about the server
       tags:
       - about
   /auth/health:
@@ -190,20 +252,22 @@ paths:
         name: workflow
         required: true
         schema:
-          $ref: '#/definitions/models.Workflow'
+          $ref: '#/definitions/models.WorkflowDTO'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.Workflow'
+            $ref: '#/definitions/models.WorkflowDTO'
         "400":
           description: Bad Request
           schema:
             additionalProperties:
               type: string
             type: object
+      security:
+      - Bearer: []
       summary: Create a workflow
       tags:
       - workflow
@@ -245,6 +309,8 @@ paths:
             additionalProperties:
               type: string
             type: object
+      security:
+      - Bearer: []
       summary: Delete a workflow
       tags:
       - workflow
@@ -260,9 +326,16 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/models.Workflow'
+              $ref: '#/definitions/models.WorkflowDTO'
             type: array
+      security:
+      - Bearer: []
       summary: List workflows
       tags:
       - workflow
+securityDefinitions:
+  BearerAuth:
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"

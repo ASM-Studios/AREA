@@ -24,6 +24,10 @@ import (
 
 // @host      localhost:8080
 // @BasePath  /
+
+// @securityDefinitions.apikey BearerAuth
+// @in header
+// @name Authorization
 func main() {
 	config.LoadConfig()
 	pkg.InitDB()

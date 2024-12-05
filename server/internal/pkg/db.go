@@ -15,9 +15,9 @@ func migrateDB() error {
 	err := DB.AutoMigrate(
 		&models.User{},
 		&models.Workflow{},
+		&models.Service{},
 		&models.Event{},
 		&models.Parameters{},
-		&models.Service{},
 	)
 	if err != nil {
 		log.Fatalf("Failed to migrate DB: %v", err)

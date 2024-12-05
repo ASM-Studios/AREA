@@ -1,25 +1,25 @@
 package models
 
-type parameter struct {
+type Parameter struct {
 	Name        string `json:"name"`
 	Description string `json:"description"`
 	Type        string `json:"type"`
 }
 
-type action struct {
+type Action struct {
 	Name        string      `json:"name"`
 	Description string      `json:"description"`
-	Parameters  []parameter `json:"parameters"`
+	Parameters  []Parameter `json:"parameters"`
 }
 
-type reaction struct {
+type Reaction struct {
 	Name        string      `json:"name"`
 	Description string      `json:"description"`
-	Parameters  []parameter `json:"parameters"`
+	Parameters  []Parameter `json:"parameters"`
 }
 
 type ServiceList struct {
 	Name     string     `json:"name"`
-	Actions  []action   `json:"actions"`
-	Reaction []reaction `json:"reactions"`
+	Actions  []Action   `json:"actions"`
+	Reaction []Reaction `json:"reactions"`
 }
