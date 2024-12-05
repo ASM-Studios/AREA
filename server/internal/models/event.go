@@ -11,6 +11,7 @@ type Event struct {
 	ServiceID   uint         `gorm:"foreignKey:ServiceID" json:"service_id"`
 	Parameters  []Parameters `json:"parameters"`
 	Type        EventType    `gorm:"type:enum('action', 'reaction');not null" json:"type"`
+        WorkflowEvents []WorkflowEvent `gorm:"constraint:OnDelete:CASCADE;" json:"workflow_events"`
 }
 
 const (
