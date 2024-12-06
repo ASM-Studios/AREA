@@ -11,11 +11,12 @@ import (
 // WorkflowCreate godoc
 // @Summary      Create a workflow
 // @Description  Create a new workflow
+// @Security     Bearer
 // @Tags         workflow
 // @Accept       json
 // @Produce      json
-// @Param        workflow  body  models.Workflow  true  "workflow"
-// @Success      200  {object}  models.Workflow
+// @Param        workflow  body  models.WorkflowDTO  true  "workflow"
+// @Success      200  {object}  models.WorkflowDTO
 // @Failure      400  {object}  map[string]string
 // @Router       /workflow/create [post]
 func WorkflowCreate(c *gin.Context) {
@@ -36,10 +37,11 @@ func WorkflowCreate(c *gin.Context) {
 // WorkflowList godoc
 // @Summary      List workflows
 // @Description  List all workflows
+// @Security     Bearer
 // @Tags         workflow
 // @Accept       json
 // @Produce      json
-// @Success      200  {object}  []models.Workflow
+// @Success      200  {object}  []models.WorkflowDTO
 // @Router       /workflow/list [get]
 func WorkflowList(c *gin.Context) {
 	var workflows []models.Workflow
@@ -54,6 +56,7 @@ func WorkflowList(c *gin.Context) {
 // WorkflowDelete godoc
 // @Summary      Delete a workflow
 // @Description  Delete a workflow by ID
+// @Security     Bearer
 // @Tags         workflow
 // @Accept       json
 // @Produce      json

@@ -26,7 +26,12 @@ const docTemplate = `{
     "paths": {
         "/about.json": {
             "get": {
-                "description": "about",
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "description": "Get information about the server",
                 "consumes": [
                     "application/json"
                 ],
@@ -36,12 +41,13 @@ const docTemplate = `{
                 "tags": [
                     "about"
                 ],
-                "summary": "About",
+                "summary": "Get information about the server",
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "msg"
+                            "type": "object",
+                            "additionalProperties": true
                         }
                     }
                 }
@@ -240,6 +246,11 @@ const docTemplate = `{
         },
         "/workflow/create": {
             "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Create a new workflow",
                 "consumes": [
                     "application/json"
@@ -258,7 +269,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.Workflow"
+                            "$ref": "#/definitions/models.WorkflowDTO"
                         }
                     }
                 ],
@@ -266,7 +277,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.Workflow"
+                            "$ref": "#/definitions/models.WorkflowDTO"
                         }
                     },
                     "400": {
@@ -283,6 +294,11 @@ const docTemplate = `{
         },
         "/workflow/delete/{id}": {
             "delete": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "Delete a workflow by ID",
                 "consumes": [
                     "application/json"
@@ -345,6 +361,11 @@ const docTemplate = `{
         },
         "/workflow/list": {
             "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "description": "List all workflows",
                 "consumes": [
                     "application/json"
@@ -362,7 +383,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/models.Workflow"
+                                "$ref": "#/definitions/models.WorkflowDTO"
                             }
                         }
                     }
@@ -371,6 +392,40 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "models.EventDTO": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "parameters": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.ParametersDTO"
+                    }
+                },
+                "service_id": {
+                    "type": "integer"
+                },
+                "type": {
+                    "$ref": "#/definitions/models.EventType"
+                }
+            }
+        },
+        "models.EventType": {
+            "type": "string",
+            "enum": [
+                "action",
+                "reaction"
+            ],
+            "x-enum-varnames": [
+                "ActionEventType",
+                "ReactionEventType"
+            ]
+        },
         "models.LoginRequest": {
             "type": "object",
             "required": [
@@ -382,6 +437,23 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.ParametersDTO": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "event_id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "type": {
                     "type": "string"
                 }
             }
@@ -405,8 +477,51 @@ const docTemplate = `{
                 }
             }
         },
-        "models.Workflow": {
-            "type": "object"
+        "models.WorkflowDTO": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "events": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.EventDTO"
+                    }
+                },
+                "is_active": {
+                    "type": "boolean"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "status": {
+                    "$ref": "#/definitions/models.WorkflowStatus"
+                },
+                "user_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "models.WorkflowStatus": {
+            "type": "string",
+            "enum": [
+                "pending",
+                "processed",
+                "failed"
+            ],
+            "x-enum-varnames": [
+                "WorkflowStatusPending",
+                "WorkflowStatusProcessed",
+                "WorkflowStatusFailed"
+            ]
+        }
+    },
+    "securityDefinitions": {
+        "BearerAuth": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
         }
     }
 }`
