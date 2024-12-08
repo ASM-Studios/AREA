@@ -17,12 +17,10 @@ WORKDIR /app
 
 COPY package*.json ./
 
-# Development or Production installation based on NODE_ENV
 RUN if [ "$NODE_ENV" = "production" ] ; then npm ci ; else npm install ; fi
 
 COPY . .
 
-# Build only if in production
 RUN if [ "$NODE_ENV" = "production" ] ; then npm run build ; fi
 
 ###----------------------- Production stage -----------------------###
@@ -56,7 +54,6 @@ CMD ["nginx", "-g", "daemon off;"]
 ###----------------------- Development stage -----------------------###
 FROM builder AS development
 
-# Install mkcert and its dependencies
 RUN apk add --no-cache \
     nss-tools \
     curl \
@@ -67,5 +64,4 @@ RUN apk add --no-cache \
 ENV NODE_ENV=development
 EXPOSE ${VITE_PORT}
 
-# Create and move certificates to the correct location
 CMD ["sh", "-c", "if [ ! -f localhost-key.pem ]; then mkcert -install && mkcert localhost; fi && mv localhost*.pem /app/ && npm run dev -- --host"]

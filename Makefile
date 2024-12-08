@@ -61,15 +61,3 @@ logs:
 ## Clean up containers, images, volumes and orphans
 clean:
 	docker compose down --rmi local -v --remove-orphans
-
-# Flutter mobile client commands
-flutter-build:
-	docker build -t flutter-app ./client_mobile
-
-flutter-run:
-	docker run -it \
-		--network host \
-		-v $(PWD)/client_mobile:/app \
-		-v /tmp/.X11-unix:/tmp/.X11-unix \
-		-e DISPLAY=${DISPLAY} \
-		flutter-app

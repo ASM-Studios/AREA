@@ -1,6 +1,21 @@
-FROM golang:1.23.4-alpine3.20 AS builder
+# Development stage
+FROM golang:1.23.4-alpine AS development
 
-RUN apk add --no-cache gcc musl-dev
+WORKDIR /app
+
+RUN go install github.com/air-verse/air@latest
+
+COPY go.mod go.sum ./
+RUN go mod download
+
+COPY . .
+
+EXPOSE 8080
+
+CMD ["air", "-c", ".air.toml"]
+
+# Production stage
+FROM golang:1.23.4-alpine AS production
 
 WORKDIR /app
 
@@ -10,8 +25,11 @@ RUN go mod download
 
 COPY . .
 
-RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main .
+RUN CGO_ENABLED=0 GOOS=linux go build -o main .
 
+CMD ["./main"]
+
+# Final stage
 FROM alpine:3.20.3
 
 RUN apk add --no-cache ca-certificates && \
@@ -19,8 +37,8 @@ RUN apk add --no-cache ca-certificates && \
 
 WORKDIR /app
 
-COPY --from=builder /app/main .
-COPY --from=builder /app/config.json .
+COPY --from=production /app/main .
+COPY --from=production /app/config.json .
 COPY .env.server .env
 
 RUN chown -R appuser:appuser /app && \

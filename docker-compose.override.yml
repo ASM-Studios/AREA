@@ -10,5 +10,15 @@ services:
       - NODE_ENV=development
       - CHOKIDAR_USEPOLLING=true
 
+  area-server:
+    build:
+      target: development
+    volumes:
+      - ./server:/app
+      - go-modules:/go/pkg/mod
+    environment:
+      - GO_ENV=development
+
 volumes:
   ssl-certs:
+  go-modules:

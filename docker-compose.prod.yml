@@ -3,4 +3,10 @@ services:
     build:
       target: production
     environment:
-      - NODE_ENV=production 
+      - NODE_ENV=production
+
+  area-server:
+    build:
+      target: production
+    environment:
+      - GO_ENV=production
