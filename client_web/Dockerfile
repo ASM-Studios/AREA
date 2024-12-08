@@ -10,37 +10,23 @@ RUN mkdir -p /etc/nginx/ssl && \
     -addext "subjectAltName = DNS:localhost" && \
     chmod 644 /etc/nginx/ssl/certificate.crt /etc/nginx/ssl/private.key
 
-
-###----------------------- Build stage for Node.js application -----------------------###
+###----------------------- Build stage -----------------------###
 FROM node:20-alpine AS builder
 
 WORKDIR /app
 
 COPY package*.json ./
-RUN npm ci
+
+# Development or Production installation based on NODE_ENV
+RUN if [ "$NODE_ENV" = "production" ] ; then npm ci ; else npm install ; fi
 
 COPY . .
 
-ARG VITE_PORT
-ARG VITE_ENDPOINT
-ARG VITE_GOOGLE_CLIENT_ID
-ARG VITE_GOOGLE_CLIENT_SECRET
-ARG VITE_MICROSOFT_CLIENT_ID
-ARG VITE_LINKEDIN_CLIENT_ID
-ARG VITE_LINKEDIN_CLIENT_SECRET
-ARG VITE_SPOTIFY_CLIENT_ID
-ARG VITE_SPOTIFY_CLIENT_SECRET
-ARG API_URL
-ARG WEB_CLIENT_URL
-ARG MOBILE_CLIENT_URL
-ARG GITHUB_CLIENT_ID
-ARG GITHUB_CLIENT_SECRET
-
-RUN npm run build
-
+# Build only if in production
+RUN if [ "$NODE_ENV" = "production" ] ; then npm run build ; fi
 
 ###----------------------- Production stage -----------------------###
-FROM nginx:1.25.3-alpine
+FROM nginx:1.25.3-alpine AS production
 
 ARG VITE_PORT
 
@@ -66,3 +52,20 @@ HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
     CMD wget --no-verbose --tries=1 --spider http://localhost:${VITE_PORT}/health || exit 1
 
 CMD ["nginx", "-g", "daemon off;"]
+
+###----------------------- Development stage -----------------------###
+FROM builder AS development
+
+# Install mkcert and its dependencies
+RUN apk add --no-cache \
+    nss-tools \
+    curl \
+    && curl -JLO "https://dl.filippo.io/mkcert/latest?for=linux/amd64" \
+    && chmod +x mkcert-v*-linux-amd64 \
+    && cp mkcert-v*-linux-amd64 /usr/local/bin/mkcert
+
+ENV NODE_ENV=development
+EXPOSE ${VITE_PORT}
+
+# Create and move certificates to the correct location
+CMD ["sh", "-c", "if [ ! -f localhost-key.pem ]; then mkcert -install && mkcert localhost; fi && mv localhost*.pem /app/ && npm run dev -- --host"]

@@ -33,6 +33,10 @@ help:
 start:
 	docker compose up -d
 
+## Start containers in detached mode for production
+start-prod:
+	docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+
 ## Build and start containers in detached mode
 build:
 	docker compose up --build -d

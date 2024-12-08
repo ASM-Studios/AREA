@@ -1,0 +1,14 @@
+services:
+  area-client-web:
+    build:
+      target: development
+    volumes:
+      - ./client_web:/app
+      - /app/node_modules
+      - ssl-certs:/app/certs
+    environment:
+      - NODE_ENV=development
+      - CHOKIDAR_USEPOLLING=true
+
+volumes:
+  ssl-certs:

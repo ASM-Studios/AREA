@@ -115,7 +115,6 @@ volumes:
   area_client_data:
   mariadb_data:
 
-
 networks:
   area_network:
     driver: bridge
