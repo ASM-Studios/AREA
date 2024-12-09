@@ -32,6 +32,7 @@ class MicrosoftAuthService {
       ),
       (r) async {
         await secureStorage.write(key: 'microsoft_access_token', value: r.accessToken);
+        print("access token = : ${r.accessToken}");
       },
     );
   }
