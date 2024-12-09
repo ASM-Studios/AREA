@@ -1,5 +1,6 @@
 import 'package:client_mobile/features/auth/login.dart';
 import 'package:client_mobile/features/auth/register.dart';
+import 'package:client_mobile/features/home/home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:go_router/go_router.dart';
@@ -13,6 +14,10 @@ Future<void> main() async {
     routes: [
       GoRoute(
         path: '/',
+        builder: (context, state) => HomePage(),
+      ),
+      GoRoute(
+        path: '/login',
         builder: (context, state) => LoginPage(),
       ),
       GoRoute(
