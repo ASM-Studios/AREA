@@ -177,4 +177,14 @@ class AuthService {
       return (false);
     }
   }
+
+  static Future<bool> logout() async {
+    bool isLogin = await secureStorage.read(key: "bearer_token") != null;
+
+    if (isLogin) {
+      await secureStorage.delete(key: "bearer_token");
+      return (true);
+    }
+    return (false);
+  }
 }
