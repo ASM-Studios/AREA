@@ -1,17 +1,54 @@
-package utils
+package pkg
 
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/rs/zerolog/log"
+	amqp "github.com/rabbitmq/amqp091-go"
+	"log"
 	"service/consts"
 	"service/models"
-	"service/pkg"
 )
 
 type RabbitMQMessage struct {
 	WorkflowID uint `json:"workflow_id"`
 	EventID    uint `json:"event_id"`
+}
+
+func (ec *EventConsumer) Consume(handler func(msg amqp.Delivery)) error {
+	msgs, err := ec.channel.Consume(
+		consts.MessageQueue, // Queue name
+		"",                  // Consumer tag
+		true,                // Auto-ack
+		false,               // Exclusive
+		false,               // No-local
+		false,               // No-wait
+		nil,                 // Arguments
+	)
+	if err != nil {
+		return fmt.Errorf("failed to start consuming messages: %w", err)
+	}
+
+	go func() {
+		for msg := range msgs {
+			handler(msg)
+		}
+	}()
+
+	return nil
+}
+
+func (ec *EventConsumer) StartConsuming() {
+	forever := make(chan bool)
+	err := ec.Consume(func(msg amqp.Delivery) {
+		log.Printf("Received message: %s", msg.Body)
+	})
+	if err != nil {
+		log.Printf("Error consuming messages: %v", err)
+		return
+	}
+
+	log.Print("Waiting for messages. To exit press CTRL+C")
+	<-forever // Block forever
 }
 
 func (ec *EventConsumer) ConsumeEvents() error {
@@ -45,8 +82,8 @@ func (ec *EventConsumer) ConsumeEvents() error {
 func (ec *EventConsumer) processMessage(message RabbitMQMessage) error {
 	workflow := models.Workflow{}
 	event := models.Event{}
-	pkg.DB.Model(&workflow).Where("id = ?", message.WorkflowID).Update("status", "processed")
-	pkg.DB.Model(&event).Where("id = ?", message.EventID).First(&event)
+	DB.Model(&workflow).Where("id = ?", message.WorkflowID).Update("status", "processed")
+	DB.Model(&event).Where("id = ?", message.EventID).First(&event)
 	if event.Type == models.ActionEventType {
 		return ec.processAction(event)
 	} else if event.Type == models.ReactionEventType {

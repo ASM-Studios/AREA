@@ -5,33 +5,45 @@ import (
 	"AREA/internal/pkg"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"github.com/goccy/go-json"
 	"net/http"
 	"strconv"
 )
 
 func SendWorkflowEventsToQueue(workflow models.Workflow) error {
-	var firstActionEvent *models.Event
-	for _, event := range workflow.Events {
-		if event.Type == models.ActionEventType {
-			firstActionEvent = &event
-			break
-		}
+	type WorkflowEventWithDetails struct {
+		WorkflowEventID uint
+		EventID         uint
+		EventName       string
+		EventType       string
+		ServiceName     string
 	}
-	if firstActionEvent == nil {
-		return fmt.Errorf("no action event found in the workflow")
-	}
-	var service models.Service
-	err := pkg.DB.First(&service, firstActionEvent.ServiceID).Error
+
+	var firstActionEvent WorkflowEventWithDetails
+	// gorm doesn't support subqueries in the FROM clause, so we have to use a raw query
+	query := `
+		SELECT workflow_events.id, events.id AS event_id, events.name AS event_name, 
+			   events.type AS event_type, services.name AS service_name
+		FROM workflow_events
+		JOIN events ON events.id = workflow_events.event_id
+		JOIN services ON services.id = events.service_id
+		WHERE workflow_events.workflow_id = ? AND events.type = ?
+		ORDER BY workflow_events.id
+		LIMIT 1
+	`
+
+	err := pkg.DB.Raw(query, workflow.ID, models.ActionEventType).Scan(&firstActionEvent).Error
+
 	if err != nil {
-		return fmt.Errorf("failed to load service: %w", err)
+		return fmt.Errorf("failed to find first action event: %w", err)
 	}
-	routingKey := fmt.Sprintf("%s.api", service.Name)
-	message, err := json.Marshal(workflow)
+	routingKey := fmt.Sprintf("%s.api", firstActionEvent.ServiceName)
+	message, err := json.Marshal(workflow.WorkflowEvents)
 	if err != nil {
-		return fmt.Errorf("failed to serialize workflow: %w", err)
+		return fmt.Errorf("failed to serialize workflow events: %w", err)
 	}
 	if err := pkg.Publisher.Produce(message, routingKey); err != nil {
-		return fmt.Errorf("failed to publish message: %w", err)
+		return fmt.Errorf("failed to publish message to RabbitMQ: %w", err)
 	}
 
 	return nil
@@ -50,7 +62,6 @@ func SendWorkflowEventsToQueue(workflow models.Workflow) error {
 // @Router       /workflow/create [post]
 func WorkflowCreate(c *gin.Context) {
 	var request models.WorkflowCreationRequest
-	pkg.PrintRequestJSON(c)
 	if err := c.ShouldBindJSON(&request); err != nil {
 		c.JSON(400, gin.H{"error": err.Error()})
 		return
