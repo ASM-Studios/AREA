@@ -6,7 +6,7 @@ import DiscordAuth from './Buttons/DiscordAuth';
 import { Divider } from 'antd';
 
 interface OAuthButtonsProps {
-    mode: 'signin' | 'signup';
+    mode: 'signin' | 'signup' | 'connect';
     onGoogleSuccess: (response: unknown) => void;
     onGoogleError: () => void;
     onMicrosoftSuccess: (response: unknown) => void;
@@ -24,34 +24,50 @@ const OAuthButtons = ({
     onLinkedinSuccess,
     onLinkedinError
 }: OAuthButtonsProps) => {
+    let withText = "";
+    switch (mode) {
+        case 'signin':
+            withText = "Sign in with";
+            break;
+        case 'signup':
+            withText = "Sign up with";
+            break;
+        case 'connect':
+            withText = "Connect with";
+            break;
+        default:
+            withText = "Use";
+            break;
+    }
+
     return (
         <>
-            <Divider>Or</Divider>
+            {mode !== 'connect' && <Divider>Or</Divider>}
 
             <GoogleAuth
                 onSuccess={onGoogleSuccess}
                 onError={onGoogleError}
-                buttonText={`Sign ${mode === 'signin' ? 'in' : 'up'} with Google`}
+                buttonText={`${withText} Google`}
             />
 
             <MicrosoftAuth
                 onSuccess={onMicrosoftSuccess}
                 onError={onMicrosoftError}
-                buttonText={`Sign ${mode === 'signin' ? 'in' : 'up'} with Microsoft`}
+                buttonText={`${withText} Microsoft`}
             />
 
             <LinkedinAuth
                 onSuccess={onLinkedinSuccess}
                 onError={onLinkedinError}
-                buttonText={`Sign ${mode === 'signin' ? 'in' : 'up'} with LinkedIn`}
+                buttonText={`${withText} LinkedIn`}
             />
 
             <SpotifyAuth
-                buttonText={`Sign ${mode === 'signin' ? 'in' : 'up'} with Spotify`}
+                buttonText={`${withText} Spotify`}
             />
 
             <DiscordAuth
-                buttonText={`Sign ${mode === 'signin' ? 'in' : 'up'} with Discord`}
+                buttonText={`${withText} Discord`}
             />
         </>
     );
