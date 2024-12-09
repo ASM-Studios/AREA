@@ -48,6 +48,8 @@ const oauth = {
 
 const workflow = {
     create: `${endpoint}/workflow/create`,
+    list: `${endpoint}/workflow/list`,
+    delete: `${endpoint}/workflow/delete`,
 }
 
 export {

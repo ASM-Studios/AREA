@@ -320,7 +320,7 @@ const CreateWorkflow: React.FC = () => {
         instanceWithAuth.post(workflowRoute.create, workflow)
             .then(() => {
                 toast.success("Workflow successfully published")
-                //TODO: Go to /workflow/{id}
+                navigate('/dashboard');
             })
             .catch((error) => {
                 console.error(error);
