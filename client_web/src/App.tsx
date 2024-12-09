@@ -30,7 +30,6 @@ import MicrosoftCallback from './Pages/Auth/Callback/MicrosoftCallback';
 import DiscordCallback from './Pages/Auth/Callback/DiscordCallback';
 
 import CreateWorkflow from "./Pages/Workflows/CreateWorkflow";
-import WorkflowsTable from "./Pages/Workflows/WorkflowsTable";
 
 import Dashboard from './Pages/Dashboard/Dashboard';
 
@@ -161,7 +160,6 @@ const App = () => {
                             <Route path={uri.discord.auth.redirectUri.replace(window.location.origin, "")} element={<DiscordCallback />} />
 
                             <Route path="/workflow/create" element={<CreateWorkflow />} />
-                            <Route path="/workflows" element={<WorkflowsTable />} />
                             <Route path="/workflow/:id" element={<NotFound />} />
 
                             <Route path="/account/me" element={<UserPage backgroundColor={backgroundColor} setBackgroundColor={setBackgroundColor} />} />

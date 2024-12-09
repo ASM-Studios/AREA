@@ -2,8 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useAuth } from "@/Context/ContextHooks";
 import { useNavigate } from "react-router-dom";
 import { Spin } from 'antd';
-import { instance, instanceWithAuth, root, auth } from "@Config/backend.routes";
-import {toast} from "react-toastify";
+import { instanceWithAuth, auth } from "@Config/backend.routes";
 
 type SecurityProps = {
     children: React.ReactNode;
@@ -13,8 +12,6 @@ const Security = ({ children }: SecurityProps) => {
     const { isAuthenticated, jsonWebToken, setIsAuthenticated, setJsonWebToken } = useAuth();
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
-    const [_, setPingResponse] = React.useState<boolean>(false);
-    const hasPinged = React.useRef(false);
 
     useEffect(() => {
         const checkAuth = () => {
