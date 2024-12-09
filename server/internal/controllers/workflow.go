@@ -20,17 +20,52 @@ import (
 // @Failure      400  {object}  map[string]string
 // @Router       /workflow/create [post]
 func WorkflowCreate(c *gin.Context) {
-	var workflow models.Workflow
-	err := c.BindJSON(&workflow)
-	if err != nil {
+	var request models.WorkflowCreationRequest
+	pkg.PrintRequestJSON(c)
+	if err := c.ShouldBindJSON(&request); err != nil {
 		c.JSON(400, gin.H{"error": err.Error()})
 		return
 	}
-	workflow.UserID, err = pkg.GetUserFromToken(c)
+	userID, err := pkg.GetUserFromToken(c)
 	if err != nil {
+		c.JSON(401, gin.H{"error": "Unauthorized"})
 		return
 	}
-	pkg.DB.Create(&workflow)
+
+	workflow := models.Workflow{
+		UserID:      userID,
+		Name:        request.Name,
+		Description: request.Description,
+		Status:      models.WorkflowStatusPending,
+		IsActive:    true,
+	}
+
+	for _, eventReq := range request.Events {
+		workflowEvent := models.WorkflowEvent{
+			EventID: eventReq.ID,
+		}
+		for _, param := range eventReq.Parameters {
+			parameter := models.Parameters{
+				Name:    param.Name,
+				Type:    param.Type,
+				EventID: eventReq.ID,
+			}
+			if err := pkg.DB.FirstOrCreate(&parameter, parameter).Error; err != nil {
+				c.JSON(500, gin.H{"error": "Failed to create or fetch parameter", "details": err.Error()})
+				return
+			}
+			parameterValue := models.ParametersValue{
+				ParametersID: parameter.ID,
+				Value:        param.Value,
+			}
+			workflowEvent.ParametersValues = append(workflowEvent.ParametersValues, parameterValue)
+		}
+		workflow.WorkflowEvents = append(workflow.WorkflowEvents, workflowEvent)
+	}
+	if err := pkg.DB.Create(&workflow).Error; err != nil {
+		c.JSON(500, gin.H{"error": "Failed to create workflow", "details": err.Error()})
+		return
+	}
 	c.JSON(200, gin.H{"workflow": workflow})
 }
 
@@ -49,7 +84,14 @@ func WorkflowList(c *gin.Context) {
 	if err != nil {
 		return
 	}
-	pkg.DB.Where("user_id = ?", userID).Find(&workflows)
+	err = pkg.DB.Preload("WorkflowEvents.ParametersValues").
+		Where("user_id = ?", userID).
+		Find(&workflows).Error
+
+	if err != nil {
+		c.JSON(500, gin.H{"error": "Failed to fetch workflows"})
+		return
+	}
 	c.JSON(200, gin.H{"workflows": workflows})
 }
 
