@@ -32,12 +32,14 @@ func getServiceFromType(serviceType string, service models.Service) models.Servi
 
 		if serviceType == "action" {
 			actions = append(actions, models.Action{
+				Id:          event.ID,
 				Name:        event.Name,
 				Description: event.Description,
 				Parameters:  parameters,
 			})
 		} else if serviceType == "reaction" {
 			reactions = append(reactions, models.Reaction{
+				Id:          event.ID,
 				Name:        event.Name,
 				Description: event.Description,
 				Parameters:  parameters,
@@ -46,6 +48,7 @@ func getServiceFromType(serviceType string, service models.Service) models.Servi
 	}
 
 	return models.ServiceList{
+		Id:       service.ID,
 		Name:     service.Name,
 		Actions:  actions,
 		Reaction: reactions,
@@ -65,6 +68,7 @@ func getServices() []models.ServiceList {
 		actions := getServiceFromType("action", service)
 		reactions := getServiceFromType("reaction", service)
 		serviceList = append(serviceList, models.ServiceList{
+			Id:       service.ID,
 			Name:     service.Name,
 			Actions:  actions.Actions,
 			Reaction: reactions.Reaction,
