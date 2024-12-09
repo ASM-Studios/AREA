@@ -103,6 +103,7 @@ services:
     volumes:
       - area_client_data:/usr/share/nginx/html/mobile_builds:ro
     depends_on:
+      - area-client-mobile
       - area-server
     networks:
       - area_network
