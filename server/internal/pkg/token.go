@@ -4,6 +4,7 @@ import (
 	"AREA/internal/models"
 	"AREA/internal/utils"
 	"errors"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -18,4 +19,12 @@ func GetUserFromToken(c *gin.Context) (uint, error) {
 		return 0, errors.New("User not found")
 	}
 	return user.ID, nil
+}
+
+func GetServiceFromName(serviceName string) (uint, error) {
+        var service models.Service
+        if err := DB.Where("name = ?", serviceName).First(&service).Error; err != nil {
+                return 0, errors.New("Service not found")
+        }
+        return service.ID, nil
 }

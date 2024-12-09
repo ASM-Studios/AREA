@@ -40,7 +40,7 @@ func Login(c *gin.Context) {
 	}
 	tokenString := utils.NewToken(c, LoginData.Email)
 	db.DB.Model(&user).Update("token", tokenString)
-	c.JSON(http.StatusOK, gin.H{"jwt": tokenString})
+        c.JSON(http.StatusOK, gin.H{"jwt": tokenString})
 }
 
 // Register godoc
