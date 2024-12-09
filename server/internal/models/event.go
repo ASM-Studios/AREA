@@ -6,12 +6,12 @@ type WorkflowStatus string
 
 type Event struct {
 	gorm.Model
-	Name        string       `json:"name"`
-	Description string       `json:"description"`
-	ServiceID   uint         `gorm:"foreignKey:ServiceID" json:"service_id"`
-	Parameters  []Parameters `json:"parameters"`
-	Type        EventType    `gorm:"type:enum('action', 'reaction');not null" json:"type"`
-        WorkflowEvents []WorkflowEvent `gorm:"constraint:OnDelete:CASCADE;" json:"workflow_events"`
+	Name           string          `json:"name"`
+	Description    string          `json:"description"`
+	ServiceID      uint            `gorm:"foreignKey:ServiceID" json:"service_id"`
+	Parameters     []Parameters    `json:"parameters"`
+	Type           EventType       `gorm:"type:enum('action', 'reaction');not null" json:"type"`
+	WorkflowEvents []WorkflowEvent `gorm:"constraint:OnDelete:CASCADE;" json:"workflow_events"`
 }
 
 const (
