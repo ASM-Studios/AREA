@@ -74,3 +74,18 @@ export interface SelectedAction extends Omit<Action, 'parameters'> {
 export interface SelectedReaction extends Omit<Reaction, 'parameters'> {
     parameters: Record<string, string>;
 }
+
+/* --------------------------------- */
+
+export type WorkflowTableDetail = {
+    ID: number;
+    CreatedAt: string;
+    UpdatedAt: string;
+    DeletedAt: string | null;
+    user_id: number;
+    name: string;
+    description: string;
+    status: string;
+    is_active: boolean;
+    workflow_events: unknown | null;
+};
