@@ -3,10 +3,39 @@ package controllers
 import (
 	"AREA/internal/models"
 	"AREA/internal/pkg"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"strconv"
 )
+
+func SendWorkflowEventsToQueue(workflow models.Workflow) error {
+	var firstActionEvent *models.Event
+	for _, event := range workflow.Events {
+		if event.Type == models.ActionEventType {
+			firstActionEvent = &event
+			break
+		}
+	}
+	if firstActionEvent == nil {
+		return fmt.Errorf("no action event found in the workflow")
+	}
+	var service models.Service
+	err := pkg.DB.First(&service, firstActionEvent.ServiceID).Error
+	if err != nil {
+		return fmt.Errorf("failed to load service: %w", err)
+	}
+	routingKey := fmt.Sprintf("%s.api", service.Name)
+	message, err := json.Marshal(workflow)
+	if err != nil {
+		return fmt.Errorf("failed to serialize workflow: %w", err)
+	}
+	if err := pkg.Publisher.Produce(message, routingKey); err != nil {
+		return fmt.Errorf("failed to publish message: %w", err)
+	}
+
+	return nil
+}
 
 // WorkflowCreate godoc
 // @Summary      Create a workflow
@@ -64,6 +93,10 @@ func WorkflowCreate(c *gin.Context) {
 	}
 	if err := pkg.DB.Create(&workflow).Error; err != nil {
 		c.JSON(500, gin.H{"error": "Failed to create workflow", "details": err.Error()})
+		return
+	}
+	if err := SendWorkflowEventsToQueue(workflow); err != nil {
+		c.JSON(500, gin.H{"error": "failed to send workflow events: %v", "details": err.Error()})
 		return
 	}
 	c.JSON(200, gin.H{"workflow": workflow})
