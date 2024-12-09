@@ -6,7 +6,9 @@ import { normalizeName } from "@/Pages/Workflows/CreateWorkflow.utils";
 
 import { About, Service, Action, Reaction, Workflow, Parameter, SelectedAction, SelectedReaction } from "@/types";
 import { toast } from "react-toastify";
-import { instanceWithAuth, workflow as workflowRoute } from "@/Config/backend.routes";
+import { instanceWithAuth, workflow as workflowRoute, root } from "@/Config/backend.routes";
+import { useError } from "@/Context/ContextHooks";
+import { useNavigate } from "react-router-dom";
 
 const { Title, Text } = Typography;
 const { Panel } = Collapse;
@@ -180,9 +182,21 @@ const CreateWorkflow: React.FC = () => {
     const [activeActionKeys, setActiveActionKeys] = useState<string[]>([]);
     const [activeReactionKeys, setActiveReactionKeys] = useState<string[]>([]);
 
+    const { setError } = useError();
+
+    const navigate = useNavigate();
+
     React.useEffect(() => {
         setLoading(true);
-        setAbout(_data); // TODO: Fetch workflow from the server
+        instanceWithAuth.get(root.about)
+            .then((response) => {
+                setAbout(response?.data);
+            })
+            .catch((error) => {
+                console.error(error);
+                setError({ error: "API Error", errorDescription: "Could not fetch server information" });
+                navigate('/error/fetch');
+            });
         setLoading(false);
     }, []);
 
@@ -335,7 +349,7 @@ const CreateWorkflow: React.FC = () => {
 
     return (
         <Security>
-            <div style={{ padding: '16px 24px', position: 'relative', zIndex: 1 }} role="main">
+            <div style={{ padding: '16px 24px', position: 'relative', zIndex: 1, height: '100%' }} role="main">
                 <Title level={3} style={{ marginBottom: 16 }}>
                     Create Workflow
                 </Title>
@@ -376,9 +390,9 @@ const CreateWorkflow: React.FC = () => {
                             </Col>
                         </Row>
 
-                        <Row gutter={[24, 24]} style={{ minHeight: '400px', height: 'calc(100vh - 250px)' }}>
+                        <Row gutter={[24, 24]}>
                             <Col xs={24} md={8} lg={6}>
-                                <Card title="Available Actions" style={{ height: '100%', overflow: 'auto' }} role="region" aria-label="Available Actions">
+                                <Card title="Available Actions" style={{ height: '100%' }} role="region" aria-label="Available Actions">
                                     <Space style={{ marginBottom: 16 }}>
                                         <Button onClick={handleFoldAllActions} disabled={activeActionKeys.length === 0}>Fold
                                             All</Button>
@@ -422,7 +436,7 @@ const CreateWorkflow: React.FC = () => {
                             </Col>
 
                             <Col xs={24} md={8} lg={12}>
-                                <Card style={{ height: '100%', overflow: 'auto' }} role="region" aria-label="Selected Items">
+                                <Card style={{ height: '100%' }} role="region" aria-label="Selected Items">
                                     <div style={{
                                         display: 'flex',
                                         flexDirection: 'column',
@@ -611,7 +625,7 @@ const CreateWorkflow: React.FC = () => {
                             </Col>
 
                             <Col xs={24} md={8} lg={6}>
-                                <Card title="Available Reactions" style={{ height: '100%', overflow: 'auto' }} role="region" aria-label="Available Reactions">
+                                <Card title="Available Reactions" style={{ height: '100%' }} role="region" aria-label="Available Reactions">
                                     <Space style={{ marginBottom: 16 }}>
                                         <Button onClick={handleFoldAllReactions}
                                                 disabled={activeReactionKeys.length === 0}>Fold All</Button>

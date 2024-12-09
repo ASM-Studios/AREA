@@ -1,7 +1,8 @@
 import { useContext } from 'react';
-import { UserContext } from './Scopes/UserContext';
-import { ThemeContext } from './Scopes/ThemeContext';
-import { AuthContext } from './Scopes/AuthContext';
+import { UserContext } from '@/Context/Scopes/UserContext';
+import { ThemeContext } from '@/Context/Scopes/ThemeContext';
+import { AuthContext } from '@/Context/Scopes/AuthContext';
+import { ErrorContext } from "@/Context/Scopes/ErrorContext";
 
 export const useUser = () => {
     const context = useContext(UserContext);
@@ -26,3 +27,11 @@ export const useAuth = () => {
     }
     return context;
 };
+
+export const useError = () => {
+    const context = useContext(ErrorContext);
+    if (!context) {
+        throw new Error('useError must be used within an ErrorProvider');
+    }
+    return context;
+}
