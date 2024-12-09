@@ -1,9 +1,7 @@
 import React from 'react';
-import { Layout, Typography, Row, Col, Button, Card, Modal } from 'antd';
+import { Layout, Typography, Row, Col, Button, Card } from 'antd';
 import { ThunderboltOutlined, ApiOutlined, SafetyCertificateOutlined } from '@ant-design/icons';
 import { motion } from 'framer-motion';
-// @ts-ignore
-import { BlockPicker } from 'react-color';
 import { instance, root } from "@Config/backend.routes";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
@@ -14,40 +12,18 @@ const { Title, Paragraph } = Typography;
 
 interface HomeProps {
   backgroundColor: string;
-  setBackgroundColor: (color: string) => void;
 }
 
-const Home: React.FC<HomeProps> = ({ backgroundColor, setBackgroundColor }) => {
-  const [isModalVisible, setIsModalVisible] = React.useState(false);
-  const [tempColor, setTempColor] = React.useState(backgroundColor);
+const Home: React.FC<HomeProps> = ({ backgroundColor }) => {
   const [pingResponse, setPingResponse] = React.useState<boolean>(false);
   const hasPinged = React.useRef(false);
   const navigate = useNavigate();
 
   const { isAuthenticated } = useAuth();
 
-  const handleColorChange = (color: { hex: any; }) => {
-    setTempColor(color.hex);
-  };
-
-  const showModal = () => {
-    setTempColor(backgroundColor);
-    setIsModalVisible(true);
-  };
-
-  const handleOk = () => {
-    setBackgroundColor(tempColor);
-    sessionStorage.setItem('backgroundColor', tempColor);
-    setIsModalVisible(false);
-  };
-
-  const handleCancel = () => {
-    setIsModalVisible(false);
-  };
-
   const ping =  () => {
-    const response = instance.get(root.ping)
-        .then((response) => {
+    instance.get(root.ping)
+        .then((_) => {
           setPingResponse(true);
         })
         .catch((error) => {
@@ -174,15 +150,7 @@ const Home: React.FC<HomeProps> = ({ backgroundColor, setBackgroundColor }) => {
               ))}
             </Row>
           </div>
-          <div style={{ textAlign: 'center', marginTop: '20px' }}>
-            <Button type="default" onClick={showModal}>
-              Change the background color
-            </Button>
-          </div>
         </div>
-        <Modal title="Change Background Color" open={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
-          <BlockPicker color={tempColor} onChangeComplete={handleColorChange} />
-        </Modal>
       </Layout>
   );
 };

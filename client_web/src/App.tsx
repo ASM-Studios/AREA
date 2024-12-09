@@ -18,6 +18,8 @@ import NotFound from './Pages/Errors/NotFound';
 import ApiNotConnected from "@/Pages/Errors/ApiNotConnected";
 import CustomError from "@/Pages/Errors/CustomError";
 
+import UserPage from "@/Pages/Account/UserPage";
+
 import Layout from '@/Components/Layout/Layout';
 import Login from './Pages/Auth/Forms/Login';
 import Register from './Pages/Auth/Forms/Register';
@@ -148,7 +150,7 @@ const App = () => {
                 <Router>
                     <Layout>
                         <Routes>
-                            <Route path="/" element={<Home backgroundColor={backgroundColor} setBackgroundColor={setBackgroundColor} />} />
+                            <Route path="/" element={<Home backgroundColor={backgroundColor} />} />
                             <Route path="/login" element={<Login />} />
                             <Route path="/register" element={<Register />} />
                             <Route path="/dashboard" element={<Dashboard />} />
@@ -161,6 +163,8 @@ const App = () => {
                             <Route path="/workflow/create" element={<CreateWorkflow />} />
                             <Route path="/workflows" element={<WorkflowsTable />} />
                             <Route path="/workflow/:id" element={<NotFound />} />
+
+                            <Route path="/account/me" element={<UserPage backgroundColor={backgroundColor} setBackgroundColor={setBackgroundColor} />} />
 
                             <Route path="/error/connection" element={<ApiNotConnected />} />
                             <Route path="/error/:error" element={<CustomError />} />
