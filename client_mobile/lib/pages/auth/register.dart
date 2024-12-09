@@ -1,4 +1,5 @@
 // import 'dart:io';
+import 'package:client_mobile/services/login/auth_service.dart';
 import 'package:client_mobile/services/microsoft/microsoft_auth_service.dart';
 import 'package:client_mobile/tools/utils.dart';
 import 'package:client_mobile/widgets/button.dart';
@@ -108,7 +109,10 @@ class _RegisterPageState extends State<RegisterPage> {
                     label: "Register",
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {
-                        print("register");
+                        bool isRegistered = await AuthService.register(context, RegisterObject(email: emailController.text, password: passwordController.text, username: userController.text).toJson());
+                        if (isRegistered) {
+                          context.pushReplacement("/dashboard");
+                        }
                       }
                     },
                     color: Colors.black,

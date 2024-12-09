@@ -80,8 +80,9 @@ class _LoginPageState extends State<LoginPage> {
                                   email: emailController.text,
                                   password: passwordController.text)
                               .toJson());
-                      if (isLogin)
+                      if (isLogin) {
                         context.pushReplacement("/dashboard");
+                      }
                     }
                   },
                   color: Colors.black,

@@ -72,7 +72,6 @@ class AuthService {
   }
 
   static Future<bool> isUserLogin() async {
-
     final String? token = await secureStorage.read(key: 'bearer_token');
     if (token == null) return (false);
     if (!await validateBearerToken(token)) {
@@ -84,39 +83,96 @@ class AuthService {
 
   static Future<bool> login(
       BuildContext context, Map<String, dynamic> jsonInfos) async {
-
     try {
-      // Afficher un indicateur de chargement si nécessaire
-      print("Tentative de connexion...");
+      print("Tentative de login...");
 
-      // URL de l'API
       final url = Uri.parse('$baseUrl/auth/login');
 
-      // Effectuer une requête POST
       final response = await http.post(
         url,
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode(jsonInfos),
       );
 
-      // Vérifier le statut de la réponse
       if (response.statusCode == 200) {
-        // Extraire le token depuis la réponse JSON
         final responseData = jsonDecode(response.body);
         final String token = responseData['jwt'];
 
-        // Stocker le token dans le secure storage
         await secureStorage.write(key: 'bearer_token', value: token);
 
         print("Connexion réussie et token sauvegardé !");
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Login effectué avec succès !"),
+            backgroundColor: Colors.black,
+          ),
+        );
         return (true);
       } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+                "Erreur de connexion : Code ${response.statusCode} - ${response.body}"),
+            backgroundColor: Colors.red,
+          ),
+        );
         print(
             "Erreur de connexion : Code ${response.statusCode} - ${response.body}");
         return (false);
       }
     } catch (e) {
-      print("Erreur lors de la connexion : $e");
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Erreur de login : $e"),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return (false);
+    }
+  }
+
+  static Future<bool> register(
+      BuildContext context, Map<String, dynamic> jsonInfos) async {
+    try {
+      print("Tentative de connexion...");
+
+      final url = Uri.parse('$baseUrl/auth/register');
+
+      final response = await http.post(
+        url,
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode(jsonInfos),
+      );
+
+      if (response.statusCode == 200) {
+        final responseData = jsonDecode(response.body);
+        final String token = responseData['jwt'];
+
+        await secureStorage.write(key: 'bearer_token', value: token);
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text("Register avec succès !"),
+            backgroundColor: Colors.black,
+          ),
+        );
+        return (true);
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text("Unauthrorized to process."),
+            backgroundColor: Colors.red,
+          ),
+        );
+        return (false);
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Erreur de register : $e"),
+          backgroundColor: Colors.red,
+        ),
+      );
       return (false);
     }
   }
