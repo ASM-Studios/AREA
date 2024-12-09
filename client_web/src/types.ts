@@ -5,18 +5,21 @@ export type Parameter = {
 };
 
 export type Action = {
+    id: number;
     name: string;
     description: string;
     parameters: Parameter[];
 };
 
 export type Reaction = {
+    id: number;
     name: string;
     description: string;
     parameters: Parameter[];
 };
 
 export type Service = {
+    id: number;
     name: string;
     actions: Action[];
     reactions: Reaction[];
@@ -53,7 +56,7 @@ export interface WorkflowDefinition {
 
 export type Workflow = {
     name: string;
-    service: string;
+    services: number[];
     description: string;
     events: WorkflowDefinition[];
 };
@@ -62,4 +65,12 @@ export interface WorkflowItem {
     id: string;
     name: string;
     parameters?: Record<string, string>;
+}
+
+export interface SelectedAction extends Omit<Action, 'parameters'> {
+    parameters: Record<string, string>;
+}
+
+export interface SelectedReaction extends Omit<Reaction, 'parameters'> {
+    parameters: Record<string, string>;
 }

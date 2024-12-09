@@ -4,22 +4,14 @@ import Security from "@/Components/Security";
 import LinkButton from "@/Components/LinkButton";
 import { normalizeName } from "@/Pages/Workflows/CreateWorkflow.utils";
 
-// Import types correctly
-import { About, Service, Action, Reaction, Workflow, Parameter } from "@/types";
-import {toast} from "react-toastify";
-import {instanceWithAuth} from "@/Config/backend.routes";
-import {workflow as workflowRoute} from "@/Config/backend.routes";
+import { About, Service, Action, Reaction, Workflow, Parameter, SelectedAction, SelectedReaction } from "@/types";
+import { toast } from "react-toastify";
+import { instanceWithAuth, workflow as workflowRoute, root } from "@/Config/backend.routes";
+import { useError } from "@/Context/ContextHooks";
+import { useNavigate } from "react-router-dom";
 
 const { Title, Text } = Typography;
 const { Panel } = Collapse;
-
-interface SelectedAction extends Action {
-    id: string;
-}
-
-interface SelectedReaction extends Reaction {
-    id: string;
-}
 
 const _data: About = { // Fixtures
     client: {
@@ -29,14 +21,17 @@ const _data: About = { // Fixtures
         current_time: 1531680780,
         services: [
             {
+                id: 1,
                 name: "facebook",
                 actions: [
                     {
+                        id: 1,
                         name: "new_message_in_group_w/o",
                         description: "A new message is posted in the group",
                         parameters: []
                     },
                     {
+                        id: 2,
                         name: "new_message_inbox",
                         description: "A new private message is received by the user",
                         parameters: [
@@ -44,6 +39,7 @@ const _data: About = { // Fixtures
                         ]
                     },
                     {
+                        id: 3,
                         name: "new_like_w/o",
                         description: "The user gains a like from one of their messages",
                         parameters: []
@@ -51,6 +47,7 @@ const _data: About = { // Fixtures
                 ],
                 reactions: [
                     {
+                        id: 4,
                         name: "like_message",
                         description: "The user likes a message",
                         parameters: [
@@ -60,9 +57,11 @@ const _data: About = { // Fixtures
                 ]
             },
             {
+                id: 2,
                 name: "twitter",
                 actions: [
                     {
+                        id: 5,
                         name: "new_tweet",
                         description: "A new tweet is posted",
                         parameters: [
@@ -70,6 +69,7 @@ const _data: About = { // Fixtures
                         ]
                     },
                     {
+                        id: 6,
                         name: "new_follower_w/o",
                         description: "The user gains a new follower",
                         parameters: []
@@ -77,6 +77,7 @@ const _data: About = { // Fixtures
                 ],
                 reactions: [
                     {
+                        id: 7,
                         name: "retweet",
                         description: "The user retweets a tweet",
                         parameters: [
@@ -84,6 +85,7 @@ const _data: About = { // Fixtures
                         ]
                     },
                     {
+                        id: 8,
                         name: "like_tweet_w/o",
                         description: "The user likes a tweet",
                         parameters: []
@@ -91,9 +93,11 @@ const _data: About = { // Fixtures
                 ]
             },
             {
+                id: 3,
                 name: "github",
                 actions: [
                     {
+                        id: 9,
                         name: "new_issue",
                         description: "A new issue is created in a repository",
                         parameters: [
@@ -101,6 +105,7 @@ const _data: About = { // Fixtures
                         ]
                     },
                     {
+                        id: 10,
                         name: "new_pull_request_w/o",
                         description: "A new pull request is created in a repository",
                         parameters: []
@@ -108,6 +113,7 @@ const _data: About = { // Fixtures
                 ],
                 reactions: [
                     {
+                        id: 11,
                         name: "create_issue",
                         description: "The user creates a new issue",
                         parameters: [
@@ -116,6 +122,7 @@ const _data: About = { // Fixtures
                         ]
                     },
                     {
+                        id: 12,
                         name: "merge_pull_request_w/o",
                         description: "The user merges a pull request",
                         parameters: []
@@ -123,9 +130,11 @@ const _data: About = { // Fixtures
                 ]
             },
             {
+                id: 4,
                 name: "slack",
                 actions: [
                     {
+                        id: 13,
                         name: "new_message",
                         description: "A new message is posted in a channel",
                         parameters: [
@@ -134,6 +143,7 @@ const _data: About = { // Fixtures
                         ]
                     },
                     {
+                        id: 14,
                         name: "new_reaction_w/o",
                         description: "A new reaction is added to a message",
                         parameters: []
@@ -141,6 +151,7 @@ const _data: About = { // Fixtures
                 ],
                 reactions: [
                     {
+                        id: 15,
                         name: "send_message",
                         description: "The user sends a message to a channel",
                         parameters: [
@@ -149,6 +160,7 @@ const _data: About = { // Fixtures
                         ]
                     },
                     {
+                        id: 16,
                         name: "add_reaction_w/o",
                         description: "The user adds a reaction to a message",
                         parameters: []
@@ -170,9 +182,21 @@ const CreateWorkflow: React.FC = () => {
     const [activeActionKeys, setActiveActionKeys] = useState<string[]>([]);
     const [activeReactionKeys, setActiveReactionKeys] = useState<string[]>([]);
 
+    const { setError } = useError();
+
+    const navigate = useNavigate();
+
     React.useEffect(() => {
         setLoading(true);
-        setAbout(_data); // TODO: Fetch workflow from the server
+        instanceWithAuth.get(root.about)
+            .then((response) => {
+                setAbout(response?.data);
+            })
+            .catch((error) => {
+                console.error(error);
+                setError({ error: "API Error", errorDescription: "Could not fetch server information" });
+                navigate('/error/fetch');
+            });
         setLoading(false);
     }, []);
 
@@ -184,16 +208,15 @@ const CreateWorkflow: React.FC = () => {
 
         const parameters = action.parameters?.length 
             ? action.parameters.reduce((acc: Record<string, string>, param: Parameter) => ({...acc, [param.name]: ''}), {})
-            : undefined;
+            : [];
 
-        // @ts-ignore
         setSelectedActions(prev => [
             ...prev,
             { 
-                id: `${action.name}-${Date.now()}`, 
+                id: Number(action.id),
                 name: action.name,
                 description: action.description,
-                parameters
+                parameters: parameters as Record<string, string>
             }
         ]);
     };
@@ -206,16 +229,15 @@ const CreateWorkflow: React.FC = () => {
 
         const parameters = reaction.parameters?.length 
             ? reaction.parameters.reduce((acc: Record<string, string>, param: Parameter) => ({...acc, [param.name]: ''}), {})
-            : undefined;
+            : [];
 
-        // @ts-ignore
         setSelectedReactions(prev => [
             ...prev,
             { 
-                id: `${reaction.name}-${Date.now()}`, 
+                id: reaction.id,
                 name: reaction.name,
                 description: reaction.description,
-                parameters
+                parameters: parameters as Record<string, string>
             }
         ]);
     };
@@ -223,13 +245,11 @@ const CreateWorkflow: React.FC = () => {
     const areAllParametersFilled = () => {
         const actionsComplete = selectedActions.every(action => {
             if (!action.parameters) return true;
-            // @ts-ignore
             return Object.values(action.parameters).every(value => value !== '');
         });
 
         const reactionsComplete = selectedReactions.every(reaction => {
             if (!reaction.parameters) return true;
-            // @ts-ignore
             return Object.values(reaction.parameters).every(value => value !== '');
         });
 
@@ -240,17 +260,28 @@ const CreateWorkflow: React.FC = () => {
         const workflow: Workflow = {
             name: workflowName,
             description: workflowDescription,
-            service: about?.server.services.find(service =>
-                service.actions.some(action => action.name === selectedActions[0]?.name)
-            )?.name ?? "unknown",
-            events:
-            [
+            services: [...new Set([
+                ...selectedActions.map(action => {
+                    const service = about?.server.services.find(s => 
+                        s.actions.some(a => a.name === action.name)
+                    );
+                    return service?.id;
+                }),
+                ...selectedReactions.map(reaction => {
+                    const service = about?.server.services.find(s => 
+                        s.reactions.some(r => r.name === reaction.name)
+                    );
+                    return service?.id;
+                })
+            ])].filter(id => id !== undefined) as number[],
+            events: [
                 ...selectedActions.map(action => {
                     const actionDef = about?.server.services
                     .flatMap((s: Service) => s.actions)
                     .find((a: Action) => a.name === action.name);
 
                     return {
+                        id: action.id,
                         name: action.name,
                         type: 'action' as "action",
                         description: action.description,
@@ -270,6 +301,7 @@ const CreateWorkflow: React.FC = () => {
                         .find((r: Reaction) => r.name === reaction.name);
 
                     return {
+                        id: reaction.id,
                         name: reaction.name,
                         type: 'reaction' as "reaction",
                         description: reaction.description,
@@ -317,7 +349,7 @@ const CreateWorkflow: React.FC = () => {
 
     return (
         <Security>
-            <div style={{ padding: '16px 24px', position: 'relative', zIndex: 1 }} role="main">
+            <div style={{ padding: '16px 24px', position: 'relative', zIndex: 1, height: '100%' }} role="main">
                 <Title level={3} style={{ marginBottom: 16 }}>
                     Create Workflow
                 </Title>
@@ -358,9 +390,9 @@ const CreateWorkflow: React.FC = () => {
                             </Col>
                         </Row>
 
-                        <Row gutter={[24, 24]} style={{ minHeight: '400px', height: 'calc(100vh - 250px)' }}>
+                        <Row gutter={[24, 24]}>
                             <Col xs={24} md={8} lg={6}>
-                                <Card title="Available Actions" style={{ height: '100%', overflow: 'auto' }} role="region" aria-label="Available Actions">
+                                <Card title="Available Actions" style={{ height: '100%' }} role="region" aria-label="Available Actions">
                                     <Space style={{ marginBottom: 16 }}>
                                         <Button onClick={handleFoldAllActions} disabled={activeActionKeys.length === 0}>Fold
                                             All</Button>
@@ -404,7 +436,7 @@ const CreateWorkflow: React.FC = () => {
                             </Col>
 
                             <Col xs={24} md={8} lg={12}>
-                                <Card style={{ height: '100%', overflow: 'auto' }} role="region" aria-label="Selected Items">
+                                <Card style={{ height: '100%' }} role="region" aria-label="Selected Items">
                                     <div style={{
                                         display: 'flex',
                                         flexDirection: 'column',
@@ -593,7 +625,7 @@ const CreateWorkflow: React.FC = () => {
                             </Col>
 
                             <Col xs={24} md={8} lg={6}>
-                                <Card title="Available Reactions" style={{ height: '100%', overflow: 'auto' }} role="region" aria-label="Available Reactions">
+                                <Card title="Available Reactions" style={{ height: '100%' }} role="region" aria-label="Available Reactions">
                                     <Space style={{ marginBottom: 16 }}>
                                         <Button onClick={handleFoldAllReactions}
                                                 disabled={activeReactionKeys.length === 0}>Fold All</Button>
