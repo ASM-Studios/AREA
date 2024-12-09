@@ -1,6 +1,5 @@
 import { Form, Button } from 'antd';
 import { GoogleOAuthProvider } from '@react-oauth/google';
-// @ts-ignore
 import { uri } from '@Config/uri';
 
 interface GoogleAuthProps {
@@ -15,14 +14,18 @@ const GoogleAuth = ({ onSuccess, onError, buttonText }: GoogleAuthProps) => {
     }
 
     const handleGoogleLogin = () => {
-        // Initialize the Google Sign-In client
-        let google: any;
+        const google = (window as any).google;
+        if (!google) {
+            console.error('Google API not loaded');
+            onError();
+            return;
+        }
+
         const client = google.accounts.oauth2.initCodeClient({
             client_id: uri.google.auth.clientId,
-            scope: 'email profile', // TODO: Add other scopes as needed
+            scope: 'email profile',
             callback: (response: unknown) => {
-                // @ts-ignore
-                if (response?.code) {
+                if (response && typeof response === 'object' && 'code' in response) {
                     onSuccess(response);
                 } else {
                     onError();
