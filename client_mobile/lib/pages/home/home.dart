@@ -1,9 +1,6 @@
-import 'package:client_mobile/features/auth/login.dart';
-import 'package:client_mobile/main.dart';
 import 'package:client_mobile/services/login/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});

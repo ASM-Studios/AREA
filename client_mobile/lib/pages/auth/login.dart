@@ -1,4 +1,5 @@
 // import 'dart:io';
+import 'package:client_mobile/services/login/auth_service.dart';
 import 'package:client_mobile/services/microsoft/microsoft_auth_service.dart';
 import 'package:client_mobile/tools/utils.dart';
 import 'package:client_mobile/widgets/button.dart';
@@ -73,7 +74,14 @@ class _LoginPageState extends State<LoginPage> {
                   label: "Login",
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {
-                      print("login");
+                      bool isLogin = await AuthService.login(
+                          context,
+                          LoginObject(
+                                  email: emailController.text,
+                                  password: passwordController.text)
+                              .toJson());
+                      if (isLogin)
+                        context.pushReplacement("/dashboard");
                     }
                   },
                   color: Colors.black,
