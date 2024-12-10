@@ -1,4 +1,3 @@
-// import 'dart:io';
 import 'package:client_mobile/services/login/auth_service.dart';
 import 'package:client_mobile/services/microsoft/microsoft_auth_service.dart';
 import 'package:client_mobile/tools/utils.dart';
@@ -109,7 +108,13 @@ class _RegisterPageState extends State<RegisterPage> {
                     label: "Register",
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {
-                        bool isRegistered = await AuthService.register(context, RegisterObject(email: emailController.text, password: passwordController.text, username: userController.text).toJson());
+                        bool isRegistered = await AuthService.register(
+                            context,
+                            RegisterObject(
+                                    email: emailController.text,
+                                    password: passwordController.text,
+                                    username: userController.text)
+                                .toJson());
                         if (isRegistered) {
                           context.pushReplacement("/dashboard");
                         }
@@ -122,12 +127,32 @@ class _RegisterPageState extends State<RegisterPage> {
                 Align(
                   alignment: Alignment.center,
                   child: SignInButton(
-                    onPressed: () {
-                      MicrosoftAuthService.auth(context);
+                    onPressed: () async {
+                      bool isRegistered = await MicrosoftAuthService.auth(
+                          context,
+                          signUp: true);
+                      if (isRegistered) {
+                        if (context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text("Microsoft link avec succès !"),
+                              backgroundColor: Colors.black,
+                            ),
+                          );
+                          context.pushReplacement("/dashboard");
+                        }
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text("Microsoft authentification failed."),
+                            backgroundColor: Colors.red,
+                          ),
+                        );
+                      }
                     },
                     label: "Sign in with Microsoft",
                     image: Image.asset(
-                      "assets/images/microsoft_logo.png",
+                      "assets/images/microsoft.png",
                       width: 40,
                       height: 30,
                     ),
