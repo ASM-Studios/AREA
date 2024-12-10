@@ -3,10 +3,51 @@ package controllers
 import (
 	"AREA/internal/models"
 	"AREA/internal/pkg"
+	"fmt"
 	"github.com/gin-gonic/gin"
+	"github.com/goccy/go-json"
 	"net/http"
 	"strconv"
 )
+
+func SendWorkflowEventsToQueue(workflow models.Workflow) error {
+	type WorkflowEventWithDetails struct {
+		WorkflowEventID uint
+		EventID         uint
+		EventName       string
+		EventType       string
+		ServiceName     string
+	}
+
+	var firstActionEvent WorkflowEventWithDetails
+	// gorm doesn't support subqueries in the FROM clause, so we have to use a raw query
+	query := `
+		SELECT workflow_events.id, events.id AS event_id, events.name AS event_name, 
+			   events.type AS event_type, services.name AS service_name
+		FROM workflow_events
+		JOIN events ON events.id = workflow_events.event_id
+		JOIN services ON services.id = events.service_id
+		WHERE workflow_events.workflow_id = ? AND events.type = ?
+		ORDER BY workflow_events.id
+		LIMIT 1
+	`
+
+	err := pkg.DB.Raw(query, workflow.ID, models.ActionEventType).Scan(&firstActionEvent).Error
+
+	if err != nil {
+		return fmt.Errorf("failed to find first action event: %w", err)
+	}
+	routingKey := fmt.Sprintf("%s.api", firstActionEvent.ServiceName)
+	message, err := json.Marshal(workflow.WorkflowEvents)
+	if err != nil {
+		return fmt.Errorf("failed to serialize workflow events: %w", err)
+	}
+	if err := pkg.Publisher.Produce(message, routingKey); err != nil {
+		return fmt.Errorf("failed to publish message to RabbitMQ: %w", err)
+	}
+
+	return nil
+}
 
 // WorkflowCreate godoc
 // @Summary      Create a workflow
@@ -64,6 +105,10 @@ func WorkflowCreate(c *gin.Context) {
 	}
 	if err := pkg.DB.Create(&workflow).Error; err != nil {
 		c.JSON(500, gin.H{"error": "Failed to create workflow", "details": err.Error()})
+		return
+	}
+	if err := SendWorkflowEventsToQueue(workflow); err != nil {
+		c.JSON(500, gin.H{"error": "failed to send workflow events: %v", "details": err.Error()})
 		return
 	}
 	c.JSON(200, gin.H{"workflow": workflow})

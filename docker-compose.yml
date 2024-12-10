@@ -3,7 +3,7 @@ services:
     image: rabbitmq:4.0.4-management-alpine
     ports:
       - "8082:15672"
-      - "5000:5673"
+      - "5000:5672"
     networks:
       - area_network
     volumes:

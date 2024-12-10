@@ -33,6 +33,10 @@ func main() {
 	config.LoadConfig()
 	pkg.InitDB()
 	pkg.InitServiceList()
+	err := pkg.InitRabbitMQ()
+	if err != nil {
+		return
+	}
 	gin.SetMode(config.AppConfig.GinMode)
 	router := routers.SetupRouter()
 	port := strconv.Itoa(config.AppConfig.Port)
