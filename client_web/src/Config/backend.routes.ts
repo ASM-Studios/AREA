@@ -44,6 +44,10 @@ const auth = {
 
 const oauth = {
     microsoft: `${endpoint}/oauth/microsoft`,
+    spotify: `${endpoint}/oauth/spotify`,
+    google: `${endpoint}/oauth/google`,
+    linkedin: `${endpoint}/oauth/linkedin`,
+    discord: `${endpoint}/oauth/discord`,
 }
 
 const workflow = {

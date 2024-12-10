@@ -1,10 +1,14 @@
 import { Card, Spin } from 'antd';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { instance, instanceWithAuth, oauth } from "@Config/backend.routes";
+import { uri } from "@Config/uri";
+import { useAuth } from "@/Context/ContextHooks";
 
 const SpotifyCallback = () => {
     const navigate = useNavigate();
     const [error, setError] = useState<string | null>(null);
+    const { setJsonWebToken, jsonWebToken } = useAuth();
 
     useEffect(() => {
         const handleCallback = async () => {
@@ -13,6 +17,7 @@ const SpotifyCallback = () => {
             const error = urlParams.get('error');
             const state = urlParams.get('state');
             const storedState = localStorage.getItem('spotify_auth_state');
+            const codeVerifier = localStorage.getItem('code_verifier');
 
             try {
                 if (state === null || state !== storedState) {
@@ -29,21 +34,40 @@ const SpotifyCallback = () => {
                     throw new Error('No authorization code received');
                 }
 
-                // TEMP: Store the code as if it were a token
-                // TODO: Implement actual token exchange
-                sessionStorage.setItem('access_token', code);
-                sessionStorage.setItem('refresh_token', 'dummy_refresh_token');
+                let response;
 
-                // Only navigate to dashboard if we reach this point successfully
+                if (jsonWebToken) {
+                    response = await instanceWithAuth.post(oauth.spotify, {
+                        code,
+                        code_verifier: codeVerifier,
+                        redirect_uri: uri.spotify.auth.redirectUri,
+                    });
+                } else {
+                    response = await instance.post(oauth.spotify, {
+                        code,
+                        code_verifier: codeVerifier,
+                        redirect_uri: uri.spotify.auth.redirectUri,
+                    })
+                }
+
+                // @ts-expect-error
+                if (!response.ok) {
+                    throw new Error('Failed to exchange token');
+                }
+
+                // @ts-expect-error
+                const data = await response.json();
+
+                setJsonWebToken(data.token);
+
+                localStorage.removeItem('spotify_auth_state');
+                localStorage.removeItem('code_verifier');
+
                 setTimeout(() => {
-                    if (code && !error && state === storedState) {
-                        sessionStorage.removeItem('spotify_auth_state');
-                        navigate('/dashboard');
-                    }
-                }, 2000);
-                return;
+                    navigate('/dashboard');
+                }, 1000);
+
             } catch (error: unknown) {
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-expect-error
                 setError(error?.message as string || 'Failed to connect with Spotify');
                 setTimeout(() => {
