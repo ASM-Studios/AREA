@@ -1,6 +1,7 @@
-package db
+package pkg
 
 import (
+	"AREA/internal/models"
 	"AREA/internal/utils"
 	"fmt"
 	"gorm.io/driver/mysql"
@@ -9,6 +10,23 @@ import (
 )
 
 var DB *gorm.DB
+
+func migrateDB() error {
+	err := DB.AutoMigrate(
+		&models.User{},
+		&models.Workflow{},
+		&models.Service{},
+		&models.Event{},
+		&models.Parameters{},
+		&models.Token{},
+		&models.WorkflowEvent{},
+		&models.ParametersValue{},
+	)
+	if err != nil {
+		log.Fatalf("Failed to migrate DB: %v", err)
+	}
+	return err
+}
 
 func InitDB() {
 	dbHost := utils.GetEnvVar("DB_HOST")
@@ -20,7 +38,12 @@ func InitDB() {
 	err := error(nil)
 	DB, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
-		log.Fatalf("failed to initialize database, got error %v", err)
+		log.Fatalf("Failed to connect database: %v", err)
+		return
 	}
-	fmt.Println("Database connection established")
+	log.Println("Database connection established")
+	if migrateDB() != nil {
+		return
+	}
+	log.Println("Migration done")
 }

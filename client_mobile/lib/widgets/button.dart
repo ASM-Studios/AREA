@@ -34,8 +34,6 @@ class AreaButton extends StatelessWidget {
                 fontSize: 24,
                 color: Colors.white,
               )),
-          // const Spacer(),
-          // if (icon != null) FaIcon(size: 25, icon!),
       ),
     );
   }

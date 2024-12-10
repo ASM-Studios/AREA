@@ -1,0 +1,223 @@
+{
+  "name": "microsoft",
+  "events": [
+    {
+      "name": "New Email Received",
+      "description": "Triggered when a new email is received in your mailbox.",
+      "type": "action",
+      "parameters": []
+    },
+    {
+      "name": "Email Sent",
+      "description": "Triggered when an email is sent from your mailbox.",
+      "type": "action",
+      "parameters": []
+    },
+    {
+      "name": "New message in channel",
+      "description": "Triggered when a new message is posted in a Teams channel.",
+      "type": "action",
+      "parameters": [
+        {
+          "name": "channel_id",
+          "description": "ID of the Teams channel.",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "New channel created",
+      "description": "Triggered when a new channel is created in Teams.",
+      "type": "action",
+      "parameters": [
+        {
+          "name": "team_id",
+          "description": "ID of the Teams team.",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "File uploaded",
+      "description": "Triggered when a new file is uploaded to OneDrive.",
+      "type": "action",
+      "parameters": [
+        {
+          "name": "folder_path",
+          "description": "Path of the folder where the file is uploaded.",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "File updated",
+      "description": "Triggered when a file is updated in OneDrive.",
+      "type": "action",
+      "parameters": [
+        {
+          "name": "file_id",
+          "description": "ID of the updated file.",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "File deleted",
+      "description": "Triggered when a file is deleted from OneDrive.",
+      "type": "action",
+      "parameters": [
+        {
+          "name": "file_id",
+          "description": "ID of the deleted file.",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "Send an Email",
+      "description": "Send an email from your mailbox.",
+      "type": "reaction",
+      "parameters": [
+        {
+          "name": "recipient",
+          "description": "Email address of the recipient.",
+          "type": "string"
+        },
+        {
+          "name": "subject",
+          "description": "Subject of the email.",
+          "type": "string"
+        },
+        {
+          "name": "body",
+          "description": "Content of the email body.",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "Mark Email as read/unread",
+      "description": "Mark an email as read or unread.",
+      "type": "reaction",
+      "parameters": [
+        {
+          "name": "email_id",
+          "description": "ID of the email to mark.",
+          "type": "string"
+        },
+        {
+          "name": "is_read",
+          "description": "Set to true to mark as read, false to mark as unread.",
+          "type": "bool"
+        }
+      ]
+    },
+    {
+      "name": "Send a message to a channel",
+      "description": "Send a message to a Teams channel.",
+      "type": "reaction",
+      "parameters": [
+        {
+          "name": "channel_id",
+          "description": "ID of the Teams channel.",
+          "type": "string"
+        },
+        {
+          "name": "message",
+          "description": "Content of the message.",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "Create a new channel",
+      "description": "Create a new channel in a Teams team.",
+      "type": "reaction",
+      "parameters": [
+        {
+          "name": "team_id",
+          "description": "ID of the Teams team.",
+          "type": "string"
+        },
+        {
+          "name": "channel_name",
+          "description": "Name of the new channel.",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "Add a team member",
+      "description": "Add a member to a Teams team.",
+      "type": "reaction",
+      "parameters": [
+        {
+          "name": "team_id",
+          "description": "ID of the Teams team.",
+          "type": "string"
+        },
+        {
+          "name": "user_email",
+          "description": "Email of the user to add.",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "Upload a file",
+      "description": "Upload a file to OneDrive.",
+      "type": "reaction",
+      "parameters": [
+        {
+          "name": "folder_path",
+          "description": "Path to the folder where the file will be uploaded.",
+          "type": "string"
+        },
+        {
+          "name": "file_name",
+          "description": "Name of the file to upload.",
+          "type": "string"
+        },
+        {
+          "name": "file_content",
+          "description": "Content of the file.",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "Update file metadata",
+      "description": "Update the metadata of a file in OneDrive.",
+      "type": "reaction",
+      "parameters": [
+        {
+          "name": "file_id",
+          "description": "ID of the file to update.",
+          "type": "string"
+        },
+        {
+          "name": "metadata",
+          "description": "New metadata for the file.",
+          "type": "map[string]string"
+        }
+      ]
+    },
+    {
+      "name": "Create a folder",
+      "description": "Create a new folder in OneDrive.",
+      "type": "reaction",
+      "parameters": [
+        {
+          "name": "parent_folder_path",
+          "description": "Path of the parent folder.",
+          "type": "string"
+        },
+        {
+          "name": "folder_name",
+          "description": "Name of the new folder.",
+          "type": "string"
+        }
+      ]
+    }
+  ]
+}

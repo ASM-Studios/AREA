@@ -1,10 +1,10 @@
 import {Form, Input, Button, Card } from 'antd';
 import { Link } from 'react-router-dom';
 import OAuthButtons from '../../../Components/Auth/OAuthButtons';
-import { instance, auth } from "@Config/backend.routes";
+import { instance, auth, oauth } from "@Config/backend.routes";
 import { useAuth } from "@/Context/ContextHooks";
 import { useNavigate } from 'react-router-dom';
-import {toast} from "react-toastify";
+import { toast } from "react-toastify";
 
 const Login = () => {
     const { setJsonWebToken, isAuthenticated, setIsAuthenticated } = useAuth();
@@ -18,7 +18,6 @@ const Login = () => {
                     console.error('JWT not found in response');
                     return;
                 }
-                localStorage.setItem('jsonWebToken', response?.data?.jwt);
                 setJsonWebToken(response?.data?.jwt);
                 setIsAuthenticated(true);
                 navigate('/dashboard');
@@ -43,10 +42,27 @@ const Login = () => {
     };
 
     const handleMicrosoftSuccess = (response: unknown) => {
-        console.log('Microsoft Login Success:', response);
-        // Call your API to verify the Microsoft token and log in the user
+        // @ts-expect-error response isn't typed
+        instance.post(oauth.microsoft, { "token": response?.accessToken }, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+            .then((response) => {
+                if (!response?.data?.jwt) {
+                    console.error('JWT not found in response');
+                    return;
+                }
+                setJsonWebToken(response?.data?.jwt);
+                setIsAuthenticated(true);
+                navigate('/dashboard');
+            })
+            .catch((error) => {
+                console.error('Failed:', error);
+                toast.error('Failed to register: ' + (error?.response?.data?.error || 'Network error'));
+            });
     };
-
+ 
     const handleMicrosoftError = (error: unknown) => {
         console.error('Microsoft Login Failed:', error);
     };

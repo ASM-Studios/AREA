@@ -1,0 +1,12 @@
+services:
+  area-client-web:
+    build:
+      target: production
+    environment:
+      - NODE_ENV=production
+
+  area-server:
+    build:
+      target: production
+    environment:
+      - GO_ENV=production

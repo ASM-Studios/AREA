@@ -16,7 +16,10 @@ import { loadSlim } from "@tsparticles/slim";
 import Home from './Pages/Home';
 import NotFound from './Pages/Errors/NotFound';
 import ApiNotConnected from "@/Pages/Errors/ApiNotConnected";
-// @ts-ignore
+import CustomError from "@/Pages/Errors/CustomError";
+
+import UserPage from "@/Pages/Account/UserPage";
+
 import Layout from '@/Components/Layout/Layout';
 import Login from './Pages/Auth/Forms/Login';
 import Register from './Pages/Auth/Forms/Register';
@@ -27,7 +30,6 @@ import MicrosoftCallback from './Pages/Auth/Callback/MicrosoftCallback';
 import DiscordCallback from './Pages/Auth/Callback/DiscordCallback';
 
 import CreateWorkflow from "./Pages/Workflows/CreateWorkflow";
-import WorkflowsTable from "./Pages/Workflows/WorkflowsTable";
 
 import Dashboard from './Pages/Dashboard/Dashboard';
 
@@ -147,7 +149,7 @@ const App = () => {
                 <Router>
                     <Layout>
                         <Routes>
-                            <Route path="/" element={<Home backgroundColor={backgroundColor} setBackgroundColor={setBackgroundColor} />} />
+                            <Route path="/" element={<Home backgroundColor={backgroundColor} />} />
                             <Route path="/login" element={<Login />} />
                             <Route path="/register" element={<Register />} />
                             <Route path="/dashboard" element={<Dashboard />} />
@@ -158,10 +160,12 @@ const App = () => {
                             <Route path={uri.discord.auth.redirectUri.replace(window.location.origin, "")} element={<DiscordCallback />} />
 
                             <Route path="/workflow/create" element={<CreateWorkflow />} />
-                            <Route path="/workflows" element={<WorkflowsTable />} />
                             <Route path="/workflow/:id" element={<NotFound />} />
 
+                            <Route path="/account/me" element={<UserPage backgroundColor={backgroundColor} setBackgroundColor={setBackgroundColor} />} />
+
                             <Route path="/error/connection" element={<ApiNotConnected />} />
+                            <Route path="/error/:error" element={<CustomError />} />
                             <Route path="*" element={<NotFound />} />
                         </Routes>
                     </Layout>

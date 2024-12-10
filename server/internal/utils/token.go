@@ -2,9 +2,10 @@ package utils
 
 import (
 	"errors"
-	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
+	"github.com/golang-jwt/jwt/v5"
 	"net/http"
+	"strings"
 	"time"
 )
 
@@ -21,7 +22,14 @@ func NewToken(c *gin.Context, email string) string {
 }
 
 func VerifyToken(c *gin.Context) (string, error) {
-	tokenString := c.GetHeader("Authorization")
+	authHeader := c.GetHeader("Authorization")
+
+	if !strings.HasPrefix(authHeader, "Bearer ") {
+		return "", errors.New("Bearer token is missing")
+	}
+
+	tokenString := strings.TrimPrefix(authHeader, "Bearer ")
+
 	if tokenString == "" {
 		return "", errors.New("Authorization token is missing")
 	}

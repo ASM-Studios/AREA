@@ -1,55 +1,91 @@
 package controllers
 
 import (
+	"AREA/internal/models"
+	"AREA/internal/pkg"
 	"github.com/gin-gonic/gin"
+	"github.com/rs/zerolog/log"
 	"net/http"
 	"strconv"
 	"time"
 )
 
-type action struct {
-	Name        string `json:"name"`
-	Description string `json:"description"`
-}
+func getServiceFromType(serviceType string, service models.Service) models.ServiceList {
+	if err := pkg.DB.Preload("Events", "type = ?", serviceType).
+		Where("id = ?", service.ID).
+		First(&service).Error; err != nil {
+		log.Error().Err(err).Msg("Failed to load service with events")
+		return models.ServiceList{}
+	}
+	var actions []models.Action
+	var reactions []models.Reaction
+	for _, event := range service.Events {
+		pkg.DB.Preload("Parameters").Find(&event)
+		var parameters []models.Parameter
+		for _, param := range event.Parameters {
+			parameters = append(parameters, models.Parameter{
+				Name:        param.Name,
+				Description: param.Description,
+				Type:        param.Type,
+			})
+		}
 
-type reaction struct {
-	Name        string `json:"name"`
-	Description string `json:"description"`
-}
+		if serviceType == "action" {
+			actions = append(actions, models.Action{
+				Id:          event.ID,
+				Name:        event.Name,
+				Description: event.Description,
+				Parameters:  parameters,
+			})
+		} else if serviceType == "reaction" {
+			reactions = append(reactions, models.Reaction{
+				Id:          event.ID,
+				Name:        event.Name,
+				Description: event.Description,
+				Parameters:  parameters,
+			})
+		}
+	}
 
-type service struct {
-	Name     string     `json:"name"`
-	Actions  []action   `json:"actions"`
-	Reaction []reaction `json:"reaction"`
-}
-
-func getServiceList() []service {
-	return []service{
-		{
-			Name: "mail",
-			Actions: []action{
-				{
-					Name:        "send",
-					Description: "send mail",
-				},
-			},
-			Reaction: []reaction{
-				{
-					Name:        "receive",
-					Description: "receive mail",
-				},
-			},
-		},
+	return models.ServiceList{
+		Id:       service.ID,
+		Name:     service.Name,
+		Actions:  actions,
+		Reaction: reactions,
 	}
 }
 
+func getServices() []models.ServiceList {
+	var services []models.Service
+	var serviceList []models.ServiceList
+
+	if err := pkg.DB.Preload("Events").Find(&services).Error; err != nil {
+		log.Error().Err(err).Msg("Failed to load services")
+		return nil
+	}
+
+	for _, service := range services {
+		actions := getServiceFromType("action", service)
+		reactions := getServiceFromType("reaction", service)
+		serviceList = append(serviceList, models.ServiceList{
+			Id:       service.ID,
+			Name:     service.Name,
+			Actions:  actions.Actions,
+			Reaction: reactions.Reaction,
+		})
+	}
+
+	return serviceList
+}
+
 // About godoc
-// @Summary About
-// @Description about
+// @Summary Get information about the server
+// @Description Get information about the server
 // @Tags about
-// @Accept  json
-// @Produce  json
-// @Success 200 {msg} string
+// @Accept json
+// @Security Bearer
+// @Produce json
+// @Success 200 {object} map[string]interface{}
 // @Router /about.json [get]
 func About(c *gin.Context) {
 	var msg struct {
@@ -57,12 +93,13 @@ func About(c *gin.Context) {
 			Host string `json:"host"`
 		} `json:"client"`
 		Server struct {
-			CurrentTime string `json:"current_time"`
-			Services    []service
+			CurrentTime string               `json:"current_time"`
+			Services    []models.ServiceList `json:"services"`
 		} `json:"server"`
 	}
+
 	msg.Client.Host = c.ClientIP()
 	msg.Server.CurrentTime = strconv.FormatInt(time.Now().Unix(), 10)
-	msg.Server.Services = getServiceList()
+	msg.Server.Services = getServices()
 	c.JSON(http.StatusOK, msg)
 }

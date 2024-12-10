@@ -42,9 +42,21 @@ const auth = {
     health: `${endpoint}/auth/health`,
 }
 
+const oauth = {
+    microsoft: `${endpoint}/oauth/microsoft`,
+}
+
+const workflow = {
+    create: `${endpoint}/workflow/create`,
+    list: `${endpoint}/workflow/list`,
+    delete: `${endpoint}/workflow/delete`,
+}
+
 export {
     instance,
     instanceWithAuth,
     root,
-    auth
+    auth,
+    oauth,
+    workflow
 }

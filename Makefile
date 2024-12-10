@@ -9,7 +9,7 @@ TARGET_MAX_CHAR_NUM=20
 
 .PHONY: start build stop restart reset logs clean help
 
-PROJECT_IMAGES = area-client-web area-client-mobile
+PROJECT_IMAGES = area-client-web area-client-mobile area-server mariadb rabbitmq
 
 ## Show help
 help:
@@ -32,6 +32,10 @@ help:
 ## Start containers in detached mode
 start:
 	docker compose up -d
+
+## Start containers in detached mode for production
+start-prod:
+	docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
 
 ## Build and start containers in detached mode
 build:

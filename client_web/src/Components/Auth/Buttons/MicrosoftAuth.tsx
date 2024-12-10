@@ -34,7 +34,7 @@ const MicrosoftAuth = ({ onSuccess, onError, buttonText }: MicrosoftAuthProps) =
                 throw new Error('MSAL not initialized');
             }
             const response = await msalInstance.loginPopup({
-                scopes: ["user.read"]
+                scopes: ["user.read", "Mail.Read", "Mail.ReadWrite", "Mail.Send"]
             });
             onSuccess(response);
         } catch (error) {
