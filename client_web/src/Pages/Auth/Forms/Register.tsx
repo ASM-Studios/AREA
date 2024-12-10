@@ -4,7 +4,7 @@ import OAuthButtons from '@/Components/Auth/OAuthButtons';
 import { instance, auth, oauth } from "@Config/backend.routes";
 import { useAuth } from "@/Context/ContextHooks";
 import { useNavigate } from 'react-router-dom';
-import {toast} from "react-toastify";
+import { toast } from "react-toastify";
 
 const Register = () => {
     const { setJsonWebToken, isAuthenticated, setIsAuthenticated } = useAuth();
@@ -18,12 +18,10 @@ const Register = () => {
                     console.error('JWT not found in response');
                     return;
                 }
-                localStorage.setItem('jsonWebToken', response?.data?.jwt);
+                toast.success('Successfully registered!');
                 setJsonWebToken(response?.data?.jwt);
                 setIsAuthenticated(true);
-                if(isAuthenticated) {
-                    navigate('/dashboard');
-                }
+                navigate('/dashboard');
             })
             .catch((error) => {
                 console.error('Failed:', error);
@@ -56,7 +54,6 @@ const Register = () => {
                     console.error('JWT not found in response');
                     return;
                 }
-                localStorage.setItem('jsonWebToken', response?.data?.jwt);
                 setJsonWebToken(response?.data?.jwt);
                 setIsAuthenticated(true);
                 navigate('/dashboard');
