@@ -10,7 +10,12 @@ function createWindow() {
         }
     });
 
-    win.loadURL('http://localhost:8081');
+    win.loadURL('https://localhost:8081/')
+        .then((r) => {
+            console.log('loaded');
+        }).catch((e) => {
+            console.log(e);
+        });
 }
 
 app.whenReady().then(createWindow);
