@@ -5,7 +5,6 @@ import 'package:client_mobile/pages/dashboard/action_selection_page.dart';
 import 'package:client_mobile/services/about/about_service.dart';
 import 'package:flutter/material.dart';
 
-// Page principale avec FutureBuilder
 class ServiceSelectionPage extends StatelessWidget {
   final Function(WorkflowActionReaction, WorkflowService) onActionSelected;
   final bool isAction;
@@ -23,7 +22,7 @@ class ServiceSelectionPage extends StatelessWidget {
         title: const Text('Select a Service'),
       ),
       body: FutureBuilder<List<WorkflowService>>(
-        future: AboutService.getAbout(), // Appelle la méthode API
+        future: AboutService.getAbout(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());

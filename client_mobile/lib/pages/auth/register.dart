@@ -1,4 +1,3 @@
-// import 'dart:io';
 import 'package:client_mobile/services/login/auth_service.dart';
 import 'package:client_mobile/services/microsoft/microsoft_auth_service.dart';
 import 'package:client_mobile/tools/utils.dart';

@@ -19,10 +19,6 @@ class AboutService {
 
     if (response.statusCode == 200) {
       final jsonData = json.decode(response.body);
-      print("$token");
-      // debugPrint("body : ${response.body}");
-      for (final service in jsonData['server']['services'])
-      print("service : $service");
 
       return (jsonData['server']['services'] as List)
             .map((service) => WorkflowService.fromJson(service))

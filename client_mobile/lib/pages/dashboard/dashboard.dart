@@ -8,11 +8,11 @@ class DashboardPage extends StatefulWidget {
 }
 
 class _DashboardPageState extends State<DashboardPage> {
-  int _currentIndex = 0; // Pour suivre l'index actuel
+  int _currentIndex = 0;
 
   final List<Widget> _pages = [
-    WorkflowPage(), // Votre page actuelle avec les boutons Action et Réaction
-    ServiceConnectionPage(), // Une nouvelle page pour la connexion des services
+    WorkflowPage(),
+    ServiceConnectionPage(),
   ];
 
   void _onTabTapped(int index) {
