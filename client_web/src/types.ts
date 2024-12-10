@@ -77,6 +77,26 @@ export interface SelectedReaction extends Omit<Reaction, 'parameters'> {
 
 /* --------------------------------- */
 
+export type WorkflowParameterValue = {
+    ID: number;
+    CreatedAt: string;
+    UpdatedAt: string;
+    DeletedAt: string | null;
+    parameters_id: number;
+    workflow_event_id: number;
+    value: string;
+};
+
+export type WorkflowEvent = {
+    ID: number;
+    CreatedAt: string;
+    UpdatedAt: string;
+    DeletedAt: string | null;
+    workflow_id: number;
+    event_id: number;
+    parameters_values: WorkflowParameterValue[];
+};
+
 export type WorkflowTableDetail = {
     ID: number;
     CreatedAt: string;
@@ -87,5 +107,5 @@ export type WorkflowTableDetail = {
     description: string;
     status: string;
     is_active: boolean;
-    workflow_events: unknown | null;
+    events: WorkflowEvent[];
 };

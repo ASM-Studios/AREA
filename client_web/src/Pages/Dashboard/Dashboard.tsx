@@ -52,7 +52,7 @@ const Dashboard: React.FC = () => {
     };
 
     React.useEffect(() => {
-        fetchWorkflows();
+        setNeedReload(true);
     }, []);
 
     React.useEffect(() => {
@@ -74,10 +74,6 @@ const Dashboard: React.FC = () => {
         activeAutomations: filteredWorkflows.filter(w => w.is_active).length,
         pendingUpdates: filteredWorkflows.filter(w => w.status === 'pending').length,
     }), [filteredWorkflows]);
-
-    React.useEffect(() => {
-        console.log('Dashboard data:', dashboardData);
-    }, [dashboardData]);
 
     return (
         <Security>
@@ -136,7 +132,7 @@ const Dashboard: React.FC = () => {
 
                 <Row gutter={[24, 24]}>
                     <Col xs={24}>
-                        <Card 
+                        <Card
                             title="Activity" 
                             extra={
                                 <Space style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
@@ -152,9 +148,9 @@ const Dashboard: React.FC = () => {
                             }
                         >
                             <WorkflowsTable
-                                workflows={filteredWorkflows} 
-                                setNeedReload={setNeedReload} 
-                                loading={loading} 
+                                workflows={filteredWorkflows}
+                                setNeedReload={setNeedReload}
+                                loading={loading}
                             />
                         </Card>
                     </Col>

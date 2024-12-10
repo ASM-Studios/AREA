@@ -18,7 +18,6 @@ const Login = () => {
                     console.error('JWT not found in response');
                     return;
                 }
-                localStorage.setItem('jsonWebToken', response?.data?.jwt);
                 setJsonWebToken(response?.data?.jwt);
                 setIsAuthenticated(true);
                 navigate('/dashboard');
@@ -54,7 +53,6 @@ const Login = () => {
                     console.error('JWT not found in response');
                     return;
                 }
-                localStorage.setItem('jsonWebToken', response?.data?.jwt);
                 setJsonWebToken(response?.data?.jwt);
                 setIsAuthenticated(true);
                 navigate('/dashboard');

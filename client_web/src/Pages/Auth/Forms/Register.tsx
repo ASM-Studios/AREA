@@ -18,12 +18,10 @@ const Register = () => {
                     console.error('JWT not found in response');
                     return;
                 }
-                localStorage.setItem('jsonWebToken', response?.data?.jwt);
+                toast.success('Successfully registered!');
                 setJsonWebToken(response?.data?.jwt);
                 setIsAuthenticated(true);
-                if(isAuthenticated) {
-                    navigate('/dashboard');
-                }
+                navigate('/dashboard');
             })
             .catch((error) => {
                 console.error('Failed:', error);
@@ -56,7 +54,6 @@ const Register = () => {
                     console.error('JWT not found in response');
                     return;
                 }
-                localStorage.setItem('jsonWebToken', response?.data?.jwt);
                 setJsonWebToken(response?.data?.jwt);
                 setIsAuthenticated(true);
                 navigate('/dashboard');
