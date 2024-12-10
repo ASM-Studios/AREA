@@ -34,7 +34,7 @@ func createAccount(c *gin.Context, response MicrosoftResponse, token *models.Tok
 
 func getBindedAccount(c *gin.Context, response MicrosoftResponse, token *models.Token) (*models.User, error) {
     serviceId, _ := pkg.GetServiceFromName(c.Param("service"))
-    err := pkg.DB.Where("email = ? AND service_id = 3", token.Email, serviceId).First(token).Error
+    err := pkg.DB.Where("email = ? AND service_id = ?", token.Email, serviceId).First(token).Error
 
     if errors.Is(err, gorm.ErrRecordNotFound) {
         return createAccount(c, response, token), nil
