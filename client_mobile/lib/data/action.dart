@@ -5,12 +5,14 @@ class WorkflowActionReaction {
   final String name;
   final String description;
   final List<Parameter> parameters;
+  String? serviceName;
 
   WorkflowActionReaction({
     required this.id,
     required this.name,
     required this.description,
     required this.parameters,
+    this.serviceName,
   });
 
   factory WorkflowActionReaction.fromJson(Map<String, dynamic> json) {

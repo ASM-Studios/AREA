@@ -2,11 +2,13 @@ class Parameter {
   final String name;
   final String description;
   final String type;
+  String? value;
 
   Parameter({
     required this.name,
     required this.description,
     required this.type,
+    this.value,
   });
 
   factory Parameter.fromJson(Map<String, dynamic> json) {

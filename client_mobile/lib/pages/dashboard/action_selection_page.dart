@@ -1,13 +1,15 @@
 import 'package:client_mobile/data/action.dart';
+import 'package:client_mobile/data/parameter.dart';
 import 'package:flutter/material.dart';
 
 class ActionSelectionPage extends StatelessWidget {
   final String serviceName;
-  final Function(WorkflowActionReaction) onActionSelected;
+  final Function(WorkflowActionReaction, String) onActionSelected;
   final List<WorkflowActionReaction> actions;
 
-  ActionSelectionPage(
-      {required this.serviceName,
+  const ActionSelectionPage(
+      {super.key,
+      required this.serviceName,
       required this.onActionSelected,
       required this.actions});
 
@@ -15,21 +17,53 @@ class ActionSelectionPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Select Action/Reaction'),
+        title: const Text('Select Action/Reaction'),
       ),
       body: ListView.builder(
         itemCount: actions.length,
         itemBuilder: (context, index) {
           return ListTile(
             title: Text(actions[index].name),
-            onTap: () {
-              // Passer directement à la première page avec l'action choisie
-              // onActionSelected(serviceActions[index]);
+            onTap: () async {
+              for (var param in actions[index].parameters) {
+                String? updatedValue =
+                    await _showParameterDialog(context, param);
+                param.value = updatedValue;
+              }
+              onActionSelected(actions[index], serviceName);
               Navigator.popUntil(context, (route) => route.isFirst);
             },
           );
         },
       ),
+    );
+  }
+
+  Future<String?> _showParameterDialog(
+      BuildContext context, Parameter parameter) async {
+    TextEditingController controller = TextEditingController();
+
+    return showDialog<String>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Enter value for ${parameter.name}'),
+          content: TextField(
+            controller: controller,
+            decoration: InputDecoration(
+              hintText: 'Enter value for ${parameter.name}',
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context, controller.text);
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
     );
   }
 }
