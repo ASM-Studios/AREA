@@ -40,7 +40,6 @@ const Header: React.FC = () => {
     }, [location.pathname]);
 
     function handleLogout() {
-        localStorage.removeItem('jsonWebToken');
         setIsAuthenticated(false);
         setJsonWebToken('');
         window.location.href = '/';

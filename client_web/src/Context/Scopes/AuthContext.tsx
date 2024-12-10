@@ -12,6 +12,7 @@ export const AuthContext = createContext<AuthContextType | undefined>(undefined)
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [jsonWebToken, setJsonWebToken] = useState('');
+    const [shouldUpdate, setShouldUpdate] = useState(false);
 
     useEffect(() => {
         const token = localStorage.getItem('jsonWebToken');
@@ -19,7 +20,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             setJsonWebToken(token);
             setIsAuthenticated(true);
         }
+        setShouldUpdate(true);
     }, []);
+
+    useEffect(() => {
+        if (!shouldUpdate) { return; }
+        localStorage.setItem('jsonWebToken', jsonWebToken);
+        if (!jsonWebToken) {
+            localStorage.removeItem('jsonWebToken');
+        }
+    }, [jsonWebToken]);
 
     return (
         <AuthContext.Provider
