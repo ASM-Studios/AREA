@@ -11,7 +11,7 @@ import (
 
 func main() {
 	rabbitMQConnection := utils.GetEnvVar("RMQ_URL")
-	pkg.InitDB()
+	utils.InitDB()
 	err := pkg.Consumer.Init(rabbitMQConnection)
 	if err != nil {
 		log.Fatalf("Failed to initialize consumer: %v", err)
