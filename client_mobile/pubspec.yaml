@@ -73,6 +73,7 @@ flutter:
       - .env.mobile
       - assets/images/microsoft.png
       - assets/images/spotify.png
+      - assets/images/spotify_green.png
       - assets/images/google.png
       - assets/images/discord.png
   #   - images/a_dot_burr.jpeg
