@@ -26,7 +26,7 @@ class ServiceMetadata {
         imagePath: 'assets/images/microsoft.png'),
     ServiceMetadata(
         name: "google",
-        color: Colors.white,
+        color: Colors.amber,
         imagePath: 'assets/images/google.png'),
   ];
 

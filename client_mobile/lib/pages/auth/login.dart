@@ -96,7 +96,7 @@ class _LoginPageState extends State<LoginPage> {
                     },
                     label: "Sign in with Microsoft",
                     image: Image.asset(
-                      "assets/images/microsoft_logo.png",
+                      "assets/images/microsoft.png",
                       width: 40,
                       height: 30,
                     ),
