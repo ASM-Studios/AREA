@@ -1,69 +1,43 @@
-import 'package:client_mobile/data/action.dart';
-import 'package:client_mobile/services/login/auth_service.dart';
-import 'package:client_mobile/widgets/action_button.dart';
-import 'package:client_mobile/widgets/reaction_button.dart';
+import 'package:client_mobile/pages/dashboard/service_connection.dart';
+import 'package:client_mobile/pages/dashboard/workflow.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
 class DashboardPage extends StatefulWidget {
-  const DashboardPage({super.key});
-
   @override
-  State<DashboardPage> createState() => _DashboardPageState();
+  _DashboardPageState createState() => _DashboardPageState();
 }
 
 class _DashboardPageState extends State<DashboardPage> {
-  WorkflowActionReaction? action;
-  WorkflowActionReaction? reaction;
+  int _currentIndex = 0; // Pour suivre l'index actuel
 
-  void onActionSelected(WorkflowActionReaction selected, String serviceName) {
-    setState(() {
-      action = selected;
-      action!.serviceName = serviceName;
-    });
-  }
+  final List<Widget> _pages = [
+    WorkflowPage(), // Votre page actuelle avec les boutons Action et Réaction
+    ServiceConnectionPage(), // Une nouvelle page pour la connexion des services
+  ];
 
-  void onReactionSelected(WorkflowActionReaction selected, String serviceName) {
+  void _onTabTapped(int index) {
     setState(() {
-      reaction = selected;
-      reaction!.serviceName = serviceName;
+      _currentIndex = index;
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          const SizedBox(height: 50),
-          ActionButton(onActionSelected: onActionSelected, action: action),
-          const SizedBox(height: 30),
-          ReactionButton(
-              onActionSelected: onReactionSelected, reaction: reaction),
-          const SizedBox(height: 50),
-          ElevatedButton(
-              onPressed: () async {
-                if (action == null || reaction == null) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text("Please refer an action and a reaction"),
-                    backgroundColor: Colors.red,
-                  ),
-                );
-                } else {
-                  print("create workflow");
-                }
-              },
-              child: const Text("Create"))
+      body: _pages[_currentIndex],
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _currentIndex,
+        onTap: _onTabTapped,
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.settings),
+            label: 'Services',
+          ),
         ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          bool hasLogout = await AuthService.logout();
-          if (hasLogout) context.pushReplacement("/login");
-        },
-        tooltip: 'Logout',
-        child: const Icon(Icons.login),
       ),
     );
   }

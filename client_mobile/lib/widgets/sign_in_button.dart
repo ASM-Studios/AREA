@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class SignInButton extends StatelessWidget {
-  const SignInButton(
+  SignInButton(
       {super.key, required this.label, this.image, this.onPressed});
 
   final String label;
