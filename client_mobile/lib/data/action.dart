@@ -17,10 +17,12 @@ class WorkflowActionReaction {
     return WorkflowActionReaction(
       id: json['id'],
       name: json['name'],
-      description: json['description'],
-      parameters: (json['parameters'] as List)
-          .map((param) => Parameter.fromJson(param))
-          .toList(),
+      description: json['description'] ?? "",
+      parameters: json['parameters'] != null
+          ? (json['parameters'] as List)
+              .map((param) => Parameter.fromJson(param))
+              .toList()
+          : [],
     );
   }
 

@@ -12,7 +12,7 @@ class Parameter {
   factory Parameter.fromJson(Map<String, dynamic> json) {
     return Parameter(
       name: json['name'],
-      description: json['description'],
+      description: json['description'] ?? "",
       type: json['type'],
     );
   }
