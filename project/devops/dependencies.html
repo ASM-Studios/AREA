@@ -1,0 +1,214 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Project Dependencies &mdash; AREA  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            AREA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing.html">Contribution Guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../client_web/index.html">AREA Client Web</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../client_mobile/index.html">AREA Client Mobile</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../server/index.html">AREA Server</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">AREA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Project Dependencies</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/project/devops/dependencies.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="project-dependencies">
+<h1>Project Dependencies<a class="headerlink" href="#project-dependencies" title="Link to this heading"></a></h1>
+<p>This page details all the technologies, tools, and external projects used in our DevOps setup.</p>
+<section id="container-technologies">
+<h2>Container Technologies<a class="headerlink" href="#container-technologies" title="Link to this heading"></a></h2>
+<section id="docker">
+<h3>Docker<a class="headerlink" href="#docker" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><strong>Version</strong>: Latest</p></li>
+<li><p><strong>Usage</strong>: Container orchestration and deployment</p></li>
+<li><p><strong>Purpose</strong>: Ensures consistent development and production environments</p></li>
+<li><p><strong>Source</strong>: <a class="reference external" href="https://www.docker.com/">Official Docker</a></p></li>
+</ul>
+</section>
+<section id="docker-compose">
+<h3>Docker Compose<a class="headerlink" href="#docker-compose" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><strong>Version</strong>: 3.x</p></li>
+<li><p><strong>Usage</strong>: Multi-container application definition and running</p></li>
+<li><p><strong>Purpose</strong>: Orchestrates our microservices architecture</p></li>
+<li><p><strong>Source</strong>: <a class="reference external" href="https://docs.docker.com/compose/">Docker Compose</a></p></li>
+</ul>
+</section>
+</section>
+<section id="web-technologies">
+<h2>Web Technologies<a class="headerlink" href="#web-technologies" title="Link to this heading"></a></h2>
+<section id="nginx">
+<h3>Nginx<a class="headerlink" href="#nginx" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><strong>Version</strong>: Alpine-based</p></li>
+<li><p><strong>Usage</strong>: Web server and reverse proxy</p></li>
+<li><p><strong>Purpose</strong>: Serves web client and handles APK downloads</p></li>
+<li><p><strong>Image</strong>: nginx:alpine</p></li>
+<li><p><strong>Source</strong>: <a class="reference external" href="https://hub.docker.com/_/nginx">Official Nginx</a></p></li>
+</ul>
+</section>
+</section>
+<section id="development-technologies">
+<h2>Development Technologies<a class="headerlink" href="#development-technologies" title="Link to this heading"></a></h2>
+<section id="flutter">
+<h3>Flutter<a class="headerlink" href="#flutter" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><strong>Version</strong>: Stable</p></li>
+<li><p><strong>Usage</strong>: Mobile client development</p></li>
+<li><p><strong>Purpose</strong>: Cross-platform mobile application development</p></li>
+<li><p><strong>Image</strong>: ghcr.io/cirruslabs/flutter:stable</p></li>
+<li><p><strong>Source</strong>: <a class="reference external" href="https://github.com/cirruslabs/docker-images-flutter">CirrusLabs Flutter</a></p></li>
+</ul>
+</section>
+<section id="node-js">
+<h3>Node.js<a class="headerlink" href="#node-js" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><strong>Version</strong>: Latest LTS</p></li>
+<li><p><strong>Usage</strong>: Web client development</p></li>
+<li><p><strong>Purpose</strong>: React application building and serving</p></li>
+<li><p><strong>Image</strong>: node:latest</p></li>
+<li><p><strong>Source</strong>: <a class="reference external" href="https://hub.docker.com/_/node">Official Node.js</a></p></li>
+</ul>
+</section>
+</section>
+<section id="development-tools">
+<h2>Development Tools<a class="headerlink" href="#development-tools" title="Link to this heading"></a></h2>
+<section id="mkcert">
+<h3>mkcert<a class="headerlink" href="#mkcert" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><strong>Purpose</strong>: Local SSL certificate generation</p></li>
+<li><p><strong>Usage</strong>: Development SSL certificates</p></li>
+<li><p><strong>Source</strong>: <a class="reference external" href="https://github.com/FiloSottile/mkcert">FiloSottile/mkcert</a></p></li>
+</ul>
+</section>
+<section id="sphinx">
+<h3>Sphinx<a class="headerlink" href="#sphinx" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><strong>Purpose</strong>: Documentation generation</p></li>
+<li><p><strong>Version</strong>: Latest</p></li>
+<li><p><strong>Usage</strong>: Project documentation</p></li>
+<li><p><strong>Source</strong>: <a class="reference external" href="https://www.sphinx-doc.org/">Sphinx Documentation</a></p></li>
+</ul>
+</section>
+</section>
+<section id="package-managers">
+<h2>Package Managers<a class="headerlink" href="#package-managers" title="Link to this heading"></a></h2>
+<section id="npm">
+<h3>npm<a class="headerlink" href="#npm" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><strong>Purpose</strong>: Node.js package management</p></li>
+<li><p><strong>Used By</strong>: Web client</p></li>
+<li><p><strong>Source</strong>: <a class="reference external" href="https://www.npmjs.com/">npm</a></p></li>
+</ul>
+</section>
+<section id="pub">
+<h3>pub<a class="headerlink" href="#pub" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><strong>Purpose</strong>: Flutter/Dart package management</p></li>
+<li><p><strong>Used By</strong>: Mobile client</p></li>
+<li><p><strong>Source</strong>: <a class="reference external" href="https://pub.dev/">pub.dev</a></p></li>
+</ul>
+</section>
+</section>
+<section id="version-control">
+<h2>Version Control<a class="headerlink" href="#version-control" title="Link to this heading"></a></h2>
+<section id="git">
+<h3>Git<a class="headerlink" href="#git" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><strong>Usage</strong>: Source code management</p></li>
+<li><p><strong>Purpose</strong>: Version control and collaboration</p></li>
+<li><p><strong>Source</strong>: <a class="reference external" href="https://git-scm.com/">Git</a></p></li>
+</ul>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Maël RABOT, Mathieu COULET, Mathieu BOREL, Charles MADJERI, Samuel BRUSCHET.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
