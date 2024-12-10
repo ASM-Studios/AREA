@@ -1,4 +1,5 @@
 import 'package:client_mobile/data/action.dart';
+import 'package:client_mobile/data/service.dart';
 import 'package:client_mobile/data/service_metadata.dart';
 import 'package:client_mobile/pages/dashboard/service_selection.dart';
 import 'package:flutter/material.dart';
@@ -7,7 +8,7 @@ class ReactionButton extends StatefulWidget {
   const ReactionButton(
       {super.key, required this.onActionSelected, this.reaction});
 
-  final Function(WorkflowActionReaction, String) onActionSelected;
+  final Function(WorkflowActionReaction, WorkflowService) onActionSelected;
   final WorkflowActionReaction? reaction;
 
   @override

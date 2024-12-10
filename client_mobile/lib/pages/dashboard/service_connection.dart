@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:client_mobile/services/microsoft/microsoft_auth_service.dart';
 import 'package:client_mobile/widgets/sign_in_button.dart';
 import 'package:flutter/material.dart';

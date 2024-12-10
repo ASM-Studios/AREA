@@ -45,8 +45,8 @@ class WorkflowService {
     return {
       'id': id,
       'name': name,
-      'actions': actions.map((a) => a.toJson()).toList(),
-      'reactions': reactions.map((r) => r.toJson()).toList(),
+      'actions': actions.map((a) => a.toJson("action")).toList(),
+      'reactions': reactions.map((r) => r.toJson("reaction")).toList(),
     };
   }
 }

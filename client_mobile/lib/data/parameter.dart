@@ -22,8 +22,8 @@ class Parameter {
   Map<String, dynamic> toJson() {
     return {
       'name': name,
-      'description': description,
       'type': type,
+      'value': value
     };
   }
 }
