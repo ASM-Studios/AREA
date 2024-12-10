@@ -5,10 +5,11 @@ import { useNavigate } from "react-router-dom";
 import { BlockPicker } from "react-color";
 import { useAuth, useUser } from "@/Context/ContextHooks";
 import OAuthButtons from "@/Components/Auth/OAuthButtons";
-import {toast} from "react-toastify";
+import { toast } from "react-toastify";
 import Security from "@/Components/Security";
+import { instance, oauth } from "@Config/backend.routes";
 
-const { Header, Content } = Layout;
+const { Content } = Layout;
 const { Title, Text } = Typography;
 
 interface UserPageProps {
@@ -24,7 +25,6 @@ const UserPage: React.FC<UserPageProps> = ({ backgroundColor, setBackgroundColor
     const { user } = useUser();
 
     const handleLogout = () => {
-        localStorage.removeItem("JsonWebToken");
         setJsonWebToken("");
         setIsAuthenticated(false);
         navigate("/");
@@ -45,6 +45,30 @@ const UserPage: React.FC<UserPageProps> = ({ backgroundColor, setBackgroundColor
 
     const handleNotImplemented = () => {
         toast.error("This feature is not implemented yet");
+    };
+
+    const onMicrosoftSuccess = (response: any) => {
+        instance.post(oauth.microsoft, { "token": response?.accessToken }, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+            .then((response: { data: { jwt: string; }; }) => {
+                if (!response?.data?.jwt) {
+                    console.error('JWT not found in response');
+                    return;
+                }
+                toast.success('Successfully connected with Microsoft');
+            })
+            .catch((error) => {
+                console.error('Failed:', error);
+                toast.error('Failed to register: ' + (error?.response?.data?.error || 'Network error'));
+            });
+    };
+
+    const onMicrosoftError = (error: any) => {
+        console.error(error);
+        toast.error("Failed to connect with Microsoft");
     };
 
     return (
@@ -85,12 +109,12 @@ const UserPage: React.FC<UserPageProps> = ({ backgroundColor, setBackgroundColor
                                         <Text>Connect your accounts to enhance your experience</Text>
                                         <OAuthButtons
                                          mode={"connect"}
-                                         onGoogleError={handleNotImplemented}
                                          onGoogleSuccess={handleNotImplemented}
-                                         onLinkedinError={handleNotImplemented}
+                                         onGoogleError={handleNotImplemented}
+                                         onMicrosoftSuccess={onMicrosoftSuccess}
+                                         onMicrosoftError={onMicrosoftError}
                                          onLinkedinSuccess={handleNotImplemented}
-                                         onMicrosoftError={handleNotImplemented}
-                                         onMicrosoftSuccess={handleNotImplemented}
+                                         onLinkedinError={handleNotImplemented}
                                         />
                                     </Space>
                                 </Card>
