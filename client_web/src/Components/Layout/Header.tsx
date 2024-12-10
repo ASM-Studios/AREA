@@ -7,18 +7,24 @@ import { useNavigate } from 'react-router-dom';
 
 const { Header: AntHeader } = Layout;
 
+enum Visibility {
+    ALWAYS = 'always',
+    AUTH = 'auth',
+    GUEST = 'guest',
+}
+
 interface MenuItems {
     key: string;
     label: React.ReactNode;
-    auth: boolean;
+    visibility?: Visibility;
 }
 
 const menuItems: MenuItems[] = [
-    { key: '/', label: <Link to="/">Home</Link>, auth: false },
-    { key: '/login', label: <Link to="/login">Login</Link>, auth: false },
-    { key: '/register', label: <Link to="/register">Register</Link>, auth: false },
-    { key: '/dashboard', label: <Link to="/dashboard">Dashboard</Link>, auth: true },
-    { key: '/workflow/create', label: <Link to="/workflow/create">Create Workflow</Link>, auth: true },
+    { key: '/', label: <Link to="/">Home</Link>, visibility: Visibility.ALWAYS },
+    { key: '/login', label: <Link to="/login">Login</Link>, visibility: Visibility.GUEST },
+    { key: '/register', label: <Link to="/register">Register</Link>, visibility: Visibility.GUEST },
+    { key: '/dashboard', label: <Link to="/dashboard">Dashboard</Link>, visibility: Visibility.AUTH },
+    { key: '/workflow/create', label: <Link to="/workflow/create">Create Workflow</Link>, visibility: Visibility.AUTH },
 ];
 
 const Header: React.FC = () => {
@@ -61,6 +67,12 @@ const Header: React.FC = () => {
         }
     };
 
+    const filteredMenuItems = menuItems.filter(item => {
+        if (item.visibility === Visibility.ALWAYS) return true;
+        if (item.visibility === Visibility.AUTH && isAuthenticated) return true;
+        return item.visibility === Visibility.GUEST && !isAuthenticated;
+    });
+
     return (
         <div style={{ padding: 24, position: 'relative', zIndex: 1 }}>
             <AntHeader style={{ backgroundColor: theme === "dark" ? '#001529' : 'white', display: 'flex', alignItems: 'center', zIndex: 1, borderRadius: '8px' }}>
@@ -68,7 +80,7 @@ const Header: React.FC = () => {
                     theme={theme}
                     mode="horizontal"
                     style={{ flex: 1 }}
-                    items={menuItems.filter(item => !item.auth || isAuthenticated)}
+                    items={filteredMenuItems}
                     selectedKeys={[selectedKey]}
                 />
                 <Dropdown
