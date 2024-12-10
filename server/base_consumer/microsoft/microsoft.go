@@ -7,15 +7,6 @@ import (
 	"service/utils"
 )
 
-type APIClient struct {
-	Token string
-}
-
-func (c *APIClient) ValidateToken() error {
-	// Add token validation logic here
-	return nil
-}
-
 func (c *APIClient) ProcessWorkflowEvent(workflowID, eventID uint) error {
 	var event models.Event
 	if err := utils.DB.First(&event, eventID).Error; err != nil {
@@ -44,16 +35,4 @@ func (c *APIClient) ProcessWorkflowEvent(workflowID, eventID uint) error {
 	}
 
 	return fmt.Errorf("unhandled event type: %s (%s)", event.Type, event.Name)
-}
-
-func InitMicrosoftAPI(token string) (*APIClient, error) {
-	client := &APIClient{
-		Token: token,
-	}
-
-	if err := client.ValidateToken(); err != nil {
-		return nil, fmt.Errorf("invalid token: %w", err)
-	}
-
-	return client, nil
 }

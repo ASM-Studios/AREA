@@ -27,7 +27,7 @@ type MailListResponse struct {
 }
 
 func (c *APIClient) HandleNewEmailReceived(workflowID uint) error {
-	endpoint := "https://graph.microsoft.com/v1.0/me/mailFolders/Inbox/messages?$filter=isRead%20eq%20false&$top=10&$orderby=receivedDateTime%20desc"
+	endpoint := "https://graph.microsoft.com/v1.0/me/mailFolders/Inbox/messages?$filter=isRead%20eq%20false&$top=1&$orderby=receivedDateTime%20desc"
 
 	req, err := http.NewRequest("GET", endpoint, nil)
 	if err != nil {
