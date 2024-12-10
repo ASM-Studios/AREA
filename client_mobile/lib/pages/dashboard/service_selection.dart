@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 
 // Page principale avec FutureBuilder
 class ServiceSelectionPage extends StatelessWidget {
-  final Function(WorkflowActionReaction, String) onActionSelected;
+  final Function(WorkflowActionReaction, WorkflowService) onActionSelected;
   final bool isAction;
 
   const ServiceSelectionPage({
@@ -58,7 +58,7 @@ class ServiceSelectionPage extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                           builder: (context) => ActionSelectionPage(
-                            serviceName: services[index].name,
+                            service: services[index],
                             onActionSelected: onActionSelected,
                             actions: isAction
                                 ? services[index].actions

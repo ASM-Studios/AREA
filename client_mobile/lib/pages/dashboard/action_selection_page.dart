@@ -1,15 +1,16 @@
 import 'package:client_mobile/data/action.dart';
 import 'package:client_mobile/data/parameter.dart';
+import 'package:client_mobile/data/service.dart';
 import 'package:flutter/material.dart';
 
 class ActionSelectionPage extends StatelessWidget {
-  final String serviceName;
-  final Function(WorkflowActionReaction, String) onActionSelected;
+  final WorkflowService service;
+  final Function(WorkflowActionReaction, WorkflowService) onActionSelected;
   final List<WorkflowActionReaction> actions;
 
   const ActionSelectionPage(
       {super.key,
-      required this.serviceName,
+      required this.service,
       required this.onActionSelected,
       required this.actions});
 
@@ -30,7 +31,7 @@ class ActionSelectionPage extends StatelessWidget {
                     await _showParameterDialog(context, param);
                 param.value = updatedValue;
               }
-              onActionSelected(actions[index], serviceName);
+              onActionSelected(actions[index], service);
               Navigator.popUntil(context, (route) => route.isFirst);
             },
           );
