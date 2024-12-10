@@ -77,7 +77,7 @@ class _WorkflowPageState extends State<WorkflowPage> {
                 Navigator.of(context).pop({
                   "name": nameController.text,
                   "description": descriptionController.text,
-                }); // Retourne les données
+                });
               },
               child: const Text("Save"),
             ),

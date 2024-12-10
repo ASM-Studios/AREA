@@ -91,8 +91,28 @@ class _LoginPageState extends State<LoginPage> {
                 Align(
                   alignment: Alignment.center,
                   child: SignInButton(
-                    onPressed: () {
-                      MicrosoftAuthService.auth(context);
+                    onPressed: () async {
+                      bool isRegistered = await MicrosoftAuthService.auth(
+                          context,
+                          signUp: true);
+                      if (isRegistered) {
+                        if (context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text("Microsoft link avec succès !"),
+                              backgroundColor: Colors.black,
+                            ),
+                          );
+                          context.pushReplacement("/dashboard");
+                        }
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text("Microsoft authentification failed."),
+                            backgroundColor: Colors.red,
+                          ),
+                        );
+                      }
                     },
                     label: "Sign in with Microsoft",
                     image: Image.asset(

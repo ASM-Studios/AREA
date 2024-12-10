@@ -1,5 +1,4 @@
 import 'package:client_mobile/data/action.dart';
-import 'package:flutter/gestures.dart';
 
 class WorkflowEvent
 {

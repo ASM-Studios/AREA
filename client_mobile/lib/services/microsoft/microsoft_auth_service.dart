@@ -15,7 +15,7 @@ class MicrosoftAuthService {
   static const String authority = "https://login.microsoftonline.com/common";
   static const FlutterSecureStorage secureStorage = FlutterSecureStorage();
 
-  static Future<bool> linkToken(String token) async {
+  static Future<bool> linkToken(String token, {bool signUp = false}) async {
     String baseUrl = dotenv.env["BACKEND_BASE_URL"] ?? "http://localhost:8080";
     final response = await http.post(
       Uri.parse('$baseUrl/oauth/microsoft'),
@@ -23,11 +23,17 @@ class MicrosoftAuthService {
       body: jsonEncode({"token": token}),
     );
 
-    print("code retourné : ${response.statusCode}");
+    // dans ce cas là on link le jwt recu avec notre bearer_token
+    if (signUp) {
+      final responseData = jsonDecode(response.body);
+      await secureStorage.write(
+          key: 'bearer_token', value: responseData["jwt"]);
+    }
+
     return response.statusCode == 200;
   }
 
-  static Future<void> auth(BuildContext context) async {
+  static Future<bool> auth(BuildContext context, {bool signUp = false}) async {
     final Config config = Config(
         tenant: "common",
         clientId: clientId,
@@ -46,28 +52,18 @@ class MicrosoftAuthService {
         ),
       ),
       (r) async {
-        bool hasLinked = await linkToken(r.accessToken!);
+        bool hasLinked = await linkToken(r.accessToken!, signUp: signUp);
+        print("access token microsoft = : ${r.accessToken}");
 
         if (hasLinked) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text("Microsoft link avec succès !"),
-              backgroundColor: Colors.black,
-            ),
-          );
           await secureStorage.write(
               key: 'microsoft_access_token', value: r.accessToken);
+          return (true);
         } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text("Microsoft authentification failed."),
-              backgroundColor: Colors.red,
-            ),
-          );
+          return (false);
         }
-
-        print("access token = : ${r.accessToken}");
       },
     );
+    return (true);
   }
 }

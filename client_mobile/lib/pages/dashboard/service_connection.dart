@@ -38,7 +38,22 @@ class _ServiceConnectionPageState extends State<ServiceConnectionPage> {
           if (microsoftToken == null)
             SignInButton(
               onPressed: () async {
-                MicrosoftAuthService.auth(context);
+                bool isLinked = await MicrosoftAuthService.auth(context);
+                if (isLinked) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text("Microsoft link avec succès !"),
+                      backgroundColor: Colors.black,
+                    ),
+                  );
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text("Microsoft authentification failed."),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
+                }
                 await _loadMicrosoftToken();
               },
               label: "Link with Microsoft",
