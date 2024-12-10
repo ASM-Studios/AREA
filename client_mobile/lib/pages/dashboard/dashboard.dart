@@ -13,7 +13,6 @@ class DashboardPage extends StatefulWidget {
 }
 
 class _DashboardPageState extends State<DashboardPage> {
-
   WorkflowActionReaction? action;
   WorkflowActionReaction? reaction;
 
@@ -30,7 +29,7 @@ class _DashboardPageState extends State<DashboardPage> {
       reaction!.serviceName = serviceName;
     });
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,13 +38,29 @@ class _DashboardPageState extends State<DashboardPage> {
           const SizedBox(height: 50),
           ActionButton(onActionSelected: onActionSelected, action: action),
           const SizedBox(height: 30),
-          ReactionButton(onActionSelected: onReactionSelected, reaction: reaction),
+          ReactionButton(
+              onActionSelected: onReactionSelected, reaction: reaction),
+          const SizedBox(height: 50),
+          ElevatedButton(
+              onPressed: () async {
+                if (action == null || reaction == null) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text("Please refer an action and a reaction"),
+                    backgroundColor: Colors.red,
+                  ),
+                );
+                } else {
+                  print("create workflow");
+                }
+              },
+              child: const Text("Create"))
         ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           bool hasLogout = await AuthService.logout();
-          if (hasLogout)  context.pushReplacement("/login");
+          if (hasLogout) context.pushReplacement("/login");
         },
         tooltip: 'Logout',
         child: const Icon(Icons.login),
