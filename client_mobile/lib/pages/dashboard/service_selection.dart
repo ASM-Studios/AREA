@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'package:client_mobile/data/action.dart';
 import 'package:client_mobile/data/service.dart';
+import 'package:client_mobile/pages/dashboard/action_selection_page.dart';
 import 'package:client_mobile/services/about/about_service.dart';
 import 'package:flutter/material.dart';
 
@@ -43,6 +44,7 @@ class ServiceSelectionPage extends StatelessWidget {
                         builder: (context) => ActionSelectionPage(
                           serviceName: services[index].name,
                           onActionSelected: onActionSelected,
+                          actions: services[index].actions,
                         ),
                       ),
                     );
@@ -55,29 +57,6 @@ class ServiceSelectionPage extends StatelessWidget {
             child: Text('Aucun service disponible'),
           );
         },
-      ),
-    );
-  }
-}
-
-// Page d'action
-class ActionSelectionPage extends StatelessWidget {
-  final String serviceName;
-  final Function(WorkflowActionReaction) onActionSelected;
-
-  ActionSelectionPage({
-    required this.serviceName,
-    required this.onActionSelected,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Actions for $serviceName'),
-      ),
-      body: Center(
-        child: Text('Choisissez une action pour $serviceName.'),
       ),
     );
   }
