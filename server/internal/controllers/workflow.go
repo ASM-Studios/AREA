@@ -67,14 +67,14 @@ func WorkflowCreate(c *gin.Context) {
 		c.JSON(400, gin.H{"error": err.Error()})
 		return
 	}
-	userID, err := pkg.GetUserFromToken(c)
+	user, err := pkg.GetUserFromToken(c)
 	if err != nil {
 		c.JSON(401, gin.H{"error": "Unauthorized"})
 		return
 	}
 
 	workflow := models.Workflow{
-		UserID:      userID,
+		UserID:      user.ID,
 		Name:        request.Name,
 		Description: request.Description,
 		Status:      models.WorkflowStatusPending,
@@ -125,12 +125,12 @@ func WorkflowCreate(c *gin.Context) {
 // @Router       /workflow/list [get]
 func WorkflowList(c *gin.Context) {
 	var workflows []models.Workflow
-	userID, err := pkg.GetUserFromToken(c)
+	user, err := pkg.GetUserFromToken(c)
 	if err != nil {
 		return
 	}
 	err = pkg.DB.Preload("WorkflowEvents.ParametersValues").
-		Where("user_id = ?", userID).
+		Where("user_id = ?", user.ID).
 		Find(&workflows).Error
 
 	if err != nil {
@@ -172,4 +172,20 @@ func WorkflowDelete(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{"message": "Workflow deleted successfully"})
+}
+
+func WorkflowGet(c *gin.Context) {
+	idParam := c.Param("id")
+	workflowID, err := strconv.Atoi(idParam)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid workflow ID"})
+		return
+	}
+	var workflow models.Workflow
+	result := pkg.DB.Preload("WorkflowEvents.ParametersValues").First(&workflow, workflowID)
+	if result.Error != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Workflow not found"})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"workflow": workflow})
 }
