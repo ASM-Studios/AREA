@@ -13,7 +13,7 @@ func UserMe(c *gin.Context) {
 		return
 	}
 	pkg.DB.Preload("Tokens").First(&user)
-	
+
 	var services []models.ServiceRequest
 	for _, token := range user.Tokens {
 		var service models.Service
@@ -31,6 +31,7 @@ func UserMe(c *gin.Context) {
 	}
 	c.JSON(200, gin.H{"user": userData})
 }
+
 func UserDelete(c *gin.Context) {
 	user, err := pkg.GetUserFromToken(c)
 	if err != nil {

@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/goccy/go-json"
+	"log"
 	"net/http"
 	"strconv"
 )
@@ -62,7 +63,6 @@ func SendWorkflowEventsToQueue(workflow models.Workflow) error {
 // @Router       /workflow/create [post]
 func WorkflowCreate(c *gin.Context) {
 	var request models.WorkflowCreationRequest
-	pkg.PrintRequestJSON(c)
 	if err := c.ShouldBindJSON(&request); err != nil {
 		c.JSON(400, gin.H{"error": err.Error()})
 		return
@@ -174,6 +174,16 @@ func WorkflowDelete(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "Workflow deleted successfully"})
 }
 
+// WorkflowGet retrieves a specific workflow by its ID.
+// @Summary Get a workflow by ID
+// @Description Retrieve detailed information about a workflow, including its events and parameters.
+// @Tags workflow
+// @Param id path int true "Workflow ID"
+// @Produce json
+// @Success 200 {object} map[string]interface{} "workflow details"
+// @Failure 400 {object} map[string]interface{} "Invalid workflow ID or bad request"
+// @Failure 404 {object} map[string]interface{} "Workflow not found"
+// @Router /workflows/{id} [get]
 func WorkflowGet(c *gin.Context) {
 	idParam := c.Param("id")
 	workflowID, err := strconv.Atoi(idParam)
@@ -182,10 +192,109 @@ func WorkflowGet(c *gin.Context) {
 		return
 	}
 	var workflow models.Workflow
-	result := pkg.DB.Preload("WorkflowEvents.ParametersValues").First(&workflow, workflowID)
-	if result.Error != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "Workflow not found"})
+	if pkg.DB.Preload("WorkflowEvents.ParametersValues").First(&workflow, workflowID).Error != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid workflow ID"})
 		return
 	}
+	var events []models.EventRequest
+	var services []uint
+	for _, ev := range workflow.WorkflowEvents {
+		var event models.Event
+		pkg.DB.First(&event, ev.EventID)
+		eventData := models.EventRequest{
+			Id:          event.ID,
+			Name:        event.Name,
+			Description: event.Description,
+			Type:        event.Type,
+		}
+		services = addUniqueService(services, event.ServiceID)
+		var paramsData []models.ParametersRequest
+		for _, param := range ev.ParametersValues {
+			var parameter models.Parameters
+			pkg.DB.First(&parameter, param.ParametersID)
+			paramData := models.ParametersRequest{
+				Name:  parameter.Name,
+				Type:  parameter.Type,
+				Value: param.Value,
+			}
+			paramsData = append(paramsData, paramData)
+		}
+		eventData.Parameters = paramsData
+		events = append(events, eventData)
+	}
+
+	var workflowData = models.WorkflowRequest{
+		Name:        workflow.Name,
+		Description: workflow.Description,
+		Services:    services,
+		Events:      events,
+		IsActive:    workflow.IsActive,
+	}
+	c.JSON(http.StatusOK, gin.H{"workflow": workflowData})
+}
+
+func addUniqueService(services []uint, serviceID uint) []uint {
+	for _, id := range services {
+		if id == serviceID {
+			return services
+		}
+	}
+	return append(services, serviceID)
+}
+
+// WorkflowUpdate updates a workflow's details.
+// @Summary Update a workflow
+// @Description Update the description, name, is_active status, and parameter values of a workflow.
+// @Tags Workflow
+// @Param id path int true "Workflow ID"
+// @Param body body models.WorkflowRequest true "Workflow update request"
+// @Produce json
+// @Success 200 {object} map[string]interface{} "Workflow updated successfully"
+// @Failure 400 {object} map[string]interface{} "Invalid workflow ID or bad request"
+// @Failure 404 {object} map[string]interface{} "Workflow or parameter value not found"
+// @Failure 500 {object} map[string]interface{} "Internal server error"
+// @Router /workflows/{id} [put]
+func WorkflowUpdate(c *gin.Context) {
+	idParam := c.Param("id")
+	workflowID, err := strconv.Atoi(idParam)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid workflow ID"})
+		return
+	}
+	var workflow models.Workflow
+	if err := pkg.DB.Preload("WorkflowEvents.ParametersValues").First(&workflow, workflowID).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Workflow not found"})
+		return
+	}
+	var request models.WorkflowRequest
+	if err := c.ShouldBindJSON(&request); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request format", "details": err.Error()})
+		return
+	}
+	log.Printf("Request: %v", request)
+	workflow.Description = request.Description
+	workflow.Name = request.Name
+	for _, eventReq := range request.Events {
+		for _, paramReq := range eventReq.Parameters {
+			var parameterValue models.ParametersValue
+			if err := pkg.DB.
+				Joins("JOIN parameters ON parameters.id = parameters_values.parameters_id").
+				Where("parameters.event_id = ? AND parameters.name = ?", eventReq.Id, paramReq.Name).
+				First(&parameterValue).Error; err != nil {
+				c.JSON(http.StatusNotFound, gin.H{"error": "Parameter value not found", "details": err.Error()})
+				return
+			}
+			parameterValue.Value = paramReq.Value
+			if err := pkg.DB.Save(&parameterValue).Error; err != nil {
+				c.JSON(500, gin.H{"error": "Failed to update parameter value", "details": err.Error()})
+				return
+			}
+		}
+	}
+	if err := pkg.DB.Save(&workflow).Error; err != nil {
+		c.JSON(500, gin.H{"error": "Failed to update workflow", "details": err.Error()})
+		return
+	}
+	workflow.IsActive = request.IsActive
 	c.JSON(http.StatusOK, gin.H{"workflow": workflow})
 }

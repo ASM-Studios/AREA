@@ -32,6 +32,7 @@ func setUpWorkflowGroup(router *gin.Engine) {
 		workflow.GET("/list", controllers.WorkflowList)
 		workflow.DELETE("/delete/:id", controllers.WorkflowDelete)
 		workflow.GET("/:id", controllers.WorkflowGet)
+		workflow.PUT("/:id", controllers.WorkflowUpdate)
 	}
 }
 

@@ -389,9 +389,77 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/workflows/{id}": {
+            "get": {
+                "description": "Retrieve detailed information about a workflow, including its events and parameters.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Workflow"
+                ],
+                "summary": "Get a workflow by ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Workflow ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "workflow details",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid workflow ID or bad request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "404": {
+                        "description": "Workflow not found",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
+        "AREA_internal_models.EventType": {
+            "type": "string",
+            "enum": [
+                "action",
+                "reaction"
+            ],
+            "x-enum-varnames": [
+                "ActionEventType",
+                "ReactionEventType"
+            ]
+        },
+        "AREA_internal_models.WorkflowStatus": {
+            "type": "string",
+            "enum": [
+                "pending",
+                "processed",
+                "failed"
+            ],
+            "x-enum-varnames": [
+                "WorkflowStatusPending",
+                "WorkflowStatusProcessed",
+                "WorkflowStatusFailed"
+            ]
+        },
         "models.EventDTO": {
             "type": "object",
             "properties": {
@@ -411,22 +479,12 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "type": {
-                    "$ref": "#/definitions/models.EventType"
+                    "$ref": "#/definitions/AREA_internal_models.EventType"
                 }
             }
         },
-        "models.EventType": {
-            "type": "string",
-            "enum": [
-                "action",
-                "reaction"
-            ],
-            "x-enum-varnames": [
-                "ActionEventType",
-                "ReactionEventType"
-            ]
-        },
         "models.LoginRequest": {
+            "description": "Request payload for user login.",
             "type": "object",
             "required": [
                 "email",
@@ -459,6 +517,7 @@ const docTemplate = `{
             }
         },
         "models.RegisterRequest": {
+            "description": "Request payload for registering a new user.",
             "type": "object",
             "required": [
                 "email",
@@ -496,25 +555,12 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "status": {
-                    "$ref": "#/definitions/models.WorkflowStatus"
+                    "$ref": "#/definitions/AREA_internal_models.WorkflowStatus"
                 },
                 "user_id": {
                     "type": "integer"
                 }
             }
-        },
-        "models.WorkflowStatus": {
-            "type": "string",
-            "enum": [
-                "pending",
-                "processed",
-                "failed"
-            ],
-            "x-enum-varnames": [
-                "WorkflowStatusPending",
-                "WorkflowStatusProcessed",
-                "WorkflowStatusFailed"
-            ]
         }
     },
     "securityDefinitions": {

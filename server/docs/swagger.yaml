@@ -1,5 +1,23 @@
 basePath: /
 definitions:
+  AREA_internal_models.EventType:
+    enum:
+    - action
+    - reaction
+    type: string
+    x-enum-varnames:
+    - ActionEventType
+    - ReactionEventType
+  AREA_internal_models.WorkflowStatus:
+    enum:
+    - pending
+    - processed
+    - failed
+    type: string
+    x-enum-varnames:
+    - WorkflowStatusPending
+    - WorkflowStatusProcessed
+    - WorkflowStatusFailed
   models.EventDTO:
     properties:
       description:
@@ -13,17 +31,10 @@ definitions:
       service_id:
         type: integer
       type:
-        $ref: '#/definitions/models.EventType'
+        $ref: '#/definitions/AREA_internal_models.EventType'
     type: object
-  models.EventType:
-    enum:
-    - action
-    - reaction
-    type: string
-    x-enum-varnames:
-    - ActionEventType
-    - ReactionEventType
   models.LoginRequest:
+    description: Request payload for user login.
     properties:
       email:
         type: string
@@ -45,6 +56,7 @@ definitions:
         type: string
     type: object
   models.RegisterRequest:
+    description: Request payload for registering a new user.
     properties:
       email:
         type: string
@@ -70,20 +82,10 @@ definitions:
       name:
         type: string
       status:
-        $ref: '#/definitions/models.WorkflowStatus'
+        $ref: '#/definitions/AREA_internal_models.WorkflowStatus'
       user_id:
         type: integer
     type: object
-  models.WorkflowStatus:
-    enum:
-    - pending
-    - processed
-    - failed
-    type: string
-    x-enum-varnames:
-    - WorkflowStatusPending
-    - WorkflowStatusProcessed
-    - WorkflowStatusFailed
 host: localhost:8080
 info:
   contact:
@@ -333,6 +335,37 @@ paths:
       summary: List workflows
       tags:
       - workflow
+  /workflows/{id}:
+    get:
+      description: Retrieve detailed information about a workflow, including its events
+        and parameters.
+      parameters:
+      - description: Workflow ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: workflow details
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Invalid workflow ID or bad request
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Workflow not found
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Get a workflow by ID
+      tags:
+      - Workflow
 securityDefinitions:
   BearerAuth:
     in: header
