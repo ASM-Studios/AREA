@@ -33,6 +33,23 @@ definitions:
       type:
         $ref: '#/definitions/AREA_internal_models.EventType'
     type: object
+  models.EventRequest:
+    description: Represents an event with its name, type, description, and associated
+      parameters.
+    properties:
+      description:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      parameters:
+        items:
+          $ref: '#/definitions/models.ParametersRequest'
+        type: array
+      type:
+        $ref: '#/definitions/AREA_internal_models.EventType'
+    type: object
   models.LoginRequest:
     description: Request payload for user login.
     properties:
@@ -53,6 +70,16 @@ definitions:
       name:
         type: string
       type:
+        type: string
+    type: object
+  models.ParametersRequest:
+    description: Represents a parameter with its name, type, and value.
+    properties:
+      name:
+        type: string
+      type:
+        type: string
+      value:
         type: string
     type: object
   models.RegisterRequest:
@@ -85,6 +112,24 @@ definitions:
         $ref: '#/definitions/AREA_internal_models.WorkflowStatus'
       user_id:
         type: integer
+    type: object
+  models.WorkflowRequest:
+    description: Structure for workflow creation or update.
+    properties:
+      description:
+        type: string
+      events:
+        items:
+          $ref: '#/definitions/models.EventRequest'
+        type: array
+      is_active:
+        type: boolean
+      name:
+        type: string
+      services:
+        items:
+          type: integer
+        type: array
     type: object
 host: localhost:8080
 info:
@@ -243,6 +288,49 @@ paths:
       summary: Message
       tags:
       - publish/Message
+  /users:
+    delete:
+      description: Permanently delete the account of the currently authenticated user.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: User account deleted successfully
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Failed to delete user account
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Delete user account
+      tags:
+      - User
+  /users/me:
+    get:
+      description: Retrieve the details of the currently authenticated user, including
+        their associated services.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Authenticated user's details
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Failed to fetch user details
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Get authenticated user details
+      tags:
+      - User
   /workflow/create:
     post:
       consumes:
@@ -365,7 +453,48 @@ paths:
             type: object
       summary: Get a workflow by ID
       tags:
-      - Workflow
+      - workflow
+    put:
+      description: Update the description, name, is_active status, and parameter values
+        of a workflow.
+      parameters:
+      - description: Workflow ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Workflow update request
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/models.WorkflowRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Workflow updated successfully
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Invalid workflow ID or bad request
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Workflow or parameter value not found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Update a workflow
+      tags:
+      - workflow
 securityDefinitions:
   BearerAuth:
     in: header

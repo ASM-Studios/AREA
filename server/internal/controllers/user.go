@@ -6,6 +6,15 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// UserMe retrieves the authenticated user's details.
+// @Summary Get authenticated user details
+// @Description Retrieve the details of the currently authenticated user, including their associated services.
+// @Tags User
+// @Security BearerAuth
+// @Produce json
+// @Success 200 {object} map[string]interface{} "Authenticated user's details"
+// @Failure 500 {object} map[string]interface{} "Failed to fetch user details"
+// @Router /users/me [get]
 func UserMe(c *gin.Context) {
 	user, err := pkg.GetUserFromToken(c)
 	if err != nil {
@@ -32,6 +41,15 @@ func UserMe(c *gin.Context) {
 	c.JSON(200, gin.H{"user": userData})
 }
 
+// UserDelete deletes the authenticated user's account.
+// @Summary Delete user account
+// @Description Permanently delete the account of the currently authenticated user.
+// @Tags User
+// @Security BearerAuth
+// @Produce json
+// @Success 200 {object} map[string]interface{} "User account deleted successfully"
+// @Failure 500 {object} map[string]interface{} "Failed to delete user account"
+// @Router /users [delete]
 func UserDelete(c *gin.Context) {
 	user, err := pkg.GetUserFromToken(c)
 	if err != nil {

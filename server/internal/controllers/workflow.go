@@ -245,7 +245,7 @@ func addUniqueService(services []uint, serviceID uint) []uint {
 // WorkflowUpdate updates a workflow's details.
 // @Summary Update a workflow
 // @Description Update the description, name, is_active status, and parameter values of a workflow.
-// @Tags Workflow
+// @Tags workflow
 // @Param id path int true "Workflow ID"
 // @Param body body models.WorkflowRequest true "Workflow update request"
 // @Produce json
