@@ -11,8 +11,8 @@ import (
 )
 
 func setUpOauthGroup(router *gin.Engine) {
-        router.POST("/oauth/:service", controllers.OAuth)
-        //router.POST("/oauth/bind/:service", controllers.OAuthBind)
+	router.POST("/oauth/:service", controllers.OAuth)
+	//router.POST("/oauth/bind/:service", controllers.OAuthBind)
 }
 
 func setUpAuthGroup(router *gin.Engine) {
@@ -31,6 +31,17 @@ func setUpWorkflowGroup(router *gin.Engine) {
 		workflow.POST("/create", controllers.WorkflowCreate)
 		workflow.GET("/list", controllers.WorkflowList)
 		workflow.DELETE("/delete/:id", controllers.WorkflowDelete)
+		workflow.GET("/:id", controllers.WorkflowGet)
+		workflow.PUT("/:id", controllers.WorkflowUpdate)
+	}
+}
+
+func setUpUserGroup(router *gin.Engine) {
+	user := router.Group("/user")
+	user.Use(middleware.AuthMiddleware())
+	{
+		user.GET("/me", controllers.UserMe)
+		user.DELETE("/delete", controllers.UserDelete)
 	}
 }
 
@@ -50,6 +61,7 @@ func SetupRouter() *gin.Engine {
 	}
 	setUpAuthGroup(router)
 	setUpOauthGroup(router)
+	setUpUserGroup(router)
 	setUpWorkflowGroup(router)
 	protected := router.Group("/")
 	protected.Use(middleware.AuthMiddleware())
