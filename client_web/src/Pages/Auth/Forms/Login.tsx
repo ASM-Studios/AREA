@@ -43,7 +43,7 @@ const Login = () => {
 
     const handleMicrosoftSuccess = (response: unknown) => {
         // @ts-expect-error response isn't typed
-        instance.post(oauth.microsoft, { "token": response?.accessToken }, {
+        instance.post(oauth.microsoft.auth, { "token": response?.accessToken }, {
             headers: {
                 'Content-Type': 'application/json',
             },

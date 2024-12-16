@@ -101,12 +101,7 @@ const Header: React.FC = () => {
                             gap: '8px'
                         }}
                     >
-                        <Avatar 
-                            icon={<UserOutlined />}
-                            style={{ 
-                                backgroundColor: theme === "dark" ? '#1890ff' : '#001529'
-                            }}
-                        />
+                        <UserOutlined />
                         <span>Profile</span>
                     </Button>
                 </Dropdown>

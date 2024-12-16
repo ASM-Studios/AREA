@@ -9,7 +9,7 @@ interface LayoutProps {
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
     const location = useLocation();
-    const headerIncludedPaths: (string | RegExp)[] = ['/', '/dashboard', '/account/me', '/workflow/create', '/workflows'];
+    const headerIncludedPaths: (string | RegExp)[] = ['/', '/dashboard', '/account/me', '/workflow/create', '/workflows', /^\/workflow\/update\/\d+$/];
     const footerIncludedPaths: (string | RegExp)[] = ['/', '/dashboard'];
 
     const isHeaderIncluded = headerIncludedPaths.some(path =>

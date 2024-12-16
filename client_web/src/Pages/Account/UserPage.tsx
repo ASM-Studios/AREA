@@ -7,7 +7,7 @@ import { useAuth, useUser } from "@/Context/ContextHooks";
 import OAuthButtons from "@/Components/Auth/OAuthButtons";
 import { toast } from "react-toastify";
 import Security from "@/Components/Security";
-import { instance, oauth } from "@Config/backend.routes";
+import {instance, instanceWithAuth, oauth} from "@Config/backend.routes";
 
 const { Content } = Layout;
 const { Title, Text } = Typography;
@@ -48,7 +48,7 @@ const UserPage: React.FC<UserPageProps> = ({ backgroundColor, setBackgroundColor
     };
 
     const onMicrosoftSuccess = (response: any) => {
-        instance.post(oauth.microsoft, { "token": response?.accessToken }, {
+        instanceWithAuth.post(oauth.microsoft.bind, { "token": response?.accessToken }, {
             headers: {
                 'Content-Type': 'application/json',
             },
