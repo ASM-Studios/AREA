@@ -8,7 +8,7 @@ import { useAuth } from "@/Context/ContextHooks";
 const SpotifyCallback = () => {
     const navigate = useNavigate();
     const [error, setError] = useState<string | null>(null);
-    const { setJsonWebToken, jsonWebToken } = useAuth();
+    const { setJsonWebToken } = useAuth();
     const hasHandledCallback = useRef(false);
 
     useEffect(() => {
@@ -27,7 +27,7 @@ const SpotifyCallback = () => {
 
                 let response;
 
-                if (jsonWebToken) {
+                if (localStorage.getItem("jsonWebToken")) {
                     response = await instanceWithAuth.post(oauth.spotify.bind, {
                         code,
                         code_verifier: codeVerifier,
@@ -41,15 +41,13 @@ const SpotifyCallback = () => {
                     })
                 }
 
-                // @ts-expect-error
-                if (!response.ok) {
+                if (!response.status || response.status !== 200) {
                     throw new Error('Failed to exchange token');
                 }
 
-                // @ts-expect-error
-                const data = await response.json();
-
-                setJsonWebToken(data.token);
+                if (!localStorage.getItem("jsonWebToken")) {
+                    setJsonWebToken(response?.data?.jwt);
+                }
 
                 localStorage.removeItem('spotify_auth_state');
                 localStorage.removeItem('code_verifier');
@@ -73,7 +71,7 @@ const SpotifyCallback = () => {
             handleCallback().catch(console.error);
             hasHandledCallback.current = true;
         }
-    }, [jsonWebToken, navigate, setJsonWebToken]);
+    }, [navigate, setJsonWebToken]);
 
     return (
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh' }}>

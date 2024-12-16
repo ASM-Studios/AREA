@@ -8,7 +8,7 @@ import { useAuth } from "@/Context/ContextHooks";
 const GithubCallback = () => {
     const navigate = useNavigate();
     const [error, setError] = useState<string | null>(null);
-    const { setJsonWebToken, jsonWebToken } = useAuth();
+    const { setJsonWebToken } = useAuth();
     const hasHandledCallback = useRef(false);
 
     useEffect(() => {
@@ -26,7 +26,7 @@ const GithubCallback = () => {
 
                 let response;
 
-                if (jsonWebToken) {
+                if (localStorage.getItem("jsonWebToken")) {
                     response = await instanceWithAuth.post(oauth.github.bind, {
                         code,
                         redirect_uri: uri.github.auth.redirectUri,
@@ -38,15 +38,13 @@ const GithubCallback = () => {
                     });
                 }
 
-                // @ts-expect-error
-                if (!response.ok) {
+                if (!response.status || response.status !== 200) {
                     throw new Error('Failed to exchange token');
                 }
 
-                // @ts-expect-error
-                const data = await response.json();
-
-                setJsonWebToken(data.token);
+                if (!localStorage.getItem("jsonWebToken")) {
+                    setJsonWebToken(response?.data?.jwt);
+                }
 
                 localStorage.removeItem('github_auth_state');
 
@@ -69,7 +67,7 @@ const GithubCallback = () => {
             handleCallback().catch(console.error);
             hasHandledCallback.current = true;
         }
-    }, [jsonWebToken, navigate, setJsonWebToken]);
+    }, [navigate, setJsonWebToken]);
 
     return (
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh' }}>

@@ -2,6 +2,11 @@ package utils
 
 import (
 	"AREA/internal/consts"
+	"encoding/json"
+	"fmt"
+	"io"
+	"net/http"
+
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/viper"
 )
@@ -24,4 +29,24 @@ func GetEnvVar(name string) string {
 	}
 	value := viper.GetString(name)
 	return value
+}
+
+func SendRequest[T any](request *http.Request) (*http.Response, *T, error) {
+        var client http.Client
+        var body T
+
+        resp, err := client.Do(request)
+        if err != nil {
+                return nil, nil, err
+        }
+
+        b, err := io.ReadAll(resp.Body)
+        if err != nil {
+                return nil, nil, err
+        }
+
+        defer resp.Body.Close()
+        err = json.Unmarshal([]byte(b), &body)
+        fmt.Println(string(b))
+        return resp, &body, err
 }
