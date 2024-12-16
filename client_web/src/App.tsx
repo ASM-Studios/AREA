@@ -28,6 +28,7 @@ import LinkedinCallback from "@/Pages/Auth/Callback/LinkedinCallback";
 import SpotifyCallback from '@/Pages/Auth/Callback/SpotifyCallback';
 import MicrosoftCallback from '@/Pages/Auth/Callback/MicrosoftCallback';
 import DiscordCallback from '@/Pages/Auth/Callback/DiscordCallback';
+import GithubCallback from '@/Pages/Auth/Callback/GithubCallback';
 
 import CreateWorkflow from "@/Pages/Workflows/CreateWorkflow";
 import UpdateWorkflow from "@/Pages/Workflows/UpdateWorkflow";
@@ -159,6 +160,7 @@ const App = () => {
                             <Route path={uri.microsoft.auth.redirectUri.replace(window.location.origin, "")} element={<MicrosoftCallback />} />
                             <Route path={uri.linkedin.auth.redirectUri.replace(window.location.origin, "")} element={<LinkedinCallback />} />
                             <Route path={uri.discord.auth.redirectUri.replace(window.location.origin, "")} element={<DiscordCallback />} />
+                            <Route path={uri.github.auth.redirectUri.replace(window.location.origin, "")} element={<GithubCallback />} />
 
                             <Route path="/workflow/create" element={<CreateWorkflow />} />
                             <Route path="/workflow/update/:id" element={<UpdateWorkflow />} />

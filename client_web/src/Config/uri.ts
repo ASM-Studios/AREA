@@ -12,6 +12,7 @@ interface UriConfig {
     spotify: { auth: AuthConfig };
     twitch: { auth: AuthConfig };
     discord: { auth: AuthConfig };
+    github: { auth: AuthConfig };
 }
 
 const uri: UriConfig = {
@@ -65,6 +66,15 @@ const uri: UriConfig = {
             clientId: import.meta.env.VITE_DISCORD_CLIENT_ID as string,
             clientSecret: "", // Not expected to be provided
             redirectUri: `${window.location.origin}/auth/discord/callback`
+        }
+    },
+    github: {
+        auth: {
+            // @ts-expect-error
+            clientId: import.meta.env.VITE_GITHUB_CLIENT_ID as string,
+            // @ts-expect-error
+            clientSecret: import.meta.env.VITE_GITHUB_CLIENT_SECRET as string,
+            redirectUri: `${window.location.origin}/auth/github/callback`
         }
     }
 };

@@ -40,14 +40,38 @@ const auth = {
     login: `${endpoint}/auth/login`,
     register: `${endpoint}/auth/register`,
     health: `${endpoint}/auth/health`,
-}
+};
 
 const oauth = {
     microsoft: {
         auth: `${endpoint}/oauth/microsoft`,
         bind: `${endpoint}/oauth/bind/microsoft`,
     },
-}
+    github: {
+        auth: `${endpoint}/oauth/github`,
+        bind: `${endpoint}/oauth/bind/github`,
+    },
+    google: {
+        auth: `${endpoint}/oauth/google`,
+        bind: `${endpoint}/oauth/bind/google`,
+    },
+    spotify: {
+        auth: `${endpoint}/oauth/spotify`,
+        bind: `${endpoint}/oauth/bind/spotify`,
+    },
+    twitch: {
+        auth: `${endpoint}/oauth/twitch`,
+        bind: `${endpoint}/oauth/bind/twitch`,
+    },
+    discord: {
+        auth: `${endpoint}/oauth/discord`,
+        bind: `${endpoint}/oauth/bind/discord`,
+    },
+    linkedin: {
+        auth: `${endpoint}/oauth/linkedin`,
+        bind: `${endpoint}/oauth/bind/linkedin`,
+    },
+};
 
 const workflow = {
     create: `${endpoint}/workflow/create`,
@@ -55,7 +79,7 @@ const workflow = {
     delete: `${endpoint}/workflow/delete`,
     update: `${endpoint}/workflow`,
     get: `${endpoint}/workflow`,
-}
+};
 
 export {
     instance,
@@ -64,4 +88,4 @@ export {
     auth,
     oauth,
     workflow
-}
+};

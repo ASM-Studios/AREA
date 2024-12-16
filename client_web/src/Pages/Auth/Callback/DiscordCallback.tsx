@@ -1,10 +1,14 @@
 import { Card, Spin } from 'antd';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { instance, instanceWithAuth, oauth } from "@Config/backend.routes";
+import { uri } from "@Config/uri";
+import { useAuth } from "@/Context/ContextHooks";
 
 const DiscordCallback = () => {
     const navigate = useNavigate();
     const [error, setError] = useState<string | null>(null);
+    const { setJsonWebToken, jsonWebToken } = useAuth();
 
     useEffect(() => {
         const handleCallback = async () => {
@@ -13,26 +17,42 @@ const DiscordCallback = () => {
             const error = urlParams.get('error');
             const state = urlParams.get('state');
             const storedState = localStorage.getItem('discord_auth_state');
+            const codeVerifier = localStorage.getItem('code_verifier');
 
             try {
                 if (state === null || state !== storedState) {
                     throw new Error('State mismatch. Please try again.');
                 }
 
-                if (error) {
-                    throw new Error('Failed to connect with Discord');
+                let response;
+
+                if (jsonWebToken) {
+                    response = await instanceWithAuth.post(oauth.discord.bind, {
+                        code,
+                        code_verifier: codeVerifier,
+                        redirect_uri: uri.discord.auth.redirectUri,
+                    });
+                } else {
+                    response = await instance.post(oauth.discord.auth, {
+                        code,
+                        code_verifier: codeVerifier,
+                        redirect_uri: uri.discord.auth.redirectUri,
+                    })
                 }
 
-                if (!code) {
-                    throw new Error('No authorization code received');
+                // @ts-expect-error
+                if (!response.ok) {
+                    throw new Error('Failed to exchange token');
                 }
 
-                // TEMP: Store the code as if it were a token
-                // TODO: Implement actual token exchange with your backend
-                sessionStorage.setItem('access_token', code);
-                sessionStorage.setItem('refresh_token', 'dummy_refresh_token');
+                // @ts-expect-error
+                const data = await response.json();
 
-                // Only navigate to dashboard if we reach this point successfully
+                setJsonWebToken(data.token);
+
+                localStorage.removeItem('discord_auth_state');
+                localStorage.removeItem('code_verifier');
+
                 setTimeout(() => {
                     if (code && !error && state === storedState) {
                         localStorage.removeItem('discord_auth_state');
