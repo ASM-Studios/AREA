@@ -42,3 +42,4 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 .env.mobile
+lib/pages/test_page.dart
