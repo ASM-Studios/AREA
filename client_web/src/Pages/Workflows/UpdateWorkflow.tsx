@@ -4,6 +4,7 @@ import Security from "@/Components/Security";
 import LinkButton from "@/Components/LinkButton";
 import { normalizeName } from "@/Pages/Workflows/CreateWorkflow.utils";
 import { createWorkflowUtils } from "./Workflow.utils";
+import { useParams } from "react-router-dom";
 
 import { About, Service, Action, Reaction, Workflow, Parameter, SelectedAction, SelectedReaction } from "@/types";
 import { toast } from "react-toastify";
@@ -14,7 +15,8 @@ import { useNavigate } from "react-router-dom";
 const { Title, Text } = Typography;
 const { Panel } = Collapse;
 
-const CreateWorkflow: React.FC = () => {
+const UpdateWorkflow: React.FC = () => {
+    const { id } = useParams<{ id: string }>();
     const [loading, setLoading] = React.useState<boolean>(false);
     const [about, setAbout] = React.useState<About | null>(null);
     const [selectedActions, setSelectedActions] = React.useState<SelectedAction[]>([]);
@@ -38,31 +40,80 @@ const CreateWorkflow: React.FC = () => {
 
     React.useEffect(() => {
         setLoading(true);
-        instanceWithAuth.get(root.about)
-            .then((response) => {
-                setAbout(response?.data);
+        Promise.all([
+            instanceWithAuth.get(root.about),
+            instanceWithAuth.get(`${workflowRoute.get}/${id}`)
+        ])
+            .then(([aboutResponse, workflowResponse]) => {
+                setAbout(aboutResponse?.data);
+                const workflow = workflowResponse?.data?.workflow;
+
+                if (!workflow) {
+                    setError({ error: "Workflow not found", errorDescription: "The workflow you are trying to update does not exist" });
+                    navigate('/error/not-found');
+                    return;
+                }
+
+                setWorkflowName(workflow.name);
+                setWorkflowDescription(workflow.description);
+
+                const actions = workflow.events.filter((event: { type: string }) => event.type === 'action');
+                const reactions = workflow.events.filter((event: { type: string }) => event.type === 'reaction');
+
+                interface WorkflowEvent {
+                    id: number;
+                    name: string;
+                    description: string;
+                    parameters: {
+                        name: string;
+                        value: string | number;
+                        type: "string" | "number" | "datetime";
+                    }[];
+                }
+
+                setSelectedActions(actions.map((action: WorkflowEvent) => ({
+                    id: action.id,
+                    name: action.name,
+                    description: action.description,
+                    parameters: action.parameters.reduce<Record<string, string | number>>((acc, param) => ({
+                        ...acc,
+                        [param.name]: param.value
+                    }), {})
+                })));
+
+                setSelectedReactions(reactions.map((reaction: WorkflowEvent) => ({
+                    id: reaction.id,
+                    name: reaction.name,
+                    description: reaction.description,
+                    parameters: reaction.parameters.reduce<Record<string, string | number>>((acc, param) => ({
+                        ...acc,
+                        [param.name]: param.value
+                    }), {})
+                })));
             })
             .catch((error) => {
                 console.error(error);
-                setError({ error: "API Error", errorDescription: "Could not fetch server information" });
+                setError({ error: "API Error", errorDescription: "Could not fetch workflow data" });
                 navigate('/error/fetch');
+            })
+            .finally(() => {
+                setLoading(false);
             });
-        setLoading(false);
-    }, []);
+    }, [id]);
 
-    const handleCreateWorkflow = () => {
+    const handleUpdateWorkflow = () => {
         const workflow: Workflow = {
             name: workflowName,
             description: workflowDescription,
             services: [...new Set([
                 ...selectedActions.map(action => {
-                    const service = about?.server.services.find(s => 
+                    const service = about?.server.services.find(s =>
                         s.actions.some(a => a.name === action.name)
                     );
                     return service?.id;
                 }),
                 ...selectedReactions.map(reaction => {
-                    const service = about?.server.services.find(s => 
+                    const service = about?.server.services.find(s =>
                         s.reactions.some(r => r.name === reaction.name)
                     );
                     return service?.id;
@@ -71,8 +122,8 @@ const CreateWorkflow: React.FC = () => {
             events: [
                 ...selectedActions.map(action => {
                     const actionDef = about?.server.services
-                    .flatMap((s: Service) => s.actions)
-                    .find((a: Action) => a.name === action.name);
+                        .flatMap((s: Service) => s.actions)
+                        .find((a: Action) => a.name === action.name);
 
                     return {
                         id: action.id,
@@ -83,11 +134,11 @@ const CreateWorkflow: React.FC = () => {
                             const paramDef = actionDef?.parameters.find((p: Parameter) => p.name === name);
                             return {
                                 name,
-                                type: paramDef?.type || 'string',
+                                type: paramDef?.type || 'string' as "string" | "number" | "datetime",
                                 value
                             };
                         })
-                    }
+                    };
                 }),
                 ...selectedReactions.map(reaction => {
                     const reactionDef = about?.server.services
@@ -103,7 +154,7 @@ const CreateWorkflow: React.FC = () => {
                             const paramDef = reactionDef?.parameters.find((p: Parameter) => p.name === name);
                             return {
                                 name,
-                                type: paramDef?.type || 'string',
+                                type: paramDef?.type || 'string' as "string" | "number" | "datetime",
                                 value
                             };
                         })
@@ -111,13 +162,15 @@ const CreateWorkflow: React.FC = () => {
                 })
             ]
         }
-        instanceWithAuth.post(workflowRoute.create, workflow)
+
+        instanceWithAuth.put(`${workflowRoute.update}/${id}`, workflow)
             .then(() => {
-                toast.success("Workflow successfully published")
+                toast.success("Workflow successfully updated")
                 navigate('/dashboard');
             })
             .catch((error) => {
                 console.error(error);
+                toast.error("Failed to update workflow");
             });
     };
 
@@ -125,7 +178,7 @@ const CreateWorkflow: React.FC = () => {
         <Security>
             <div style={{ padding: '16px 24px', position: 'relative', zIndex: 1, height: '100%' }} role="main">
                 <Title level={3} style={{ marginBottom: 16 }}>
-                    Create Workflow
+                    Update Workflow
                 </Title>
 
                 {loading ? (
@@ -168,11 +221,13 @@ const CreateWorkflow: React.FC = () => {
                             <Col xs={24} md={8} lg={6}>
                                 <Card title="Available Actions" style={{ height: '100%' }} role="region" aria-label="Available Actions">
                                     <Space style={{ marginBottom: 16 }}>
-                                        <Button onClick={workflowUtils.handleFoldAllActions} disabled={activeActionKeys.length === 0}>Fold
-                                            All</Button>
+                                        <Button onClick={workflowUtils.handleFoldAllActions} disabled={activeActionKeys.length === 0}>
+                                            Fold All
+                                        </Button>
                                         <Button onClick={workflowUtils.handleUnfoldAllActions}
-                                                disabled={activeActionKeys.length === about?.server.services.length}>Unfold
-                                            All</Button>
+                                                disabled={activeActionKeys.length === about?.server.services.length}>
+                                            Unfold All
+                                        </Button>
                                     </Space>
                                     <Collapse activeKey={activeActionKeys} onChange={setActiveActionKeys}>
                                         {about?.server?.services.map((service: Service) => (
@@ -250,8 +305,8 @@ const CreateWorkflow: React.FC = () => {
                                                                         .find((p: any) => p.name === key);
 
                                                                     return (
-                                                                        <Form.Item 
-                                                                            key={key} 
+                                                                        <Form.Item
+                                                                            key={key}
                                                                             label={paramDef?.description || key}
                                                                             style={{ marginBottom: 8 }}
                                                                         >
@@ -260,8 +315,8 @@ const CreateWorkflow: React.FC = () => {
                                                                                     type="number"
                                                                                     value={value as unknown as string}
                                                                                     onChange={(e) => {
-                                                                                        setSelectedActions(prev => prev.map(a => 
-                                                                                            a.id === action.id 
+                                                                                        setSelectedActions(prev => prev.map(a =>
+                                                                                            a.id === action.id
                                                                                                 ? {...a, parameters: {...a.parameters, [key]: e.target.value}}
                                                                                                 : a
                                                                                         ));
@@ -271,8 +326,8 @@ const CreateWorkflow: React.FC = () => {
                                                                                 <Input
                                                                                     value={value as unknown as string}
                                                                                     onChange={(e) => {
-                                                                                        setSelectedActions(prev => prev.map(a => 
-                                                                                            a.id === action.id 
+                                                                                        setSelectedActions(prev => prev.map(a =>
+                                                                                            a.id === action.id
                                                                                                 ? {...a, parameters: {...a.parameters, [key]: e.target.value}}
                                                                                                 : a
                                                                                         ));
@@ -322,8 +377,8 @@ const CreateWorkflow: React.FC = () => {
                                                                         .find((p: any) => p.name === key);
 
                                                                     return (
-                                                                        <Form.Item 
-                                                                            key={key} 
+                                                                        <Form.Item
+                                                                            key={key}
                                                                             label={paramDef?.description || key}
                                                                             style={{ marginBottom: 8 }}
                                                                         >
@@ -332,8 +387,8 @@ const CreateWorkflow: React.FC = () => {
                                                                                     type="number"
                                                                                     value={value as unknown as string}
                                                                                     onChange={(e) => {
-                                                                                        setSelectedReactions(prev => prev.map(r => 
-                                                                                            r.id === reaction.id 
+                                                                                        setSelectedReactions(prev => prev.map(r =>
+                                                                                            r.id === reaction.id
                                                                                                 ? {...r, parameters: {...r.parameters, [key]: e.target.value}}
                                                                                                 : r
                                                                                         ));
@@ -343,8 +398,8 @@ const CreateWorkflow: React.FC = () => {
                                                                                 <Input
                                                                                     value={value as unknown as string}
                                                                                     onChange={(e) => {
-                                                                                        setSelectedReactions(prev => prev.map(r => 
-                                                                                            r.id === reaction.id 
+                                                                                        setSelectedReactions(prev => prev.map(r =>
+                                                                                            r.id === reaction.id
                                                                                                 ? {...r, parameters: {...r.parameters, [key]: e.target.value}}
                                                                                                 : r
                                                                                         ));
@@ -383,7 +438,7 @@ const CreateWorkflow: React.FC = () => {
                                         </Space>
                                         <Button
                                             type="primary"
-                                            onClick={handleCreateWorkflow}
+                                            onClick={handleUpdateWorkflow}
                                             disabled={
                                                 !workflowName
                                                 || selectedActions.length < 1
@@ -391,7 +446,7 @@ const CreateWorkflow: React.FC = () => {
                                                 || !workflowUtils.areAllParametersFilled(selectedActions, selectedReactions)
                                             }
                                         >
-                                            Create Workflow
+                                            Update Workflow
                                         </Button>
                                         <LinkButton text="Cancel" goBack type="danger"/>
                                     </div>
@@ -404,8 +459,7 @@ const CreateWorkflow: React.FC = () => {
                                         <Button onClick={workflowUtils.handleFoldAllReactions}
                                                 disabled={activeReactionKeys.length === 0}>Fold All</Button>
                                         <Button onClick={workflowUtils.handleUnfoldAllReactions}
-                                                disabled={activeReactionKeys.length === about?.server.services.length}>Unfold
-                                            All</Button>
+                                                disabled={activeReactionKeys.length === about?.server.services.length}>Unfold All</Button>
                                     </Space>
                                     <Collapse activeKey={activeReactionKeys} onChange={setActiveReactionKeys}>
                                         {about?.server?.services.map((service: Service) => (
@@ -449,4 +503,4 @@ const CreateWorkflow: React.FC = () => {
     );
 };
 
-export default CreateWorkflow;
+export default UpdateWorkflow;

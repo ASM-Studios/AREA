@@ -43,13 +43,18 @@ const auth = {
 }
 
 const oauth = {
-    microsoft: `${endpoint}/oauth/microsoft`,
+    microsoft: {
+        auth: `${endpoint}/oauth/microsoft`,
+        bind: `${endpoint}/oauth/bind/microsoft`,
+    },
 }
 
 const workflow = {
     create: `${endpoint}/workflow/create`,
     list: `${endpoint}/workflow/list`,
     delete: `${endpoint}/workflow/delete`,
+    update: `${endpoint}/workflow`,
+    get: `${endpoint}/workflow`,
 }
 
 export {
