@@ -45,6 +45,7 @@ dependencies:
   go_router: ^14.6.1
   aad_oauth: ^1.0.1
   http: ^1.2.2
+  google_sign_in: ^6.2.2
 
 dev_dependencies:
   flutter_test:

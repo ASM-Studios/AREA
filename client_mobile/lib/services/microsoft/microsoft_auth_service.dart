@@ -9,7 +9,7 @@ import '../../main.dart';
 import 'package:http/http.dart' as http;
 
 class MicrosoftAuthService {
-  static final String clientId = dotenv.env["VITE_MICROSOFT_CLIENT_ID"] ?? "";
+  static final String clientId = dotenv.env["MICROSOFT_CLIENT_ID"] ?? "";
   static const String redirectUri =
       "msauth://my.area.app/lvGC0B4SWYU8tNPHg%2FbdMjQinZQ%3D";
   static const String authority = "https://login.microsoftonline.com/common";
