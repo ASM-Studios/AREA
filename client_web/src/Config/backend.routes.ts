@@ -42,6 +42,11 @@ const auth = {
     health: `${endpoint}/auth/health`,
 };
 
+const user = {
+    me: `${endpoint}/user/me`,
+    delete: `${endpoint}/user/delete`,
+};
+
 const oauth = {
     microsoft: {
         auth: `${endpoint}/oauth/microsoft`,
@@ -86,6 +91,7 @@ export {
     instanceWithAuth,
     root,
     auth,
+    user,
     oauth,
     workflow
 };

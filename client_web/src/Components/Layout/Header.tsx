@@ -1,9 +1,10 @@
-import { Layout, Menu, Button, Dropdown, Avatar } from 'antd';
+import { Layout, Menu, Button, Dropdown, Tooltip } from 'antd';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth, useTheme } from '@/Context/ContextHooks';
 import React, { useEffect, useState } from "react";
-import { UserOutlined } from '@ant-design/icons';
+import { UserOutlined, MenuOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
+import { useMediaQuery } from 'react-responsive';
 
 const { Header: AntHeader } = Layout;
 
@@ -32,6 +33,7 @@ const Header: React.FC = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const [selectedKey, setSelectedKey] = useState<string>(location.pathname);
+    const isMobile = useMediaQuery({ maxWidth: 768 });
 
     const { isAuthenticated, setIsAuthenticated, setJsonWebToken } = useAuth();
 
@@ -75,36 +77,56 @@ const Header: React.FC = () => {
     return (
         <div style={{ padding: 24, position: 'relative', zIndex: 1 }}>
             <AntHeader style={{ backgroundColor: theme === "dark" ? '#001529' : 'white', display: 'flex', alignItems: 'center', zIndex: 1, borderRadius: '8px' }}>
-                <Menu
-                    theme={theme}
-                    mode="horizontal"
-                    style={{ flex: 1 }}
-                    items={filteredMenuItems}
-                    selectedKeys={[selectedKey]}
-                />
-                <Dropdown
-                    menu={{ 
-                        items: profileMenuItems,
-                        onClick: handleMenuClick
-                    }}
-                    placement="bottomRight"
-                    arrow
-                >
-                    <Button 
-                        type="text"
-                        style={{
-                            marginLeft: 'auto',
-                            height: '40px',
-                            borderRadius: '6px',
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '8px'
-                        }}
+                {isMobile ? (
+                    <Dropdown
+                        overlay={ // Deprecated but no alternative
+                            <Menu
+                                items={filteredMenuItems}
+                                selectedKeys={[selectedKey]}
+                                onClick={({ key }) => setSelectedKey(key)}
+                            />
+                        }
+                        trigger={['click']}
                     >
-                        <UserOutlined />
-                        <span>Profile</span>
-                    </Button>
-                </Dropdown>
+                        <Button icon={<MenuOutlined />} />
+                    </Dropdown>
+                ) : (
+                    <Menu
+                        theme={theme}
+                        mode="horizontal"
+                        style={{ flex: 1 }}
+                        items={filteredMenuItems}
+                        selectedKeys={[selectedKey]}
+                    />
+                )}
+                <Tooltip title={!isAuthenticated ? "Please log in to access profile settings" : ""}>
+                    <div>
+                        <Dropdown
+                            menu={{
+                                items: profileMenuItems,
+                                onClick: handleMenuClick
+                            }}
+                            placement="bottomRight"
+                            arrow
+                            disabled={!isAuthenticated}
+                        >
+                            <Button
+                                type="text"
+                                style={{
+                                    marginLeft: 'auto',
+                                    height: '40px',
+                                    borderRadius: '6px',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '8px'
+                                }}
+                            >
+                                <UserOutlined />
+                                <span>Profile</span>
+                            </Button>
+                        </Dropdown>
+                    </div>
+                </Tooltip>
             </AntHeader>
         </div>
     );

@@ -4,15 +4,10 @@ import { uri } from '@Config/uri';
 
 interface GithubAuthProps {
     buttonText: string;
+    disabled?: boolean;
 }
 
-const GithubAuth: FC<GithubAuthProps> = ({ buttonText }) => {
-    const scope = [
-        'read:user',
-        'user:email',
-        // Add other scopes as needed
-    ].join(' ');
-
+const GithubAuth: FC<GithubAuthProps> = ({ buttonText, disabled = false }) => {
     const handleGithubLogin = () => {
         const state = crypto.randomUUID().substring(0, 16);
         localStorage.setItem('github_auth_state', state);
@@ -21,7 +16,7 @@ const GithubAuth: FC<GithubAuthProps> = ({ buttonText }) => {
         const params = {
             client_id: uri.github.auth.clientId,
             redirect_uri: uri.github.auth.redirectUri,
-            scope: scope,
+            scope: uri.github.auth.scope.join(' '),
             state: state,
         };
 
@@ -38,6 +33,7 @@ const GithubAuth: FC<GithubAuthProps> = ({ buttonText }) => {
             <Button
                 onClick={handleGithubLogin}
                 className="w-full flex items-center justify-center gap-2 bg-[#24292e] text-white py-2 px-4 rounded-md hover:bg-[#2f363d] transition-colors"
+                disabled={disabled}
             >
                 <img
                     src="/github-icon.png"

@@ -1,11 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {Card, Spin} from "antd";
+import { Card, Spin } from "antd";
 
 const LinkedinCallback = () => {
     const [error, setError] = useState<string | undefined>(undefined);
-
     const navigate = useNavigate();
+    const hasHandledCallback = useRef(false);
 
     useEffect(() => {
         const handleCallback = async () => {
@@ -46,7 +46,10 @@ const LinkedinCallback = () => {
             }
         };
 
-        handleCallback().then(() => {});
+        if (!hasHandledCallback.current) {
+            handleCallback().then(() => {});
+            hasHandledCallback.current = true;
+        }
     }, [navigate]);
 
     return (
@@ -65,7 +68,7 @@ const LinkedinCallback = () => {
                     <>
                         <Spin size="large" />
                         <h3 style={{ marginTop: 24 }}>
-                            Connecting to Spotify
+                            Connecting to LinkedIn
                         </h3>
                         <p>
                             Please wait while we complete your authentication...

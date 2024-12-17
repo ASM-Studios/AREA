@@ -5,7 +5,7 @@ import { instance, instanceWithAuth, oauth } from "@Config/backend.routes";
 import { uri } from "@Config/uri";
 import { useAuth } from "@/Context/ContextHooks";
 
-const SpotifyCallback = () => {
+const TwitchCallback = () => {
     const navigate = useNavigate();
     const [error, setError] = useState<string | null>(null);
     const { setJsonWebToken, jsonWebToken } = useAuth();
@@ -17,7 +17,7 @@ const SpotifyCallback = () => {
             const code = urlParams.get('code');
             const error = urlParams.get('error');
             const state = urlParams.get('state');
-            const storedState = localStorage.getItem('spotify_auth_state');
+            const storedState = localStorage.getItem('twitch_auth_state');
             const codeVerifier = localStorage.getItem('code_verifier');
 
             try {
@@ -28,17 +28,17 @@ const SpotifyCallback = () => {
                 let response;
 
                 if (jsonWebToken) {
-                    response = await instanceWithAuth.post(oauth.spotify.bind, {
+                    response = await instanceWithAuth.post(oauth.twitch.bind, {
                         code,
                         code_verifier: codeVerifier,
-                        redirect_uri: uri.spotify.auth.redirectUri,
+                        redirect_uri: uri.twitch.auth.redirectUri,
                     });
                 } else {
-                    response = await instance.post(oauth.spotify.auth, {
+                    response = await instance.post(oauth.twitch.auth, {
                         code,
                         code_verifier: codeVerifier,
-                        redirect_uri: uri.spotify.auth.redirectUri,
-                    })
+                        redirect_uri: uri.twitch.auth.redirectUri,
+                    });
                 }
 
                 // @ts-expect-error
@@ -51,18 +51,18 @@ const SpotifyCallback = () => {
 
                 setJsonWebToken(data.token);
 
-                localStorage.removeItem('spotify_auth_state');
+                localStorage.removeItem('twitch_auth_state');
                 localStorage.removeItem('code_verifier');
 
                 setTimeout(() => {
                     if (code && !error && state === storedState) {
-                        sessionStorage.removeItem('spotify_auth_state');
+                        sessionStorage.removeItem('twitch_auth_state');
                         navigate('/dashboard');
                     }
                 }, 2000);
                 return;
             } catch (error: unknown) {
-                setError((error as Error)?.message || 'Failed to connect with Spotify');
+                setError((error as Error)?.message || 'Failed to connect with Twitch');
                 setTimeout(() => {
                     navigate('/login');
                 }, 2000);
@@ -73,7 +73,7 @@ const SpotifyCallback = () => {
             handleCallback().catch(console.error);
             hasHandledCallback.current = true;
         }
-    }, [jsonWebToken, navigate, setJsonWebToken]);
+    }, [navigate, jsonWebToken, setJsonWebToken]);
 
     return (
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh' }}>
@@ -91,7 +91,7 @@ const SpotifyCallback = () => {
                     <>
                         <Spin size="large" />
                         <h3 style={{ marginTop: 24 }}>
-                            Connecting to Spotify
+                            Connecting to Twitch
                         </h3>
                         <p>
                             Please wait while we complete your authentication...
@@ -103,4 +103,4 @@ const SpotifyCallback = () => {
     );
 };
 
-export default SpotifyCallback;
+export default TwitchCallback;

@@ -8,9 +8,10 @@ interface MicrosoftAuthProps {
     onSuccess: (response: unknown) => void;
     onError: (error: unknown) => void;
     buttonText: string;
+    disabled?: boolean;
 }
 
-const MicrosoftAuth = ({ onSuccess, onError, buttonText }: MicrosoftAuthProps) => {
+const MicrosoftAuth = ({ onSuccess, onError, buttonText, disabled = false }: MicrosoftAuthProps) => {
     const [msalInstance, setMsalInstance] = useState<PublicClientApplication | null>(null);
 
     useEffect(() => {
@@ -34,7 +35,7 @@ const MicrosoftAuth = ({ onSuccess, onError, buttonText }: MicrosoftAuthProps) =
                 throw new Error('MSAL not initialized');
             }
             const response = await msalInstance.loginPopup({
-                scopes: ["user.read", "Mail.Read", "Mail.ReadWrite", "Mail.Send"]
+                scopes: uri.microsoft.auth.scope
             });
             onSuccess(response);
         } catch (error) {
@@ -56,6 +57,7 @@ const MicrosoftAuth = ({ onSuccess, onError, buttonText }: MicrosoftAuthProps) =
                         alt="Microsoft"
                         style={{ width: '20px', marginRight: '8px' }}
                     />}
+                    disabled={disabled}
                 >
                     {buttonText}
                 </Button>
