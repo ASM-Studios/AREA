@@ -6,9 +6,10 @@ interface GoogleAuthProps {
     onSuccess: (response: unknown) => void;
     onError: () => void;
     buttonText: string;
+    disabled?: boolean;
 }
 
-const GoogleAuth = ({ onSuccess, onError, buttonText }: GoogleAuthProps) => {
+const GoogleAuth = ({ onSuccess, onError, buttonText, disabled = false }: GoogleAuthProps) => {
     if (!uri.google.auth.clientId || uri.google.auth.clientId === '') {
         return null;
     }
@@ -23,7 +24,7 @@ const GoogleAuth = ({ onSuccess, onError, buttonText }: GoogleAuthProps) => {
 
         const client = google.accounts.oauth2.initCodeClient({
             client_id: uri.google.auth.clientId,
-            scope: 'email profile',
+            scope: uri.google.auth.scope.join(' '),
             callback: (response: unknown) => {
                 if (response && typeof response === 'object' && 'code' in response) {
                     onSuccess(response);
@@ -41,6 +42,7 @@ const GoogleAuth = ({ onSuccess, onError, buttonText }: GoogleAuthProps) => {
                 <Button
                     onClick={handleGoogleLogin}
                     className="w-full flex items-center justify-center gap-2 bg-white text-gray-700 py-2 px-4 rounded-md hover:bg-gray-100 transition-colors border border-gray-300"
+                    disabled={disabled}
                 >
                     <img
                         src="/google-icon.png"

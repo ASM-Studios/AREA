@@ -10,7 +10,11 @@ interface WorkflowUtilsConfig {
   setActiveReactionKeys: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
-export const createWorkflowUtils = (config: WorkflowUtilsConfig) => {
+export const normalizeName = (name: string): string => {
+  return name.replace(/_/g, " ").replace(/\b\w/g, (c: string): string => c.toUpperCase());
+};
+
+export const WorkflowUtils = (config: WorkflowUtilsConfig) => {
   const {
     about,
     setSelectedActions,

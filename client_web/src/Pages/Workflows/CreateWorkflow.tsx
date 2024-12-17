@@ -2,8 +2,7 @@ import React, { useState } from "react";
 import { Button, Row, Typography, Spin, Space, Card, List, Form, Input, Col, Collapse } from "antd";
 import Security from "@/Components/Security";
 import LinkButton from "@/Components/LinkButton";
-import { normalizeName } from "@/Pages/Workflows/CreateWorkflow.utils";
-import { createWorkflowUtils } from "./Workflow.utils";
+import { WorkflowUtils, normalizeName } from "./Workflow.utils";
 
 import { About, Service, Action, Reaction, Workflow, Parameter, SelectedAction, SelectedReaction } from "@/types";
 import { toast } from "react-toastify";
@@ -28,7 +27,7 @@ const CreateWorkflow: React.FC = () => {
     const { setError } = useError();
     const navigate = useNavigate();
 
-    const workflowUtils = createWorkflowUtils({
+    const workflowUtils = WorkflowUtils({
         about,
         setSelectedActions,
         setSelectedReactions,
@@ -124,10 +123,6 @@ const CreateWorkflow: React.FC = () => {
     return (
         <Security>
             <div style={{ padding: '16px 24px', position: 'relative', zIndex: 1, height: '100%' }} role="main">
-                <Title level={3} style={{ marginBottom: 16 }}>
-                    Create Workflow
-                </Title>
-
                 {loading ? (
                     <Spin size="large" aria-label="Loading workflow creator" />
                 ) : (

@@ -5,16 +5,10 @@ import { uri } from '@Config/uri';
 
 interface SpotifyOAuthProps {
     buttonText: string;
+    disabled?: boolean;
 }
 
-const SpotifyAuth: FC<SpotifyOAuthProps> = ({ buttonText }) => {
-
-    const scope = [
-        'user-read-private',
-        'user-read-email',
-        // TODO: Add other scopes as needed
-    ].join(' ');
-
+const SpotifyAuth: FC<SpotifyOAuthProps> = ({ buttonText, disabled = false }) => {
     const generateCodeChallenge = async (codeVerifier: string) => {
         const encoder = new TextEncoder();
         const data = encoder.encode(codeVerifier);
@@ -37,7 +31,7 @@ const SpotifyAuth: FC<SpotifyOAuthProps> = ({ buttonText }) => {
         const params = {
             response_type: 'code',
             client_id: uri.spotify.auth.clientId,
-            scope: scope,
+            scope: uri.spotify.auth.scope.join(' '),
             redirect_uri: uri.spotify.auth.redirectUri,
             state: state,
             code_challenge_method: 'S256',
@@ -53,9 +47,10 @@ const SpotifyAuth: FC<SpotifyOAuthProps> = ({ buttonText }) => {
             <Button
                 onClick={handleSpotifyLogin}
                 className="w-full flex items-center justify-center gap-2 bg-[#1DB954] text-white py-2 px-4 rounded-md hover:bg-[#1ed760] transition-colors"
+                disabled={disabled}
             >
                 <img
-                    src="/spotify-logo.png"
+                    src="/spotify-icon.png"
                     alt="Spotify Logo"
                     style={{ width: '24px', height: '24px' }}
                 />

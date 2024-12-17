@@ -6,11 +6,11 @@ interface LinkedinAuthProps {
     onSuccess: (response: unknown) => void;
     onError: (error: unknown) => void;
     buttonText: string;
+    disabled?: boolean;
 }
 
-const LinkedinAuth = ({ buttonText }: LinkedinAuthProps) => {
+const LinkedinAuth = ({ buttonText, disabled = false }: LinkedinAuthProps) => {
     const handleLinkedinAuth = () => {
-        const scope = 'r_liteprofile r_emailaddress';
         const state = Math.random().toString(36).substring(7);
 
         sessionStorage.setItem('linkedinState', state);
@@ -20,7 +20,7 @@ const LinkedinAuth = ({ buttonText }: LinkedinAuthProps) => {
             `client_id=${uri.linkedin.auth.clientId}&` +
             `redirect_uri=${encodeURIComponent(uri.linkedin.auth.redirectUri)}&` +
             `state=${state}&` +
-            `scope=${encodeURIComponent(scope)}`;
+            `scope=${encodeURIComponent(uri.linkedin.auth.scope.join(' '))}`; // TODO: Test without the uri encoding
     };
 
     if (!uri.linkedin.auth.clientId) {
@@ -37,6 +37,7 @@ const LinkedinAuth = ({ buttonText }: LinkedinAuthProps) => {
                         alt="LinkedIn"
                         style={{ width: '20px', marginRight: '8px' }}
                     />}
+                    disabled={disabled}
                 >
                     {buttonText}
                 </Button>

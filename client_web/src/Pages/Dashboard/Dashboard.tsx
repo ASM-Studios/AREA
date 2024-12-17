@@ -78,10 +78,6 @@ const Dashboard: React.FC = () => {
     return (
         <Security>
             <div style={{padding: 24, position: 'relative', zIndex: 1}} role="main">
-                <Title level={3} style={{marginBottom: 16}}>
-                    Dashboard
-                </Title>
-
                 <Row gutter={[24, 24]} style={{marginBottom: 24}}>
                     <Col xs={24} md={8}>
                         <Card>

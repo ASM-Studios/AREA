@@ -1,5 +1,5 @@
 import { Card, Spin } from 'antd';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { instance, instanceWithAuth, oauth } from "@Config/backend.routes";
 import { uri } from "@Config/uri";
@@ -9,6 +9,7 @@ const DiscordCallback = () => {
     const navigate = useNavigate();
     const [error, setError] = useState<string | null>(null);
     const { setJsonWebToken, jsonWebToken } = useAuth();
+    const hasHandledCallback = useRef(false);
 
     useEffect(() => {
         const handleCallback = async () => {
@@ -68,8 +69,11 @@ const DiscordCallback = () => {
             }
         };
 
-        handleCallback().catch(console.error);
-    }, [navigate]);
+        if (!hasHandledCallback.current) {
+            handleCallback().catch(console.error);
+            hasHandledCallback.current = true;
+        }
+    }, [jsonWebToken, navigate, setJsonWebToken]);
 
     return (
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh' }}>
@@ -99,4 +103,4 @@ const DiscordCallback = () => {
     );
 };
 
-export default DiscordCallback; 
+export default DiscordCallback;
