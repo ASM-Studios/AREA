@@ -61,3 +61,8 @@ logs:
 ## Clean up containers, images, volumes and orphans
 clean:
 	docker compose down --rmi local -v --remove-orphans
+
+serverless-compose: start
+	docker container stop area-area-server-1
+	cd server && go run .
+	cd ..

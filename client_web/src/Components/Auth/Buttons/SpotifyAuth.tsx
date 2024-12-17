@@ -15,11 +15,23 @@ const SpotifyAuth: FC<SpotifyOAuthProps> = ({ buttonText }) => {
         // TODO: Add other scopes as needed
     ].join(' ');
 
-    const handleSpotifyLogin = () => {
-        const state = crypto.randomUUID().substring(0, 16);
-        localStorage.setItem('spotify_auth_state', state);
+    const generateCodeChallenge = async (codeVerifier: string) => {
+        const encoder = new TextEncoder();
+        const data = encoder.encode(codeVerifier);
+        const digest = await crypto.subtle.digest('SHA-256', data);
+        return btoa(String.fromCharCode(...new Uint8Array(digest)))
+            .replace(/\+/g, '-')
+            .replace(/\//g, '_')
+            .replace(/=+$/, '');
+    };
 
-        console.log("Set state: ", state); // TODO: Remove after api connection
+    const handleSpotifyLogin = async () => {
+        const state = crypto.randomUUID().substring(0, 16);
+        const codeVerifier = crypto.randomUUID() + crypto.randomUUID();
+        const codeChallenge = await generateCodeChallenge(codeVerifier);
+
+        localStorage.setItem('spotify_auth_state', state);
+        localStorage.setItem('code_verifier', codeVerifier);
 
         const authUrl = new URL('https://accounts.spotify.com/authorize');
         const params = {
@@ -28,6 +40,8 @@ const SpotifyAuth: FC<SpotifyOAuthProps> = ({ buttonText }) => {
             scope: scope,
             redirect_uri: uri.spotify.auth.redirectUri,
             state: state,
+            code_challenge_method: 'S256',
+            code_challenge: codeChallenge,
         };
 
         authUrl.search = new URLSearchParams(params).toString();

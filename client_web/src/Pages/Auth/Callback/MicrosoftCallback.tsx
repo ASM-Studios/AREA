@@ -23,11 +23,7 @@ const MicrosoftCallback = () => {
                 const response = await msalInstance.handleRedirectPromise();
                 
                 if (response) {
-                    // TODO: Send the token to your backend
-
                     localStorage.setItem('microsoft_access_token', response.accessToken);
-
-                    // navigate('/dashboard'); //TODO: The navigate function is to be put in the onSuccess function
                 }
             } catch (error) {
                 console.error('Microsoft authentication error:', error);

@@ -3,6 +3,7 @@ import MicrosoftAuth from './Buttons/MicrosoftAuth';
 import LinkedinAuth from './Buttons/LinkedinAuth';
 import SpotifyAuth from './Buttons/SpotifyAuth';
 import DiscordAuth from './Buttons/DiscordAuth';
+import GithubAuth from "./Buttons/GithubAuth";
 import { Divider } from 'antd';
 
 interface OAuthButtonsProps {
@@ -68,6 +69,10 @@ const OAuthButtons = ({
 
             <DiscordAuth
                 buttonText={`${withText} Discord`}
+            />
+
+            <GithubAuth
+                buttonText={`${withText} Github`}
             />
         </>
     );

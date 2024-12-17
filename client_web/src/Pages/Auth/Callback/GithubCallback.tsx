@@ -5,7 +5,7 @@ import { instance, instanceWithAuth, oauth } from "@Config/backend.routes";
 import { uri } from "@Config/uri";
 import { useAuth } from "@/Context/ContextHooks";
 
-const SpotifyCallback = () => {
+const GithubCallback = () => {
     const navigate = useNavigate();
     const [error, setError] = useState<string | null>(null);
     const { setJsonWebToken, jsonWebToken } = useAuth();
@@ -16,8 +16,7 @@ const SpotifyCallback = () => {
             const code = urlParams.get('code');
             const error = urlParams.get('error');
             const state = urlParams.get('state');
-            const storedState = localStorage.getItem('spotify_auth_state');
-            const codeVerifier = localStorage.getItem('code_verifier');
+            const storedState = localStorage.getItem('github_auth_state');
 
             try {
                 if (state === null || state !== storedState) {
@@ -27,17 +26,15 @@ const SpotifyCallback = () => {
                 let response;
 
                 if (jsonWebToken) {
-                    response = await instanceWithAuth.post(oauth.spotify.bind, {
+                    response = await instanceWithAuth.post(oauth.github.bind, {
                         code,
-                        code_verifier: codeVerifier,
-                        redirect_uri: uri.spotify.auth.redirectUri,
+                        redirect_uri: uri.github.auth.redirectUri,
                     });
                 } else {
-                    response = await instance.post(oauth.spotify.auth, {
+                    response = await instance.post(oauth.github.auth, {
                         code,
-                        code_verifier: codeVerifier,
-                        redirect_uri: uri.spotify.auth.redirectUri,
-                    })
+                        redirect_uri: uri.github.auth.redirectUri,
+                    });
                 }
 
                 // @ts-expect-error
@@ -50,20 +47,17 @@ const SpotifyCallback = () => {
 
                 setJsonWebToken(data.token);
 
-                localStorage.removeItem('spotify_auth_state');
-                localStorage.removeItem('code_verifier');
+                localStorage.removeItem('github_auth_state');
 
                 setTimeout(() => {
                     if (code && !error && state === storedState) {
-                        sessionStorage.removeItem('spotify_auth_state');
+                        sessionStorage.removeItem('github_auth_state');
                         navigate('/dashboard');
                     }
                 }, 2000);
                 return;
             } catch (error: unknown) {
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-expect-error
-                setError(error?.message as string || 'Failed to connect with Spotify');
+                setError((error as Error)?.message || 'Failed to connect with GitHub');
                 setTimeout(() => {
                     navigate('/login');
                 }, 2000);
@@ -89,7 +83,7 @@ const SpotifyCallback = () => {
                     <>
                         <Spin size="large" />
                         <h3 style={{ marginTop: 24 }}>
-                            Connecting to Spotify
+                            Connecting to GitHub
                         </h3>
                         <p>
                             Please wait while we complete your authentication...
@@ -101,4 +95,4 @@ const SpotifyCallback = () => {
     );
 };
 
-export default SpotifyCallback; 
+export default GithubCallback;
