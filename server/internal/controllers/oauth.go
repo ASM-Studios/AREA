@@ -10,15 +10,12 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type Token struct {
-        Token   string  `json:"token" binding:"required"`
-}
-
-type OAuthCallback func(c *gin.Context, token *models.Token) (*models.User, error)
+type OAuthCallback func(c *gin.Context) (*models.Token, error)
 
 var OAuthCallbacks = map[string]OAuthCallback {
     //"google": googleCallback,
     "microsoft": oauth.MicrosoftCallback,
+    "spotify": oauth.SpotifyCallback,
 }
 
 func getServiceID(c *gin.Context) (uint, error) {
@@ -33,55 +30,42 @@ func getServiceID(c *gin.Context) (uint, error) {
 }
 
 func OAuth(c *gin.Context) {
-        var token Token
-        if err := c.ShouldBindJSON(&token); err != nil {
+        dbToken, err := OAuthCallbacks[c.Param("service")](c)
+        if err != nil || dbToken == nil {
                 c.AbortWithStatusJSON(http.StatusBadRequest, gin.H {
                         "message": "Invalid request",
                 })
+                return
         }
 
-
-        serviceId, err := getServiceID(c)
+        user, err := oauth.OAuthRegisterAccount(c, dbToken)
         if err != nil {
-            return
-        }
-
-        var dbToken models.Token
-        dbToken.Value = token.Token
-        dbToken.ServiceID = serviceId
-        user, err := OAuthCallbacks[c.Param("service")](c, &dbToken)
-        dbToken.UserID = user.ID
-        if err != nil {
+                c.AbortWithStatusJSON(http.StatusBadRequest, gin.H {
+                        "message": "Invalid request",
+                })
                 return
         }
 
         c.JSON(http.StatusOK, gin.H{"username": user.Username, "email": user.Email, "jwt": user.Token})
 }
 
-/*func OAuthBind(c *gin.Context) {
-        var token Token
-        if err := c.ShouldBindJSON(&token); err != nil {
+func OAuthBind(c *gin.Context) {
+        dbToken, err := OAuthCallbacks[c.Param("service")](c)
+        if err != nil {
                 c.AbortWithStatusJSON(http.StatusBadRequest, gin.H {
                         "message": "Invalid request",
                 })
                 return
         }
-        userId, err := pkg.GetUserFromToken(c)
+
+        _, err = oauth.OAuthBindAccount(c, dbToken)
         if err != nil {
                 c.AbortWithStatusJSON(http.StatusBadRequest, gin.H {
-                        "message": "User not found",
-                })
-        }
-        serviceId, err := pkg.GetServiceFromName(c.Param("service"))
-        if err != nil {
-                c.AbortWithStatusJSON(http.StatusBadRequest, gin.H {
-                        "message": "Service not found",
+                        "message": "Invalid request",
                 })
                 return
         }
 
-        var dbToken models.Token
-        dbToken.Value = token.Token
-        dbToken.UserID = userId
-        dbToken.ServiceID = serviceId
-}*/
+        //oauth.OAuthLogin(c, *serviceInfo, token);
+        c.JSON(http.StatusOK, gin.H{"message": "Bind successful"})
+}
