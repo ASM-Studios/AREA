@@ -7,6 +7,8 @@ const LinkedinCallback = () => {
     const navigate = useNavigate();
     const hasHandledCallback = useRef(false);
 
+    const isBinding = sessionStorage.getItem("jsonWebToken");
+
     useEffect(() => {
         const handleCallback = async () => {
             const urlParams = new URLSearchParams(window.location.search);
@@ -40,9 +42,11 @@ const LinkedinCallback = () => {
                 // Redirect to dashboard instead of home
                 navigate('/dashboard');
             } catch (error) {
+                setError((error as Error)?.message || 'Failed to connect with Linkedin');
                 console.error('LinkedIn authentication error:', error);
-                setError(`LinkedIn authentication error: ${error}`);
-                navigate('/login');
+                setTimeout(() => {
+                    navigate(isBinding ? '/account/me' : '/login');
+                }, 2000);
             }
         };
 

@@ -11,6 +11,8 @@ const TwitchCallback = () => {
     const { setJsonWebToken } = useAuth();
     const hasHandledCallback = useRef(false);
 
+    const isBinding = localStorage.getItem("jsonWebToken");
+
     useEffect(() => {
         const handleCallback = async () => {
             const urlParams = new URLSearchParams(window.location.search);
@@ -27,7 +29,7 @@ const TwitchCallback = () => {
 
                 let response;
 
-                if (localStorage.getItem("jsonWebToken")) {
+                if (isBinding) {
                     response = await instanceWithAuth.post(oauth.twitch.bind, {
                         code,
                         code_verifier: codeVerifier,
@@ -45,7 +47,7 @@ const TwitchCallback = () => {
                     throw new Error('Failed to exchange token');
                 }
 
-                if (!localStorage.getItem("jsonWebToken")) {
+                if (!isBinding) {
                     setJsonWebToken(response?.data?.jwt);
                 }
 
@@ -62,7 +64,7 @@ const TwitchCallback = () => {
             } catch (error: unknown) {
                 setError((error as Error)?.message || 'Failed to connect with Twitch');
                 setTimeout(() => {
-                    navigate('/login');
+                    navigate(isBinding ? '/account/me' : '/login');
                 }, 2000);
             }
         };
