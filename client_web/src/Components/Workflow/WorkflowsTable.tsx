@@ -20,10 +20,6 @@ const WorkflowsTable: React.FC<WorkflowsTableProps> = ({ workflows, setNeedReloa
     const isSmallScreen = useMediaQuery({ maxWidth: 767 });
     const navigate = useNavigate();
 
-    React.useEffect(() => {
-        console.log("Workflows:", workflows);
-    }, [workflows]);
-
     const handleEdit = (record: WorkflowTableDetail) => {
         navigate(`/workflow/update/${record.ID}`);
     };
