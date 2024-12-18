@@ -6,23 +6,23 @@ import (
 	"net/http"
 )
 
-type GithubResponse struct {
+type DiscordResponse struct {
         Mail string `json:"email"`
-        DisplayName string `json:"login"`
+        DisplayName string `json:"username"`
 }
 
-func GetGithubResponse(serviceRawResponse *http.Response) (*ServiceResponse, error) {
-        var githubResponse GithubResponse
+func GetDiscordResponse(serviceRawResponse *http.Response) (*ServiceResponse, error) {
+        var discordResponse DiscordResponse
 
         body, err := io.ReadAll(serviceRawResponse.Body)
         if err != nil {
                 return nil, err
         }
-        err = json.Unmarshal([]byte(body), &githubResponse)
+        err = json.Unmarshal([]byte(body), &discordResponse)
         if err != nil {
                 return nil, err
         }
 
-        serviceResponse := ServiceResponse(githubResponse)
+        serviceResponse := ServiceResponse(discordResponse)
         return &serviceResponse, nil
 }

@@ -31,7 +31,7 @@ func createAccount(c *gin.Context, dbToken *models.Token) (*models.User) {
 func updateAccount(c *gin.Context, dbToken *models.Token) (*models.User) {
         var user models.User
         pkg.DB.Where("id = ?", dbToken.UserID).First(&user)
-        pkg.DB.Where("email = ?", dbToken.Email).First(dbToken).Update("value", dbToken.Token)
+        pkg.DB.Where("email = ?", dbToken.Email).First(dbToken).Update("token", dbToken.Token)
         user.Token = utils.NewToken(c, user.Email)
         pkg.DB.UpdateColumns(&user)
         return &user
@@ -64,7 +64,7 @@ func OAuthBindAccount(c *gin.Context, dbToken *models.Token) (*models.User, erro
         if errors.Is(err, gorm.ErrRecordNotFound) {
                 pkg.DB.Create(&dbToken)
         } else {
-                pkg.DB.Model(&dbToken).Update("value", dbToken.Token)
+                pkg.DB.Model(&dbToken).Update("token", dbToken.Token)
         }
         return &user, nil
 }

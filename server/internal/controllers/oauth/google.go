@@ -6,23 +6,23 @@ import (
 	"net/http"
 )
 
-type GithubResponse struct {
+type GoogleResponse struct {
         Mail string `json:"email"`
-        DisplayName string `json:"login"`
+        DisplayName string `json:"username"`
 }
 
-func GetGithubResponse(serviceRawResponse *http.Response) (*ServiceResponse, error) {
-        var githubResponse GithubResponse
+func GetGoogleResponse(serviceRawResponse *http.Response) (*ServiceResponse, error) {
+        var googleResponse GoogleResponse
 
         body, err := io.ReadAll(serviceRawResponse.Body)
         if err != nil {
                 return nil, err
         }
-        err = json.Unmarshal([]byte(body), &githubResponse)
+        err = json.Unmarshal([]byte(body), &googleResponse)
         if err != nil {
                 return nil, err
         }
 
-        serviceResponse := ServiceResponse(githubResponse)
+        serviceResponse := ServiceResponse(googleResponse)
         return &serviceResponse, nil
 }
