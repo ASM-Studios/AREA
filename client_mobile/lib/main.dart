@@ -8,7 +8,7 @@ import 'package:go_router/go_router.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 Future<void> main() async {
-  await dotenv.load(fileName: ".env.mobile");
+  await dotenv.load(fileName: ".env");
 
   final GoRouter router = GoRouter(
     navigatorKey: navigatorKey,

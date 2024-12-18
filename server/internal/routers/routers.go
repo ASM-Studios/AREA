@@ -5,7 +5,10 @@ import (
 	"AREA/internal/config"
 	"AREA/internal/controllers"
 	"AREA/internal/middleware"
+	"AREA/internal/services"
+	"database/sql"
 	"github.com/gin-gonic/gin"
+	amqp "github.com/rabbitmq/amqp091-go"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
@@ -20,7 +23,7 @@ func setUpAuthGroup(router *gin.Engine) {
 	{
 		auth.POST("/register", controllers.Register)
 		auth.POST("/login", controllers.Login)
-		auth.GET("/health", controllers.Health)
+		auth.GET("/health", controllers.AuthHealth)
 	}
 }
 
@@ -45,7 +48,13 @@ func setUpUserGroup(router *gin.Engine) {
 	}
 }
 
-func SetupRouter() *gin.Engine {
+func InitServices(db *sql.DB, rmq *amqp.Connection) {
+	services.InitHealthService(db, rmq)
+}
+
+func SetupRouter(db *sql.DB, rmq *amqp.Connection) *gin.Engine {
+	InitServices(db, rmq)
+
 	router := gin.Default()
 	router.Use(middleware.ErrorHandlerMiddleware())
 	if config.AppConfig.Cors {
@@ -54,6 +63,10 @@ func SetupRouter() *gin.Engine {
 	if config.AppConfig.Swagger {
 		router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	}
+
+	router.GET("/health", controllers.SystemHealth)
+	router.HEAD("/health", controllers.SystemHealth)
+
 	public := router.Group("/")
 	{
 		public.GET("/ping", controllers.Ping)

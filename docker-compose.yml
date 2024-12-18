@@ -2,8 +2,8 @@ services:
   rabbitmq:
     image: rabbitmq:4.0.4-management-alpine
     ports:
-      - "8082:15672"
-      - "5000:5672"
+      - "15672:15672"
+      - "5672:5672"
     networks:
       - area_network
     volumes:
@@ -59,8 +59,14 @@ services:
     networks:
       - area_network
     env_file:
-      - server/.env.server
+      - server/.env
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 40s
 
   area-client-mobile:
     build:
@@ -77,7 +83,7 @@ services:
     networks:
       - area_network
     env_file:
-      - ./client_mobile/.env.mobile
+      - ./client_mobile/.env
 
   area-client-web:
     build:
@@ -108,8 +114,35 @@ services:
     networks:
       - area_network
     env_file:
-      - ./client_web/.env.local
+      - ./client_web/.env
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider --no-check-certificate https://localhost:${VITE_PORT} || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+
+  healthcheck-reporter:
+    image: alpine:3.20.3
+    depends_on:
+      area-server:
+        condition: service_healthy
+      area-client-web:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+      mariadb:
+        condition: service_healthy
+    command: |
+      sh -c '
+        echo "🚀 All services are up and running!"
+        echo "📱 Web client is available at: https://localhost:${VITE_PORT}"
+        echo "⚙️  API is available at: http://localhost:8080"
+        echo "🐰 RabbitMQ management UI is available at: http://localhost:15672"
+      '
+    environment:
+      - VITE_PORT=${VITE_PORT}
 
 volumes:
   area_client_data:
