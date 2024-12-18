@@ -33,7 +33,7 @@ func getSpofityBasicAuthorization() string {
         return base64.StdEncoding.EncodeToString([]byte(clientID + ":" + clientSecret))
 }
 
-func spotifyGetToken(c *gin.Context, spotifyCode SpotifyCode) (*SpotifyToken) {
+func getSpotifyBearer(c *gin.Context, spotifyCode SpotifyCode) (*SpotifyToken, error) {
         form := url.Values{}
         form.Add("grant_type", "authorization_code")
         form.Add("code", spotifyCode.Code)
@@ -41,13 +41,13 @@ func spotifyGetToken(c *gin.Context, spotifyCode SpotifyCode) (*SpotifyToken) {
         form.Add("redirect_uri", spotifyCode.RedirectUri)
         req, err := http.NewRequest("POST","https://accounts.spotify.com/api/token" , bytes.NewBufferString(form.Encode()))
         if err != nil {
-                return nil
+                return nil, err
         }
         req.Header.Set("Authorization", "Basic " + getSpofityBasicAuthorization())
         req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 
         _, spotifyToken, err := utils.SendRequest[SpotifyToken](req)
-        return spotifyToken
+        return spotifyToken, nil
 }
 
 func createSpotifyToken(c *gin.Context, serviceId uint, spotifyToken SpotifyToken) (*models.Token, error) {
@@ -63,7 +63,7 @@ func createSpotifyToken(c *gin.Context, serviceId uint, spotifyToken SpotifyToke
                 return nil, err
         }
 
-        dbToken.Value = spotifyToken.Token
+        dbToken.Token = spotifyToken.Token
         dbToken.DisplayName = spotifyResponse.DisplayName
         dbToken.Email = spotifyResponse.Mail
         dbToken.ServiceID = serviceId
@@ -86,6 +86,13 @@ func SpotifyCallback(c *gin.Context) (*models.Token, error) {
                 })
                 return nil, err
         }
-        spotifyToken := spotifyGetToken(c, spotifyCode)
+
+        spotifyToken, err := getSpotifyBearer(c, spotifyCode)
+        if err != nil {
+                c.AbortWithStatusJSON(http.StatusBadRequest, gin.H {
+                        "message": "Invalid request",
+                })
+                return nil, err
+        }
         return createSpotifyToken(c, serviceId, *spotifyToken)
 }

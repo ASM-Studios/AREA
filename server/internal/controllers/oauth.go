@@ -17,6 +17,7 @@ var OAuthCallbacks = map[string]OAuthCallback {
     "microsoft": oauth.MicrosoftCallback,
     "spotify": oauth.SpotifyCallback,
     "github": oauth.GithubCallback,
+    "twitch": oauth.TwitchCallback,
 }
 
 func getServiceID(c *gin.Context) (uint, error) {
