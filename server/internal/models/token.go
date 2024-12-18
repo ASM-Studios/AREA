@@ -4,9 +4,11 @@ import "gorm.io/gorm"
 
 type Token struct {
         gorm.Model
-        Value string
-        DisplayName string
-        Email string
-        ServiceID uint
-        UserID uint
+        Token           string
+        RefreshToken    string
+        ExpiresIn       int
+        DisplayName     string
+        Email           string
+        ServiceID       uint
+        UserID          uint
 }

@@ -3,7 +3,6 @@ package utils
 import (
 	"AREA/internal/consts"
 	"encoding/json"
-	"fmt"
 	"io"
 	"net/http"
 
@@ -47,6 +46,5 @@ func SendRequest[T any](request *http.Request) (*http.Response, *T, error) {
 
         defer resp.Body.Close()
         err = json.Unmarshal([]byte(b), &body)
-        fmt.Println(string(b))
         return resp, &body, err
 }

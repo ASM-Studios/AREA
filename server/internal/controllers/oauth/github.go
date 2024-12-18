@@ -26,7 +26,7 @@ type GithubResponse struct {
         DisplayName string `json:"login"`
 }
 
-func getGithubBearer(c *gin.Context, githubCode GithubCode) (*GithubToken) {
+func getGithubBearer(c *gin.Context, githubCode GithubCode) (*GithubToken, error) {
         body := struct {
                 Code    string  `json:"code"`
                 RedirectUri string `json:"redirect_uri"`
@@ -41,13 +41,16 @@ func getGithubBearer(c *gin.Context, githubCode GithubCode) (*GithubToken) {
         encodedBody, err := json.Marshal(body)
         req, err := http.NewRequest("POST", "https://github.com/login/oauth/access_token" , bytes.NewBuffer(encodedBody))
         if err != nil {
-                return nil
+                return nil, err
         }
         req.Header.Set("Accept", "application/json")
         req.Header.Set("Content-Type", "application/json")
 
-        _, githubToken, err := utils.SendRequest[GithubToken](req)
-        return githubToken
+        resp, githubToken, err := utils.SendRequest[GithubToken](req)
+        if err != nil || resp.StatusCode != 200 {
+                return nil, err
+        }
+        return githubToken, nil
 }
 
 func createGithubToken(c *gin.Context, serviceId uint, githubToken GithubToken) (*models.Token, error) {
@@ -63,7 +66,7 @@ func createGithubToken(c *gin.Context, serviceId uint, githubToken GithubToken) 
                 return nil, err
         }
 
-        dbToken.Value = githubToken.Token
+        dbToken.Token = githubToken.Token
         dbToken.DisplayName = githubResponse.DisplayName
         dbToken.Email = githubResponse.Mail
         dbToken.ServiceID = serviceId
@@ -86,6 +89,13 @@ func GithubCallback(c *gin.Context) (*models.Token, error) {
                 })
                 return nil, err
         }
-        bearerToken := getGithubBearer(c, githubCode)
+
+        bearerToken, err := getGithubBearer(c, githubCode)
+        if err != nil {
+                c.AbortWithStatusJSON(http.StatusBadRequest, gin.H {
+                        "message": "Invalid request",
+                })
+                return nil, err
+        }
         return createGithubToken(c, serviceId, *bearerToken)
 }

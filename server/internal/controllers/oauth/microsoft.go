@@ -23,7 +23,7 @@ type MicrosoftResponse struct {
 func createMicrosoftToken(serviceId uint, microsoftToken MicrosoftToken, microsoftResponse MicrosoftResponse) *models.Token {
         var dbToken models.Token
 
-        dbToken.Value = microsoftToken.Token
+        dbToken.Token = microsoftToken.Token
         dbToken.DisplayName = microsoftResponse.DisplayName
         dbToken.Email = microsoftResponse.Mail
         dbToken.ServiceID = serviceId
