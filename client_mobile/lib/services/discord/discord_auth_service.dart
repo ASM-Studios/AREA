@@ -1,11 +1,10 @@
 import 'dart:convert';
-import 'dart:math';
+import 'package:client_mobile/tools/utils.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_web_auth/flutter_web_auth.dart';
 import 'package:http/http.dart' as http;
-import 'package:crypto/crypto.dart';
 
 class DiscordAuthService {
   static final String clientId = dotenv.env["DISCORD_CLIENT_ID"] ?? "";
@@ -14,24 +13,6 @@ class DiscordAuthService {
   static const FlutterSecureStorage secureStorage = FlutterSecureStorage();
 
   static const String scopes = "identify email guilds";
-
-  static String generateCodeVerifier() {
-    const String _charset =
-        'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~';
-    return List.generate(
-        128, (i) => _charset[Random.secure().nextInt(_charset.length)]).join();
-  }
-
-  static String generateCodeChallenge(String codeVerifier) {
-    var bytes = ascii.encode(codeVerifier);
-    var digest = sha256.convert(bytes);
-    String codeChallenge = base64Url
-        .encode(digest.bytes)
-        .replaceAll("=", "")
-        .replaceAll("+", "-")
-        .replaceAll("/", "_");
-    return codeChallenge;
-  }
 
   static Future<bool> _fetchDiscordAccessToken(
       String authorizationCode, String codeVerifier) async {
@@ -66,8 +47,8 @@ class DiscordAuthService {
   }
 
   static Future<bool> auth(BuildContext context, {bool signUp = false}) async {
-    final String codeVerifier = generateCodeVerifier();
-    final String codeChallenge = generateCodeChallenge(codeVerifier);
+    final String codeVerifier = Utils.generateCodeVerifier();
+    final String codeChallenge = Utils.generateCodeChallenge(codeVerifier);
 
     final authUrl = Uri.https("discord.com", "oauth2/authorize", {
       "response_type": "code",

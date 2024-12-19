@@ -1,3 +1,7 @@
+import 'dart:convert';
+import 'dart:math';
+import 'package:crypto/crypto.dart';
+
 class Utils {
   static bool isValidEmail(String email) {
     final emailRegex =
@@ -20,5 +24,23 @@ class Utils {
     error += "Password must contain at least one special character.\n";
   }
     return (error);
+  }
+
+    static String generateCodeVerifier() {
+    const String _charset =
+        'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~';
+    return List.generate(
+        128, (i) => _charset[Random.secure().nextInt(_charset.length)]).join();
+  }
+
+  static String generateCodeChallenge(String codeVerifier) {
+    var bytes = ascii.encode(codeVerifier);
+    var digest = sha256.convert(bytes);
+    String codeChallenge = base64Url
+        .encode(digest.bytes)
+        .replaceAll("=", "")
+        .replaceAll("+", "-")
+        .replaceAll("/", "_");
+    return codeChallenge;
   }
 }
