@@ -1,4 +1,3 @@
-// import 'dart:io';
 import 'package:client_mobile/services/login/auth_service.dart';
 import 'package:client_mobile/services/microsoft/microsoft_auth_service.dart';
 import 'package:client_mobile/tools/utils.dart';
@@ -6,6 +5,7 @@ import 'package:client_mobile/widgets/button.dart';
 import 'package:client_mobile/widgets/clickable_text.dart';
 import 'package:client_mobile/widgets/divider_with_text.dart';
 import 'package:client_mobile/widgets/form_field.dart';
+import 'package:client_mobile/widgets/password_form_field.dart';
 import 'package:client_mobile/widgets/sign_in_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_appauth/flutter_appauth.dart';
@@ -44,13 +44,13 @@ class _LoginPageState extends State<LoginPage> {
       }
 
       if (isRegistered) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text("Microsoft link avec succès !"),
-              backgroundColor: Colors.black,
-            ),
-          );
-          context.pushReplacement("/dashboard");
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text("Microsoft link avec succès !"),
+            backgroundColor: Colors.black,
+          ),
+        );
+        context.pushReplacement("/dashboard");
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
@@ -73,7 +73,7 @@ class _LoginPageState extends State<LoginPage> {
           key: _formKey,
           child: SingleChildScrollView(
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              // crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 AreaFormField(
                   label: "Email",
@@ -89,7 +89,7 @@ class _LoginPageState extends State<LoginPage> {
                   },
                 ),
                 const SizedBox(height: 50),
-                AreaFormField(
+                PasswordFormField(
                   controller: passwordController,
                   validator: (password) {
                     if (password == null || password.isEmpty)
@@ -119,16 +119,13 @@ class _LoginPageState extends State<LoginPage> {
                 const SizedBox(height: 15),
                 const DividerWithText(label: "Or Sign in with"),
                 const SizedBox(height: 15),
-                Align(
-                  alignment: Alignment.center,
-                  child: SignInButton(
-                    onPressed: handleMicrosoftOAuth,
-                    label: "Microsoft",
-                    image: Image.asset(
-                      "assets/images/microsoft.png",
-                      width: 40,
-                      height: 30,
-                    ),
+                SignInButton(
+                  onPressed: handleMicrosoftOAuth,
+                  label: "Microsoft",
+                  image: Image.asset(
+                    "assets/images/microsoft.png",
+                    width: 40,
+                    height: 20,
                   ),
                 ),
                 const SizedBox(height: 5),

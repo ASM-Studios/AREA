@@ -5,6 +5,7 @@ import 'package:client_mobile/widgets/button.dart';
 import 'package:client_mobile/widgets/clickable_text.dart';
 import 'package:client_mobile/widgets/divider_with_text.dart';
 import 'package:client_mobile/widgets/form_field.dart';
+import 'package:client_mobile/widgets/password_form_field.dart';
 import 'package:client_mobile/widgets/sign_in_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_appauth/flutter_appauth.dart';
@@ -98,7 +99,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   },
                 ),
                 const SizedBox(height: 50),
-                AreaFormField(
+                PasswordFormField(
                   label: "Password",
                   controller: passwordController,
                   validator: (password) {
@@ -110,13 +111,10 @@ class _RegisterPageState extends State<RegisterPage> {
                     return (null);
                   },
                 ),
-                AreaFormField(
+                PasswordFormField(
                   label: "Confirm password",
                   controller: confirmPasswordController,
                   validator: (password) {
-                    if (password == null || password.isEmpty) {
-                      return "Please confirm your password.";
-                    }
                     if (password != passwordController.text)
                       return "Your password doesn't match.";
                     return (null);
@@ -155,7 +153,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     image: Image.asset(
                       "assets/images/microsoft.png",
                       width: 40,
-                      height: 30,
+                      height: 20,
                     ),
                   ),
                 ),
