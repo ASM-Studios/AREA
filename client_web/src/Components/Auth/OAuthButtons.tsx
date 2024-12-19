@@ -45,8 +45,6 @@ const OAuthButtons = ({
             {mode !== 'connect' && <Divider>Or</Divider>}
 
             <GoogleAuth
-                onSuccess={onGoogleSuccess}
-                onError={onGoogleError}
                 buttonText={`${withText} Google`}
                 disabled={services.some((service) => service.name === 'google')}
             />

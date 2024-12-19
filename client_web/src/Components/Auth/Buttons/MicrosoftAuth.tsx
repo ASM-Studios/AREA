@@ -43,28 +43,6 @@ const MicrosoftAuth = ({ buttonText, disabled = false }: MicrosoftAuthProps) => 
         window.location.href = authUrl.toString();
     };
 
-    useEffect(() => {
-        const urlParams = new URLSearchParams(window.location.search);
-        const code = urlParams.get('code');
-        const state = urlParams.get('state');
-        const storedState = localStorage.getItem('microsoft_auth_state');
-        const storedCodeVerifier = localStorage.getItem('code_verifier');
-
-        if (code && state === storedState && storedCodeVerifier) {
-            const tokenUrl = new URL('https://login.microsoftonline.com/common/oauth2/v2.0/token');
-            const params = {
-                client_id: uri.microsoft.auth.clientId,
-                grant_type: 'authorization_code',
-                code: code,
-                redirect_uri: uri.microsoft.auth.redirectUri,
-                code_verifier: storedCodeVerifier,
-            };
-
-            tokenUrl.search = new URLSearchParams(params).toString();
-            window.location.href = tokenUrl.toString();
-        }
-    }, []);
-
     return (
         <Form.Item style={{ textAlign: 'center' }}>
             <Button
