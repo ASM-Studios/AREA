@@ -1,0 +1,36 @@
+{
+  "auth": {
+    "signInWith": "Se connecter avec",
+    "signUpWith": "S'inscrire avec",
+    "connectWith": "Connecter avec",
+    "useWith": "Utiliser"
+  },
+  "header": {
+    "home": "Accueil",
+    "login": "Connexion",
+    "register": "Inscription",
+    "dashboard": "Tableau de bord",
+    "createWorkflow": "Créer un workflow",
+    "profile": {
+      "settings": "Paramètres du profil",
+      "logout": "Déconnexion",
+      "tooltip": "Veuillez vous connecter pour accéder aux paramètres du profil"
+    }
+  },
+  "footer": {
+    "copyright": "©2024 ASM. Tous droits réservés."
+  },
+  "userPage": {
+    "themeSettings": "Paramètres du thème",
+    "customizeBackground": "Personnalisez votre couleur de fond",
+    "resetColor": "Réinitialiser la couleur par défaut",
+    "connectedServices": {
+      "title": "Services connectés",
+      "description": "Connectez vos comptes pour améliorer votre expérience",
+      "list": {
+        "title": "Services connectés :",
+        "connectedOn": "Connecté le"
+      }
+    }
+  }
+}

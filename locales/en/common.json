@@ -1,0 +1,15 @@
+{
+  "account": {
+    "themeSettings": "Theme Settings",
+    "customizeBackground": "Customize Background",
+    "resetColor": "Reset Color",
+    "connectedServices": {
+      "title": "Connected Services",
+      "description": "Manage your connected services",
+      "list": {
+        "title": "Connected Accounts",
+        "connectedOn": "Connected on"
+      }
+    }
+  }
+} 

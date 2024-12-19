@@ -7,10 +7,11 @@ import { useAuth, useUser } from "@/Context/ContextHooks";
 import OAuthButtons from "@/Components/Auth/OAuthButtons";
 import { toast } from "react-toastify";
 import Security from "@/Components/Security";
-import { instanceWithAuth, oauth, user as userRoute } from "@Config/backend.routes";
+import { instanceWithAuth, user as userRoute } from "@Config/backend.routes";
 import { UserPayload } from "@/Context/Scopes/UserContext";
 import { UserOutlined, BgColorsOutlined } from "@ant-design/icons";
 import ProfileCard from "@/Components/User/ProfileCard";
+import { useTranslation } from "react-i18next";
 
 const { Content } = Layout;
 const { Text } = Typography;
@@ -29,6 +30,7 @@ const UserPage: React.FC<UserPageProps> = ({ backgroundColor, setBackgroundColor
 
     const { setJsonWebToken, setIsAuthenticated } = useAuth();
     const { user, setUser } = useUser();
+    const { t } = useTranslation('common');
 
     React.useEffect(() => {
         instanceWithAuth.get(userRoute.me)
@@ -80,23 +82,23 @@ const UserPage: React.FC<UserPageProps> = ({ backgroundColor, setBackgroundColor
                             />
 
                             <Col xs={24} md={12}>
-                                <Card title="Theme Settings" style={{ padding: '16px', height: '100%' }}>
+                                <Card title={t('account.themeSettings')} style={{ padding: '16px', height: '100%' }}>
                                     <Space direction="vertical" align="center" style={{ width: '100%' }}>
-                                        <Text>Customize your background color</Text>
+                                        <Text>{t('account.customizeBackground')}</Text>
                                         <div style={{ border: '1px solid #d9d9d9', padding: '8px', borderRadius: '4px' }}>
                                             <BlockPicker color={tempColor} onChangeComplete={handleColorChange} />
                                         </div>
                                         <Button icon={<BgColorsOutlined />} onClick={handleDefaultColor}>
-                                            Reset to Default Color
+                                            {t('userPage.resetColor')}
                                         </Button>
                                     </Space>
                                 </Card>
                             </Col>
 
                             <Col xs={24}>
-                                <Card title="Connected Services" style={{ padding: '16px' }}>
+                                <Card title={t('account.connectedServices.title')} style={{ padding: '16px' }}>
                                     <Space direction="vertical" style={{ width: '100%' }}>
-                                        <Text>Connect your accounts to enhance your experience</Text>
+                                        <Text>{t('account.connectedServices.description')}</Text>
                                         <Row gutter={[16, 16]} style={{ paddingTop: '15px' }}>
                                             <Col xs={24} md={12}>
                                                 <Space direction="vertical" style={{ width: '100%' }}>
@@ -109,7 +111,7 @@ const UserPage: React.FC<UserPageProps> = ({ backgroundColor, setBackgroundColor
                                             </Col>
                                             <Col xs={24} md={12}>
                                                 <Space direction="vertical" style={{ width: '100%' }}>
-                                                    <Text strong style={{ marginBottom: '8px' }}>Connected Services:</Text>
+                                                    <Text strong style={{ marginBottom: '8px' }}>{t('account.connectedServices.list.title')}</Text>
                                                     <List
                                                         dataSource={user?.services || []}
                                                         renderItem={(service) => (
@@ -117,7 +119,7 @@ const UserPage: React.FC<UserPageProps> = ({ backgroundColor, setBackgroundColor
                                                                 <List.Item.Meta
                                                                     avatar={<Avatar icon={<UserOutlined />} />}
                                                                     title={service.name}
-                                                                    description={`Connected on ${new Date(service.connectedAt).toLocaleDateString()}`}
+                                                                    description={`${t('account.connectedServices.list.connectedOn')} ${new Date(service.connectedAt).toLocaleDateString()}`}
                                                                 />
                                                             </List.Item>
                                                         )}
