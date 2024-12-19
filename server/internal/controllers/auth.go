@@ -83,22 +83,3 @@ func Register(c *gin.Context) {
 	})
 	c.JSON(http.StatusOK, gin.H{"username": RegisterData.Username, "email": RegisterData.Email, "jwt": tokenString})
 }
-
-// Health godoc
-// @Summary      Check if the JWT is valid
-// @Description  Validate the token and return 200 if valid, 401 if expired or invalid
-// @Tags         auth
-// @Accept       json
-// @Produce      json
-// @Success      200  {object}  map[string]string
-// @Failure      401  {object}  map[string]string
-// @Router       /auth/health [get]
-func Health(c *gin.Context) {
-	_, err := utils.VerifyToken(c)
-
-	if err != nil {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized: " + err.Error()})
-		return
-	}
-	c.JSON(http.StatusOK, gin.H{"status": "healthy"})
-}

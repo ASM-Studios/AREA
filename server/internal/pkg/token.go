@@ -8,23 +8,23 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func GetUserFromToken(c *gin.Context) (uint, error) {
+func GetUserFromToken(c *gin.Context) (models.User, error) {
 	email, err := utils.VerifyToken(c)
 	if err != nil {
-		return 0, err
+		return models.User{}, err
 	}
 	user := models.User{}
 	DB.Where("email = ?", email).First(&user)
 	if user.ID == 0 {
-		return 0, errors.New("User not found")
+		return models.User{}, errors.New("User not found")
 	}
-	return user.ID, nil
+	return user, nil
 }
 
 func GetServiceFromName(serviceName string) (uint, error) {
-        var service models.Service
-        if err := DB.Where("name = ?", serviceName).First(&service).Error; err != nil {
-                return 0, errors.New("Service not found")
-        }
-        return service.ID, nil
+	var service models.Service
+	if err := DB.Where("name = ?", serviceName).First(&service).Error; err != nil {
+		return 0, errors.New("service not found")
+	}
+	return service.ID, nil
 }

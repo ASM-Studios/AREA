@@ -5,11 +5,12 @@ import fs from 'fs'
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd())
+  const port = parseInt(env.VITE_PORT) || 8081
 
   return {
     plugins: [react()],
     server: {
-      port: parseInt(env.VITE_PORT) || 8081,
+      port: port,
       watch: {
         usePolling: true,
       },
@@ -18,12 +19,16 @@ export default defineConfig(({ mode }) => {
         key: fs.readFileSync('localhost-key.pem'),
         cert: fs.readFileSync('localhost.pem'),
       },
+      strictPort: true,
+      listen: {
+        port: port,
+        host: true,
+      }
     },
     resolve: {
       alias: {
         '@': path.resolve(__dirname, './src'),
         '@Config': path.resolve(__dirname, './src/Config'),
-        // ... other aliases
       }
     }
   }
