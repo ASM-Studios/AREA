@@ -1,13 +1,13 @@
 import {Form, Input, Button, Card } from 'antd';
 import { Link } from 'react-router-dom';
 import OAuthButtons from '../../../Components/Auth/OAuthButtons';
-import { instance, auth, oauth } from "@Config/backend.routes";
+import { instance, auth } from "@Config/backend.routes";
 import { useAuth } from "@/Context/ContextHooks";
 import { useNavigate } from 'react-router-dom';
 import { toast } from "react-toastify";
 
 const Login = () => {
-    const { setJsonWebToken, isAuthenticated, setIsAuthenticated } = useAuth();
+    const { setJsonWebToken, setIsAuthenticated } = useAuth();
 
     const navigate = useNavigate();
 
@@ -39,41 +39,6 @@ const Login = () => {
 
     const handleGoogleError = () => {
         console.log('Google Login Failed');
-    };
-
-    const handleMicrosoftSuccess = (response: unknown) => {
-        // @ts-expect-error response isn't typed
-        instance.post(oauth.microsoft, { "token": response?.accessToken }, {
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        })
-            .then((response) => {
-                if (!response?.data?.jwt) {
-                    console.error('JWT not found in response');
-                    return;
-                }
-                setJsonWebToken(response?.data?.jwt);
-                setIsAuthenticated(true);
-                navigate('/dashboard');
-            })
-            .catch((error) => {
-                console.error('Failed:', error);
-                toast.error('Failed to register: ' + (error?.response?.data?.error || 'Network error'));
-            });
-    };
- 
-    const handleMicrosoftError = (error: unknown) => {
-        console.error('Microsoft Login Failed:', error);
-    };
-
-    const handleLinkedinSuccess = (response: unknown) => {
-        console.log('LinkedIn Login Success:', response);
-        // Handle successful LinkedIn login
-    };
-
-    const handleLinkedinError = (error: unknown) => {
-        console.error('LinkedIn Login Failed:', error);
     };
 
     return (
@@ -128,10 +93,6 @@ const Login = () => {
                         mode="signin"
                         onGoogleSuccess={handleGoogleSuccess}
                         onGoogleError={handleGoogleError}
-                        onMicrosoftSuccess={handleMicrosoftSuccess}
-                        onMicrosoftError={handleMicrosoftError}
-                        onLinkedinSuccess={handleLinkedinSuccess}
-                        onLinkedinError={handleLinkedinError}
                     />
 
                     <Form.Item>

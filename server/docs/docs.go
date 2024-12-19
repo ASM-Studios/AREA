@@ -244,6 +244,72 @@ const docTemplate = `{
                 }
             }
         },
+        "/users": {
+            "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Permanently delete the account of the currently authenticated user.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Delete user account",
+                "responses": {
+                    "200": {
+                        "description": "User account deleted successfully",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "500": {
+                        "description": "Failed to delete user account",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
+        "/users/me": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Retrieve the details of the currently authenticated user, including their associated services.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Get authenticated user details",
+                "responses": {
+                    "200": {
+                        "description": "Authenticated user's details",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "500": {
+                        "description": "Failed to fetch user details",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
         "/workflow/create": {
             "post": {
                 "security": [
@@ -389,9 +455,135 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/workflows/{id}": {
+            "get": {
+                "description": "Retrieve detailed information about a workflow, including its events and parameters.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "workflow"
+                ],
+                "summary": "Get a workflow by ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Workflow ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "workflow details",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid workflow ID or bad request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "404": {
+                        "description": "Workflow not found",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Update the description, name, is_active status, and parameter values of a workflow.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "workflow"
+                ],
+                "summary": "Update a workflow",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Workflow ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Workflow update request",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.WorkflowRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Workflow updated successfully",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid workflow ID or bad request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "404": {
+                        "description": "Workflow or parameter value not found",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
+        "AREA_internal_models.EventType": {
+            "type": "string",
+            "enum": [
+                "action",
+                "reaction"
+            ],
+            "x-enum-varnames": [
+                "ActionEventType",
+                "ReactionEventType"
+            ]
+        },
+        "AREA_internal_models.WorkflowStatus": {
+            "type": "string",
+            "enum": [
+                "pending",
+                "processed",
+                "failed"
+            ],
+            "x-enum-varnames": [
+                "WorkflowStatusPending",
+                "WorkflowStatusProcessed",
+                "WorkflowStatusFailed"
+            ]
+        },
         "models.EventDTO": {
             "type": "object",
             "properties": {
@@ -411,22 +603,36 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "type": {
-                    "$ref": "#/definitions/models.EventType"
+                    "$ref": "#/definitions/AREA_internal_models.EventType"
                 }
             }
         },
-        "models.EventType": {
-            "type": "string",
-            "enum": [
-                "action",
-                "reaction"
-            ],
-            "x-enum-varnames": [
-                "ActionEventType",
-                "ReactionEventType"
-            ]
+        "models.EventRequest": {
+            "description": "Represents an event with its name, type, description, and associated parameters.",
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "parameters": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.ParametersRequest"
+                    }
+                },
+                "type": {
+                    "$ref": "#/definitions/AREA_internal_models.EventType"
+                }
+            }
         },
         "models.LoginRequest": {
+            "description": "Request payload for user login.",
             "type": "object",
             "required": [
                 "email",
@@ -458,7 +664,23 @@ const docTemplate = `{
                 }
             }
         },
+        "models.ParametersRequest": {
+            "description": "Represents a parameter with its name, type, and value.",
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "value": {
+                    "type": "string"
+                }
+            }
+        },
         "models.RegisterRequest": {
+            "description": "Request payload for registering a new user.",
             "type": "object",
             "required": [
                 "email",
@@ -496,25 +718,39 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "status": {
-                    "$ref": "#/definitions/models.WorkflowStatus"
+                    "$ref": "#/definitions/AREA_internal_models.WorkflowStatus"
                 },
                 "user_id": {
                     "type": "integer"
                 }
             }
         },
-        "models.WorkflowStatus": {
-            "type": "string",
-            "enum": [
-                "pending",
-                "processed",
-                "failed"
-            ],
-            "x-enum-varnames": [
-                "WorkflowStatusPending",
-                "WorkflowStatusProcessed",
-                "WorkflowStatusFailed"
-            ]
+        "models.WorkflowRequest": {
+            "description": "Structure for workflow creation or update.",
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "events": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.EventRequest"
+                    }
+                },
+                "is_active": {
+                    "type": "boolean"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "services": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                }
+            }
         }
     },
     "securityDefinitions": {
