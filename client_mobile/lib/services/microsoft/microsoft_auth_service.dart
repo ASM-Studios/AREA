@@ -56,6 +56,12 @@ class MicrosoftAuthService {
         print("access token microsoft = : ${r.accessToken}");
 
         if (hasLinked) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text("Microsoft link avec succès !"),
+              backgroundColor: Colors.black,
+            ),
+          );
           await secureStorage.write(
               key: 'microsoft_access_token', value: r.accessToken);
           return (true);
@@ -64,6 +70,6 @@ class MicrosoftAuthService {
         }
       },
     );
-    return (true);
+    return (false);
   }
 }
