@@ -45,20 +45,7 @@ class _RegisterPageState extends State<RegisterPage> {
       }
 
       if (isRegistered) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text("Microsoft link avec succès !"),
-              backgroundColor: Colors.black,
-            ),
-          );
           context.pushReplacement("/dashboard");
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text("Microsoft authentification failed."),
-            backgroundColor: Colors.red,
-          ),
-        );
       }
       isLoggingViaOauth = false;
     }
