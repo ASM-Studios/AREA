@@ -59,14 +59,14 @@ func (p *EventPublisher) Produce(message []byte, routingKey string) error {
 	return nil
 }
 
-func InitRabbitMQ() error {
+func InitRabbitMQ() (*amqp.Connection, error) {
 	Publisher = &EventPublisher{}
 	log.Println("Initializing RabbitMQ connection")
 	err := Publisher.Init(utils.GetEnvVar("RMQ_URL"))
 	if err != nil {
 		log.Fatalf("Failed to initialize RabbitMQ connection: %v", err)
-		return err
+		return nil, err
 	}
 	log.Printf("RabbitMQ connection established: exchange on %s\n", consts.ExchangeName)
-	return nil
+	return Publisher.connection, nil
 }

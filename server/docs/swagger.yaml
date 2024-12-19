@@ -1,5 +1,23 @@
 basePath: /
 definitions:
+  AREA_internal_models.EventType:
+    enum:
+    - action
+    - reaction
+    type: string
+    x-enum-varnames:
+    - ActionEventType
+    - ReactionEventType
+  AREA_internal_models.WorkflowStatus:
+    enum:
+    - pending
+    - processed
+    - failed
+    type: string
+    x-enum-varnames:
+    - WorkflowStatusPending
+    - WorkflowStatusProcessed
+    - WorkflowStatusFailed
   models.EventDTO:
     properties:
       description:
@@ -13,17 +31,27 @@ definitions:
       service_id:
         type: integer
       type:
-        $ref: '#/definitions/models.EventType'
+        $ref: '#/definitions/AREA_internal_models.EventType'
     type: object
-  models.EventType:
-    enum:
-    - action
-    - reaction
-    type: string
-    x-enum-varnames:
-    - ActionEventType
-    - ReactionEventType
+  models.EventRequest:
+    description: Represents an event with its name, type, description, and associated
+      parameters.
+    properties:
+      description:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      parameters:
+        items:
+          $ref: '#/definitions/models.ParametersRequest'
+        type: array
+      type:
+        $ref: '#/definitions/AREA_internal_models.EventType'
+    type: object
   models.LoginRequest:
+    description: Request payload for user login.
     properties:
       email:
         type: string
@@ -44,7 +72,18 @@ definitions:
       type:
         type: string
     type: object
+  models.ParametersRequest:
+    description: Represents a parameter with its name, type, and value.
+    properties:
+      name:
+        type: string
+      type:
+        type: string
+      value:
+        type: string
+    type: object
   models.RegisterRequest:
+    description: Request payload for registering a new user.
     properties:
       email:
         type: string
@@ -70,20 +109,28 @@ definitions:
       name:
         type: string
       status:
-        $ref: '#/definitions/models.WorkflowStatus'
+        $ref: '#/definitions/AREA_internal_models.WorkflowStatus'
       user_id:
         type: integer
     type: object
-  models.WorkflowStatus:
-    enum:
-    - pending
-    - processed
-    - failed
-    type: string
-    x-enum-varnames:
-    - WorkflowStatusPending
-    - WorkflowStatusProcessed
-    - WorkflowStatusFailed
+  models.WorkflowRequest:
+    description: Structure for workflow creation or update.
+    properties:
+      description:
+        type: string
+      events:
+        items:
+          $ref: '#/definitions/models.EventRequest'
+        type: array
+      is_active:
+        type: boolean
+      name:
+        type: string
+      services:
+        items:
+          type: integer
+        type: array
+    type: object
 host: localhost:8080
 info:
   contact:
@@ -241,6 +288,49 @@ paths:
       summary: Message
       tags:
       - publish/Message
+  /users:
+    delete:
+      description: Permanently delete the account of the currently authenticated user.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: User account deleted successfully
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Failed to delete user account
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Delete user account
+      tags:
+      - User
+  /users/me:
+    get:
+      description: Retrieve the details of the currently authenticated user, including
+        their associated services.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Authenticated user's details
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Failed to fetch user details
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Get authenticated user details
+      tags:
+      - User
   /workflow/create:
     post:
       consumes:
@@ -331,6 +421,78 @@ paths:
       security:
       - Bearer: []
       summary: List workflows
+      tags:
+      - workflow
+  /workflows/{id}:
+    get:
+      description: Retrieve detailed information about a workflow, including its events
+        and parameters.
+      parameters:
+      - description: Workflow ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: workflow details
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Invalid workflow ID or bad request
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Workflow not found
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Get a workflow by ID
+      tags:
+      - workflow
+    put:
+      description: Update the description, name, is_active status, and parameter values
+        of a workflow.
+      parameters:
+      - description: Workflow ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Workflow update request
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/models.WorkflowRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Workflow updated successfully
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Invalid workflow ID or bad request
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Workflow or parameter value not found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Update a workflow
       tags:
       - workflow
 securityDefinitions:

@@ -1,13 +1,13 @@
 import { Form, Input, Button, Card } from 'antd';
 import { Link } from 'react-router-dom';
 import OAuthButtons from '@/Components/Auth/OAuthButtons';
-import { instance, auth, oauth } from "@Config/backend.routes";
+import { instance, auth } from "@Config/backend.routes";
 import { useAuth } from "@/Context/ContextHooks";
 import { useNavigate } from 'react-router-dom';
 import { toast } from "react-toastify";
 
 const Register = () => {
-    const { setJsonWebToken, isAuthenticated, setIsAuthenticated } = useAuth();
+    const { setJsonWebToken, setIsAuthenticated } = useAuth();
 
     const navigate = useNavigate();
 
@@ -42,43 +42,6 @@ const Register = () => {
         console.log('Google Register Failed');
     };
 
-    const handleMicrosoftSuccess = (response: unknown) => {
-        // @ts-expect-error response isn't typed
-        instance.post(oauth.microsoft, { "token": response?.accessToken }, {
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        })
-            .then((response) => {
-                if (!response?.data?.jwt) {
-                    console.error('JWT not found in response');
-                    return;
-                }
-                setJsonWebToken(response?.data?.jwt);
-                setIsAuthenticated(true);
-                navigate('/dashboard');
-            })
-            .catch((error) => {
-                console.error('Failed:', error);
-                toast.error('Failed to register: ' + (error?.response?.data?.error || 'Network error'));
-            });
-    };
-
-    const handleMicrosoftError = (error: unknown) => {
-        console.error('Microsoft Register Failed:', error);
-        // @ts-expect-error error isn't typed
-        toast.error('Failed to register: ' + error?.response?.data?.error);
-    };
-
-    const handleLinkedinSuccess = (response: unknown) => {
-        console.log('LinkedIn Register Success:', response);
-        // Call your API to verify the LinkedIn token and register the user
-    };
-
-    const handleLinkedinError = (error: unknown) => {
-        console.error('LinkedIn Register Failed:', error);
-    };
-
     return (
         <div style={{
             minHeight: '100vh',
@@ -100,6 +63,7 @@ const Register = () => {
                     <Form.Item
                         name="username"
                         rules={[{ required: true, message: 'Please input your username!' }]}
+                        tooltip="Choose a unique username for your account"
                     >
                         <Input placeholder="Username" />
                     </Form.Item>
@@ -110,8 +74,9 @@ const Register = () => {
                             { required: true, message: 'Please input your email!' },
                             { type: 'email', message: 'Please enter a valid email!' }
                         ]}
+                        tooltip="Enter your email address for account verification"
                     >
-                        <Input placeholder="Email" />
+                        <Input placeholder="example@example.com" />
                     </Form.Item>
 
                     <Form.Item
@@ -122,8 +87,9 @@ const Register = () => {
                             message: 'Password must contain at least one letter, one number, and one special character.' },
                             { min: 8, message: 'Password must be at least 8 characters long.' }
                         ]}
+                        tooltip="Password must be at least 8 characters long and contain letters, numbers, and special characters"
                     >
-                        <Input.Password placeholder="Password" />
+                        <Input.Password placeholder="********" />
                     </Form.Item>
 
                     <Form.Item
@@ -140,8 +106,9 @@ const Register = () => {
                                 },
                             }),
                         ]}
+                        tooltip="Re-enter your password to confirm"
                     >
-                        <Input.Password placeholder="Confirm Password" />
+                        <Input.Password placeholder="********" />
                     </Form.Item>
 
                     <Form.Item>
@@ -154,10 +121,6 @@ const Register = () => {
                         mode="signup"
                         onGoogleSuccess={handleGoogleSuccess}
                         onGoogleError={handleGoogleError}
-                        onMicrosoftSuccess={handleMicrosoftSuccess}
-                        onMicrosoftError={handleMicrosoftError}
-                        onLinkedinSuccess={handleLinkedinSuccess}
-                        onLinkedinError={handleLinkedinError}
                     />
 
                     <Form.Item>

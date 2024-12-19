@@ -1,13 +1,13 @@
 import {Form, Input, Button, Card } from 'antd';
 import { Link } from 'react-router-dom';
 import OAuthButtons from '../../../Components/Auth/OAuthButtons';
-import { instance, auth, oauth } from "@Config/backend.routes";
+import { instance, auth } from "@Config/backend.routes";
 import { useAuth } from "@/Context/ContextHooks";
 import { useNavigate } from 'react-router-dom';
 import { toast } from "react-toastify";
 
 const Login = () => {
-    const { setJsonWebToken, isAuthenticated, setIsAuthenticated } = useAuth();
+    const { setJsonWebToken, setIsAuthenticated } = useAuth();
 
     const navigate = useNavigate();
 
@@ -41,41 +41,6 @@ const Login = () => {
         console.log('Google Login Failed');
     };
 
-    const handleMicrosoftSuccess = (response: unknown) => {
-        // @ts-expect-error response isn't typed
-        instance.post(oauth.microsoft, { "token": response?.accessToken }, {
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        })
-            .then((response) => {
-                if (!response?.data?.jwt) {
-                    console.error('JWT not found in response');
-                    return;
-                }
-                setJsonWebToken(response?.data?.jwt);
-                setIsAuthenticated(true);
-                navigate('/dashboard');
-            })
-            .catch((error) => {
-                console.error('Failed:', error);
-                toast.error('Failed to register: ' + (error?.response?.data?.error || 'Network error'));
-            });
-    };
- 
-    const handleMicrosoftError = (error: unknown) => {
-        console.error('Microsoft Login Failed:', error);
-    };
-
-    const handleLinkedinSuccess = (response: unknown) => {
-        console.log('LinkedIn Login Success:', response);
-        // Handle successful LinkedIn login
-    };
-
-    const handleLinkedinError = (error: unknown) => {
-        console.error('LinkedIn Login Failed:', error);
-    };
-
     return (
         <div style={{
             minHeight: '100vh',
@@ -93,29 +58,33 @@ const Login = () => {
                     initialValues={{ remember: true }}
                     onFinish={onFinish}
                     onFinishFailed={onFinishFailed}
+                    labelCol={{ span: 24 }}
+                    wrapperCol={{ span: 24 }}
                 >
                     <Form.Item
+                        tooltip="Please enter your email address"
                         name="email"
                         rules={[
                             { required: true, message: 'Please input your email!' },
                             { type: 'email', message: 'Please input your valid email!' }
                         ]}
                     >
-                        <Input placeholder="Email" />
+                        <Input placeholder="example@example.com" />
                     </Form.Item>
 
                     <Form.Item
+                        tooltip="Please enter your password"
                         name="password"
                         rules={[
                             { required: true, message: 'Please input your password!' },
                             { pattern:
-                                /^(?=.*[0-9])(?=.*[!@#$%^&*])[A-Za-z0-9!@#$%^&*]+$/,
+                                    /^(?=.*[0-9])(?=.*[!@#$%^&*])[A-Za-z0-9!@#$%^&*]+$/,
                                 message: 'Password must contain at least one letter, one number, and one special character.'
                             },
                             { min: 8, message: 'Password must be at least 8 characters long.' }
                         ]}
                     >
-                        <Input.Password placeholder="Password" />
+                        <Input.Password placeholder="********" />
                     </Form.Item>
 
                     <Form.Item>
@@ -128,10 +97,6 @@ const Login = () => {
                         mode="signin"
                         onGoogleSuccess={handleGoogleSuccess}
                         onGoogleError={handleGoogleError}
-                        onMicrosoftSuccess={handleMicrosoftSuccess}
-                        onMicrosoftError={handleMicrosoftError}
-                        onLinkedinSuccess={handleLinkedinSuccess}
-                        onLinkedinError={handleLinkedinError}
                     />
 
                     <Form.Item>

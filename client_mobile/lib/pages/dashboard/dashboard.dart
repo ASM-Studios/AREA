@@ -3,6 +3,8 @@ import 'package:client_mobile/pages/dashboard/workflow.dart';
 import 'package:flutter/material.dart';
 
 class DashboardPage extends StatefulWidget {
+  const DashboardPage({super.key});
+
   @override
   _DashboardPageState createState() => _DashboardPageState();
 }
@@ -11,8 +13,8 @@ class _DashboardPageState extends State<DashboardPage> {
   int _currentIndex = 0;
 
   final List<Widget> _pages = [
-    WorkflowPage(),
-    ServiceConnectionPage(),
+    const WorkflowPage(),
+    const ServiceConnectionPage(),
   ];
 
   void _onTabTapped(int index) {
