@@ -129,7 +129,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   color: const Color(0XFF035a63)
                   ),
                 ),
-                const SizedBox(height: 15),
+                const SizedBox(height: 40),
                 const DividerWithText(label: "Or Register with"),
                 const SizedBox(height: 15),
                 Align(

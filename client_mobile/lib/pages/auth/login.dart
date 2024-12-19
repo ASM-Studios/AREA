@@ -103,7 +103,7 @@ class _LoginPageState extends State<LoginPage> {
                   },
                   color: const Color(0XFF035a63),
                 ),
-                const SizedBox(height: 15),
+                const SizedBox(height: 40),
                 const DividerWithText(label: "Or Sign in with"),
                 const SizedBox(height: 15),
                 SignInButton(
