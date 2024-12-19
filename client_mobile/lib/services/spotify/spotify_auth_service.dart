@@ -10,7 +10,6 @@ class SpotifyAuthService {
   static final String clientId = dotenv.env["SPOTIFY_CLIENT_ID"] ?? "";
   static final String clientSecret = dotenv.env["SPOTIFY_CLIENT_SECRET"] ?? "";
   static const String redirectUri = "my.area.app://callback";
-  static const String authority = "https://login.microsoftonline.com/common";
   static const FlutterSecureStorage secureStorage = FlutterSecureStorage();
 
   static const String scopes = "user-read-private user-read-email";
