@@ -30,7 +30,16 @@ func GetEnvVar(name string) string {
 	return value
 }
 
-func SendRequest[T any](request *http.Request) (*http.Response, *T, error) {
+func SendRequest(request *http.Request) (*http.Response, error) {
+        client := http.Client{}
+        resp, err := client.Do(request)
+        if err != nil {
+                return nil, err
+        }
+        return resp, nil
+}
+
+func SendRequestBody[T any](request *http.Request) (*http.Response, *T, error) {
         var client http.Client
         var body T
 
