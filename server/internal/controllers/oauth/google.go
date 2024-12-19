@@ -8,7 +8,7 @@ import (
 
 type GoogleResponse struct {
         Mail string `json:"email"`
-        DisplayName string `json:"username"`
+        DisplayName string `json:"name"`
 }
 
 func GetGoogleResponse(serviceRawResponse *http.Response) (*ServiceResponse, error) {
