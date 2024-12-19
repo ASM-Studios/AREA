@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class SignInButton extends StatelessWidget {
-  SignInButton(
+  const SignInButton(
       {super.key, required this.label, this.image, this.onPressed});
 
   final String label;
@@ -10,27 +10,23 @@ class SignInButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FractionallySizedBox(
-      widthFactor: 0.6,
-      child: FilledButton(
+    return ElevatedButton(
         onPressed: onPressed ?? () {},
         style: ButtonStyle(
-          padding: const WidgetStatePropertyAll(EdgeInsets.all(10)),
+          padding: const WidgetStatePropertyAll(EdgeInsets.fromLTRB(10, 10, 20, 10)),
           backgroundColor: WidgetStateProperty.all(Colors.white),
           shape: WidgetStatePropertyAll(
             RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(6.0),
+              borderRadius: BorderRadius.circular(30.0),
               side: const BorderSide(
                 color: Color.fromARGB(255, 221, 228, 222),
-                width: 2.0,
+                width: 1.5,
               ),
             ),
           ),
-          fixedSize: const WidgetStatePropertyAll(
-            Size(double.infinity, 80),
-          ),
         ),
         child: Row(
+          mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             if (image != null) image!,
@@ -44,7 +40,6 @@ class SignInButton extends StatelessWidget {
             ),
           ],
         ),
-      ),
-    );
+      );
   }
 }
