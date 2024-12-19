@@ -5,9 +5,11 @@ import Security from "@/Components/Security";
 import LinkButton from "@/Components/LinkButton";
 import WorkflowsTable from "@/Components/Workflow/WorkflowsTable";
 import { WorkflowTableDetail} from "@/types";
-import { instanceWithAuth, workflow } from "@Config/backend.routes";
-import {toast} from "react-toastify";
+import { instanceWithAuth, workflow, user } from "@Config/backend.routes";
+import { toast } from "react-toastify";
 import LoadingDots from "@/Components/LoadingDots/LoadingDots";
+import { useUser } from "@/Context/ContextHooks";
+import {UserPayload} from "@/Context/Scopes/UserContext";
 
 const { Title } = Typography;
 
@@ -27,6 +29,7 @@ const Dashboard: React.FC = () => {
         activeAutomations: undefined,
         pendingUpdates: undefined,
     });
+    const { setUser } = useUser();
 
     const fetchWorkflows = () => {
         setLoading(true);
@@ -53,6 +56,15 @@ const Dashboard: React.FC = () => {
 
     React.useEffect(() => {
         setNeedReload(true);
+        instanceWithAuth.get(user.me)
+            .then((response: { data: UserPayload }) => {
+                setUser(response?.data?.user);
+            })
+            .catch((error) => {
+                console.error(error);
+                toast.error('Failed to fetch user data');
+                setUser(null);
+            });
     }, []);
 
     React.useEffect(() => {
