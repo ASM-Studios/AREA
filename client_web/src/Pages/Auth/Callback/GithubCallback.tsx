@@ -11,6 +11,8 @@ const GithubCallback = () => {
     const { setJsonWebToken } = useAuth();
     const hasHandledCallback = useRef(false);
 
+    const isBinding = localStorage.getItem("jsonWebToken");
+
     useEffect(() => {
         const handleCallback = async () => {
             const urlParams = new URLSearchParams(window.location.search);
@@ -26,7 +28,7 @@ const GithubCallback = () => {
 
                 let response;
 
-                if (localStorage.getItem("jsonWebToken")) {
+                if (isBinding) {
                     response = await instanceWithAuth.post(oauth.github.bind, {
                         code,
                         redirect_uri: uri.github.auth.redirectUri,
@@ -42,7 +44,7 @@ const GithubCallback = () => {
                     throw new Error('Failed to exchange token');
                 }
 
-                if (!localStorage.getItem("jsonWebToken")) {
+                if (!isBinding) {
                     setJsonWebToken(response?.data?.jwt);
                 }
 
@@ -58,7 +60,7 @@ const GithubCallback = () => {
             } catch (error: unknown) {
                 setError((error as Error)?.message || 'Failed to connect with GitHub');
                 setTimeout(() => {
-                    navigate('/login');
+                    navigate(isBinding ? '/account/me' : '/login');
                 }, 2000);
             }
         };
