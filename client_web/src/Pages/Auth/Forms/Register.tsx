@@ -63,6 +63,7 @@ const Register = () => {
                     <Form.Item
                         name="username"
                         rules={[{ required: true, message: 'Please input your username!' }]}
+                        tooltip="Choose a unique username for your account"
                     >
                         <Input placeholder="Username" />
                     </Form.Item>
@@ -73,8 +74,9 @@ const Register = () => {
                             { required: true, message: 'Please input your email!' },
                             { type: 'email', message: 'Please enter a valid email!' }
                         ]}
+                        tooltip="Enter your email address for account verification"
                     >
-                        <Input placeholder="Email" />
+                        <Input placeholder="example@example.com" />
                     </Form.Item>
 
                     <Form.Item
@@ -85,8 +87,9 @@ const Register = () => {
                             message: 'Password must contain at least one letter, one number, and one special character.' },
                             { min: 8, message: 'Password must be at least 8 characters long.' }
                         ]}
+                        tooltip="Password must be at least 8 characters long and contain letters, numbers, and special characters"
                     >
-                        <Input.Password placeholder="Password" />
+                        <Input.Password placeholder="********" />
                     </Form.Item>
 
                     <Form.Item
@@ -103,8 +106,9 @@ const Register = () => {
                                 },
                             }),
                         ]}
+                        tooltip="Re-enter your password to confirm"
                     >
-                        <Input.Password placeholder="Confirm Password" />
+                        <Input.Password placeholder="********" />
                     </Form.Item>
 
                     <Form.Item>

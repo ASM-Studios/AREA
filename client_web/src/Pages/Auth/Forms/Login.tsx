@@ -58,29 +58,33 @@ const Login = () => {
                     initialValues={{ remember: true }}
                     onFinish={onFinish}
                     onFinishFailed={onFinishFailed}
+                    labelCol={{ span: 24 }}
+                    wrapperCol={{ span: 24 }}
                 >
                     <Form.Item
+                        tooltip="Please enter your email address"
                         name="email"
                         rules={[
                             { required: true, message: 'Please input your email!' },
                             { type: 'email', message: 'Please input your valid email!' }
                         ]}
                     >
-                        <Input placeholder="Email" />
+                        <Input placeholder="example@example.com" />
                     </Form.Item>
 
                     <Form.Item
+                        tooltip="Please enter your password"
                         name="password"
                         rules={[
                             { required: true, message: 'Please input your password!' },
                             { pattern:
-                                /^(?=.*[0-9])(?=.*[!@#$%^&*])[A-Za-z0-9!@#$%^&*]+$/,
+                                    /^(?=.*[0-9])(?=.*[!@#$%^&*])[A-Za-z0-9!@#$%^&*]+$/,
                                 message: 'Password must contain at least one letter, one number, and one special character.'
                             },
                             { min: 8, message: 'Password must be at least 8 characters long.' }
                         ]}
                     >
-                        <Input.Password placeholder="Password" />
+                        <Input.Password placeholder="********" />
                     </Form.Item>
 
                     <Form.Item>
