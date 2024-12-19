@@ -7,6 +7,7 @@ import 'package:client_mobile/widgets/divider_with_text.dart';
 import 'package:client_mobile/widgets/form_field.dart';
 import 'package:client_mobile/widgets/password_form_field.dart';
 import 'package:client_mobile/widgets/sign_in_button.dart';
+import 'package:client_mobile/widgets/simple_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_appauth/flutter_appauth.dart';
 import 'package:go_router/go_router.dart';
@@ -45,7 +46,7 @@ class _RegisterPageState extends State<RegisterPage> {
       }
 
       if (isRegistered) {
-          context.pushReplacement("/dashboard");
+        context.pushReplacement("/dashboard");
       }
       isLoggingViaOauth = false;
     }
@@ -64,16 +65,18 @@ class _RegisterPageState extends State<RegisterPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                SimpleText("Username"),
                 AreaFormField(
-                    label: "Username",
+                    label: "username",
                     controller: userController,
                     validator: (user) {
                       if (user == null || user.isEmpty)
                         return "Please input your username.";
                       return (null);
                     }),
+                SimpleText("Email"),
                 AreaFormField(
-                  label: "Email",
+                  label: "you@example.com",
                   controller: emailController,
                   validator: (email) {
                     if (email == null || email.isEmpty) {
@@ -86,8 +89,9 @@ class _RegisterPageState extends State<RegisterPage> {
                   },
                 ),
                 const SizedBox(height: 50),
+                SimpleText("Password"),
                 PasswordFormField(
-                  label: "Password",
+                  label: "********",
                   controller: passwordController,
                   validator: (password) {
                     if (password == null || password.isEmpty) {
@@ -98,8 +102,9 @@ class _RegisterPageState extends State<RegisterPage> {
                     return (null);
                   },
                 ),
+                SimpleText("Confirm password"),
                 PasswordFormField(
-                  label: "Confirm password",
+                  label: "********",
                   controller: confirmPasswordController,
                   validator: (password) {
                     if (password != passwordController.text)
@@ -111,23 +116,22 @@ class _RegisterPageState extends State<RegisterPage> {
                 Align(
                   alignment: Alignment.center,
                   child: AreaButton(
-                    label: "Register",
-                    onPressed: () async {
-                      if (_formKey.currentState!.validate()) {
-                        bool isRegistered = await AuthService.register(
-                            context,
-                            RegisterObject(
-                                    email: emailController.text,
-                                    password: passwordController.text,
-                                    username: userController.text)
-                                .toJson());
-                        if (isRegistered) {
-                          context.pushReplacement("/dashboard");
+                      label: "Register",
+                      onPressed: () async {
+                        if (_formKey.currentState!.validate()) {
+                          bool isRegistered = await AuthService.register(
+                              context,
+                              RegisterObject(
+                                      email: emailController.text,
+                                      password: passwordController.text,
+                                      username: userController.text)
+                                  .toJson());
+                          if (isRegistered) {
+                            context.pushReplacement("/dashboard");
+                          }
                         }
-                      }
-                    },
-                  color: const Color(0XFF035a63)
-                  ),
+                      },
+                      color: const Color(0XFF035a63)),
                 ),
                 const SizedBox(height: 40),
                 const DividerWithText(label: "Or Register with"),

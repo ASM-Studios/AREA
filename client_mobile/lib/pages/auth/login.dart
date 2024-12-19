@@ -7,6 +7,7 @@ import 'package:client_mobile/widgets/divider_with_text.dart';
 import 'package:client_mobile/widgets/form_field.dart';
 import 'package:client_mobile/widgets/password_form_field.dart';
 import 'package:client_mobile/widgets/sign_in_button.dart';
+import 'package:client_mobile/widgets/simple_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_appauth/flutter_appauth.dart';
 import 'package:go_router/go_router.dart';
@@ -60,10 +61,11 @@ class _LoginPageState extends State<LoginPage> {
           key: _formKey,
           child: SingleChildScrollView(
             child: Column(
-              // crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                const SimpleText("Email"),
                 AreaFormField(
-                  label: "Email",
+                  label: "you@example.com",
                   controller: emailController,
                   validator: (email) {
                     if (email == null || email.isEmpty) {
@@ -76,6 +78,7 @@ class _LoginPageState extends State<LoginPage> {
                   },
                 ),
                 const SizedBox(height: 50),
+                const SimpleText("Password"),
                 PasswordFormField(
                   controller: passwordController,
                   validator: (password) {
@@ -83,7 +86,7 @@ class _LoginPageState extends State<LoginPage> {
                       return "Please input your password.";
                     return (null);
                   },
-                  label: "Password",
+                  label: "********",
                 ),
                 const SizedBox(height: 15),
                 AreaButton(
@@ -106,13 +109,15 @@ class _LoginPageState extends State<LoginPage> {
                 const SizedBox(height: 40),
                 const DividerWithText(label: "Or Sign in with"),
                 const SizedBox(height: 15),
-                SignInButton(
-                  onPressed: handleMicrosoftOAuth,
-                  label: "Microsoft",
-                  image: Image.asset(
-                    "assets/images/microsoft.png",
-                    width: 40,
-                    height: 20,
+                Center(
+                  child: SignInButton(
+                    onPressed: handleMicrosoftOAuth,
+                    label: "Microsoft",
+                    image: Image.asset(
+                      "assets/images/microsoft.png",
+                      width: 40,
+                      height: 20,
+                    ),
                   ),
                 ),
                 const SizedBox(height: 5),
