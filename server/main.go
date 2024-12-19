@@ -1,14 +1,15 @@
 package main
 
 import (
-	"AREA/internal/config"
-	"AREA/internal/pkg"
-	"AREA/internal/routers"
 	"fmt"
-	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
 	"strconv"
+
+	"AREA/internal/config"
+	"AREA/internal/pkg"
+	"AREA/internal/routers"
+	"github.com/gin-gonic/gin"
 )
 
 // @title           AREA API
@@ -31,14 +32,21 @@ import (
 // @name Authorization
 func main() {
 	config.LoadConfig()
-	pkg.InitDB()
-	pkg.InitServiceList()
-	err := pkg.InitRabbitMQ()
-	if err != nil {
-		return
+
+	sqlDB := pkg.InitDB()
+	if sqlDB == nil {
+		log.Fatal("Failed to initialize database")
 	}
+	defer sqlDB.Close()
+	pkg.InitServiceList()
+	rmq, err := pkg.InitRabbitMQ()
+	if err != nil {
+		log.Fatalf("Failed to initialize RabbitMQ: %v", err)
+	}
+	defer rmq.Close()
+
 	gin.SetMode(config.AppConfig.GinMode)
-	router := routers.SetupRouter()
+	router := routers.SetupRouter(sqlDB, rmq)
 	port := strconv.Itoa(config.AppConfig.Port)
 	log.Printf("Starting %s on port %s in %s mode", config.AppConfig.AppName, port, config.AppConfig.GinMode)
 
