@@ -10,7 +10,7 @@ import (
 )
 
 var OAuthApps = map[string]oauth.ServiceApp {
-        "microsoft": {ServiceName: "microsoft", ClientId: "MICROSOFT_CLIENT_ID", ClientSecret: "MICROSOFT_CLIENT_SECRET", TokenURL: "https://login.microsoftonline.com/common/oauth2/v2.0/token", MeURL: "https://graph.microsoft.com/v1.0/me"},
+        "microsoft": {ServiceName: "microsoft", ClientId: "MICROSOFT_CLIENT_ID", ClientSecret: "", TokenURL: "https://login.microsoftonline.com/common/oauth2/v2.0/token", MeURL: "https://graph.microsoft.com/v1.0/me"},
         "github": {ServiceName: "github", ClientId: "GITHUB_CLIENT_ID", ClientSecret: "GITHUB_CLIENT_SECRET", TokenURL: "https://github.com/login/oauth/access_token", MeURL: "https://api.github.com/user"},
         "spotify": {ServiceName: "spotify", ClientId: "SPOTIFY_CLIENT_ID", ClientSecret: "SPOTIFY_CLIENT_SECRET", TokenURL: "https://accounts.spotify.com/api/token", MeURL: "https://api.spotify.com/v1/me"},
         "twitch": {ServiceName: "twitch", ClientId: "TWITCH_CLIENT_ID", ClientSecret: "TWITCH_CLIENT_SECRET", TokenURL: "https://id.twitch.tv/oauth2/token", MeURL: "https://api.twitch.tv/helix/users"},
