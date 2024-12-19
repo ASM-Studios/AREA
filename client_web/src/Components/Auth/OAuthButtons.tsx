@@ -13,20 +13,12 @@ interface OAuthButtonsProps {
     mode: 'signin' | 'signup' | 'connect';
     onGoogleSuccess: (response: unknown) => void;
     onGoogleError: () => void;
-    onMicrosoftSuccess: (response: unknown) => void;
-    onMicrosoftError: (error: unknown) => void;
-    onLinkedinSuccess: (response: unknown) => void;
-    onLinkedinError: (error: unknown) => void;
 }
 
 const OAuthButtons = ({
     mode,
     onGoogleSuccess,
     onGoogleError,
-    onMicrosoftSuccess,
-    onMicrosoftError,
-    onLinkedinSuccess,
-    onLinkedinError
 }: OAuthButtonsProps) => {
     const { user } = useUser();
 
@@ -60,15 +52,11 @@ const OAuthButtons = ({
             />
 
             <MicrosoftAuth
-                onSuccess={onMicrosoftSuccess}
-                onError={onMicrosoftError}
                 buttonText={`${withText} Microsoft`}
                 disabled={services.some((service) => service.name === 'microsoft')}
             />
 
             <LinkedinAuth
-                onSuccess={onLinkedinSuccess}
-                onError={onLinkedinError}
                 buttonText={`${withText} LinkedIn`}
                 disabled={services.some((service) => service.name === 'linkedin')}
             />

@@ -1,10 +1,7 @@
 import {Button, Form} from 'antd';
-// @ts-ignore
 import { uri } from '@Config/uri';
 
 interface LinkedinAuthProps {
-    onSuccess: (response: unknown) => void;
-    onError: (error: unknown) => void;
     buttonText: string;
     disabled?: boolean;
 }

@@ -1,6 +1,5 @@
 import { Form, Button } from 'antd';
 import { FC } from 'react';
-// @ts-ignore
 import { uri } from '@Config/uri';
 
 interface DiscordAuthProps {

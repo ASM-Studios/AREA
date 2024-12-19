@@ -1,13 +1,13 @@
 import { Form, Input, Button, Card } from 'antd';
 import { Link } from 'react-router-dom';
 import OAuthButtons from '@/Components/Auth/OAuthButtons';
-import { instance, auth, oauth } from "@Config/backend.routes";
+import { instance, auth } from "@Config/backend.routes";
 import { useAuth } from "@/Context/ContextHooks";
 import { useNavigate } from 'react-router-dom';
 import { toast } from "react-toastify";
 
 const Register = () => {
-    const { setJsonWebToken, isAuthenticated, setIsAuthenticated } = useAuth();
+    const { setJsonWebToken, setIsAuthenticated } = useAuth();
 
     const navigate = useNavigate();
 
@@ -40,43 +40,6 @@ const Register = () => {
 
     const handleGoogleError = () => {
         console.log('Google Register Failed');
-    };
-
-    const handleMicrosoftSuccess = (response: unknown) => {
-        // @ts-expect-error response isn't typed
-        instance.post(oauth.microsoft.auth, { "token": response?.accessToken }, {
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        })
-            .then((response) => {
-                if (!response?.data?.jwt) {
-                    console.error('JWT not found in response');
-                    return;
-                }
-                setJsonWebToken(response?.data?.jwt);
-                setIsAuthenticated(true);
-                navigate('/dashboard');
-            })
-            .catch((error) => {
-                console.error('Failed:', error);
-                toast.error('Failed to register: ' + (error?.response?.data?.error || 'Network error'));
-            });
-    };
-
-    const handleMicrosoftError = (error: unknown) => {
-        console.error('Microsoft Register Failed:', error);
-        // @ts-expect-error error isn't typed
-        toast.error('Failed to register: ' + error?.response?.data?.error);
-    };
-
-    const handleLinkedinSuccess = (response: unknown) => {
-        console.log('LinkedIn Register Success:', response);
-        // Call your API to verify the LinkedIn token and register the user
-    };
-
-    const handleLinkedinError = (error: unknown) => {
-        console.error('LinkedIn Register Failed:', error);
     };
 
     return (
@@ -154,10 +117,6 @@ const Register = () => {
                         mode="signup"
                         onGoogleSuccess={handleGoogleSuccess}
                         onGoogleError={handleGoogleError}
-                        onMicrosoftSuccess={handleMicrosoftSuccess}
-                        onMicrosoftError={handleMicrosoftError}
-                        onLinkedinSuccess={handleLinkedinSuccess}
-                        onLinkedinError={handleLinkedinError}
                     />
 
                     <Form.Item>

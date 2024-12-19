@@ -1,12 +1,9 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { ContextManager } from "@/Context/ContextManager";
-// @ts-ignore
-import { uri } from '@Config/uri';
 
 import { useEffect, useMemo, useState } from "react";
 import Particles, { initParticlesEngine } from "@tsparticles/react";
 import {
-    type Container,
     type ISourceOptions,
     MoveDirection,
     OutMode,
@@ -24,12 +21,7 @@ import Layout from '@/Components/Layout/Layout';
 import Login from '@/Pages/Auth/Forms/Login';
 import Register from '@/Pages/Auth/Forms/Register';
 
-import LinkedinCallback from "@/Pages/Auth/Callback/LinkedinCallback";
-import SpotifyCallback from '@/Pages/Auth/Callback/SpotifyCallback';
-import MicrosoftCallback from '@/Pages/Auth/Callback/MicrosoftCallback';
-import DiscordCallback from '@/Pages/Auth/Callback/DiscordCallback';
-import GithubCallback from '@/Pages/Auth/Callback/GithubCallback';
-import TwitchCallback from "@/Pages/Auth/Callback/TwitchCallback";
+import GenericCallback from "@/Pages/Auth/Callback/GenericCallback";
 
 import CreateWorkflow from "@/Pages/Workflows/CreateWorkflow";
 import UpdateWorkflow from "@/Pages/Workflows/UpdateWorkflow";
@@ -37,7 +29,6 @@ import UpdateWorkflow from "@/Pages/Workflows/UpdateWorkflow";
 import Dashboard from './Pages/Dashboard/Dashboard';
 
 import { ToastContainer } from 'react-toastify';
-// @ts-ignore
 import 'react-toastify/dist/ReactToastify.css';
 
 const App = () => {
@@ -53,7 +44,7 @@ const App = () => {
         setBackgroundColor(sessionStorage.getItem("backgroundColor") || "#FFA500");
     }, []);
 
-    const particlesLoaded = async (container?: Container): Promise<void> => {};
+    const particlesLoaded = async (): Promise<void> => {};
 
     const options: ISourceOptions = useMemo(
         () => ({
@@ -157,12 +148,7 @@ const App = () => {
                             <Route path="/register" element={<Register />} />
                             <Route path="/dashboard" element={<Dashboard />} />
 
-                            <Route path={uri.spotify.auth.redirectUri.replace(window.location.origin, "")} element={<SpotifyCallback />} />
-                            <Route path={uri.microsoft.auth.redirectUri.replace(window.location.origin, "")} element={<MicrosoftCallback />} />
-                            <Route path={uri.linkedin.auth.redirectUri.replace(window.location.origin, "")} element={<LinkedinCallback />} />
-                            <Route path={uri.discord.auth.redirectUri.replace(window.location.origin, "")} element={<DiscordCallback />} />
-                            <Route path={uri.github.auth.redirectUri.replace(window.location.origin, "")} element={<GithubCallback />} />
-                            <Route path={uri.twitch.auth.redirectUri.replace(window.location.origin, "")} element={<TwitchCallback />} />
+                            <Route path="/auth/:service/callback" element={<GenericCallback />} />
 
                             <Route path="/workflow/create" element={<CreateWorkflow />} />
                             <Route path="/workflow/update/:id" element={<UpdateWorkflow />} />

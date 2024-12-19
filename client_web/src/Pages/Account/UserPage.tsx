@@ -61,75 +61,8 @@ const UserPage: React.FC<UserPageProps> = ({ backgroundColor, setBackgroundColor
         setBackgroundColor(defaultColor);
     };
 
-    const onMicrosoftSuccess = (response: any) => {
-        instanceWithAuth.post(oauth.microsoft.bind, { "token": response?.accessToken }, {
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        })
-            .then((response: { data: { jwt: string; }; }) => {
-                if (!response?.data?.jwt) {
-                    console.error('JWT not found in response');
-                    return;
-                }
-                toast.success('Successfully connected with Microsoft');
-            })
-            .catch((error) => {
-                console.error('Failed:', error);
-                toast.error('Failed to register: ' + (error?.response?.data?.error || 'Network error'));
-            });
-    };
-
-    const onMicrosoftError = (error: any) => {
-        console.error(error);
-        toast.error("Failed to connect with Microsoft");
-    };
-
-    const onLinkedinSuccess = (response: any) => {
-        instanceWithAuth.post(oauth.linkedin.bind, { "token": response?.accessToken }, {
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        })
-            .then((response: { data: { jwt: string; }; }) => {
-                if (!response?.data?.jwt) {
-                    console.error('JWT not found in response');
-                    return;
-                }
-                toast.success('Successfully connected with LinkedIn');
-            })
-            .catch((error) => {
-                console.error('Failed:', error);
-                toast.error('Failed to register: ' + (error?.response?.data?.error || 'Network error'));
-            });
-    };
-
-    const onLinkedinError = (error: any) => {
-        console.error(error);
-        toast.error("Failed to connect with LinkedIn");
-    };
-
-    const onGoogleSuccess = (response: any) => {
-        instanceWithAuth.post(oauth.google.bind, { "token": response?.accessToken }, {
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        })
-            .then((response: { data: { jwt: string; }; }) => {
-                if (!response?.data?.jwt) {
-                    console.error('JWT not found in response');
-                    return;
-                }
-                toast.success('Successfully connected with Google');
-            })
-            .catch((error) => {
-                console.error('Failed:', error);
-                toast.error('Failed to register: ' + (error?.response?.data?.error || 'Network error'));
-            });
-    };
-
-    const onGoogleError = () => {
-        toast.error("Failed to connect with Google");
+    const handleNotImplemented = () => {
+        toast.error("This feature is not implemented yet");
     };
 
     return (
@@ -169,12 +102,8 @@ const UserPage: React.FC<UserPageProps> = ({ backgroundColor, setBackgroundColor
                                                 <Space direction="vertical" style={{ width: '100%' }}>
                                                     <OAuthButtons
                                                         mode={"connect"}
-                                                        onGoogleSuccess={onGoogleSuccess}
-                                                        onGoogleError={onGoogleError}
-                                                        onMicrosoftSuccess={onMicrosoftSuccess}
-                                                        onMicrosoftError={onMicrosoftError}
-                                                        onLinkedinSuccess={onLinkedinSuccess}
-                                                        onLinkedinError={onLinkedinError}
+                                                        onGoogleSuccess={handleNotImplemented}
+                                                        onGoogleError={handleNotImplemented}
                                                     />
                                                 </Space>
                                             </Col>
