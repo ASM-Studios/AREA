@@ -1,5 +1,4 @@
 import {Button, Form} from 'antd';
-// @ts-ignore
 import { uri } from '@Config/uri';
 
 interface LinkedinAuthProps {

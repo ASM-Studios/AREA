@@ -1,6 +1,5 @@
 import { Form, Button } from 'antd';
 import { useEffect, useState } from 'react';
-// @ts-ignore
 import { uri } from '@Config/uri';
 
 interface MicrosoftAuthProps {
