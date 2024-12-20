@@ -87,8 +87,7 @@ const Home: React.FC<HomeProps> = ({ backgroundColor }) => {
                   <ThunderboltOutlined style={{ fontSize: 32, color: backgroundColor, marginBottom: 16 }} />
                   <Title level={4}>Easy Automation</Title>
                   <Paragraph>
-                    Create powerful automation workflows with our intuitive drag-and-drop interface.
-                    No coding required!
+                    Create powerful automation workflows with no coding required!
                   </Paragraph>
                 </Card>
               </motion.div>

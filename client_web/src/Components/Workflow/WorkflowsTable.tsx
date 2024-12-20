@@ -8,6 +8,7 @@ import { instanceWithAuth, workflow } from "@Config/backend.routes";
 import { toast } from "react-toastify";
 import { useMediaQuery } from 'react-responsive';
 import Security from "@/Components/Security";
+import { useNavigate } from "react-router-dom";
 
 interface WorkflowsTableProps {
     workflows: WorkflowTableDetail[];
@@ -17,15 +18,26 @@ interface WorkflowsTableProps {
 
 const WorkflowsTable: React.FC<WorkflowsTableProps> = ({ workflows, setNeedReload, loading }) => {
     const isSmallScreen = useMediaQuery({ maxWidth: 767 });
+    const navigate = useNavigate();
 
     const handleEdit = (record: WorkflowTableDetail) => {
-        console.log('Edit workflow:', record);
-        // TODO: Add edit logic here
+        navigate(`/workflow/update/${record.ID}`);
     };
 
     const handleToggleActive = (record: WorkflowTableDetail) => {
-        console.log('Toggle active status:', record);
-        // TODO: Add toggle active logic here
+        instanceWithAuth.put(workflow.update + `/${record.ID}`, {
+            is_active: !record.is_active,
+        })
+            .then(() => {
+                toast.success('Workflow updated');
+            })
+            .catch((error) => {
+                console.error(error)
+                toast.error('Failed to updated workflow');
+            })
+            .finally(() => {
+                setNeedReload(true);
+            })
     };
 
     const handleDelete = (record: WorkflowTableDetail) => {
@@ -105,7 +117,6 @@ const WorkflowsTable: React.FC<WorkflowsTableProps> = ({ workflows, setNeedReloa
                             onClick={() => handleEdit(record)}
                             size="small"
                             aria-label="Edit workflow"
-                            disabled={true} // TODO: Implement this feature
                         />
                     </Tooltip>
                     <Tooltip title={record.is_active ? 'Deactivate workflow' : 'Activate workflow'}>
@@ -115,7 +126,6 @@ const WorkflowsTable: React.FC<WorkflowsTableProps> = ({ workflows, setNeedReloa
                             size="small"
                             type={record.is_active ? 'default' : 'primary'}
                             aria-label={record.is_active ? 'Deactivate workflow' : 'Activate workflow'}
-                            disabled={true} // TODO: Implement this feature
                         />
                     </Tooltip>
                     <Tooltip title="Delete workflow">

@@ -1,8 +1,19 @@
 import { createContext, useState, ReactNode } from 'react';
 
-interface User {
-    id: string;
+export interface ServicesDescription {
+    id: number;
+    name: string;
+    connectedAt: string;
+}
+
+export interface User {
     username: string;
+    email: string;
+    services: ServicesDescription[];
+}
+
+export interface UserPayload {
+    user: User;
 }
 
 export interface UserContextType {
