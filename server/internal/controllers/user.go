@@ -30,6 +30,7 @@ func UserMe(c *gin.Context) {
 		services = append(services, models.ServiceRequest{
 			Name: service.Name,
 			ID:   service.ID,
+                        ConnectedAt: token.UpdatedAt.String(),
 		})
 	}
 

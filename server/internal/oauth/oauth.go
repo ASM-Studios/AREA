@@ -15,7 +15,23 @@ type ServiceApp struct {
         ClientId        string
         ClientSecret    string
         TokenURL        string
+        RefreshTokenURL string
         MeURL           string
+}
+
+var OAuthApps = map[string]ServiceApp {
+        "microsoft": {ServiceName: "microsoft", ClientId: "MICROSOFT_CLIENT_ID", ClientSecret: "MICROSOFT_CLIENT_SECRET",
+                TokenURL: "https://login.microsoftonline.com/common/oauth2/v2.0/token", MeURL: "https://graph.microsoft.com/v1.0/me"},
+        "github": {ServiceName: "github", ClientId: "GITHUB_CLIENT_ID", ClientSecret: "GITHUB_CLIENT_SECRET",
+                TokenURL: "https://github.com/login/oauth/access_token", MeURL: "https://api.github.com/user"},
+        "spotify": {ServiceName: "spotify", ClientId: "SPOTIFY_CLIENT_ID", ClientSecret: "SPOTIFY_CLIENT_SECRET",
+                TokenURL: "https://accounts.spotify.com/api/token", RefreshTokenURL: "", MeURL: "https://api.spotify.com/v1/me"},
+        "twitch": {ServiceName: "twitch", ClientId: "TWITCH_CLIENT_ID", ClientSecret: "TWITCH_CLIENT_SECRET",
+                TokenURL: "https://id.twitch.tv/oauth2/token", MeURL: "https://api.twitch.tv/helix/users"},
+        "discord": {ServiceName: "discord", ClientId: "DISCORD_CLIENT_ID", ClientSecret: "DISCORD_CLIENT_SECRET",
+                TokenURL: "https://discord.com/api/oauth2/token", MeURL: "https://discord.com/api/users/@me"},
+        "google": {ServiceName: "google", ClientId: "GOOGLE_CLIENT_ID", ClientSecret: "GOOGLE_CLIENT_SECRET",
+                TokenURL: "https://oauth2.googleapis.com/token", MeURL: "https://www.googleapis.com/oauth2/v1/userinfo"},
 }
 
 type ServiceCode struct {
@@ -53,12 +69,8 @@ func getServiceBearer(serviceApp ServiceApp, serviceCode ServiceCode) (*ServiceB
                 form.Add("code_verifier", serviceCode.CodeVerifier)
         }
         form.Add("redirect_uri", serviceCode.RedirectUri)
-        if serviceApp.ClientId != "" {
-            form.Add("client_id", utils.GetEnvVar(serviceApp.ClientId))
-        }
-        if serviceApp.ClientSecret != "" {
-            form.Add("client_secret", utils.GetEnvVar(serviceApp.ClientSecret))
-        }
+        form.Add("client_id", utils.GetEnvVar(serviceApp.ClientId))
+        form.Add("client_secret", utils.GetEnvVar(serviceApp.ClientSecret))
 
         req, err := http.NewRequest("POST", serviceApp.TokenURL, bytes.NewBufferString(form.Encode()))
         if err != nil {
