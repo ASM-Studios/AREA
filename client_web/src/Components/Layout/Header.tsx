@@ -1,6 +1,6 @@
 import { Layout, Menu, Button, Dropdown, Tooltip } from 'antd';
 import { Link, useLocation } from 'react-router-dom';
-import { useAuth, useTheme } from '@/Context/ContextHooks';
+import { useAuth, useTheme, useUser } from '@/Context/ContextHooks';
 import React, { useEffect, useState } from "react";
 import { UserOutlined, MenuOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
@@ -8,34 +8,35 @@ import { useMediaQuery } from 'react-responsive';
 
 const { Header: AntHeader } = Layout;
 
-enum Visibility {
-    ALWAYS = 'always',
-    AUTH = 'auth',
-    GUEST = 'guest',
-}
-
-interface MenuItems {
-    key: string;
-    label: React.ReactNode;
-    visibility?: Visibility;
-}
-
-const menuItems: MenuItems[] = [
-    { key: '/', label: <Link to="/">Home</Link>, visibility: Visibility.ALWAYS },
-    { key: '/login', label: <Link to="/login">Login</Link>, visibility: Visibility.GUEST },
-    { key: '/register', label: <Link to="/register">Register</Link>, visibility: Visibility.GUEST },
-    { key: '/dashboard', label: <Link to="/dashboard">Dashboard</Link>, visibility: Visibility.AUTH },
-    { key: '/workflow/create', label: <Link to="/workflow/create">Create Workflow</Link>, visibility: Visibility.AUTH },
-];
-
 const Header: React.FC = () => {
-    const { theme } = useTheme();
     const navigate = useNavigate();
     const location = useLocation();
     const [selectedKey, setSelectedKey] = useState<string>(location.pathname);
     const isMobile = useMediaQuery({ maxWidth: 768 });
 
     const { isAuthenticated, setIsAuthenticated, setJsonWebToken } = useAuth();
+    const { theme } = useTheme();
+    const { translations } = useUser();
+
+    enum Visibility {
+        ALWAYS = 'always',
+        AUTH = 'auth',
+        GUEST = 'guest',
+    }
+    
+    interface MenuItems {
+        key: string;
+        label: React.ReactNode;
+        visibility?: Visibility;
+    }
+    
+    const menuItems: MenuItems[] = [
+        { key: '/', label: <Link to="/">{translations?.header?.home}</Link>, visibility: Visibility.ALWAYS },
+        { key: '/login', label: <Link to="/login">{translations?.header?.login}</Link>, visibility: Visibility.GUEST },
+        { key: '/register', label: <Link to="/register">{translations?.header?.register}</Link>, visibility: Visibility.GUEST },
+        { key: '/dashboard', label: <Link to="/dashboard">{translations?.header?.dashboard}</Link>, visibility: Visibility.AUTH },
+        { key: '/workflow/create', label: <Link to="/workflow/create">{translations?.header?.createWorkflow}</Link>, visibility: Visibility.AUTH },
+    ];
 
     useEffect(() => {
         setSelectedKey(location.pathname);
@@ -50,11 +51,11 @@ const Header: React.FC = () => {
     const profileMenuItems = [
         {
             key: 'profile',
-            label: 'Profile Settings'
+            label: translations?.header?.profile?.settings
         },
         {
             key: 'logout',
-            label: 'Logout',
+            label: translations?.header?.profile?.logout,
             danger: true
         }
     ];
@@ -99,7 +100,7 @@ const Header: React.FC = () => {
                         selectedKeys={[selectedKey]}
                     />
                 )}
-                <Tooltip title={!isAuthenticated ? "Please log in to access profile settings" : ""}>
+                <Tooltip title={!isAuthenticated ? translations?.header?.profile?.tooltip : ""}>
                     <div>
                         <Dropdown
                             menu={{
@@ -122,7 +123,7 @@ const Header: React.FC = () => {
                                 }}
                             >
                                 <UserOutlined />
-                                <span>Profile</span>
+                                <span>{translations?.header?.profile?.title}</span>
                             </Button>
                         </Dropdown>
                     </div>

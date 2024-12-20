@@ -3,7 +3,7 @@ import { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { instance, instanceWithAuth, oauth } from "@Config/backend.routes";
 import { uri } from "@Config/uri";
-import { useAuth } from "@/Context/ContextHooks";
+import { useAuth, useUser } from "@/Context/ContextHooks";
 
 const capitalize = (s: string) => {
     return s.charAt(0).toUpperCase() + s.slice(1);
@@ -37,8 +37,9 @@ const GenericCallback = () => {
     const navigate = useNavigate();
     const [error, setError] = useState<string | null>(null);
     const [service, setService] = useState<string>('');
-    const { setJsonWebToken } = useAuth();
     const hasHandledCallback = useRef(false);
+    const { setJsonWebToken } = useAuth();
+    const { translations } = useUser();
 
     const isBinding = localStorage.getItem("jsonWebToken");
 
@@ -66,7 +67,7 @@ const GenericCallback = () => {
         if (service) {
             setService(service);
         } else {
-            setError(`Invalid service: ${service}`);
+            setError(`${translations?.callback.errors.invalidService}: ${service}`);
             setTimeout(() => {
                 navigate(isBinding ? '/account/me' : '/login');
             }, 2000);
@@ -96,7 +97,7 @@ const GenericCallback = () => {
 
             try {
                 if (state === null || state !== storedState) {
-                    throw new Error('State mismatch. Please try again.');
+                    throw new Error(translations?.callback.errors.stateMismatch);
                 }
 
                 const response = await getInstance().post(getRoute(), {
@@ -106,7 +107,7 @@ const GenericCallback = () => {
                 });
 
                 if (!response.status || response.status !== 200) {
-                    throw new Error('Failed to exchange token');
+                    throw new Error(translations?.callback.errors.tokenExchange);
                 }
 
                 if (!isBinding) {
@@ -124,7 +125,7 @@ const GenericCallback = () => {
                 }, 2000);
                 return;
             } catch (error: unknown) {
-                setError((error as Error)?.message || `Failed to connect with ${capitalize(service)}`);
+                setError((error as Error)?.message || `${translations?.callback.errors.genericError}: ${capitalize(service)}`);
                 setTimeout(() => {
                     navigate(isBinding ? '/account/me' : '/login');
                 }, 2000);
@@ -146,17 +147,17 @@ const GenericCallback = () => {
                             {error}
                         </h3>
                         <p>
-                            Redirecting you back...
+                            {translations?.callback.redirect.message}
                         </p>
                     </>
                 ) : (
                     <>
                         <Spin size="large" />
                         <h3 style={{ marginTop: 24 }}>
-                            Connecting to {capitalize(service)}
+                            {translations?.callback.loading.title.replace('{service}', capitalize(service))}
                         </h3>
                         <p>
-                            Please wait while we complete your authentication...
+                            {translations?.callback.loading.description}
                         </p>
                     </>
                 )}

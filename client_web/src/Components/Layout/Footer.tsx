@@ -1,11 +1,12 @@
-import { Layout } from 'antd';
-import { useTheme } from '@/Context/ContextHooks';
 import React from "react";
+import { Layout } from 'antd';
+import { useTheme, useUser } from '@/Context/ContextHooks';
 
 const { Footer } = Layout;
 
 const AppFooter: React.FC = () => {
     const { theme } = useTheme();
+    const { translations } = useUser();
 
     return (
         <div style={{padding: 24, position: 'relative', zIndex: 1}}>
@@ -19,7 +20,7 @@ const AppFooter: React.FC = () => {
                     borderRadius: '8px'
                 }}
             >
-            ©2024 ASM. All Rights Reserved.
+                {translations?.footer?.reservedRights}
             </Footer>
         </div>
     );
