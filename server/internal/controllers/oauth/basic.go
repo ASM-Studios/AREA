@@ -53,8 +53,12 @@ func getServiceBearer(serviceApp ServiceApp, serviceCode ServiceCode) (*ServiceB
                 form.Add("code_verifier", serviceCode.CodeVerifier)
         }
         form.Add("redirect_uri", serviceCode.RedirectUri)
-        form.Add("client_id", utils.GetEnvVar(serviceApp.ClientId))
-        form.Add("client_secret", utils.GetEnvVar(serviceApp.ClientSecret))
+        if serviceApp.ClientId != "" {
+            form.Add("client_id", utils.GetEnvVar(serviceApp.ClientId))
+        }
+        if serviceApp.ClientSecret != "" {
+            form.Add("client_secret", utils.GetEnvVar(serviceApp.ClientSecret))
+        }
 
         req, err := http.NewRequest("POST", serviceApp.TokenURL, bytes.NewBufferString(form.Encode()))
         if err != nil {
