@@ -68,8 +68,8 @@ func getServiceBearer(serviceApp ServiceApp, serviceCode ServiceCode) (*ServiceB
         req.Header.Set("Origin", "http://localhost")
         req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 
-        _, serviceBearerToken, err := utils.SendRequestBody[ServiceBearerToken](req)
-        if err != nil {
+        resp, serviceBearerToken, err := utils.SendRequestBody[ServiceBearerToken](req)
+        if err != nil || resp.StatusCode != 200 {
                 return nil, err
         }
         return serviceBearerToken, nil
@@ -84,8 +84,8 @@ func createDBToken(serviceId uint, serviceApp ServiceApp, serviceBearerToken Ser
         }
         req.Header.Set("Authorization", "Bearer " + serviceBearerToken.Token)
         req.Header.Set("Client-ID", utils.GetEnvVar(serviceApp.ClientId))
-        resp, err := utils.SendRequest(req)        //TODO CHANGE REQUEST
-        if err != nil {
+        resp, err := utils.SendRequest(req)
+        if err != nil || resp.StatusCode != 200 {
                 return nil, err
         }
         serviceResponse, err := ServiceResponseConverters[serviceApp.ServiceName](resp)

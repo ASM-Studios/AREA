@@ -75,7 +75,7 @@ func OAuthBind(c *gin.Context) {
         serviceId, err := getServiceID(c)
 
         dbToken, err := oauth.BasicServiceCallback(c, serviceId, OAuthApps[c.Param("service")])
-        if err != nil {
+        if err != nil || dbToken == nil {
                 c.AbortWithStatusJSON(http.StatusBadRequest, gin.H {
                         "message": "Invalid request",
                 })
