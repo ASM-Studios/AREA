@@ -265,13 +265,17 @@ export interface Translation {
                     subtitle: string;
                     connectService: string;
                     goBack: string;
-                }
+                };
+                apiError: {
+                    title: string;
+                    subtitle: string;
+                };
             },
             loading: string;
             success: {
                 published: string;
             }
-        };
+        },
         update: {
             form: {
                 name: {
@@ -326,6 +330,7 @@ export interface Translation {
     };
     common: {
         table: {
+            next: string;
             noData: string;
             ok: string;
             reset: string;

@@ -6,6 +6,8 @@ import en_language from '../../../locales/en';
 import fr_language from '../../../locales/fr';
 import es_language from '../../../locales/es';
 import pirate_language from '../../../locales/pirate';
+import { instanceWithAuth, user as userRoute } from "@Config/backend.routes";
+import {toast} from "react-toastify";
 
 export interface ServicesDescription {
     id: number;
@@ -50,6 +52,16 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
         Cookies.set('language', language, { expires: 365 });
         setTranslations(languageMap[language as keyof typeof languageMap]);
     }, [language]);
+
+    React.useEffect(() => {
+        instanceWithAuth.get(userRoute.me)
+            .then((response: { data: UserPayload }) => {
+                setUser(response?.data?.user);
+            })
+            .catch((error) => {
+                setUser(null);
+            });
+    }, []);
 
     return (
         <UserContext.Provider value={{ 

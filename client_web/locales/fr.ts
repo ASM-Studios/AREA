@@ -1,4 +1,4 @@
-import { Translation } from '../src/Config/translation.types';
+import { Translation } from '@Config/translation.types';
 
 const fr_language: Translation = {
     home: {
@@ -267,11 +267,66 @@ const fr_language: Translation = {
                     subtitle: "Vous devez connecter au moins un service pour créer un workflow",
                     connectService: "Connecter un Service",
                     goBack: "Retour"
+                },
+                apiError: {
+                    title: "Erreur API",
+                    subtitle: "Impossible d'obtenir les informations du service"
                 }
             },
             loading: "Création du workflow en cours...",
             success: {
                 published: "Workflow créé avec succès !"
+            }
+        },
+        update: {
+            form: {
+                name: {
+                    label: "Nom",
+                    placeholder: "Entrez le nom de votre workflow",
+                    example: "Mon Workflow",
+                    required: "Veuillez entrer un nom pour votre workflow"
+                },
+                description: {
+                    label: "Description",
+                    placeholder: "Entrez la description de votre workflow",
+                    example: "Ce workflow enverra un message à mon canal Slack lorsqu'un nouvel email arrive"
+                }
+            },
+            sections: {
+                availableActions: "Actions Disponibles",
+                availableReactions: "Réactions Disponibles",
+                selectedItems: "Éléments Sélectionnés",
+                when: "Quand",
+                then: "Alors"
+            },
+            buttons: {
+                foldAll: "Tout Replier",
+                unfoldAll: "Tout Déplier",
+                clearActions: "Effacer les Actions",
+                clearReactions: "Effacer les Réactions",
+                update: "Mettre à Jour",
+                cancel: "Annuler"
+            },
+            errors: {
+                noServices: {
+                    title: "Aucun Service Connecté",
+                    subtitle: "Vous devez connecter au moins un service pour mettre à jour un workflow",
+                    connectService: "Connecter un Service",
+                    goBack: "Retour"
+                },
+                noWorkflow: {
+                    title: "Workflow Introuvable",
+                    subtitle: "Le workflow que vous essayez de modifier n'existe pas"
+                },
+                apiError: {
+                    title: "Erreur API",
+                    subtitle: "Impossible d'obtenir les informations du workflow"
+                },
+                updateFailed: "Échec de la mise à jour du workflow"
+            },
+            loading: "Mise à jour du workflow...",
+            success: {
+                updated: "Workflow mis à jour avec succès !"
             }
         }
     },
@@ -296,7 +351,8 @@ const fr_language: Translation = {
             close: "Fermer",
             triggerDesc: "Décroissant",
             triggerAsc: "Croissant",
-            cancelSort: "Annuler le tri"
+            cancelSort: "Annuler le tri",
+            next: "Suivant"
         }
     },
     security: {

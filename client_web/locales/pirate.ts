@@ -1,4 +1,4 @@
-import { Translation } from '../src/Config/translation.types';
+import { Translation } from '@Config/translation.types';
 
 const pirate_language: Translation = {
     home: {
@@ -279,6 +279,10 @@ const pirate_language: Translation = {
                     subtitle: "Ye need at least one ally to chart a route",
                     connectService: "Find Allies",
                     goBack: "Return to Port"
+                },
+                apiError: {
+                    title: "Crow's Nest Error",
+                    subtitle: "Couldn't spot service information"
                 }
             },
             loading: "Chartin' yer route...",
@@ -359,7 +363,8 @@ const pirate_language: Translation = {
             close: "Close",
             triggerDesc: "Bottom to Top",
             triggerAsc: "Top to Bottom",
-            cancelSort: "Stop Sortin'"
+            cancelSort: "Stop Sortin'",
+            next: "Next Port"
         }
     },
     security: {

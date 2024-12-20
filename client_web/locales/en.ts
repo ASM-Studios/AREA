@@ -1,4 +1,4 @@
-import { Translation } from '../src/Config/translation.types';
+import { Translation } from '@Config/translation.types';
 
 const en_language: Translation = {
     home: {
@@ -236,14 +236,14 @@ const en_language: Translation = {
             form: {
                 name: {
                     label: "Name",
-                    placeholder: "Enter your workflow name",
+                    placeholder: "Enter workflow name",
                     example: "My Workflow",
-                    required: "Please enter a name for your workflow"
+                    required: "Please input a name for your workflow!"
                 },
                 description: {
                     label: "Description",
-                    placeholder: "Enter your workflow description",
-                    example: "This workflow will send a message to my Slack channel when a new email arrives"
+                    placeholder: "Describe your workflow",
+                    example: "This workflow will..."
                 }
             },
             sections: {
@@ -258,15 +258,19 @@ const en_language: Translation = {
                 unfoldAll: "Unfold All",
                 clearActions: "Clear Actions",
                 clearReactions: "Clear Reactions",
-                create: "Create",
+                create: "Create Workflow",
                 cancel: "Cancel"
             },
             errors: {
                 noServices: {
                     title: "No Services Connected",
-                    subtitle: "You need to connect at least one service to create a workflow",
-                    connectService: "Connect Service",
+                    subtitle: "Please connect some services before creating a workflow",
+                    connectService: "Connect Services",
                     goBack: "Go Back"
+                },
+                apiError: {
+                    title: "API Error",
+                    subtitle: "Failed to fetch service information"
                 }
             },
             loading: "Creating workflow...",
@@ -328,6 +332,7 @@ const en_language: Translation = {
     },
     common: {
         table: {
+            next: "Next",
             noData: "No data found",
             ok: "OK",
             reset: "Reset",
