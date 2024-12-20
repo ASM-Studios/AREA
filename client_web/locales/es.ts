@@ -1,4 +1,4 @@
-import { Translation } from '../src/Config/translation.types';
+import { Translation } from '@Config/translation.types';
 
 const es_language: Translation = {
     home: {
@@ -267,6 +267,10 @@ const es_language: Translation = {
                     subtitle: "Necesitas conectar al menos un servicio para crear un flujo de trabajo",
                     connectService: "Conectar Servicio",
                     goBack: "Volver"
+                },
+                apiError: {
+                    title: "Error de API",
+                    subtitle: "No se pudo obtener la información del servicio"
                 }
             },
             loading: "Creando flujo de trabajo...",
@@ -347,7 +351,8 @@ const es_language: Translation = {
             close: "Cerrar",
             triggerDesc: "Descendente",
             triggerAsc: "Ascendente",
-            cancelSort: "Cancelar Ordenamiento"
+            cancelSort: "Cancelar Ordenamiento",
+            next: "Siguiente",
         }
     },
     security: {

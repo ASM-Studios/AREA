@@ -120,7 +120,7 @@ const GenericCallback = () => {
                 setTimeout(() => {
                     if (code && !error && state === storedState) {
                         sessionStorage.removeItem(`${service}_auth_state`);
-                        navigate('/dashboard');
+                        navigate(isBinding ? '/account/me' : '/dashboard');
                     }
                 }, 2000);
                 return;

@@ -1,0 +1,42 @@
+.workflow-layout {
+  background: #fff;
+}
+
+.workflow-card {
+  margin: 24px;
+}
+
+.step-content {
+  margin-top: 24px;
+  padding: 24px;
+  background: #fafafa;
+  border-radius: 2px;
+}
+
+.events-card, .selected-events-card {
+  height: 600px;
+  overflow-y: auto;
+}
+
+.event-item {
+  margin-bottom: 8px;
+}
+
+.event-item:last-child {
+  margin-bottom: 0;
+}
+
+.selected-event-item {
+  margin-bottom: 16px;
+  border-left: 3px solid #1890ff;
+}
+
+.steps-action {
+  margin-top: 24px;
+  text-align: right;
+}
+
+.ant-collapse-content {
+  max-height: 500px;
+  overflow-y: auto;
+} 
