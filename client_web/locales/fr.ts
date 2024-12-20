@@ -1,4 +1,4 @@
-import { Translation } from '@/Config/translation.types';
+import { Translation } from '../src/Config/translation.types';
 
 const fr_language: Translation = {
     home: {
@@ -8,14 +8,14 @@ const fr_language: Translation = {
         upperCards: {
             firstCard: {
                 title: "Automatisation Facile",
-                description: "Créez des workflows d'automatisation puissants dès maintenant, et cela sans aucune programmation !",
+                description: "Créez des workflows d'automatisation puissants sans programmation !",
             },
             secondCard: {
                 title: "Connectez vos Services",
-                description: "Intégrez vos applications et services préférés. Faites-les travailler ensemble en toute transparence.",
+                description: "Intégrez vos services et applications populaires. Faites-les travailler ensemble en toute transparence.",
             },
             thirdCard: {
-                title: "Sécurisé et Fiable",
+                title: "Sûr et Fiable",
                 description: "Vos données sont protégées avec une sécurité de niveau entreprise. Exécutez vos automatisations en toute confiance.",
             },
         },
@@ -30,7 +30,7 @@ const fr_language: Translation = {
             },
             thirdCard: {
                 title: "Regardez-le Fonctionner",
-                description: "Détendez-vous et laissez l'Area s'occuper du reste de votre automatisation",
+                description: "Détendez-vous et laissez Area s'occuper du reste",
             },
         },
     },
@@ -40,10 +40,10 @@ const fr_language: Translation = {
             form: {
                 email: {
                     placeholder: "exemple@exemple.com",
-                    tooltip: "Veuillez saisir votre adresse e-mail",
+                    tooltip: "Veuillez saisir votre adresse email",
                     validation: {
-                        required: "Veuillez saisir votre e-mail !",
-                        invalid: "Veuillez saisir une adresse e-mail valide !"
+                        required: "Veuillez saisir votre email !",
+                        invalid: "Veuillez saisir une adresse email valide !"
                     }
                 },
                 password: {
@@ -64,21 +64,21 @@ const fr_language: Translation = {
             }
         },
         register: {
-            title: "S'inscrire",
+            title: "Inscription",
             form: {
                 username: {
                     placeholder: "Entrez votre nom d'utilisateur",
-                    tooltip: "Veuillez saisir votre nom d'utilisateur souhaité",
+                    tooltip: "Veuillez saisir le nom d'utilisateur souhaité",
                     validation: {
                         required: "Veuillez saisir votre nom d'utilisateur !"
                     }
                 },
                 email: {
                     placeholder: "exemple@exemple.com",
-                    tooltip: "Veuillez saisir votre adresse e-mail",
+                    tooltip: "Veuillez saisir votre adresse email",
                     validation: {
-                        required: "Veuillez saisir votre e-mail !",
-                        invalid: "Veuillez saisir une adresse e-mail valide !"
+                        required: "Veuillez saisir votre email !",
+                        invalid: "Veuillez saisir un email valide !"
                     }
                 },
                 password: {
@@ -113,7 +113,7 @@ const fr_language: Translation = {
     header: {
         home: "Accueil",
         login: "Connexion",
-        register: "S'inscrire",
+        register: "Inscription",
         dashboard: "Tableau de bord",
         createWorkflow: "Créer un Workflow",
         profile: {
@@ -128,37 +128,37 @@ const fr_language: Translation = {
     },
     userPage: {
         profileCard: {
-            title: "Informations de l'utilisateur",
+            title: "Informations Utilisateur",
             welcomeMessage: "Bon retour, {name} !",
             description: "Voici votre page utilisateur",
-            logoutDescription: "Déconnectez-vous de votre compte",
+            logoutDescription: "Se déconnecter de votre compte",
             logoutButton: "Déconnexion",
         },
         themeSettings: {
-            title: "Paramètres du thème",
+            title: "Paramètres du Thème",
             description: "Personnalisez votre couleur de fond",
-            resetButton: "Réinitialiser la couleur par défaut",
+            resetButton: "Réinitialiser la Couleur",
         },
         connectedServices: {
-            title: "Services connectés",
+            title: "Services Connectés",
             description: "Gérez vos services connectés",
-            connectedServices: "Services connectés",
+            connectedServices: "Services Connectés",
             connectedAt: "Connecté le",
         },
     },
     callback: {
         errors: {
-            stateMismatch: "Mismatch d'état. Veuillez réessayer.",
+            stateMismatch: "État non correspondant. Veuillez réessayer.",
             tokenExchange: "Échec de l'échange de jeton",
-            invalidService: "Service invalide: {service}",
+            invalidService: "Service invalide : {service}",
             genericError: "Échec de la connexion avec {service}",
         },
         loading: {
             title: "Connexion à {service}",
-            description: "Veuillez patienter pendant que nous complétons votre authentification...",
+            description: "Veuillez patienter pendant que nous finalisons votre authentification...",
         },
         redirect: {
-            message: "Vous êtes redirigé...",
+            message: "Redirection en cours...",
         }
     },
     oauthButtons: {
@@ -171,13 +171,13 @@ const fr_language: Translation = {
     dashboard: {
         cards: {
             firstCard: {
-                title: "Total Automations",
+                title: "Total des Automatisations",
             },
             secondCard: {
-                title: "Automations Active",
+                title: "Automatisations Actives",
             },
             thirdCard: {
-                title: "Automations En Attente",
+                title: "Mises à jour en attente",
             }
         },
         table: {
@@ -187,7 +187,7 @@ const fr_language: Translation = {
         },
         errors: {
             fetchWorkflows: "Échec de la récupération des workflows",
-            fetchUser: "Échec de la récupération des données de l'utilisateur",
+            fetchUser: "Échec de la récupération des données utilisateur",
         }
     },
     workflow: {
@@ -198,7 +198,7 @@ const fr_language: Translation = {
                 status: "Statut",
                 active: "Actif",
                 createdAt: "Créé le",
-                updatedAt: "Modifié le",
+                updatedAt: "Mis à jour le",
                 actions: "Actions"
             },
             activeStatus: {
@@ -231,6 +231,48 @@ const fr_language: Translation = {
                 updateFailed: "Échec de la mise à jour du workflow",
                 deleteFailed: "Échec de la suppression du workflow"
             }
+        },
+        create: {
+            form: {
+                name: {
+                    label: "Nom",
+                    placeholder: "Entrez le nom de votre workflow",
+                    example: "Mon Workflow",
+                    required: "Veuillez entrer un nom pour votre workflow"
+                },
+                description: {
+                    label: "Description",
+                    placeholder: "Entrez la description de votre workflow",
+                    example: "Ce workflow enverra un message à mon canal Slack lorsqu'un nouvel email arrive"
+                }
+            },
+            sections: {
+                availableActions: "Actions Disponibles",
+                availableReactions: "Réactions Disponibles",
+                selectedItems: "Éléments Sélectionnés",
+                when: "Quand",
+                then: "Alors"
+            },
+            buttons: {
+                foldAll: "Tout Replier",
+                unfoldAll: "Tout Déplier",
+                clearActions: "Effacer les Actions",
+                clearReactions: "Effacer les Réactions",
+                create: "Créer",
+                cancel: "Annuler"
+            },
+            errors: {
+                noServices: {
+                    title: "Aucun Service Connecté",
+                    subtitle: "Vous devez connecter au moins un service pour créer un workflow",
+                    connectService: "Connecter un Service",
+                    goBack: "Retour"
+                }
+            },
+            loading: "Création du workflow en cours...",
+            success: {
+                published: "Workflow créé avec succès !"
+            }
         }
     },
     common: {
@@ -239,7 +281,7 @@ const fr_language: Translation = {
             ok: "OK",
             reset: "Réinitialiser",
             filter: "Filtrer",
-            selectAll: "Tout sélectionner",
+            selectAll: "Tout Sélectionner",
             sort: "Trier",
             search: "Rechercher",
             clear: "Effacer",
@@ -252,8 +294,8 @@ const fr_language: Translation = {
             confirm: "Confirmer",
             save: "Enregistrer",
             close: "Fermer",
-            triggerDesc: "Descendant",
-            triggerAsc: "Ascendant",
+            triggerDesc: "Décroissant",
+            triggerAsc: "Croissant",
             cancelSort: "Annuler le tri"
         }
     },
@@ -267,12 +309,12 @@ const fr_language: Translation = {
         api: {
             title: "API Non Connectée",
             subtitle: "Désolé, l'API n'est actuellement pas disponible.",
-            backHome: "Retour à l'accueil"
+            backHome: "Retour à l'Accueil"
         },
         notFound: {
             title: "404",
-            subtitle: "Désolé, la page que vous avez visitée n'existe pas.",
-            backHome: "Retour à l'accueil"
+            subtitle: "Désolé, la page que vous recherchez n'existe pas.",
+            backHome: "Retour à l'Accueil"
         }
     },
 };

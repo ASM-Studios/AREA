@@ -26,7 +26,7 @@ const UpdateWorkflow: React.FC = () => {
     const [activeActionKeys, setActiveActionKeys] = useState<string[]>([]);
     const [activeReactionKeys, setActiveReactionKeys] = useState<string[]>([]);
 
-    const { user } = useUser();
+    const { user, translations } = useUser();
     const { setError } = useError();
     const navigate = useNavigate();
     const userHasNoServices = user?.services === null
@@ -50,7 +50,10 @@ const UpdateWorkflow: React.FC = () => {
                 const workflow = workflowResponse?.data?.workflow;
 
                 if (!workflow) {
-                    setError({ error: "Workflow not found", errorDescription: "The workflow you are trying to update does not exist" });
+                    setError({
+                        error: translations?.workflow.update.errors.noWorkflow.title,
+                        errorDescription: translations?.workflow.update.errors.noWorkflow.subtitle
+                    });
                     navigate('/error/not-found');
                     return;
                 }
@@ -76,7 +79,7 @@ const UpdateWorkflow: React.FC = () => {
                     id: action.id,
                     name: action.name,
                     description: action.description,
-                    parameters: action.parameters.reduce<Record<string, string | number>>((acc, param) => ({
+                    parameters: action?.parameters?.reduce<Record<string, string | number>>((acc, param) => ({
                         ...acc,
                         [param.name]: param.value
                     }), {})
@@ -86,7 +89,7 @@ const UpdateWorkflow: React.FC = () => {
                     id: reaction.id,
                     name: reaction.name,
                     description: reaction.description,
-                    parameters: reaction.parameters.reduce<Record<string, string | number>>((acc, param) => ({
+                    parameters: reaction?.parameters?.reduce<Record<string, string | number>>((acc, param) => ({
                         ...acc,
                         [param.name]: param.value
                     }), {})
@@ -94,7 +97,10 @@ const UpdateWorkflow: React.FC = () => {
             })
             .catch((error) => {
                 console.error(error);
-                setError({ error: "API Error", errorDescription: "Could not fetch workflow data" });
+                setError({
+                    error: translations?.workflow.update.errors.apiError.title,
+                    errorDescription: translations?.workflow.update.errors.apiError.subtitle
+                });
                 navigate('/error/fetch');
             })
             .finally(() => {
@@ -131,7 +137,7 @@ const UpdateWorkflow: React.FC = () => {
                         name: action.name,
                         type: 'action' as "action",
                         description: action.description,
-                        parameters: Object.entries(action.parameters || {}).map(([name, value]) => {
+                        parameters: Object.entries(action?.parameters || {}).map(([name, value]) => {
                             const paramDef = actionDef?.parameters.find((p: Parameter) => p.name === name);
                             return {
                                 name,
@@ -151,7 +157,7 @@ const UpdateWorkflow: React.FC = () => {
                         name: reaction.name,
                         type: 'reaction' as "reaction",
                         description: reaction.description,
-                        parameters: Object.entries(reaction.parameters || {}).map(([name, value]) => {
+                        parameters: Object.entries(reaction?.parameters || {}).map(([name, value]) => {
                             const paramDef = reactionDef?.parameters.find((p: Parameter) => p.name === name);
                             return {
                                 name,
@@ -166,12 +172,12 @@ const UpdateWorkflow: React.FC = () => {
 
         instanceWithAuth.put(`${workflowRoute.update}/${id}`, workflow)
             .then(() => {
-                toast.success("Workflow successfully updated")
+                toast.success(translations?.workflow.update.success.updated);
                 navigate('/dashboard');
             })
             .catch((error) => {
                 console.error(error);
-                toast.error("Failed to update workflow");
+                toast.error(translations?.workflow.update.errors.updateFailed);
             });
     };
 
@@ -182,12 +188,12 @@ const UpdateWorkflow: React.FC = () => {
                     <Card>
                         <Result
                             status="error"
-                            title="No services are connected"
-                            subTitle="Please connect a service to create a workflow."
+                            title={translations?.workflow.update.errors.noServices.title}
+                            subTitle={translations?.workflow.update.errors.noServices.subtitle}
                             extra={
                                 <Space>
-                                    <LinkButton text="Go Back" goBack type="default" />
-                                    <LinkButton text="Connect a Service" url="/account/me" type="primary" />
+                                    <LinkButton text={translations?.workflow.update.errors.noServices.goBack} goBack type="default" />
+                                    <LinkButton text={translations?.workflow.update.errors.noServices.connectService} url="/account/me" type="primary" />
                                 </Space>
                             }
                         />
@@ -195,7 +201,7 @@ const UpdateWorkflow: React.FC = () => {
                 ) : (
                     <>
                         {loading ? (
-                            <Spin size="large" aria-label="Loading workflow creator" />
+                            <Spin size="large" aria-label={translations?.workflow.update.loading} />
                         ) : (
                             <>
                                 <Row justify="center" style={{ marginBottom: 24 }}>
@@ -205,11 +211,11 @@ const UpdateWorkflow: React.FC = () => {
                                                 <Form.Item
                                                     required
                                                     validateStatus={!workflowName && workflowNameTouched ? "error" : ""}
-                                                    help={!workflowName && workflowNameTouched ? "Workflow name is required" : ""}
-                                                    label="Enter workflow name"
+                                                    help={!workflowName && workflowNameTouched ? translations?.workflow.update.form.name.required : ""}
+                                                    label={translations?.workflow.update.form.name.label}
                                                 >
                                                     <Input
-                                                        placeholder="e.g., Daily Notification Setup"
+                                                        placeholder={translations?.workflow.update.form.name.placeholder}
                                                         value={workflowName}
                                                         onChange={(e) => setWorkflowName(e.target.value)}
                                                         onBlur={() => setWorkflowNameTouched(true)}
@@ -217,10 +223,10 @@ const UpdateWorkflow: React.FC = () => {
                                                     />
                                                 </Form.Item>
                                                 <Form.Item
-                                                    label="Enter workflow description"
+                                                    label={translations?.workflow.update.form.description.label}
                                                 >
                                                     <Input
-                                                        placeholder="e.g., Send me a notification when someone posts in my group"
+                                                        placeholder={translations?.workflow.update.form.description.placeholder}
                                                         value={workflowDescription}
                                                         onChange={(e) => setWorkflowDescription(e.target.value)}
                                                     />
@@ -235,11 +241,11 @@ const UpdateWorkflow: React.FC = () => {
                                         <Card title="Available Actions" style={{ height: '100%' }} role="region" aria-label="Available Actions">
                                             <Space style={{ marginBottom: 16 }}>
                                                 <Button onClick={workflowUtils.handleFoldAllActions} disabled={activeActionKeys.length === 0}>
-                                                    Fold All
+                                                    {translations?.workflow.update.buttons.foldAll}
                                                 </Button>
                                                 <Button onClick={workflowUtils.handleUnfoldAllActions}
                                                         disabled={activeActionKeys.length === about?.server.services.length}>
-                                                    Unfold All
+                                                    {translations?.workflow.update.buttons.unfoldAll}
                                                 </Button>
                                             </Space>
                                             <Collapse activeKey={activeActionKeys} onChange={setActiveActionKeys}>
@@ -312,7 +318,7 @@ const UpdateWorkflow: React.FC = () => {
                                                                 >
                                                                     <Space direction="vertical" style={{ width: '100%' }}>
                                                                         {normalizeName(action.name)}
-                                                                        {action.parameters && Object.entries(action.parameters).map(([key, value]) => {
+                                                                        {action?.parameters && Object.entries(action?.parameters).map(([key, value]) => {
                                                                             const paramDef = about?.server.services
                                                                                 .flatMap((s: any) => s.actions)
                                                                                 .find((a: any) => a.name === action.name)
@@ -384,7 +390,7 @@ const UpdateWorkflow: React.FC = () => {
                                                                 >
                                                                     <Space direction="vertical" style={{ width: '100%' }}>
                                                                         {normalizeName(reaction.name)}
-                                                                        {reaction.parameters && Object.entries(reaction.parameters).map(([key, value]) => {
+                                                                        {reaction?.parameters && Object.entries(reaction?.parameters).map(([key, value]) => {
                                                                             const paramDef = about?.server.services
                                                                                 .flatMap((s: any) => s.reactions)
                                                                                 .find((r: any) => r.name === reaction.name)
@@ -461,20 +467,20 @@ const UpdateWorkflow: React.FC = () => {
                                                         || !workflowUtils.areAllParametersFilled(selectedActions, selectedReactions)
                                                     }
                                                 >
-                                                    Update Workflow
+                                                    {translations?.workflow.update.buttons.update}
                                                 </Button>
-                                                <LinkButton text="Cancel" goBack type="danger"/>
+                                                <LinkButton text={translations?.workflow.update.buttons.cancel} goBack type="danger"/>
                                             </div>
                                         </Card>
                                     </Col>
 
                                     <Col xs={24} md={8} lg={6}>
-                                        <Card title="Available Reactions" style={{ height: '100%' }} role="region" aria-label="Available Reactions">
+                                        <Card title={translations?.workflow.update.sections.availableReactions} style={{ height: '100%' }} role="region" aria-label={translations?.workflow.update.sections.availableReactions}>
                                             <Space style={{ marginBottom: 16 }}>
                                                 <Button onClick={workflowUtils.handleFoldAllReactions}
-                                                        disabled={activeReactionKeys.length === 0}>Fold All</Button>
+                                                        disabled={activeReactionKeys.length === 0}>{translations?.workflow.update.buttons.foldAll}</Button>
                                                 <Button onClick={workflowUtils.handleUnfoldAllReactions}
-                                                        disabled={activeReactionKeys.length === about?.server.services.length}>Unfold All</Button>
+                                                        disabled={activeReactionKeys.length === about?.server.services.length}>{translations?.workflow.update.buttons.unfoldAll}</Button>
                                             </Space>
                                             <Collapse activeKey={activeReactionKeys} onChange={setActiveReactionKeys}>
                                                 {about?.server?.services

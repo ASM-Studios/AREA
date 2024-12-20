@@ -1,5 +1,5 @@
-import en_language from "../../public/locales/en";
-import fr_language from "../../public/locales/fr";
+import en_language from "../../locales/en";
+import fr_language from "../../locales/fr";
 import { Translation } from "@Config/translation.types";
 
 type TranslationKeys = 'en' | 'fr';

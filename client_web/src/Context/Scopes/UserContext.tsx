@@ -2,8 +2,10 @@ import React, { createContext, useState, ReactNode } from 'react';
 import Cookies from 'js-cookie';
 import { Translation } from '@/Config/translation.types';
 
-import en_language from '../../../public/locales/en';
-import fr_language from '../../../public/locales/fr';
+import en_language from '../../../locales/en';
+import fr_language from '../../../locales/fr';
+import es_language from '../../../locales/es';
+import pirate_language from '../../../locales/pirate';
 
 export interface ServicesDescription {
     id: number;
@@ -35,6 +37,8 @@ export const UserContext = createContext<UserContextType | undefined>(undefined)
 const languageMap: { [key: string]: Translation } = {
     en: en_language,
     fr: fr_language,
+    es: es_language,
+    pirate: pirate_language,
 }
 
 export const UserProvider = ({ children }: { children: ReactNode }) => {

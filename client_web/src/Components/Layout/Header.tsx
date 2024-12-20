@@ -1,4 +1,4 @@
-import { Layout, Menu, Button, Dropdown, Tooltip } from 'antd';
+import { Layout, Menu, Button, Dropdown, Tooltip, Space } from 'antd';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth, useTheme, useUser } from '@/Context/ContextHooks';
 import React, { useEffect, useState } from "react";
@@ -16,7 +16,7 @@ const Header: React.FC = () => {
 
     const { isAuthenticated, setIsAuthenticated, setJsonWebToken } = useAuth();
     const { theme } = useTheme();
-    const { translations } = useUser();
+    const { translations, setLanguage, language } = useUser();
 
     enum Visibility {
         ALWAYS = 'always',
@@ -37,6 +37,17 @@ const Header: React.FC = () => {
         { key: '/dashboard', label: <Link to="/dashboard">{translations?.header?.dashboard}</Link>, visibility: Visibility.AUTH },
         { key: '/workflow/create', label: <Link to="/workflow/create">{translations?.header?.createWorkflow}</Link>, visibility: Visibility.AUTH },
     ];
+
+    const languageOptions = [
+        { key: 'en', label: '🇬🇧 English', value: 'en' },
+        { key: 'fr', label: '🇫🇷 Français', value: 'fr' },
+        { key: 'es', label: '🇪🇸 Español', value: 'es' },
+        { key: 'pirate', label: '🏴‍☠️ Pirate', value: 'pirate' }
+    ];
+
+    const handleLanguageChange = (lang: string) => {
+        setLanguage(lang);
+    };
 
     useEffect(() => {
         setSelectedKey(location.pathname);
@@ -100,34 +111,50 @@ const Header: React.FC = () => {
                         selectedKeys={[selectedKey]}
                     />
                 )}
-                <Tooltip title={!isAuthenticated ? translations?.header?.profile?.tooltip : ""}>
-                    <div>
-                        <Dropdown
-                            menu={{
-                                items: profileMenuItems,
-                                onClick: handleMenuClick
-                            }}
-                            placement="bottomRight"
-                            arrow
-                            disabled={!isAuthenticated}
-                        >
-                            <Button
-                                type="text"
-                                style={{
-                                    marginLeft: 'auto',
-                                    height: '40px',
-                                    borderRadius: '6px',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    gap: '8px'
+                <Space style={{ marginLeft: 'auto' }}>
+                    <Dropdown
+                        menu={{
+                            items: languageOptions.map(lang => ({
+                                key: lang.key,
+                                label: lang.label,
+                                onClick: () => handleLanguageChange(lang.value)
+                            })),
+                        }}
+                        placement="bottomRight"
+                        arrow
+                    >
+                        <Button type="text">
+                            {languageOptions.find(lang => lang.value === language)?.label || '🌐 Language'}
+                        </Button>
+                    </Dropdown>
+                    <Tooltip title={!isAuthenticated ? translations?.header?.profile?.tooltip : ""}>
+                        <div>
+                            <Dropdown
+                                menu={{
+                                    items: profileMenuItems,
+                                    onClick: handleMenuClick
                                 }}
+                                placement="bottomRight"
+                                arrow
+                                disabled={!isAuthenticated}
                             >
-                                <UserOutlined />
-                                <span>{translations?.header?.profile?.title}</span>
-                            </Button>
-                        </Dropdown>
-                    </div>
-                </Tooltip>
+                                <Button
+                                    type="text"
+                                    style={{
+                                        height: '40px',
+                                        borderRadius: '6px',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        gap: '8px'
+                                    }}
+                                >
+                                    <UserOutlined />
+                                    <span>{translations?.header?.profile?.title}</span>
+                                </Button>
+                            </Dropdown>
+                        </div>
+                    </Tooltip>
+                </Space>
             </AntHeader>
         </div>
     );

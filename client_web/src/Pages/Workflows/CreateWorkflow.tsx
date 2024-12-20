@@ -9,6 +9,7 @@ import { toast } from "react-toastify";
 import { instanceWithAuth, workflow as workflowRoute, root } from "@/Config/backend.routes";
 import { useError, useUser } from "@/Context/ContextHooks";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const { Title, Text } = Typography;
 const { Panel } = Collapse;
@@ -24,7 +25,7 @@ const CreateWorkflow: React.FC = () => {
     const [activeActionKeys, setActiveActionKeys] = useState<string[]>([]);
     const [activeReactionKeys, setActiveReactionKeys] = useState<string[]>([]);
 
-    const { user } = useUser();
+    const { user, translations } = useUser();
     const { setError } = useError();
     const navigate = useNavigate();
     const userHasNoServices = user?.services === null
@@ -130,12 +131,12 @@ const CreateWorkflow: React.FC = () => {
                     <Card>
                         <Result
                             status="error"
-                            title="No services are connected"
-                            subTitle="Please connect a service to create a workflow."
+                            title={translations?.workflow.create.errors.noServices.title}
+                            subTitle={translations?.workflow.create.errors.noServices.subtitle}
                             extra={
                                 <Space>
-                                    <LinkButton text="Go Back" goBack type="default" />
-                                    <LinkButton text="Connect a Service" url="/account/me" type="primary" />
+                                    <LinkButton text={translations?.workflow.create.errors.noServices.goBack} goBack type="default" />
+                                    <LinkButton text={translations?.workflow.create.errors.noServices.connectService} url="/account/me" type="primary" />
                                 </Space>
                             }
                         />
@@ -143,7 +144,7 @@ const CreateWorkflow: React.FC = () => {
                 ) : (
                     <>
                         {loading ? (
-                            <Spin size="large" aria-label="Loading workflow creator" />
+                            <Spin size="large" aria-label={translations?.workflow.create.loading} />
                         ) : (
                             <>
                                 <Row justify="center" style={{ marginBottom: 24 }}>
@@ -153,11 +154,11 @@ const CreateWorkflow: React.FC = () => {
                                                 <Form.Item
                                                     required
                                                     validateStatus={!workflowName && workflowNameTouched ? "error" : ""}
-                                                    help={!workflowName && workflowNameTouched ? "Workflow name is required" : ""}
-                                                    label="Enter workflow name"
+                                                    help={!workflowName && workflowNameTouched ? translations?.workflow.create.form.name.required : ""}
+                                                    label={translations?.workflow.create.form.name.label}
                                                 >
                                                     <Input
-                                                        placeholder="e.g., Daily Notification Setup"
+                                                        placeholder={translations?.workflow.create.form.name.placeholder}
                                                         value={workflowName}
                                                         onChange={(e) => setWorkflowName(e.target.value)}
                                                         onBlur={() => setWorkflowNameTouched(true)}
@@ -165,10 +166,10 @@ const CreateWorkflow: React.FC = () => {
                                                     />
                                                 </Form.Item>
                                                 <Form.Item
-                                                    label="Enter workflow description"
+                                                    label={translations?.workflow.create.form.description.label}
                                                 >
                                                     <Input
-                                                        placeholder="e.g., Send me a notification when someone posts in my group"
+                                                        placeholder={translations?.workflow.create.form.description.placeholder}
                                                         value={workflowDescription}
                                                         onChange={(e) => setWorkflowDescription(e.target.value)}
                                                     />
@@ -180,13 +181,14 @@ const CreateWorkflow: React.FC = () => {
 
                                 <Row gutter={[24, 24]}>
                                     <Col xs={24} md={8} lg={6}>
-                                        <Card title="Available Actions" style={{ height: '100%' }} role="region" aria-label="Available Actions">
+                                        <Card title={translations?.workflow.create.sections.availableActions} style={{ height: '100%' }} role="region" aria-label={translations?.workflow.create.sections.availableActions}>
                                             <Space style={{ marginBottom: 16 }}>
-                                                <Button onClick={workflowUtils.handleFoldAllActions} disabled={activeActionKeys.length === 0}>Fold
-                                                    All</Button>
-                                                <Button onClick={workflowUtils.handleUnfoldAllActions}
-                                                        disabled={activeActionKeys.length === about?.server.services.length}>Unfold
-                                                    All</Button>
+                                                <Button onClick={workflowUtils.handleFoldAllActions} disabled={activeActionKeys.length === 0}>
+                                                    {translations?.workflow.create.buttons.foldAll}
+                                                </Button>
+                                                <Button onClick={workflowUtils.handleUnfoldAllActions} disabled={activeActionKeys.length === about?.server.services.length}>
+                                                    {translations?.workflow.create.buttons.unfoldAll}
+                                                </Button>
                                             </Space>
                                             <Collapse activeKey={activeActionKeys} onChange={setActiveActionKeys}>
                                                 {about?.server?.services
@@ -226,7 +228,7 @@ const CreateWorkflow: React.FC = () => {
                                     </Col>
 
                                     <Col xs={24} md={8} lg={12}>
-                                        <Card style={{ height: '100%' }} role="region" aria-label="Selected Items">
+                                        <Card style={{ height: '100%' }} role="region" aria-label={translations?.workflow.create.sections.selectedItems}>
                                             <div style={{
                                                 display: 'flex',
                                                 flexDirection: 'column',
@@ -235,7 +237,7 @@ const CreateWorkflow: React.FC = () => {
                                             }}>
                                                 {selectedActions.length > 0 && (
                                                     <Space direction="vertical" style={{ width: '100%' }}>
-                                                        <Text strong>When:</Text>
+                                                        <Text strong>{translations?.workflow.create.sections.when}:</Text>
                                                         <Space wrap>
                                                             {selectedActions.map(action => (
                                                                 <Card
@@ -307,7 +309,7 @@ const CreateWorkflow: React.FC = () => {
 
                                                 {selectedReactions.length > 0 && (
                                                     <Space direction="vertical" style={{ width: '100%' }}>
-                                                        <Text strong>Then:</Text>
+                                                        <Text strong>{translations?.workflow.create.sections.then}:</Text>
                                                         <Space wrap>
                                                             {selectedReactions.map(reaction => (
                                                                 <Card
@@ -385,7 +387,7 @@ const CreateWorkflow: React.FC = () => {
                                                         }}
                                                         disabled={selectedActions.length === 0}
                                                     >
-                                                        Clear Actions
+                                                        {translations?.workflow.create.buttons.clearActions}
                                                     </Button>
                                                     <Button
                                                         type="default"
@@ -394,7 +396,7 @@ const CreateWorkflow: React.FC = () => {
                                                         }}
                                                         disabled={selectedReactions.length === 0}
                                                     >
-                                                        Clear Reactions
+                                                        {translations?.workflow.create.buttons.clearReactions}
                                                     </Button>
                                                 </Space>
                                                 <Button
@@ -407,21 +409,20 @@ const CreateWorkflow: React.FC = () => {
                                                         || !workflowUtils.areAllParametersFilled(selectedActions, selectedReactions)
                                                     }
                                                 >
-                                                    Create Workflow
+                                                    {translations?.workflow.create.buttons.create}
                                                 </Button>
-                                                <LinkButton text="Cancel" goBack type="danger"/>
+                                                <LinkButton text={translations?.workflow.create.buttons.cancel} goBack type="danger"/>
                                             </div>
                                         </Card>
                                     </Col>
 
                                     <Col xs={24} md={8} lg={6}>
-                                        <Card title="Available Reactions" style={{ height: '100%' }} role="region" aria-label="Available Reactions">
+                                        <Card title={translations?.workflow.create.sections.availableReactions} style={{ height: '100%' }} role="region" aria-label={translations?.workflow.create.sections.availableReactions}>
                                             <Space style={{ marginBottom: 16 }}>
                                                 <Button onClick={workflowUtils.handleFoldAllReactions}
-                                                        disabled={activeReactionKeys.length === 0}>Fold All</Button>
+                                                        disabled={activeReactionKeys.length === 0}>{translations?.workflow.create.buttons.foldAll}</Button>
                                                 <Button onClick={workflowUtils.handleUnfoldAllReactions}
-                                                        disabled={activeReactionKeys.length === about?.server.services.length}>Unfold
-                                                    All</Button>
+                                                        disabled={activeReactionKeys.length === about?.server.services.length}>{translations?.workflow.create.buttons.unfoldAll}</Button>
                                             </Space>
                                             <Collapse activeKey={activeReactionKeys} onChange={setActiveReactionKeys}>
                                                 {about?.server?.services

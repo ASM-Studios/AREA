@@ -230,6 +230,99 @@ export interface Translation {
                 deleteFailed: string;
             };
         };
+        create: {
+            form: {
+                name: {
+                    label: string;
+                    placeholder: string;
+                    example: string;
+                    required: string;
+                },
+                description: {
+                    label: string;
+                    placeholder: string;
+                    example: string;
+                }
+            },
+            sections: {
+                availableActions: string;
+                availableReactions: string;
+                selectedItems: string;
+                when: string;
+                then: string;
+            },
+            buttons: {
+                foldAll: string;
+                unfoldAll: string;
+                clearActions: string;
+                clearReactions: string;
+                create: string;
+                cancel: string;
+            },
+            errors: {
+                noServices: {
+                    title: string;
+                    subtitle: string;
+                    connectService: string;
+                    goBack: string;
+                }
+            },
+            loading: string;
+            success: {
+                published: string;
+            }
+        };
+        update: {
+            form: {
+                name: {
+                    label: string;
+                    placeholder: string;
+                    example: string;
+                    required: string;
+                },
+                description: {
+                    label: string;
+                    placeholder: string;
+                    example: string;
+                }
+            },
+            sections: {
+                availableActions: string;
+                availableReactions: string;
+                selectedItems: string;
+                when: string;
+                then: string;
+            },
+            buttons: {
+                foldAll: string;
+                unfoldAll: string;
+                clearActions: string;
+                clearReactions: string;
+                update: string;
+                cancel: string;
+            },
+            errors: {
+                noServices: {
+                    title: string;
+                    subtitle: string;
+                    connectService: string;
+                    goBack: string;
+                };
+                noWorkflow: {
+                    title: string;
+                    subtitle: string;
+                };
+                apiError: {
+                    title: string;
+                    subtitle: string;
+                };
+                updateFailed: string;
+            },
+            loading: string;
+            success: {
+                updated: string;
+            }
+        },
     };
     common: {
         table: {

@@ -1,5 +1,4 @@
-import { Translation } from '@/Config/translation.types';
-import { table } from 'console';
+import { Translation } from '../src/Config/translation.types';
 
 const en_language: Translation = {
     home: {
@@ -231,6 +230,99 @@ const en_language: Translation = {
             error: {
                 updateFailed: "Failed to update workflow",
                 deleteFailed: "Failed to delete workflow"
+            }
+        },
+        create: {
+            form: {
+                name: {
+                    label: "Name",
+                    placeholder: "Enter your workflow name",
+                    example: "My Workflow",
+                    required: "Please enter a name for your workflow"
+                },
+                description: {
+                    label: "Description",
+                    placeholder: "Enter your workflow description",
+                    example: "This workflow will send a message to my Slack channel when a new email arrives"
+                }
+            },
+            sections: {
+                availableActions: "Available Actions",
+                availableReactions: "Available Reactions",
+                selectedItems: "Selected Items",
+                when: "When",
+                then: "Then"
+            },
+            buttons: {
+                foldAll: "Fold All",
+                unfoldAll: "Unfold All",
+                clearActions: "Clear Actions",
+                clearReactions: "Clear Reactions",
+                create: "Create",
+                cancel: "Cancel"
+            },
+            errors: {
+                noServices: {
+                    title: "No Services Connected",
+                    subtitle: "You need to connect at least one service to create a workflow",
+                    connectService: "Connect Service",
+                    goBack: "Go Back"
+                }
+            },
+            loading: "Creating workflow...",
+            success: {
+                published: "Workflow successfully created!"
+            }
+        },
+        update: {
+            form: {
+                name: {
+                    label: "Name",
+                    placeholder: "Enter your workflow name",
+                    example: "My Workflow",
+                    required: "Please enter a name for your workflow"
+                },
+                description: {
+                    label: "Description",
+                    placeholder: "Enter your workflow description",
+                    example: "This workflow will send a message to my Slack channel when a new email arrives"
+                }
+            },
+            sections: {
+                availableActions: "Available Actions",
+                availableReactions: "Available Reactions",
+                selectedItems: "Selected Items",
+                when: "When",
+                then: "Then"
+            },
+            buttons: {
+                foldAll: "Fold All",
+                unfoldAll: "Unfold All",
+                clearActions: "Clear Actions",
+                clearReactions: "Clear Reactions",
+                update: "Update",
+                cancel: "Cancel"
+            },
+            errors: {
+                noServices: {
+                    title: "No Services Connected",
+                    subtitle: "You need to connect at least one service to update a workflow",
+                    connectService: "Connect Service",
+                    goBack: "Go Back"
+                },
+                noWorkflow: {
+                    title: "Workflow Not Found",
+                    subtitle: "The workflow you're trying to edit doesn't exist"
+                },
+                apiError: {
+                    title: "API Error",
+                    subtitle: "Could not fetch workflow information"
+                },
+                updateFailed: "Failed to update workflow"
+            },
+            loading: "Updating workflow...",
+            success: {
+                updated: "Workflow successfully updated!"
             }
         }
     },
