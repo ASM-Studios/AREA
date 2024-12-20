@@ -1,28 +1,46 @@
+import 'dart:convert';
+
+import 'package:client_mobile/tools/utils.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+import 'package:flutter_web_auth/flutter_web_auth.dart';
+import 'package:http/http.dart' as http;
 
 class GoogleAuthService {
   static final String clientId = dotenv.env["GOOGLE_CLIENT_ID"] ?? "";
-  static const String redirectUri =
-      "msauth://my.area.app/lvGC0B4SWYU8tNPHg%2FbdMjQinZQ%3D";
-  static const String authority = "https://login.microsoftonline.com/common";
+  static final String clientSecret = dotenv.env["GOOGLE_CLIENT_SECRET"] ?? "";
+  static const String redirectUri = "my.area.app";
   static const FlutterSecureStorage secureStorage = FlutterSecureStorage();
 
-  static const List<String> scopes = <String>[
-    'email',
-    'profile',
-  ];
+  static const String scopes = "email profile";
 
   static Future<bool> auth(BuildContext context, {bool signUp = false}) async {
-    print("google client id = $clientId");
-    GoogleSignIn _googleSignIn =
-        GoogleSignIn(clientId: clientId, scopes: scopes);
-    GoogleSignInAccount? account = await _googleSignIn.signIn();
-    if (account == null) return (false);
-    final GoogleSignInAuthentication googleAuth = await account.authentication;
-    print("google access token : ${googleAuth.accessToken}");
-    return (true);
+    final codeVerifier = Utils.generateCodeVerifier();
+    final codeChallenge = Utils.generateCodeChallenge(codeVerifier);
+
+    final authUrl = Uri.https("accounts.google.com", "/o/oauth2/v2/auth", {
+      "response_type": "code",
+      "client_id": clientId,
+      "scope": scopes,
+      "redirect_uri": redirectUri,
+      "code_challenge": codeChallenge,
+      "code_challenge_method": "S256"
+    }).toString();
+
+    print("url spotify : $authUrl");
+    try {
+      final result = await FlutterWebAuth.authenticate(
+        url: authUrl,
+        callbackUrlScheme: "my.area.app",
+      );
+      final code = Uri.parse(result).queryParameters["code"];
+      if (code == null) return (false);
+      print("code a echanger : $code");
+      return (true);
+    } catch (e) {
+      print("error authentification google : $e");
+      return (false);
+    }
   }
 }
