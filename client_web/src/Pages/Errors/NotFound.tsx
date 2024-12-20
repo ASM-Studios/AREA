@@ -1,15 +1,18 @@
 import { Result } from 'antd';
 import LinkButton from "@/Components/LinkButton";
 import React from 'react';
+import { useUser } from "@/Context/ContextHooks";
 
 const NotFound: React.FC = () => {
+    const { translations } = useUser();
+
     return (
         <Result
             status="404"
-            title="404"
-            subTitle="Sorry, the page you visited does not exist."
+            title={translations?.errors?.notFound?.title}
+            subTitle={translations?.errors?.notFound?.subtitle}
             extra={
-                <LinkButton text="Back Home" url="/" />
+                <LinkButton text={translations?.errors?.notFound?.backHome} url="/" />
             }
             style={{ zIndex: 1, position: 'relative' }}
         />

@@ -2,44 +2,35 @@ import { Form, Input, Button, Card } from 'antd';
 import { Link } from 'react-router-dom';
 import OAuthButtons from '@/Components/Auth/OAuthButtons';
 import { instance, auth } from "@Config/backend.routes";
-import { useAuth } from "@/Context/ContextHooks";
+import { useAuth, useUser } from "@/Context/ContextHooks";
 import { useNavigate } from 'react-router-dom';
 import { toast } from "react-toastify";
 
 const Register = () => {
     const { setJsonWebToken, setIsAuthenticated } = useAuth();
-
+    const { translations } = useUser();
     const navigate = useNavigate();
 
     const onFinish = (values: unknown) => {
         instance.post(auth.register, values)
             .then((response) => {
                 if (!response?.data?.jwt) {
-                    console.error('JWT not found in response');
+                    console.error(translations?.authForm.register.errors.jwtNotFound);
                     return;
                 }
-                toast.success('Successfully registered!');
+                toast.success(translations?.authForm.register.success.registered);
                 setJsonWebToken(response?.data?.jwt);
                 setIsAuthenticated(true);
                 navigate('/dashboard');
             })
             .catch((error) => {
                 console.error('Failed:', error);
-                toast.error('Failed to register: ' + error?.response?.data?.error);
+                toast.error(`${translations?.authForm.register.errors.registerFailed}: ${error?.response?.data?.error}`);
             });
     };
 
     const onFinishFailed = (errorInfo: unknown) => {
         console.error('Failed:', errorInfo);
-    };
-
-    const handleGoogleSuccess = (credentialResponse: unknown) => {
-        console.log('Google Register Success:', credentialResponse);
-        // Call your API to verify the Google token and register the user
-    };
-
-    const handleGoogleError = () => {
-        console.log('Google Register Failed');
     };
 
     return (
@@ -53,7 +44,7 @@ const Register = () => {
             top: 0,
             left: 0
         }} role="main">
-            <Card title="Register" style={{ width: 400 }}>
+            <Card title={translations?.authForm.register.title} style={{ width: 400 }}>
                 <Form
                     name="register"
                     initialValues={{ remember: true }}
@@ -62,71 +53,69 @@ const Register = () => {
                 >
                     <Form.Item
                         name="username"
-                        rules={[{ required: true, message: 'Please input your username!' }]}
-                        tooltip="Choose a unique username for your account"
+                        rules={[{ required: true, message: translations?.authForm.register.form.username.validation.required }]}
+                        tooltip={translations?.authForm.register.form.username.tooltip}
                     >
-                        <Input placeholder="Username" />
+                        <Input placeholder={translations?.authForm.register.form.username.placeholder} />
                     </Form.Item>
 
                     <Form.Item
                         name="email"
                         rules={[
-                            { required: true, message: 'Please input your email!' },
-                            { type: 'email', message: 'Please enter a valid email!' }
+                            { required: true, message: translations?.authForm.register.form.email.validation.required },
+                            { type: 'email', message: translations?.authForm.register.form.email.validation.invalid }
                         ]}
-                        tooltip="Enter your email address for account verification"
+                        tooltip={translations?.authForm.register.form.email.tooltip}
                     >
-                        <Input placeholder="example@example.com" />
+                        <Input placeholder={translations?.authForm.register.form.email.placeholder} />
                     </Form.Item>
 
                     <Form.Item
                         name="password"
                         rules={[
-                            { required: true, message: 'Please input your password!' },
+                            { required: true, message: translations?.authForm.register.form.password.validation.required },
                             { pattern: /^(?=.*[0-9])(?=.*[!@#$%^&*])[A-Za-z0-9!@#$%^&*]+$/,
-                            message: 'Password must contain at least one letter, one number, and one special character.' },
-                            { min: 8, message: 'Password must be at least 8 characters long.' }
+                              message: translations?.authForm.register.form.password.validation.pattern },
+                            { min: 8, message: translations?.authForm.register.form.password.validation.length }
                         ]}
-                        tooltip="Password must be at least 8 characters long and contain letters, numbers, and special characters"
+                        tooltip={translations?.authForm.register.form.password.tooltip}
                     >
-                        <Input.Password placeholder="********" />
+                        <Input.Password placeholder={translations?.authForm.register.form.password.placeholder} />
                     </Form.Item>
 
                     <Form.Item
                         name="confirmPassword"
                         dependencies={['password']}
                         rules={[
-                            { required: true, message: 'Please confirm your password!' },
+                            { required: true, message: translations?.authForm.register.form.confirmPassword.validation.required },
                             ({ getFieldValue }) => ({
                                 validator(_, value) {
                                     if (!value || getFieldValue('password') === value) {
                                         return Promise.resolve();
                                     }
-                                    return Promise.reject(new Error('Passwords do not match!'));
+                                    return Promise.reject(new Error(translations?.authForm.register.form.confirmPassword.validation.match));
                                 },
                             }),
                         ]}
-                        tooltip="Re-enter your password to confirm"
+                        tooltip={translations?.authForm.register.form.confirmPassword.tooltip}
                     >
-                        <Input.Password placeholder="********" />
+                        <Input.Password placeholder={translations?.authForm.register.form.confirmPassword.placeholder} />
                     </Form.Item>
 
                     <Form.Item>
                         <Button type="primary" htmlType="submit" style={{ width: '100%' }}>
-                            Register
+                            {translations?.authForm.register.form.submitButton}
                         </Button>
                     </Form.Item>
 
                     <OAuthButtons
                         mode="signup"
-                        onGoogleSuccess={handleGoogleSuccess}
-                        onGoogleError={handleGoogleError}
                     />
 
                     <Form.Item>
                         <Link to="/login">
                             <Button type="link" style={{ padding: 0 }}>
-                                I already have an account
+                                {translations?.authForm.register.form.haveAccountLink}
                             </Button>
                         </Link>
                     </Form.Item>

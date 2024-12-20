@@ -23,8 +23,8 @@ import Register from '@/Pages/Auth/Forms/Register';
 
 import GenericCallback from "@/Pages/Auth/Callback/GenericCallback";
 
-import CreateWorkflow from "@/Pages/Workflows/CreateWorkflow";
 import UpdateWorkflow from "@/Pages/Workflows/UpdateWorkflow";
+import WorkflowHandler from '@/Pages/Workflows/WorkflowHandler';
 
 import Dashboard from './Pages/Dashboard/Dashboard';
 
@@ -150,7 +150,7 @@ const App = () => {
 
                             <Route path="/auth/:service/callback" element={<GenericCallback />} />
 
-                            <Route path="/workflow/create" element={<CreateWorkflow />} />
+                            <Route path="/workflow/create" element={<WorkflowHandler />} />
                             <Route path="/workflow/update/:id" element={<UpdateWorkflow />} />
 
                             <Route path="/account/me" element={<UserPage backgroundColor={backgroundColor} setBackgroundColor={setBackgroundColor} />} />

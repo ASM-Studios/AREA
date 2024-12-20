@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useAuth } from "@/Context/ContextHooks";
+import { useAuth, useUser } from "@/Context/ContextHooks";
 import { useNavigate } from "react-router-dom";
 import { Spin } from 'antd';
 import { instanceWithAuth, auth } from "@Config/backend.routes";
@@ -11,6 +11,7 @@ type SecurityProps = {
 
 const Security = ({ children }: SecurityProps) => {
     const { jsonWebToken, setIsAuthenticated, setJsonWebToken } = useAuth();
+    const { translations } = useUser();
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
 
@@ -20,7 +21,7 @@ const Security = ({ children }: SecurityProps) => {
         if (!token) {
             setIsAuthenticated(false);
             setJsonWebToken("");
-            toast.error("You are not authenticated - no token found");
+            toast.error(translations?.security.errors.unauthorized);
             navigate("/");
             setLoading(false);
             return;
@@ -35,7 +36,7 @@ const Security = ({ children }: SecurityProps) => {
             .catch(() => {
                 setIsAuthenticated(false);
                 setJsonWebToken("");
-                toast.error("You are not authenticated - token invalid");
+                toast.error(translations?.security.errors.invalidToken);
                 navigate("/");
             })
             .finally(() => {

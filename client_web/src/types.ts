@@ -75,6 +75,11 @@ export interface SelectedReaction extends Omit<Reaction, 'parameters'> {
     parameters: Record<string, string>;
 }
 
+export interface filteredEvents {
+    service: string;
+    events: Action[] | Reaction[];
+}
+
 /* --------------------------------- */
 
 export type WorkflowParameterValue = {

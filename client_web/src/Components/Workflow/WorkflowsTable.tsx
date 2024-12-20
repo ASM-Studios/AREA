@@ -9,6 +9,7 @@ import { toast } from "react-toastify";
 import { useMediaQuery } from 'react-responsive';
 import Security from "@/Components/Security";
 import { useNavigate } from "react-router-dom";
+import { useUser } from "@/Context/ContextHooks";
 
 interface WorkflowsTableProps {
     workflows: WorkflowTableDetail[];
@@ -19,6 +20,7 @@ interface WorkflowsTableProps {
 const WorkflowsTable: React.FC<WorkflowsTableProps> = ({ workflows, setNeedReload, loading }) => {
     const isSmallScreen = useMediaQuery({ maxWidth: 767 });
     const navigate = useNavigate();
+    const { translations } = useUser();
 
     const handleEdit = (record: WorkflowTableDetail) => {
         navigate(`/workflow/update/${record.ID}`);
@@ -29,11 +31,11 @@ const WorkflowsTable: React.FC<WorkflowsTableProps> = ({ workflows, setNeedReloa
             is_active: !record.is_active,
         })
             .then(() => {
-                toast.success('Workflow updated');
+                toast.success(translations?.workflow.notifications.success.updated);
             })
             .catch((error) => {
                 console.error(error)
-                toast.error('Failed to updated workflow');
+                toast.error(translations?.workflow.notifications.error.updateFailed);
             })
             .finally(() => {
                 setNeedReload(true);
@@ -43,11 +45,11 @@ const WorkflowsTable: React.FC<WorkflowsTableProps> = ({ workflows, setNeedReloa
     const handleDelete = (record: WorkflowTableDetail) => {
         instanceWithAuth.delete(workflow.delete + `/${record.ID}`)
             .then(() => {
-                toast.success('Workflow deleted');
+                toast.success(translations?.workflow.notifications.success.deleted);
             })
             .catch((error) => {
                 console.error(error)
-                toast.error('Failed to delete workflow');
+                toast.error(translations?.workflow.notifications.error.deleteFailed);
             })
             .finally(() => {
                 setNeedReload(true);
@@ -56,7 +58,7 @@ const WorkflowsTable: React.FC<WorkflowsTableProps> = ({ workflows, setNeedReloa
 
     const columns: ColumnsType<WorkflowTableDetail> = [
         {
-            title: 'Name',
+            title: translations?.workflow.table.columns.name,
             dataIndex: 'name',
             key: 'name',
             fixed: isSmallScreen ? undefined : 'left',
@@ -64,13 +66,13 @@ const WorkflowsTable: React.FC<WorkflowsTableProps> = ({ workflows, setNeedReloa
             sorter: (a, b) => a.name.localeCompare(b.name),
         },
         {
-            title: 'Description',
+            title: translations?.workflow.table.columns.description,
             dataIndex: 'description',
             key: 'description',
             ellipsis: true,
         },
         {
-            title: 'Status',
+            title: translations?.workflow.table.columns.status,
             dataIndex: 'status',
             key: 'status',
             filters: [...new Set(workflows.map(w => w.status))].map(status => ({
@@ -80,61 +82,62 @@ const WorkflowsTable: React.FC<WorkflowsTableProps> = ({ workflows, setNeedReloa
             onFilter: (value, record) => record.status === value,
         },
         {
-            title: 'Active',
+            title: translations?.workflow.table.columns.active,
             dataIndex: 'is_active',
             key: 'is_active',
-            render: (active: boolean) => active ? 'Yes' : 'No',
+            render: (active: boolean) => active ? translations?.workflow.table.activeStatus.yes : translations?.workflow.table.activeStatus.no,
             filters: [
-                { text: 'Active', value: true },
-                { text: 'Inactive', value: false },
+                { text: translations?.workflow.table.filters.active, value: true },
+                { text: translations?.workflow.table.filters.inactive, value: false },
             ],
             onFilter: (value, record) => record.is_active === value,
         },
         {
-            title: 'Created At',
+            title: translations?.workflow.table.columns.createdAt,
             dataIndex: 'CreatedAt',
             key: 'CreatedAt',
             render: (date: string) => dayjs(date).format('YYYY-MM-DD HH:mm'),
             sorter: (a, b) => dayjs(a.CreatedAt).unix() - dayjs(b.CreatedAt).unix(),
         },
         {
-            title: 'Updated At',
+            title: translations?.workflow.table.columns.updatedAt,
             dataIndex: 'UpdatedAt',
             key: 'UpdatedAt',
             render: (date: string) => dayjs(date).format('YYYY-MM-DD HH:mm'),
             sorter: (a, b) => dayjs(a.UpdatedAt).unix() - dayjs(b.UpdatedAt).unix(),
         },
         {
-            title: 'Actions',
+            title: translations?.workflow.table.columns.actions,
             key: 'actions',
             fixed: isSmallScreen ? undefined : 'right',
             width: 150,
             render: (_, record) => (
                 <Space>
-                    <Tooltip title="Edit workflow">
+                    <Tooltip title={translations?.workflow.table.tooltips.edit}>
                         <Button
                             icon={<EditOutlined />}
                             onClick={() => handleEdit(record)}
                             size="small"
-                            aria-label="Edit workflow"
+                            aria-label={translations?.workflow.table.ariaLabels.edit}
+                            disabled={true} // TODO: Update component not reimplemented
                         />
                     </Tooltip>
-                    <Tooltip title={record.is_active ? 'Deactivate workflow' : 'Activate workflow'}>
+                    <Tooltip title={record.is_active ? translations?.workflow.table.tooltips.deactivate : translations?.workflow.table.tooltips.activate}>
                         <Button
                             icon={<PoweroffOutlined />}
                             onClick={() => handleToggleActive(record)}
                             size="small"
                             type={record.is_active ? 'default' : 'primary'}
-                            aria-label={record.is_active ? 'Deactivate workflow' : 'Activate workflow'}
+                            aria-label={record.is_active ? translations?.workflow.table.ariaLabels.deactivate : translations?.workflow.table.ariaLabels.activate}
                         />
                     </Tooltip>
-                    <Tooltip title="Delete workflow">
+                    <Tooltip title={translations?.workflow.table.tooltips.delete}>
                         <Button
                             icon={<DeleteOutlined />}
                             onClick={() => handleDelete(record)}
                             size="small"
                             danger
-                            aria-label="Delete workflow"
+                            aria-label={translations?.workflow.table.ariaLabels.delete}
                         />
                     </Tooltip>
                 </Space>
@@ -155,6 +158,18 @@ const WorkflowsTable: React.FC<WorkflowsTableProps> = ({ workflows, setNeedReloa
                     offsetScroll: 0,
                 }}
                 loading={loading}
+                locale={{
+                    emptyText: translations?.common.table.noData,
+                    filterConfirm: translations?.common.table.ok,
+                    filterReset: translations?.common.table.reset,
+                    filterTitle: translations?.common.table.filter,
+                    selectAll: translations?.common.table.selectAll,
+                    sortTitle: translations?.common.table.sort,
+                    triggerDesc: translations?.common.table.triggerDesc,
+                    triggerAsc: translations?.common.table.triggerAsc,
+                    cancelSort: translations?.common.table.cancelSort,
+                    filterSearchPlaceholder: translations?.common.table.search,
+                }}
             />
         </Security>
     );

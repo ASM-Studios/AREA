@@ -28,7 +28,7 @@ const UserPage: React.FC<UserPageProps> = ({ backgroundColor, setBackgroundColor
     const [hoverCount, setHoverCount] = useState(0);
 
     const { setJsonWebToken, setIsAuthenticated } = useAuth();
-    const { user, setUser } = useUser();
+    const { user, setUser, translations } = useUser();
 
     React.useEffect(() => {
         instanceWithAuth.get(userRoute.me)
@@ -61,10 +61,6 @@ const UserPage: React.FC<UserPageProps> = ({ backgroundColor, setBackgroundColor
         setBackgroundColor(defaultColor);
     };
 
-    const handleNotImplemented = () => {
-        toast.error("This feature is not implemented yet");
-    };
-
     return (
         <Security>
             <div style={{ padding: '16px 24px', position: 'relative', zIndex: 1, height: '100%' }} role="main">
@@ -80,36 +76,34 @@ const UserPage: React.FC<UserPageProps> = ({ backgroundColor, setBackgroundColor
                             />
 
                             <Col xs={24} md={12}>
-                                <Card title="Theme Settings" style={{ padding: '16px', height: '100%' }}>
+                                <Card title={translations?.userPage?.themeSettings?.title} style={{ padding: '16px', height: '100%' }}>
                                     <Space direction="vertical" align="center" style={{ width: '100%' }}>
-                                        <Text>Customize your background color</Text>
+                                        <Text>{translations?.userPage?.themeSettings?.description}</Text>
                                         <div style={{ border: '1px solid #d9d9d9', padding: '8px', borderRadius: '4px' }}>
                                             <BlockPicker color={tempColor} onChangeComplete={handleColorChange} />
                                         </div>
                                         <Button icon={<BgColorsOutlined />} onClick={handleDefaultColor}>
-                                            Reset to Default Color
+                                            {translations?.userPage?.themeSettings?.resetButton}
                                         </Button>
                                     </Space>
                                 </Card>
                             </Col>
 
                             <Col xs={24}>
-                                <Card title="Connected Services" style={{ padding: '16px' }}>
+                                <Card title={translations?.userPage?.connectedServices?.title} style={{ padding: '16px' }}>
                                     <Space direction="vertical" style={{ width: '100%' }}>
-                                        <Text>Connect your accounts to enhance your experience</Text>
+                                        <Text>{translations?.userPage?.connectedServices?.description}</Text>
                                         <Row gutter={[16, 16]} style={{ paddingTop: '15px' }}>
                                             <Col xs={24} md={12}>
                                                 <Space direction="vertical" style={{ width: '100%' }}>
                                                     <OAuthButtons
                                                         mode={"connect"}
-                                                        onGoogleSuccess={handleNotImplemented}
-                                                        onGoogleError={handleNotImplemented}
                                                     />
                                                 </Space>
                                             </Col>
                                             <Col xs={24} md={12}>
                                                 <Space direction="vertical" style={{ width: '100%' }}>
-                                                    <Text strong style={{ marginBottom: '8px' }}>Connected Services:</Text>
+                                                    <Text strong style={{ marginBottom: '8px' }}>{translations?.userPage?.connectedServices?.connectedServices}:</Text>
                                                     <List
                                                         dataSource={user?.services || []}
                                                         renderItem={(service) => (
@@ -117,7 +111,10 @@ const UserPage: React.FC<UserPageProps> = ({ backgroundColor, setBackgroundColor
                                                                 <List.Item.Meta
                                                                     avatar={<Avatar icon={<UserOutlined />} />}
                                                                     title={service.name}
-                                                                    description={`Connected on ${new Date(service.connectedAt).toLocaleDateString()}`}
+                                                                    description={
+                                                                        `${translations?.userPage?.connectedServices?.connectedAt} 
+                                                                        ${new Date(service.connectedAt).toLocaleDateString()}`
+                                                                    }
                                                                 />
                                                             </List.Item>
                                                         )}

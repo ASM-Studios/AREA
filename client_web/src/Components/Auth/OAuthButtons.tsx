@@ -11,38 +11,34 @@ import { ServicesDescription } from "@/Context/Scopes/UserContext";
 
 interface OAuthButtonsProps {
     mode: 'signin' | 'signup' | 'connect';
-    onGoogleSuccess: (response: unknown) => void;
-    onGoogleError: () => void;
 }
 
 const OAuthButtons = ({
     mode,
-    onGoogleSuccess,
-    onGoogleError,
 }: OAuthButtonsProps) => {
-    const { user } = useUser();
+    const { user, translations } = useUser();
 
     const services: ServicesDescription[] = mode === 'connect' ? user?.services || [] : [];
 
     let withText = "";
     switch (mode) {
         case 'signin':
-            withText = "Sign in with";
+            withText = translations?.oauthButtons.signin;
             break;
         case 'signup':
-            withText = "Sign up with";
+            withText = translations?.oauthButtons.signup;
             break;
         case 'connect':
-            withText = "Connect with";
+            withText = translations?.oauthButtons.connect;
             break;
         default:
-            withText = "Use";
+            withText = translations?.oauthButtons.use;
             break;
     }
 
     return (
         <>
-            {mode !== 'connect' && <Divider>Or</Divider>}
+            {mode !== 'connect' && <Divider>{translations?.oauthButtons.or}</Divider>}
 
             <GoogleAuth
                 buttonText={`${withText} Google`}
