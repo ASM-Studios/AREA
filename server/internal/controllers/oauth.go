@@ -1,22 +1,13 @@
 package controllers
 
 import (
-        "AREA/internal/controllers/oauth"
+        "AREA/internal/oauth"
         "AREA/internal/pkg"
         "errors"
         "net/http"
 
         "github.com/gin-gonic/gin"
 )
-
-var OAuthApps = map[string]oauth.ServiceApp {
-        "microsoft": {ServiceName: "microsoft", ClientId: "MICROSOFT_CLIENT_ID", ClientSecret: "", TokenURL: "https://login.microsoftonline.com/common/oauth2/v2.0/token", MeURL: "https://graph.microsoft.com/v1.0/me"},
-        "github": {ServiceName: "github", ClientId: "GITHUB_CLIENT_ID", ClientSecret: "GITHUB_CLIENT_SECRET", TokenURL: "https://github.com/login/oauth/access_token", MeURL: "https://api.github.com/user"},
-        "spotify": {ServiceName: "spotify", ClientId: "SPOTIFY_CLIENT_ID", ClientSecret: "SPOTIFY_CLIENT_SECRET", TokenURL: "https://accounts.spotify.com/api/token", MeURL: "https://api.spotify.com/v1/me"},
-        "twitch": {ServiceName: "twitch", ClientId: "TWITCH_CLIENT_ID", ClientSecret: "TWITCH_CLIENT_SECRET", TokenURL: "https://id.twitch.tv/oauth2/token", MeURL: "https://api.twitch.tv/helix/users"},
-        "discord": {ServiceName: "discord", ClientId: "DISCORD_CLIENT_ID", ClientSecret: "DISCORD_CLIENT_SECRET", TokenURL: "https://discord.com/api/oauth2/token", MeURL: "https://discord.com/api/users/@me"},
-        "google": {ServiceName: "google", ClientId: "GOOGLE_CLIENT_ID", ClientSecret: "GOOGLE_CLIENT_SECRET", TokenURL: "https://oauth2.googleapis.com/token", MeURL: "https://www.googleapis.com/oauth2/v1/userinfo"},
-}
 
 func getServiceID(c *gin.Context) (uint, error) {
         serviceId, err := pkg.GetServiceFromName(c.Param("service"))
@@ -42,7 +33,7 @@ func getServiceID(c *gin.Context) (uint, error) {
 func OAuth(c *gin.Context) {
         serviceId, err := getServiceID(c)
 
-        dbToken, err := oauth.BasicServiceCallback(c, serviceId, OAuthApps[c.Param("service")])
+        dbToken, err := oauth.BasicServiceCallback(c, serviceId, oauth.OAuthApps[c.Param("service")])
         if err != nil || dbToken == nil {
                 c.AbortWithStatusJSON(http.StatusBadRequest, gin.H {
                         "message": "Invalid request",
@@ -74,8 +65,8 @@ func OAuth(c *gin.Context) {
 func OAuthBind(c *gin.Context) {
         serviceId, err := getServiceID(c)
 
-        dbToken, err := oauth.BasicServiceCallback(c, serviceId, OAuthApps[c.Param("service")])
-        if err != nil {
+        dbToken, err := oauth.BasicServiceCallback(c, serviceId, oauth.OAuthApps[c.Param("service")])
+        if err != nil || dbToken == nil {
                 c.AbortWithStatusJSON(http.StatusBadRequest, gin.H {
                         "message": "Invalid request",
                 })
