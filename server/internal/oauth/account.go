@@ -38,10 +38,12 @@ func updateAccount(c *gin.Context, dbToken *models.Token) (*models.User) {
 }
 
 func OAuthRegisterAccount(c *gin.Context, dbToken *models.Token) (*models.User, error) {
-        serviceId, err := pkg.GetServiceFromName(c.Param("service"))
+        serviceId := pkg.GetServiceFromName(c.Param("service"))
+        if serviceId == -1 {
+                return nil, errors.New("Service not found")
+        }
 
-        err = pkg.DB.Where("email = ? AND service_id = ?", dbToken.Email, serviceId).First(dbToken).Error
-
+        err := pkg.DB.Where("email = ? AND service_id = ?", dbToken.Email, serviceId).First(dbToken).Error
         if errors.Is(err, gorm.ErrRecordNotFound) {
                 return createAccount(c, dbToken), nil
         } else {
@@ -50,17 +52,19 @@ func OAuthRegisterAccount(c *gin.Context, dbToken *models.Token) (*models.User, 
 }
 
 func OAuthBindAccount(c *gin.Context, dbToken *models.Token) (*models.User, error) {
-        serviceId, _ := pkg.GetServiceFromName(c.Param("service"))
-        user, err := pkg.GetUserFromToken(c)
-        pkg.DB.Where("email = ?", user.Email).First(&user)
+        serviceId := pkg.GetServiceFromName(c.Param("service"))
+        if serviceId == -1 {
+            return nil, errors.New("Service not found")
+        }
 
-        if err != nil {
-                return nil, err
+        user, err := pkg.GetUserFromToken(c)
+        err = pkg.DB.Where("email = ?", user.Email).First(&user).Error
+        if errors.Is(err, gorm.ErrRecordNotFound) {
+                return nil, errors.New("User not found")
         }
         dbToken.UserID = user.ID
 
         err = pkg.DB.Where("email = ? AND service_id = ?", dbToken.Email, serviceId).First(dbToken).Error
-
         if errors.Is(err, gorm.ErrRecordNotFound) {
                 pkg.DB.Create(&dbToken)
         } else {
