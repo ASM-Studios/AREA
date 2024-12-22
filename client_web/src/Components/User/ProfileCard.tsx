@@ -15,7 +15,7 @@ interface ProfileCardProps {
 const ProfileCard: React.FC<ProfileCardProps> = ({ handleLogout, hoverCount, setHoverCount, hoverLimit }) => {
     const [position, setPosition] = useState<{ top: number; left: number } | null>(null);
 
-    const { user } = useUser();
+    const { user, translations } = useUser();
 
     const handleMouseEnter = () => {
         if (hoverCount < hoverLimit) {
@@ -30,14 +30,14 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ handleLogout, hoverCount, set
 
     return (
         <Col xs={24} md={12}>
-            <Card title="Profile Information" style={{ padding: '16px', height: '100%', position: 'relative' }}>
+            <Card title={translations?.userPage?.profileCard?.title} style={{ padding: '16px', height: '100%', position: 'relative' }}>
                 <Space direction="vertical" align="center" style={{ width: '100%' }}>
                     <Avatar size={64} icon={<UserOutlined />} />
-                    <Text strong>Welcome, {user?.username || 'User'}!</Text>
-                    <Text>Manage your account settings and connected services here.</Text>
+                    <Text strong>{translations?.userPage?.profileCard?.welcomeMessage.replace('{name}', user?.username || 'User')}</Text>
+                    <Text>{translations?.userPage?.profileCard?.description}</Text>
                 </Space>
                 <Space direction="vertical" align="center" style={{ width: "100%", paddingTop: "20px" }}>
-                    <Text type="secondary">Ready to leave?</Text>
+                    <Text type="secondary">{translations?.userPage?.profileCard?.logoutDescription}</Text>
                     <Button
                         type="primary"
                         danger
@@ -51,7 +51,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ handleLogout, hoverCount, set
                             transition: 'top 0.3s ease, left 0.3s ease',
                         }}
                     >
-                        Logout
+                        {translations?.userPage?.profileCard?.logoutButton}
                     </Button>
                 </Space>
             </Card>

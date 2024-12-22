@@ -2,12 +2,13 @@ import {Form, Input, Button, Card } from 'antd';
 import { Link } from 'react-router-dom';
 import OAuthButtons from '../../../Components/Auth/OAuthButtons';
 import { instance, auth } from "@Config/backend.routes";
-import { useAuth } from "@/Context/ContextHooks";
+import { useAuth, useUser } from "@/Context/ContextHooks";
 import { useNavigate } from 'react-router-dom';
 import { toast } from "react-toastify";
 
 const Login = () => {
     const { setJsonWebToken, setIsAuthenticated } = useAuth();
+    const { translations } = useUser();
 
     const navigate = useNavigate();
 
@@ -15,7 +16,7 @@ const Login = () => {
         instance.post(auth.login, values)
             .then((response) => {
                 if (!response?.data?.jwt) {
-                    console.error('JWT not found in response');
+                    console.error(translations?.authForm.login.errors.jwtNotFound);
                     return;
                 }
                 setJsonWebToken(response?.data?.jwt);
@@ -24,21 +25,12 @@ const Login = () => {
             })
             .catch((error) => {
                 console.error('Failed:', error);
-                toast.error('Failed to login: ' + error?.response?.data?.error);
+                toast.error(`${translations?.authForm.login.errors.loginFailed}: ${error?.response?.data?.error}`);
             });
     };
 
     const onFinishFailed = (errorInfo: unknown) => {
         console.error('Failed:', errorInfo);
-    };
-
-    const handleGoogleSuccess = (credentialResponse: unknown) => {
-        console.log('Google Login Success:', credentialResponse);
-        // Call your API to verify the Google token and log in the user
-    };
-
-    const handleGoogleError = () => {
-        console.log('Google Login Failed');
     };
 
     return (
@@ -52,7 +44,7 @@ const Login = () => {
             top: 0,
             left: 0
         }} role="main">
-            <Card title="Login" style={{ width: 400 }}>
+            <Card title={translations?.authForm.login.title} style={{ width: 400 }}>
                 <Form
                     name="login"
                     initialValues={{ remember: true }}
@@ -62,47 +54,44 @@ const Login = () => {
                     wrapperCol={{ span: 24 }}
                 >
                     <Form.Item
-                        tooltip="Please enter your email address"
+                        tooltip={translations?.authForm.login.form.email.tooltip}
                         name="email"
                         rules={[
-                            { required: true, message: 'Please input your email!' },
-                            { type: 'email', message: 'Please input your valid email!' }
+                            { required: true, message: translations?.authForm.login.form.email.validation.required },
+                            { type: 'email', message: translations?.authForm.login.form.email.validation.invalid }
                         ]}
                     >
-                        <Input placeholder="example@example.com" />
+                        <Input placeholder={translations?.authForm.login.form.email.placeholder} />
                     </Form.Item>
 
                     <Form.Item
-                        tooltip="Please enter your password"
+                        tooltip={translations?.authForm.login.form.password.tooltip}
                         name="password"
                         rules={[
-                            { required: true, message: 'Please input your password!' },
-                            { pattern:
-                                    /^(?=.*[0-9])(?=.*[!@#$%^&*])[A-Za-z0-9!@#$%^&*]+$/,
-                                message: 'Password must contain at least one letter, one number, and one special character.'
+                            { required: true, message: translations?.authForm.login.form.password.validation.required },
+                            { pattern: /^(?=.*[0-9])(?=.*[!@#$%^&*])[A-Za-z0-9!@#$%^&*]+$/,
+                              message: translations?.authForm.login.form.password.validation.pattern
                             },
-                            { min: 8, message: 'Password must be at least 8 characters long.' }
+                            { min: 8, message: translations?.authForm.login.form.password.validation.length }
                         ]}
                     >
-                        <Input.Password placeholder="********" />
+                        <Input.Password placeholder={translations?.authForm.login.form.password.placeholder} />
                     </Form.Item>
 
                     <Form.Item>
                         <Button type="primary" htmlType="submit" style={{ width: '100%' }}>
-                            Login
+                            {translations?.authForm.login.form.submitButton}
                         </Button>
                     </Form.Item>
 
                     <OAuthButtons
                         mode="signin"
-                        onGoogleSuccess={handleGoogleSuccess}
-                        onGoogleError={handleGoogleError}
                     />
 
                     <Form.Item>
                         <Link to="/register">
                             <Button type="link" style={{ padding: 0 }}>
-                                I don't have an account
+                                {translations?.authForm.login.form.noAccountLink}
                             </Button>
                         </Link>
                     </Form.Item>

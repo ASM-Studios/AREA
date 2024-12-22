@@ -9,7 +9,7 @@ import { instanceWithAuth, workflow, user } from "@Config/backend.routes";
 import { toast } from "react-toastify";
 import LoadingDots from "@/Components/LoadingDots/LoadingDots";
 import { useUser } from "@/Context/ContextHooks";
-import {UserPayload} from "@/Context/Scopes/UserContext";
+import { UserPayload } from "@/Context/Scopes/UserContext";
 
 const { Title } = Typography;
 
@@ -29,7 +29,7 @@ const Dashboard: React.FC = () => {
         activeAutomations: undefined,
         pendingUpdates: undefined,
     });
-    const { setUser } = useUser();
+    const { setUser, translations } = useUser();
 
     const fetchWorkflows = () => {
         setLoading(true);
@@ -47,7 +47,7 @@ const Dashboard: React.FC = () => {
             })
             .catch((error) => {
                 console.error(error);
-                toast.error('Failed to fetch workflows');
+                toast.error(translations?.dashboard.errors.fetchWorkflows);
             })
             .finally(() => {
                 setLoading(false);
@@ -62,7 +62,7 @@ const Dashboard: React.FC = () => {
             })
             .catch((error) => {
                 console.error(error);
-                toast.error('Failed to fetch user data');
+                toast.error(translations?.dashboard.errors.fetchUser);
                 setUser(null);
             });
     }, []);
@@ -102,7 +102,7 @@ const Dashboard: React.FC = () => {
                                             : <LoadingDots />
                                     }
                                 </Title>
-                                <Typography.Text type="secondary">Total Automations</Typography.Text>
+                                <Typography.Text type="secondary">{translations?.dashboard.cards.firstCard.title}</Typography.Text>
                             </Space>
                         </Card>
                     </Col>
@@ -117,7 +117,7 @@ const Dashboard: React.FC = () => {
                                             : <LoadingDots />
                                     }
                                 </Title>
-                                <Typography.Text type="secondary">Active Automations</Typography.Text>
+                                <Typography.Text type="secondary">{translations?.dashboard.cards.secondCard.title}</Typography.Text>
                             </Space>
                         </Card>
                     </Col>
@@ -132,7 +132,7 @@ const Dashboard: React.FC = () => {
                                             : <LoadingDots />
                                     }
                                 </Title>
-                                <Typography.Text type="secondary">Pending Updates</Typography.Text>
+                                <Typography.Text type="secondary">{translations?.dashboard.cards.thirdCard.title}</Typography.Text>
                             </Space>
                         </Card>
                     </Col>
@@ -141,17 +141,17 @@ const Dashboard: React.FC = () => {
                 <Row gutter={[24, 24]}>
                     <Col xs={24}>
                         <Card
-                            title="Activity" 
+                            title={translations?.dashboard.table.title} 
                             extra={
                                 <Space style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                                     <Input.Search
-                                        placeholder="Search workflows"
+                                        placeholder={translations?.dashboard.table.searchWorkflows}
                                         onSearch={value => setSearchTerm(value)}
                                         onChange={e => setSearchTerm(e.target.value)}
                                         style={{ width: 400 }}
                                         allowClear
                                     />
-                                    <LinkButton text="Create A Workflow" url="/workflow/create" />
+                                    <LinkButton text={translations?.dashboard.table.createWorkflow} url="/workflow/create" />
                                 </Space>
                             }
                         >
