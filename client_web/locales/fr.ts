@@ -232,7 +232,7 @@ const fr_language: Translation = {
                 deleteFailed: "Échec de la suppression du workflow"
             }
         },
-        create: {
+        handler: {
             form: {
                 name: {
                     label: "Nom",
@@ -259,7 +259,8 @@ const fr_language: Translation = {
                 clearActions: "Effacer les Actions",
                 clearReactions: "Effacer les Réactions",
                 create: "Créer",
-                cancel: "Annuler"
+                cancel: "Annuler",
+                update: "Mettre à Jour"
             },
             errors: {
                 noServices: {

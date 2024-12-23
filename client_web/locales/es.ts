@@ -232,7 +232,7 @@ const es_language: Translation = {
                 deleteFailed: "Error al eliminar el flujo de trabajo"
             }
         },
-        create: {
+        handler: {
             form: {
                 name: {
                     label: "Nombre",
@@ -259,7 +259,8 @@ const es_language: Translation = {
                 clearActions: "Limpiar Acciones",
                 clearReactions: "Limpiar Reacciones",
                 create: "Crear",
-                cancel: "Cancelar"
+                cancel: "Cancelar",
+                update: "Actualizar"
             },
             errors: {
                 noServices: {

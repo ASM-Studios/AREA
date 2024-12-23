@@ -7,7 +7,6 @@ import fr_language from '../../../locales/fr';
 import es_language from '../../../locales/es';
 import pirate_language from '../../../locales/pirate';
 import { instanceWithAuth, user as userRoute } from "@Config/backend.routes";
-import {toast} from "react-toastify";
 
 export interface ServicesDescription {
     id: number;

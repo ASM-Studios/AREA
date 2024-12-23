@@ -61,6 +61,15 @@ export type Workflow = {
     events: WorkflowDefinition[];
 };
 
+export type GetWorkflow = {
+    id: number;
+    name: string;
+    description: string;
+    status: string;
+    is_active: boolean;
+    events: WorkflowDefinition[];
+}
+
 export interface WorkflowItem {
     id: string;
     name: string;
