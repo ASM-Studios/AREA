@@ -230,7 +230,7 @@ export interface Translation {
                 deleteFailed: string;
             };
         };
-        create: {
+        handler: {
             form: {
                 name: {
                     label: string;
@@ -258,6 +258,7 @@ export interface Translation {
                 clearReactions: string;
                 create: string;
                 cancel: string;
+                update: string;
             },
             errors: {
                 noServices: {

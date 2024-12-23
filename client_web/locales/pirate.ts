@@ -244,7 +244,7 @@ const pirate_language: Translation = {
                 deleteFailed: "Failed to sink route"
             }
         },
-        create: {
+        handler: {
             form: {
                 name: {
                     label: "Route Name",
@@ -271,7 +271,8 @@ const pirate_language: Translation = {
                 clearActions: "Clear Orders",
                 clearReactions: "Clear Responses",
                 create: "Chart It",
-                cancel: "Abandon"
+                cancel: "Abandon",
+                update: "Change Route"
             },
             errors: {
                 noServices: {
