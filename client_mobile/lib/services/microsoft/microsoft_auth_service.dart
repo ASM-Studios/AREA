@@ -9,7 +9,7 @@ import '../../main.dart';
 import 'package:http/http.dart' as http;
 
 class MicrosoftAuthService {
-  static final String clientId = dotenv.env["VITE_MICROSOFT_CLIENT_ID"] ?? "";
+  static final String clientId = dotenv.env["MICROSOFT_CLIENT_ID"] ?? "";
   static const String redirectUri =
       "msauth://my.area.app/lvGC0B4SWYU8tNPHg%2FbdMjQinZQ%3D";
   static const String authority = "https://login.microsoftonline.com/common";
@@ -56,6 +56,12 @@ class MicrosoftAuthService {
         print("access token microsoft = : ${r.accessToken}");
 
         if (hasLinked) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text("Microsoft link avec succès !"),
+              backgroundColor: Colors.black,
+            ),
+          );
           await secureStorage.write(
               key: 'microsoft_access_token', value: r.accessToken);
           return (true);
@@ -64,6 +70,6 @@ class MicrosoftAuthService {
         }
       },
     );
-    return (true);
+    return (false);
   }
 }

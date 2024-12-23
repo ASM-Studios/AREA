@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import { instance, root } from "@Config/backend.routes";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "@/Context/ContextHooks";
+import { useAuth, useUser } from "@/Context/ContextHooks";
 
 const { Content } = Layout;
 const { Title, Paragraph } = Typography;
@@ -20,6 +20,7 @@ const Home: React.FC<HomeProps> = ({ backgroundColor }) => {
   const navigate = useNavigate();
 
   const { isAuthenticated } = useAuth();
+  const { translations } = useUser();
 
   const ping =  () => {
     instance.get(root.ping)
@@ -60,13 +61,13 @@ const Home: React.FC<HomeProps> = ({ backgroundColor }) => {
           <Row justify="center" align="middle" style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px' }}>
             <Col xs={24} md={12}>
               <Title level={1} style={{ color: 'white', marginBottom: 24 }}>
-                Connect Your Digital World
+                {translations?.home?.title}
               </Title>
               <Paragraph style={{ color: 'white', fontSize: 18, marginBottom: 32 }}>
-                Automate your life by connecting your favorite services. Create powerful automation flows with just a few clicks.
+                {translations?.home?.description}
               </Paragraph>
               <Button type="primary" disabled={!pingResponse} onClick={() => { handleGetStarted() }}>
-                Get Started
+                {translations?.home?.getStarted}
               </Button>
             </Col>
             <Col xs={24} md={12}>
@@ -85,10 +86,9 @@ const Home: React.FC<HomeProps> = ({ backgroundColor }) => {
               <motion.div whileHover={{ scale: 1.05 }}>
                 <Card>
                   <ThunderboltOutlined style={{ fontSize: 32, color: backgroundColor, marginBottom: 16 }} />
-                  <Title level={4}>Easy Automation</Title>
+                  <Title level={4}>{translations?.home?.upperCards?.firstCard?.title}</Title>
                   <Paragraph>
-                    Create powerful automation workflows with our intuitive drag-and-drop interface.
-                    No coding required!
+                    {translations?.home?.upperCards?.firstCard?.description}
                   </Paragraph>
                 </Card>
               </motion.div>
@@ -97,9 +97,9 @@ const Home: React.FC<HomeProps> = ({ backgroundColor }) => {
               <motion.div whileHover={{ scale: 1.05 }}>
                 <Card>
                   <ApiOutlined style={{ fontSize: 32, color: backgroundColor, marginBottom: 16 }} />
-                  <Title level={4}>Connect Services</Title>
+                  <Title level={4}>{translations?.home?.upperCards?.secondCard?.title}</Title>
                   <Paragraph>
-                    Integrate with popular services and apps. Make them work together seamlessly.
+                    {translations?.home?.upperCards?.secondCard?.description}
                   </Paragraph>
                 </Card>
               </motion.div>
@@ -108,9 +108,9 @@ const Home: React.FC<HomeProps> = ({ backgroundColor }) => {
               <motion.div whileHover={{ scale: 1.05 }}>
                 <Card>
                   <SafetyCertificateOutlined style={{ fontSize: 32, color: backgroundColor, marginBottom: 16 }} />
-                  <Title level={4}>Secure & Reliable</Title>
+                  <Title level={4}>{translations?.home?.upperCards?.thirdCard?.title}</Title>
                   <Paragraph>
-                    Your data is protected with enterprise-grade security. Run your automations with confidence.
+                    {translations?.home?.upperCards?.thirdCard?.description}
                   </Paragraph>
                 </Card>
               </motion.div>
@@ -120,14 +120,11 @@ const Home: React.FC<HomeProps> = ({ backgroundColor }) => {
 
         <div style={{ background: '#f5f5f5', padding: '64px 24px' }}>
           <div style={{ maxWidth: 1200, margin: '0 auto' }}>
-            <Title level={2} style={{ textAlign: 'center', marginBottom: 48 }}>
-              How It Works
-            </Title>
             <Row gutter={[32, 32]}>
               {[
-                { step: '1', title: 'Choose a Trigger', description: 'Select an event that starts your automation' },
-                { step: '2', title: 'Add Actions', description: 'Define what happens when the trigger fires' },
-                { step: '3', title: 'Watch It Work', description: 'Sit back and let Area handle the rest' },
+                { step: '1', title: translations?.home?.lowerCards?.firstCard?.title, description: translations?.home?.lowerCards?.firstCard?.description },
+                { step: '2', title: translations?.home?.lowerCards?.secondCard?.title, description: translations?.home?.lowerCards?.secondCard?.description },
+                { step: '3', title: translations?.home?.lowerCards?.thirdCard?.title, description: translations?.home?.lowerCards?.thirdCard?.description },
               ].map((item) => (
                   <Col xs={24} md={8} key={item.step}>
                     <motion.div whileHover={{ y: -10 }} style={{ textAlign: 'center' }}>

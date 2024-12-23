@@ -1,40 +1,34 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import { ContextManager } from "./Context/ContextManager";
-// @ts-ignore
-import { uri } from '@Config/uri';
+import { ContextManager } from "@/Context/ContextManager";
 
 import { useEffect, useMemo, useState } from "react";
 import Particles, { initParticlesEngine } from "@tsparticles/react";
 import {
-    type Container,
     type ISourceOptions,
     MoveDirection,
     OutMode,
 } from "@tsparticles/engine";
 import { loadSlim } from "@tsparticles/slim";
 
-import Home from './Pages/Home';
-import NotFound from './Pages/Errors/NotFound';
+import Home from '@/Pages/Home';
+import NotFound from '@/Pages/Errors/NotFound';
 import ApiNotConnected from "@/Pages/Errors/ApiNotConnected";
 import CustomError from "@/Pages/Errors/CustomError";
 
 import UserPage from "@/Pages/Account/UserPage";
 
 import Layout from '@/Components/Layout/Layout';
-import Login from './Pages/Auth/Forms/Login';
-import Register from './Pages/Auth/Forms/Register';
+import Login from '@/Pages/Auth/Forms/Login';
+import Register from '@/Pages/Auth/Forms/Register';
 
-import LinkedinCallback from "./Pages/Auth/Callback/LinkedinCallback";
-import SpotifyCallback from './Pages/Auth/Callback/SpotifyCallback';
-import MicrosoftCallback from './Pages/Auth/Callback/MicrosoftCallback';
-import DiscordCallback from './Pages/Auth/Callback/DiscordCallback';
+import GenericCallback from "@/Pages/Auth/Callback/GenericCallback";
 
-import CreateWorkflow from "./Pages/Workflows/CreateWorkflow";
+import UpdateWorkflow from "@/Pages/Workflows/UpdateWorkflow";
+import WorkflowHandler from '@/Pages/Workflows/WorkflowHandler';
 
 import Dashboard from './Pages/Dashboard/Dashboard';
 
 import { ToastContainer } from 'react-toastify';
-// @ts-ignore
 import 'react-toastify/dist/ReactToastify.css';
 
 const App = () => {
@@ -50,7 +44,7 @@ const App = () => {
         setBackgroundColor(sessionStorage.getItem("backgroundColor") || "#FFA500");
     }, []);
 
-    const particlesLoaded = async (container?: Container): Promise<void> => {};
+    const particlesLoaded = async (): Promise<void> => {};
 
     const options: ISourceOptions = useMemo(
         () => ({
@@ -154,13 +148,10 @@ const App = () => {
                             <Route path="/register" element={<Register />} />
                             <Route path="/dashboard" element={<Dashboard />} />
 
-                            <Route path={uri.spotify.auth.redirectUri.replace(window.location.origin, "")} element={<SpotifyCallback />} />
-                            <Route path={uri.microsoft.auth.redirectUri.replace(window.location.origin, "")} element={<MicrosoftCallback />} />
-                            <Route path={uri.linkedin.auth.redirectUri.replace(window.location.origin, "")} element={<LinkedinCallback />} />
-                            <Route path={uri.discord.auth.redirectUri.replace(window.location.origin, "")} element={<DiscordCallback />} />
+                            <Route path="/auth/:service/callback" element={<GenericCallback />} />
 
-                            <Route path="/workflow/create" element={<CreateWorkflow />} />
-                            <Route path="/workflow/:id" element={<NotFound />} />
+                            <Route path="/workflow/create" element={<WorkflowHandler />} />
+                            <Route path="/workflow/update/:id" element={<UpdateWorkflow />} />
 
                             <Route path="/account/me" element={<UserPage backgroundColor={backgroundColor} setBackgroundColor={setBackgroundColor} />} />
 

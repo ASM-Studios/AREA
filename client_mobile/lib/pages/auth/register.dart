@@ -3,7 +3,9 @@ import 'package:client_mobile/services/microsoft/microsoft_auth_service.dart';
 import 'package:client_mobile/tools/utils.dart';
 import 'package:client_mobile/widgets/button.dart';
 import 'package:client_mobile/widgets/clickable_text.dart';
+import 'package:client_mobile/widgets/divider_with_text.dart';
 import 'package:client_mobile/widgets/form_field.dart';
+import 'package:client_mobile/widgets/password_form_field.dart';
 import 'package:client_mobile/widgets/sign_in_button.dart';
 import 'package:client_mobile/widgets/simple_text.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +21,7 @@ class RegisterPage extends StatefulWidget {
 class _RegisterPageState extends State<RegisterPage> {
   final String callbackUrlScheme = 'my.area.app';
   String get spotifyRedirectUrlMobile => '$callbackUrlScheme://callback';
+  bool isLoggingViaOauth = false;
 
   final String clientId = dotenv.env["VITE_SPOTIFY_CLIENT_ID"] ?? "";
   final appAuth = const FlutterAppAuth();
@@ -30,6 +33,24 @@ class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController confirmPasswordController =
       TextEditingController();
+
+  void handleMicrosoftOAuth() async {
+    if (!isLoggingViaOauth) {
+      isLoggingViaOauth = true;
+      bool isRegistered =
+          await MicrosoftAuthService.auth(context, signUp: true);
+
+      if (!mounted) {
+        isLoggingViaOauth = false;
+        return;
+      }
+
+      if (isRegistered) {
+        context.pushReplacement("/dashboard");
+      }
+      isLoggingViaOauth = false;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,24 +65,18 @@ class _RegisterPageState extends State<RegisterPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const SimpleText(
-                  "Username",
-                  bold: true,
-                ),
+                SimpleText("Username"),
                 AreaFormField(
-                    label: "Value",
+                    label: "username",
                     controller: userController,
                     validator: (user) {
                       if (user == null || user.isEmpty)
                         return "Please input your username.";
                       return (null);
                     }),
-                const SimpleText(
-                  "Email",
-                  bold: true,
-                ),
+                SimpleText("Email"),
                 AreaFormField(
-                  label: "Value",
+                  label: "you@example.com",
                   controller: emailController,
                   validator: (email) {
                     if (email == null || email.isEmpty) {
@@ -73,10 +88,10 @@ class _RegisterPageState extends State<RegisterPage> {
                     return (null);
                   },
                 ),
-                const SizedBox(height: 25),
-                const SimpleText("Password", bold: true),
-                AreaFormField(
-                  label: "Value",
+                const SizedBox(height: 50),
+                SimpleText("Password"),
+                PasswordFormField(
+                  label: "********",
                   controller: passwordController,
                   validator: (password) {
                     if (password == null || password.isEmpty) {
@@ -87,15 +102,11 @@ class _RegisterPageState extends State<RegisterPage> {
                     return (null);
                   },
                 ),
-                const SizedBox(height: 15),
-                const SimpleText("Confirm password", bold: true),
-                AreaFormField(
-                  label: "Value",
+                SimpleText("Confirm password"),
+                PasswordFormField(
+                  label: "********",
                   controller: confirmPasswordController,
                   validator: (password) {
-                    if (password == null || password.isEmpty) {
-                      return "Please confirm your password.";
-                    }
                     if (password != passwordController.text)
                       return "Your password doesn't match.";
                     return (null);
@@ -105,56 +116,35 @@ class _RegisterPageState extends State<RegisterPage> {
                 Align(
                   alignment: Alignment.center,
                   child: AreaButton(
-                    label: "Register",
-                    onPressed: () async {
-                      if (_formKey.currentState!.validate()) {
-                        bool isRegistered = await AuthService.register(
-                            context,
-                            RegisterObject(
-                                    email: emailController.text,
-                                    password: passwordController.text,
-                                    username: userController.text)
-                                .toJson());
-                        if (isRegistered) {
-                          context.pushReplacement("/dashboard");
+                      label: "Register",
+                      onPressed: () async {
+                        if (_formKey.currentState!.validate()) {
+                          bool isRegistered = await AuthService.register(
+                              context,
+                              RegisterObject(
+                                      email: emailController.text,
+                                      password: passwordController.text,
+                                      username: userController.text)
+                                  .toJson());
+                          if (isRegistered) {
+                            context.pushReplacement("/dashboard");
+                          }
                         }
-                      }
-                    },
-                    color: Colors.black,
-                  ),
+                      },
+                      color: const Color(0XFF035a63)),
                 ),
-                const SizedBox(height: 30),
+                const SizedBox(height: 40),
+                const DividerWithText(label: "Or Register with"),
+                const SizedBox(height: 15),
                 Align(
                   alignment: Alignment.center,
                   child: SignInButton(
-                    onPressed: () async {
-                      bool isRegistered = await MicrosoftAuthService.auth(
-                          context,
-                          signUp: true);
-                      if (isRegistered) {
-                        if (context.mounted) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text("Microsoft link avec succès !"),
-                              backgroundColor: Colors.black,
-                            ),
-                          );
-                          context.pushReplacement("/dashboard");
-                        }
-                      } else {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text("Microsoft authentification failed."),
-                            backgroundColor: Colors.red,
-                          ),
-                        );
-                      }
-                    },
-                    label: "Sign in with Microsoft",
+                    onPressed: handleMicrosoftOAuth,
+                    label: "Microsoft",
                     image: Image.asset(
                       "assets/images/microsoft.png",
                       width: 40,
-                      height: 30,
+                      height: 20,
                     ),
                   ),
                 ),

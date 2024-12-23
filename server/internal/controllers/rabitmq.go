@@ -24,8 +24,8 @@ func Message(c *gin.Context) {
 
 	connectionString := utils.GetEnvVar("RMQ_URL")
 	rmqProducer := utils.RMQProducer{
-		consts.MessageQueue,
-		connectionString,
+		Queue: consts.MessageQueue,
+		ConnectionString:   connectionString,
 	}
 
 	rmqProducer.PublishMessage("text/plain", []byte(msg.Message))
