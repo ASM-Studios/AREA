@@ -1,12 +1,12 @@
-import { Form, Input, Button, Card } from 'antd';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { Form, Input, Button, Card } from 'antd';
+import { toast } from "react-toastify";
 import OAuthButtons from '@/Components/Auth/OAuthButtons';
 import { instance, auth } from "@Config/backend.routes";
 import { useAuth, useUser } from "@/Context/ContextHooks";
 import { useNavigate } from 'react-router-dom';
-import { toast } from "react-toastify";
 import Globe from "@/Components/eldora/globe";
-import { useState } from 'react';
 
 const Register = () => {
     const [form] = Form.useForm();
@@ -14,6 +14,10 @@ const Register = () => {
     const { translations } = useUser();
     const navigate = useNavigate();
     const [isFormValid, setIsFormValid] = useState(false);
+
+    React.useEffect(() => {
+        onFieldsChange();
+    }, [])
 
     const onFinish = (values: unknown) => {
         instance.post(auth.register, values)
@@ -39,9 +43,12 @@ const Register = () => {
 
     const onFieldsChange = () => {
         const fieldsError = form.getFieldsError();
-        const isValid = fieldsError.every(field => field.errors.length === 0) &&
-            form.getFieldsValue(true).every((value: string | undefined) => value !== undefined && value !== '');
-        setIsFormValid(isValid);
+        const values = form.getFieldsValue();
+
+        setIsFormValid(
+            !Object.values(values).some(value => !value)
+            && fieldsError.every(field => field.errors.length === 0)
+        );
     };
 
     return (

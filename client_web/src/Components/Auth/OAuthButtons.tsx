@@ -1,69 +1,66 @@
-import React from "react";
-import GoogleAuth from './Buttons/GoogleAuth';
-import MicrosoftAuth from './Buttons/MicrosoftAuth';
-import LinkedinAuth from './Buttons/LinkedinAuth';
-import SpotifyAuth from './Buttons/SpotifyAuth';
-import DiscordAuth from './Buttons/DiscordAuth';
-import GithubAuth from "./Buttons/GithubAuth";
-import TwitchAuth from "./Buttons/TwitchAuth";
+import React, { useMemo } from "react";
 import { Divider } from 'antd';
 import { useUser } from "@/Context/ContextHooks";
-import { ServicesDescription } from "@/Context/Scopes/UserContext";
-import { BaseAuthProps } from "@/Components/Auth/auth.types";
+import GenericOAuthButton from './Buttons/GenericOAuth';
+import config from "@/Components/Auth/Buttons/config";
+
+type OAuthMode = 'signin' | 'signup' | 'connect';
 
 interface OAuthButtonsProps {
-    mode: 'signin' | 'signup' | 'connect';
+    mode: OAuthMode;
+    className?: string;
 }
 
-const OAuthButtonsMap: { [key: string]: React.FC<BaseAuthProps> } = {
-    google: GoogleAuth,
-    microsoft: MicrosoftAuth,
-    spotify: SpotifyAuth,
-    linkedin: LinkedinAuth,
-    discord: DiscordAuth,
-    github: GithubAuth,
-    twitch: TwitchAuth,
-};
-
-const OAuthButtons = ({
+const OAuthButtons: React.FC<OAuthButtonsProps> = ({
     mode,
-}: OAuthButtonsProps) => {
+    className,
+}) => {
     const { user, translations } = useUser();
 
-    const services: ServicesDescription[] = mode === 'connect' ? user?.services || [] : [];
+    const services = useMemo(() => 
+        mode === 'connect' ? user?.services || [] : [],
+        [mode, user?.services]
+    );
 
-    let withText = "";
-    switch (mode) {
-        case 'signin':
-            withText = translations?.oauthButtons.signin;
-            break;
-        case 'signup':
-            withText = translations?.oauthButtons.signup;
-            break;
-        case 'connect':
-            withText = translations?.oauthButtons.connect;
-            break;
-        default:
-            withText = translations?.oauthButtons.use;
-            break;
+    const withText = useMemo(() => ({
+        signin: translations?.oauthButtons.signin,
+        signup: translations?.oauthButtons.signup,
+        connect: translations?.oauthButtons.connect,
+        default: translations?.oauthButtons.use,
+    }[mode] || translations?.oauthButtons.use), 
+    [mode, translations?.oauthButtons]);
+
+    const buttons = useMemo(() => 
+        Object.entries(config)
+            .filter(([_, { disabled }]) => !disabled)
+            .map(([service, { icon, handler }]) => ({
+                key: service,
+                service,
+                buttonText: `${withText} ${service.charAt(0).toUpperCase() + service.slice(1)}`,
+                disabled: services.some((s) => s.name === service),
+                handleLogin: handler,
+                iconSrc: icon,
+            })),
+        [config, services, withText]
+    );
+
+    if (!buttons.length) {
+        return null;
     }
 
     return (
-        <>
-            {mode !== 'connect' && <Divider>{translations?.oauthButtons.or}</Divider>}
+        <div className={className}>
+            {mode !== 'connect' && translations?.oauthButtons.or && (
+                <Divider>{translations.oauthButtons.or}</Divider>
+            )}
 
-            {Object.keys(OAuthButtonsMap).map((service) => {
-                const Component = OAuthButtonsMap[service];
-                return (
-                    <Component
-                        key={service}
-                        buttonText={`${withText} ${service.charAt(0).toUpperCase() + service.slice(1)}`}
-                        disabled={services.some((s) => s.name === service)}
-                    />
-                );
-            })}
-        </>
+            {buttons.map((buttonProps) => (
+                <GenericOAuthButton
+                    {...buttonProps}
+                />
+            ))}
+        </div>
     );
 };
 
-export default OAuthButtons;
+export default React.memo(OAuthButtons);
