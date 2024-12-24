@@ -68,6 +68,56 @@ services:
       retries: 5
       start_period: 40s
 
+  area-server-action-consumer:
+    build:
+      context: ./server
+      dockerfile: Dockerfile_action_consumer
+    volumes:
+      - ./ssl:/app/ssl:ro
+    environment:
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
+      DB_USER: ${DB_USER}
+      DB_NAME: ${DB_NAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+    depends_on:
+      mariadb:
+        condition: service_healthy
+      area-server:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - area_network
+    env_file:
+      - server/.env
+    restart: unless-stopped
+
+  area-server-reaction-consumer:
+    build:
+      context: ./server
+      dockerfile: Dockerfile_reaction_consumer
+    volumes:
+      - ./ssl:/app/ssl:ro
+    environment:
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
+      DB_USER: ${DB_USER}
+      DB_NAME: ${DB_NAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+    depends_on:
+      mariadb:
+        condition: service_healthy
+      area-server:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - area_network
+    env_file:
+      - server/.env
+    restart: unless-stopped
+
   area-client-mobile:
     build:
       context: ./client_mobile

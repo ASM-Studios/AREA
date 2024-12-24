@@ -1,9 +1,7 @@
-package consts
+package gconsts
 
 const EnvFile = ".env"
 const EnvFileDirectory = "."
-
-const MessageQueue = "message_queue"
 
 const ServiceFileDirectory = "./services"
 

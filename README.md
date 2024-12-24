@@ -64,8 +64,9 @@ make start
 - Python
 - sphinx
 - spinx_rtd_theme
+- sphinxcontrib-mermaid
 
-sphinx and sphinx_rtd_theme can be installed using pip
+sphinx, sphinx_rtd_theme and sphinxcontrib-mermaid can be installed using pip
 
 </details>
 
