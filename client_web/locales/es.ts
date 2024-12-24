@@ -372,6 +372,11 @@ const es_language: Translation = {
             title: "404",
             subtitle: "Lo sentimos, la página que visitaste no existe.",
             backHome: "Volver al Inicio"
+        },
+        attack: {
+            title: "¡Ataque Detectado!",
+            subtitle: "Nuestro sistema ha detectado un ataque y ha bloqueado tu solicitud.",
+            backHome: "Volver al Inicio"
         }
     },
 };

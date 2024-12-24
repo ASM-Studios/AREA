@@ -156,6 +156,11 @@ const pirate_language: Translation = {
             title: "404 - Lost At Sea",
             subtitle: "Blimey! This map leads nowhere!",
             backHome: "Back To Safe Harbor"
+        },
+        attack: {
+            title: "Attack Detected",
+            subtitle: "Arrr! We be under attack!",
+            backHome: "Back To Safe Harbor"
         }
     },
     callback: {
