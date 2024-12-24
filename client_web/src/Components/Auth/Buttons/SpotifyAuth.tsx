@@ -1,13 +1,9 @@
 import { Form, Button } from 'antd';
 import { FC } from 'react';
 import { uri } from '@Config/uri';
+import { BaseAuthProps } from "@/Components/Auth/auth.types";
 
-interface SpotifyOAuthProps {
-    buttonText: string;
-    disabled?: boolean;
-}
-
-const SpotifyAuth: FC<SpotifyOAuthProps> = ({ buttonText, disabled = false }) => {
+const SpotifyAuth: FC<BaseAuthProps> = ({ buttonText, disabled = false }) => {
     const generateCodeChallenge = async (codeVerifier: string) => {
         const encoder = new TextEncoder();
         const data = encoder.encode(codeVerifier);

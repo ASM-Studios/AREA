@@ -1,12 +1,9 @@
 import {Button, Form} from 'antd';
 import { uri } from '@Config/uri';
+import { BaseAuthProps } from "@/Components/Auth/auth.types";
+import {FC} from "react";
 
-interface LinkedinAuthProps {
-    buttonText: string;
-    disabled?: boolean;
-}
-
-const LinkedinAuth = ({ buttonText, disabled = false }: LinkedinAuthProps) => {
+const LinkedinAuth: FC<BaseAuthProps> = ({ buttonText, disabled = false }) => {
     const handleLinkedinAuth = () => {
         const state = Math.random().toString(36).substring(7);
 

@@ -1,3 +1,4 @@
+import React from "react";
 import GoogleAuth from './Buttons/GoogleAuth';
 import MicrosoftAuth from './Buttons/MicrosoftAuth';
 import LinkedinAuth from './Buttons/LinkedinAuth';
@@ -8,10 +9,21 @@ import TwitchAuth from "./Buttons/TwitchAuth";
 import { Divider } from 'antd';
 import { useUser } from "@/Context/ContextHooks";
 import { ServicesDescription } from "@/Context/Scopes/UserContext";
+import { BaseAuthProps } from "@/Components/Auth/auth.types";
 
 interface OAuthButtonsProps {
     mode: 'signin' | 'signup' | 'connect';
 }
+
+const OAuthButtonsMap: { [key: string]: React.FC<BaseAuthProps> } = {
+    google: GoogleAuth,
+    microsoft: MicrosoftAuth,
+    spotify: SpotifyAuth,
+    linkedin: LinkedinAuth,
+    discord: DiscordAuth,
+    github: GithubAuth,
+    twitch: TwitchAuth,
+};
 
 const OAuthButtons = ({
     mode,
@@ -40,42 +52,18 @@ const OAuthButtons = ({
         <>
             {mode !== 'connect' && <Divider>{translations?.oauthButtons.or}</Divider>}
 
-            <GoogleAuth
-                buttonText={`${withText} Google`}
-                disabled={services.some((service) => service.name === 'google')}
-            />
-
-            <MicrosoftAuth
-                buttonText={`${withText} Microsoft`}
-                disabled={services.some((service) => service.name === 'microsoft')}
-            />
-
-            <LinkedinAuth
-                buttonText={`${withText} LinkedIn`}
-                disabled={services.some((service) => service.name === 'linkedin')}
-            />
-
-            <SpotifyAuth
-                buttonText={`${withText} Spotify`}
-                disabled={services.some((service) => service.name === 'spotify')}
-            />
-
-            <DiscordAuth
-                buttonText={`${withText} Discord`}
-                disabled={services.some((service) => service.name === 'discord')}
-            />
-
-            <GithubAuth
-                buttonText={`${withText} Github`}
-                disabled={services.some((service) => service.name === 'github')}
-            />
-
-            <TwitchAuth
-                buttonText={`${withText} Twitch`}
-                disabled={services.some((service) => service.name === 'twitch')}
-            />
+            {Object.keys(OAuthButtonsMap).map((service) => {
+                const Component = OAuthButtonsMap[service];
+                return (
+                    <Component
+                        key={service}
+                        buttonText={`${withText} ${service.charAt(0).toUpperCase() + service.slice(1)}`}
+                        disabled={services.some((s) => s.name === service)}
+                    />
+                );
+            })}
         </>
     );
 };
 
-export default OAuthButtons; 
+export default OAuthButtons;

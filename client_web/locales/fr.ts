@@ -39,6 +39,7 @@ const fr_language: Translation = {
             title: "Connexion",
             form: {
                 email: {
+                    label: "Nom d'utilisateur",
                     placeholder: "exemple@exemple.com",
                     tooltip: "Veuillez saisir votre adresse email",
                     validation: {
@@ -47,6 +48,7 @@ const fr_language: Translation = {
                     }
                 },
                 password: {
+                    label: "Mot de Passe",
                     placeholder: "********",
                     tooltip: "Veuillez saisir votre mot de passe",
                     validation: {
@@ -67,6 +69,7 @@ const fr_language: Translation = {
             title: "Inscription",
             form: {
                 username: {
+                    label: "Nom d'Utilisateur",
                     placeholder: "Entrez votre nom d'utilisateur",
                     tooltip: "Veuillez saisir le nom d'utilisateur souhaité",
                     validation: {
@@ -74,6 +77,7 @@ const fr_language: Translation = {
                     }
                 },
                 email: {
+                    label: "Email",
                     placeholder: "exemple@exemple.com",
                     tooltip: "Veuillez saisir votre adresse email",
                     validation: {
@@ -82,6 +86,7 @@ const fr_language: Translation = {
                     }
                 },
                 password: {
+                    label: "Mot de Passe",
                     placeholder: "********",
                     tooltip: "Veuillez saisir votre mot de passe",
                     validation: {
@@ -91,6 +96,7 @@ const fr_language: Translation = {
                     }
                 },
                 confirmPassword: {
+                    label: "Confirmer le Mot de Passe",
                     placeholder: "********",
                     tooltip: "Veuillez confirmer votre mot de passe",
                     validation: {

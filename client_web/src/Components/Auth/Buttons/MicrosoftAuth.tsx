@@ -1,13 +1,9 @@
 import { Form, Button } from 'antd';
-import { useEffect, useState } from 'react';
+import {FC, useState} from 'react';
 import { uri } from '@Config/uri';
+import { BaseAuthProps } from "@/Components/Auth/auth.types";
 
-interface MicrosoftAuthProps {
-    buttonText: string;
-    disabled?: boolean;
-}
-
-const MicrosoftAuth = ({ buttonText, disabled = false }: MicrosoftAuthProps) => {
+const MicrosoftAuth: FC<BaseAuthProps> = ({ buttonText, disabled = false }) => {
     const [codeVerifier, setCodeVerifier] = useState<string | null>(null);
 
     const generateCodeChallenge = async (codeVerifier: string) => {

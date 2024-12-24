@@ -25,6 +25,9 @@ export default defineConfig(({ mode }) => {
         host: true,
       }
     },
+    optimizeDeps: {
+      include: ['cobe'],
+    },
     resolve: {
       alias: {
         '@': path.resolve(__dirname, './src'),

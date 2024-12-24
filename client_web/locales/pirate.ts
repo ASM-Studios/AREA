@@ -39,6 +39,7 @@ const pirate_language: Translation = {
             title: "Board Yer Ship",
             form: {
                 email: {
+                    label: "message-in-a-bottle address",
                     placeholder: "captain@blackpearl.sea",
                     tooltip: "Enter yer message-in-a-bottle address",
                     validation: {
@@ -47,6 +48,7 @@ const pirate_language: Translation = {
                     }
                 },
                 password: {
+                    label: "secret code",
                     placeholder: "********",
                     tooltip: "Enter yer secret code",
                     validation: {
@@ -67,6 +69,7 @@ const pirate_language: Translation = {
             title: "Join the Crew",
             form: {
                 username: {
+                    label: "pirate name",
                     placeholder: "Enter yer pirate name",
                     tooltip: "What be yer sailor name?",
                     validation: {
@@ -74,6 +77,7 @@ const pirate_language: Translation = {
                     }
                 },
                 email: {
+                    label: "message-in-a-bottle address",
                     placeholder: "captain@blackpearl.sea",
                     tooltip: "Enter yer message-in-a-bottle address",
                     validation: {
@@ -82,6 +86,7 @@ const pirate_language: Translation = {
                     }
                 },
                 password: {
+                    label: "secret code",
                     placeholder: "********",
                     tooltip: "Enter yer secret code",
                     validation: {
@@ -91,6 +96,7 @@ const pirate_language: Translation = {
                     }
                 },
                 confirmPassword: {
+                    label: "confirm secret code",
                     placeholder: "********",
                     tooltip: "Confirm yer secret code",
                     validation: {

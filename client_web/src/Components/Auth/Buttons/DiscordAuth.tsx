@@ -1,13 +1,9 @@
 import { Form, Button } from 'antd';
 import { FC } from 'react';
 import { uri } from '@Config/uri';
+import { BaseAuthProps } from "@/Components/Auth/auth.types";
 
-interface DiscordAuthProps {
-    buttonText: string;
-    disabled?: boolean;
-}
-
-const DiscordAuth: FC<DiscordAuthProps> = ({ buttonText, disabled = false }) => {
+const DiscordAuth: FC<BaseAuthProps> = ({ buttonText, disabled = false }) => {
     const handleDiscordLogin = () => {
         const state = crypto.randomUUID().substring(0, 16);
         localStorage.setItem('discord_auth_state', state);
