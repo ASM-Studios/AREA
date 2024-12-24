@@ -371,5 +371,10 @@ export interface Translation {
             subtitle: string;
             backHome: string;
         };
+        attack: {
+            title: string;
+            subtitle: string;
+            backHome: string;
+        };
     };
 }

@@ -372,6 +372,11 @@ const fr_language: Translation = {
             title: "404",
             subtitle: "Désolé, la page que vous recherchez n'existe pas.",
             backHome: "Retour à l'Accueil"
+        },
+        attack: {
+            title: "Attaque Détectée",
+            subtitle: "Désolé, cette page n'est pas disponible.",
+            backHome: "Retour à l'Accueil"
         }
     },
 };

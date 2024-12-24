@@ -372,6 +372,11 @@ const en_language: Translation = {
             title: "404",
             subtitle: "Sorry, the page you visited does not exist.",
             backHome: "Back Home"
+        },
+        attack: {
+            title: "Attack Detected",
+            subtitle: "Sorry, the page you visited is not available.",
+            backHome: "Back Home"
         }
     },
 };

@@ -3,20 +3,20 @@ import LinkButton from "@/Components/LinkButton";
 import React from 'react';
 import { useUser } from "@/Context/ContextHooks";
 
-const NotFound: React.FC = () => {
+const ApiError: React.FC = () => {
     const { translations } = useUser();
 
     return (
         <Result
-            status="404"
-            title={translations?.errors?.notFound?.title}
-            subTitle={translations?.errors?.notFound?.subtitle}
+            status="error"
+            title={translations?.errors?.api?.title}
+            subTitle={translations?.errors?.api?.subtitle}
             extra={
-                <LinkButton text={translations?.errors?.notFound?.backHome} url="/" />
+                <LinkButton text="Back Home" url="/" />
             }
             style={{ zIndex: 1, position: 'relative' }}
         />
     );
 };
 
-export default NotFound;
+export default ApiError;
