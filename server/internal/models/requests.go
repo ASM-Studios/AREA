@@ -58,6 +58,7 @@ type WorkflowCreationRequest struct {
 type ServiceRequest struct {
 	ID   uint   `json:"id"`
 	Name string `json:"name"`
+        ConnectedAt     string `json:"connectedAt"`
 }
 
 // UserRequest represents the response structure for user details.

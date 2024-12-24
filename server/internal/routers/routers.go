@@ -15,7 +15,9 @@ import (
 
 func setUpOauthGroup(router *gin.Engine) {
         router.POST("/oauth/:service", controllers.OAuth)
-        router.POST("/oauth/bind/:service", controllers.OAuthBind)
+        protected := router.Group("/", middleware.AuthMiddleware())
+        protected.POST("/oauth/bind/:service", controllers.OAuthBind)
+        protected.POST("/oauth/refresh/:service", controllers.OAuthRefresh)
 }
 
 func setUpAuthGroup(router *gin.Engine) {

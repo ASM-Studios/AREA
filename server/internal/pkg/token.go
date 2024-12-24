@@ -21,10 +21,10 @@ func GetUserFromToken(c *gin.Context) (models.User, error) {
 	return user, nil
 }
 
-func GetServiceFromName(serviceName string) (uint, error) {
+func GetServiceFromName(serviceName string) (int) {
 	var service models.Service
 	if err := DB.Where("name = ?", serviceName).First(&service).Error; err != nil {
-		return 0, errors.New("service not found")
-	}
-	return service.ID, nil
+		return -1
+    }
+	return int(service.ID)
 }
