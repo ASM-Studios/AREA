@@ -39,6 +39,7 @@ const en_language: Translation = {
             title: "Login",
             form: {
                 email: {
+                    label: "email",
                     placeholder: "example@example.com",
                     tooltip: "Please enter your email address",
                     validation: {
@@ -47,6 +48,7 @@ const en_language: Translation = {
                     }
                 },
                 password: {
+                    label: "password",
                     placeholder: "********",
                     tooltip: "Please enter your password",
                     validation: {
@@ -67,6 +69,7 @@ const en_language: Translation = {
             title: "Register",
             form: {
                 username: {
+                    label: "username",
                     placeholder: "Enter your username",
                     tooltip: "Please enter your desired username",
                     validation: {
@@ -74,6 +77,7 @@ const en_language: Translation = {
                     }
                 },
                 email: {
+                    label: "email",
                     placeholder: "example@example.com",
                     tooltip: "Please enter your email address",
                     validation: {
@@ -82,6 +86,7 @@ const en_language: Translation = {
                     }
                 },
                 password: {
+                    label: "password",
                     placeholder: "********",
                     tooltip: "Please enter your password",
                     validation: {
@@ -91,6 +96,7 @@ const en_language: Translation = {
                     }
                 },
                 confirmPassword: {
+                    label: "password confirmation",
                     placeholder: "********",
                     tooltip: "Please confirm your password",
                     validation: {

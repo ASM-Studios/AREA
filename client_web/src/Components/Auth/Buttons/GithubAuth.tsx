@@ -1,13 +1,9 @@
 import { Form, Button } from 'antd';
 import { FC } from 'react';
 import { uri } from '@Config/uri';
+import { BaseAuthProps } from "@/Components/Auth/auth.types";
 
-interface GithubAuthProps {
-    buttonText: string;
-    disabled?: boolean;
-}
-
-const GithubAuth: FC<GithubAuthProps> = ({ buttonText, disabled = false }) => {
+const GithubAuth: FC<BaseAuthProps> = ({ buttonText, disabled = false }) => {
     const handleGithubLogin = () => {
         const state = crypto.randomUUID().substring(0, 16);
         localStorage.setItem('github_auth_state', state);
