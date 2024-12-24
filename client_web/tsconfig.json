@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "baseUrl": "./",
+    "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"],
       "@Config/*": ["src/Config/*"]
@@ -13,6 +13,7 @@
     "noEmit": true,
     "jsx": "react-jsx",
     "esModuleInterop": true,
+    "types": ["jest", "@testing-library/jest-dom", "node"]
   },
-  "include": ["src"]
+  "include": ["src/**/*", "src/**/*.tsx", "src/**/*.ts"]
 }

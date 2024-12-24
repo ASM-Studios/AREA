@@ -37,3 +37,4 @@ Contents
     installation
     context
     workflowCreation
+    tests
