@@ -1,5 +1,5 @@
-Installation
-============
+Installation Guide
+==================
 
 Follow these steps to set up and run the AREA Client Web project.
 
@@ -23,7 +23,7 @@ Follow these steps to set up and run the AREA Client Web project.
 
 To start the front-end, ensure that the following binaries are available:
 
-mkcert - For generating SSL certificates.
+- **mkcert**: For generating SSL certificates.
 
 .. code-block:: sh
 
