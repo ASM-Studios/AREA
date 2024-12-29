@@ -1,5 +1,5 @@
-Installation
-============
+Installation Guide
+==================
 
 Docker
 ======
@@ -39,7 +39,7 @@ If you only wish for the web client to run, follow these steps to set up and run
 
 To start the front-end, ensure that the following binaries are available:
 
-mkcert - For generating SSL certificates.
+- **mkcert**: For generating SSL certificates.
 
 .. code-block:: sh
 
