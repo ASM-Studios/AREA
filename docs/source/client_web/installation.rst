@@ -1,7 +1,23 @@
 Installation Guide
 ==================
 
-Follow these steps to set up and run the AREA Client Web project.
+Docker
+======
+
+This project is shipped inside a docker that let you run all parts of the project
+
+1. Run the docker
+-----------------
+
+.. code-block:: sh
+
+    make build && make start
+
+
+Standalone
+==========
+
+If you only wish for the web client to run, follow these steps to set up and run the AREA Client Web project.
 
 1. Clone the repository
 -----------------------

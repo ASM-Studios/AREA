@@ -84,3 +84,26 @@ logs:
 ## Clean up containers, images, volumes and orphans
 clean:
 	docker compose down --rmi local -v --remove-orphans
+
+## Run all tests
+tests: test_client_web test_client_mobile test_server
+
+## Run tests for client_web
+test_client_web:
+	cd client_web && npm run test && cd ..
+
+## Run test:watcher for client_web
+test_client_web_watch:
+	cd client_web && npm run test:watch && cd ..
+
+## Run test:coverage for client_web
+coverage_client_web:
+	cd client_web && npm run test:coverage && cd ..
+
+## Run tests for client_mobile
+test_client_mobile:
+	@echo "test_client_mobile::not implemented yet"
+
+## Run tests for server
+test_server:
+	@echo "test_server::not implemented yet"

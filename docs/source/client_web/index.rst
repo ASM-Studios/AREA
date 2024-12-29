@@ -18,5 +18,8 @@ Contents
 
     overview
     installation
+    context
+    workflowCreation
+    tests
     development
     features
