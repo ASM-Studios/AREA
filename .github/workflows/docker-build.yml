@@ -84,7 +84,7 @@ jobs:
           echo "DB_USER=${{ secrets.DB_USER }}" >> server/.env
 
       - name: Build and test
-        run: docker compose build
+        run: docker compose --profile full up --build -d
 
       - name: Push images if on main branch
         if: ${{ github.ref == 'refs/heads/main' && env.ACT != 'true' }}

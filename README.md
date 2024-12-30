@@ -48,8 +48,28 @@ cp client_mobile/.env.mobile.example .env.mobile
 
 4. Run the project
 
+- Run the project in full mode
+
 ```sh
-make start
+make start-full
+```
+
+- Run the project in web mode (only web client and server)
+
+```sh
+make start-web
+```
+
+- Run the project in mobile mode (only mobile client and server)
+
+```sh
+make start-mobile
+```
+
+- Run the project in server mode (only server)
+
+```sh
+make start-server
 ```
 
 </details>
