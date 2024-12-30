@@ -1,7 +1,7 @@
 package pkg
 
 import (
-	"AREA/internal/consts"
+	"AREA/internal/gconsts"
 	"AREA/internal/utils"
 	"fmt"
 	amqp "github.com/rabbitmq/amqp091-go"
@@ -27,7 +27,7 @@ func (p *EventPublisher) Init(connectionString string) error {
 	}
 	p.channel = ch
 	err = ch.ExchangeDeclare(
-		consts.ExchangeName, // exchange name
+		gconsts.ExchangeName, // exchange name
 		"topic",             // exchange type
 		true,                // durable
 		false,               // auto-deleted
@@ -44,7 +44,7 @@ func (p *EventPublisher) Init(connectionString string) error {
 
 func (p *EventPublisher) Produce(message []byte, routingKey string) error {
 	err := p.channel.Publish(
-		consts.ExchangeName, // exchange
+		gconsts.ExchangeName, // exchange
 		routingKey,          // routing key
 		false,               // mandatory
 		false,               // immediate
@@ -67,6 +67,6 @@ func InitRabbitMQ() (*amqp.Connection, error) {
 		log.Fatalf("Failed to initialize RabbitMQ connection: %v", err)
 		return nil, err
 	}
-	log.Printf("RabbitMQ connection established: exchange on %s\n", consts.ExchangeName)
+	log.Printf("RabbitMQ connection established: exchange on %s\n", gconsts.ExchangeName)
 	return Publisher.connection, nil
 }

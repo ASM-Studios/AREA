@@ -2,9 +2,9 @@ root = "."
 tmp_dir = "tmp"
 
 [build]
-cmd = "go build -o ./tmp/area cmd/area/main.go"
-bin = "./tmp/area"
-full_bin = "./tmp/area"
+cmd = "go build -o ./tmp/action_consumer cmd/action_consumer/main.go"
+bin = "./tmp/action_consumer"
+full_bin = "./tmp/action_consumer"
 include_ext = ["go", "tpl", "tmpl", "html"]
 exclude_dir = ["assets", "tmp", "vendor"]
 include_dir = []

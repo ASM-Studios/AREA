@@ -7,6 +7,7 @@ import (
 	"AREA/internal/middleware"
 	"AREA/internal/services"
 	"database/sql"
+
 	"github.com/gin-gonic/gin"
 	amqp "github.com/rabbitmq/amqp091-go"
 	swaggerFiles "github.com/swaggo/files"
@@ -67,6 +68,7 @@ func SetupRouter(db *sql.DB, rmq *amqp.Connection) *gin.Engine {
 	}
 
 	router.GET("/health", controllers.SystemHealth)
+        router.GET("/trigger", controllers.Trigger)
 	router.HEAD("/health", controllers.SystemHealth)
 
 	public := router.Group("/")

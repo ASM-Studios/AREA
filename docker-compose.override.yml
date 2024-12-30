@@ -19,6 +19,24 @@ services:
     environment:
       - GO_ENV=development
 
+  area-server-action-consumer:
+    build:
+      target: development
+    volumes:
+      - ./server:/app
+      - go-modules:/go/pkg/mod
+    environment:
+      - GO_ENV=development
+
+  area-server-reaction-consumer:
+    build:
+      target: development
+    volumes:
+      - ./server:/app
+      - go-modules:/go/pkg/mod
+    environment:
+      - GO_ENV=development
+
 volumes:
   ssl-certs:
   go-modules:

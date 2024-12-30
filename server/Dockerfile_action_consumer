@@ -14,10 +14,7 @@ COPY . .
 
 EXPOSE 8080
 
-HEALTHCHECK --interval=10s --timeout=5s --start-period=5s --retries=3 \
-    CMD wget --no-verbose --tries=1 --spider http://localhost:8080/health || exit 1
-
-CMD ["air", "-c", ".air.toml"]
+CMD ["air", "-c", ".air.toml.action_consumer"]
 
 # Production stage
 FROM golang:1.23.4-alpine AS production
@@ -30,9 +27,9 @@ RUN go mod download
 
 COPY . .
 
-RUN CGO_ENABLED=0 GOOS=linux go build -o area cmd/area/main.go
+RUN CGO_ENABLED=0 GOOS=linux go build -o action_consumer cmd/action_consumer/main.go
 
-CMD ["./area"]
+CMD ["./action_consumer"]
 
 # Final stage
 FROM alpine:3.20.3
@@ -42,17 +39,14 @@ RUN apk add --no-cache ca-certificates wget && \
 
 WORKDIR /app
 
-COPY --from=production /app/area .
+COPY --from=production /app/action_consumer .
 COPY --from=production /app/config.json .
 
 RUN chown -R appuser:appuser /app && \
-    chmod +x /app/area
+    chmod +x /app/action_consumer
 
 USER appuser
 
 EXPOSE 8080
 
-HEALTHCHECK --interval=10s --timeout=5s --start-period=5s --retries=3 \
-    CMD wget --no-verbose --tries=1 --spider http://localhost:8080/health || exit 1
-
-CMD ["./area"]
+CMD ["./action_consumer"]

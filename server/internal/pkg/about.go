@@ -1,7 +1,7 @@
 package pkg
 
 import (
-	"AREA/internal/consts"
+	"AREA/internal/gconsts"
 	"AREA/internal/models"
 	"errors"
 	"github.com/goccy/go-json"
@@ -12,7 +12,7 @@ import (
 )
 
 func InitServiceList() {
-	files, err := filepath.Glob(filepath.Join(consts.ServiceFileDirectory, "*.json"))
+	files, err := filepath.Glob(filepath.Join(gconsts.ServiceFileDirectory, "*.json"))
 	if err != nil {
 		log.Println("Error loading service files:", err)
 		return

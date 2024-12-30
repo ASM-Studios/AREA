@@ -1,7 +1,7 @@
 package utils
 
 import (
-	"AREA/internal/consts"
+	"AREA/internal/gconsts"
 	"encoding/json"
 	"io"
 	"net/http"
@@ -11,8 +11,8 @@ import (
 )
 
 func init() {
-	viper.SetConfigFile(consts.EnvFile)
-	viper.AddConfigPath(consts.EnvFileDirectory)
+	viper.SetConfigFile(gconsts.EnvFile)
+	viper.AddConfigPath(gconsts.EnvFileDirectory)
 	err := viper.ReadInConfig()
 	if err != nil {
 		log.Debug().Err(err).

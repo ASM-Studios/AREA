@@ -1,5 +1,51 @@
 {
   "name": "twitch",
   "events": [
+    {
+      "name": "Send message",
+      "description": "Send a message on a tchat",
+      "type": "reaction",
+      "parameters": [
+        {
+          "name": "destination",
+          "description": "Tchat on which message will be send",
+          "type": "string"
+        },
+        {
+          "name": "content",
+          "description": "Content of the message",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "Whisper message",
+      "description": "Whisper a message",
+      "type": "reaction",
+      "parameters": [
+        {
+          "name": "receiver",
+          "description": "Receiver of the message",
+          "type": "string"
+        },
+        {
+          "name": "content",
+          "description": "Content of the message",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "Stream start",
+      "description": "Detect stream start",
+      "type": "action",
+      "parameters": [
+        {
+          "name": "streamer",
+          "description": "Streamer which will trigger the action",
+          "type": "string"
+        }
+      ]
+    }
   ]
 }

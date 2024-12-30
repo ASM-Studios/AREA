@@ -1,8 +1,10 @@
 package controllers
 
 import (
-	"github.com/gin-gonic/gin"
+	"AREA/internal/utils"
 	"net/http"
+
+	"github.com/gin-gonic/gin"
 )
 
 // Ping godoc
@@ -17,4 +19,11 @@ func Ping(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"message": "pong",
 	})
+}
+
+func Trigger(c *gin.Context) {
+        var producer utils.RMQProducer
+        producer.Queue = "trigger"
+        producer.ConnectionString = utils.GetEnvVar("RMQ_URL")
+        producer.PublishMessage("text", []byte("trigger"))
 }

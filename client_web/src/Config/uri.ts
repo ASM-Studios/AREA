@@ -76,6 +76,8 @@ const uri: UriConfig = {
             redirectUri: `${window.location.origin}/auth/twitch/callback`,
             scope: [
                 'user:read:email',
+                'user:write:chat',
+                'user:manage:whispers'
             ]
         }
     },
