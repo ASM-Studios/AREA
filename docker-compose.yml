@@ -39,7 +39,7 @@ services:
     restart: always
     profiles: [ "server", "web", "mobile", "full" ]
 
-  area-server:
+  server:
     build:
       context: ./server
       dockerfile: Dockerfile
@@ -71,7 +71,7 @@ services:
       start_period: 40s
     profiles: [ "server", "web", "mobile", "full" ]
 
-  area-server-action-consumer:
+  server-action-consumer:
     build:
       context: ./server
       dockerfile: Dockerfile_action_consumer
@@ -86,17 +86,18 @@ services:
     depends_on:
       mariadb:
         condition: service_healthy
-      area-server:
-        condition: service_healthy
       rabbitmq:
+        condition: service_healthy
+      server:
         condition: service_healthy
     networks:
       - area_network
     env_file:
       - server/.env
-    restart: unless-stopped
+    restart: always
+    profiles: [ "server", "web", "mobile", "full" ]
 
-  area-server-reaction-consumer:
+  server-reaction-consumer:
     build:
       context: ./server
       dockerfile: Dockerfile_reaction_consumer
@@ -111,17 +112,18 @@ services:
     depends_on:
       mariadb:
         condition: service_healthy
-      area-server:
-        condition: service_healthy
       rabbitmq:
+        condition: service_healthy
+      server:
         condition: service_healthy
     networks:
       - area_network
     env_file:
       - server/.env
-    restart: unless-stopped
+    restart: always
+    profiles: [ "server", "web", "mobile", "full" ]
 
-  area-client-mobile:
+  client_mobile:
     build:
       context: ./client_mobile
       dockerfile: Dockerfile
@@ -139,11 +141,11 @@ services:
       - ./client_mobile/.env
     profiles: [ "mobile", "full" ]
     depends_on:
-      area-server:
+      server:
         condition: service_healthy
     restart: "no"
 
-  area-client-web:
+  client_web:
     build:
       context: ./client_web
       dockerfile: Dockerfile
@@ -167,11 +169,11 @@ services:
     volumes:
       - mobile_builds:/usr/share/nginx/html/mobile_builds:ro
     depends_on:
-      area-server:
+      server:
         condition: service_healthy
-      area-client-mobile:
+      client_mobile:
         condition: service_completed_successfully
-        required: false
+        required: false # TODO: remove before final defense
     networks:
       - area_network
     env_file:
@@ -192,7 +194,7 @@ services:
         condition: service_healthy
       rabbitmq:
         condition: service_healthy
-      area-server:
+      server:
         condition: service_healthy
     profiles: [ "server" ]
     restart: "no"
@@ -204,9 +206,9 @@ services:
         condition: service_healthy
       rabbitmq:
         condition: service_healthy
-      area-server:
+      server:
         condition: service_healthy
-      area-client-web:
+      client_web:
         condition: service_healthy
     environment:
       - VITE_PORT=${VITE_PORT}
@@ -220,9 +222,9 @@ services:
         condition: service_healthy
       rabbitmq:
         condition: service_healthy
-      area-server:
+      server:
         condition: service_healthy
-      area-client-mobile:
+      client_mobile:
         condition: service_completed_successfully
     profiles: [ "mobile" ]
     restart: "no"
@@ -234,11 +236,11 @@ services:
         condition: service_healthy
       rabbitmq:
         condition: service_healthy
-      area-server:
+      server:
         condition: service_healthy
-      area-client-web:
+      client_web:
         condition: service_healthy
-      area-client-mobile:
+      client_mobile:
         condition: service_completed_successfully
     environment:
       - VITE_PORT=${VITE_PORT}
@@ -248,7 +250,6 @@ services:
 volumes:
   mobile_builds:
   mariadb_data:
-
 
 networks:
   area_network:

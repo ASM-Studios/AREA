@@ -30,10 +30,6 @@ help:
 ## Start containers in detached mode
 start: start-full
 
-## Start containers in detached mode for production
-start-prod:
-	docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
-
 ## Build and start containers in detached mode
 build: build-full
 
@@ -54,8 +50,9 @@ logs:
 ## Clean up containers, images, volumes and orphans
 clean:
 	docker compose --profile full down --remove-orphans -v
-	-docker rmi -f $$(docker images | grep "^area-\|area_" | awk '{print $$3}') || true
-	-docker volume rm $$(docker volume ls -q | grep "^area\|area_") || true
+	-docker rmi -f $$(docker images -q) || true
+	docker builder prune -af
+	docker system prune -af --volumes
 
 ## Run all tests
 tests: test_client_web test_client_mobile test_server
