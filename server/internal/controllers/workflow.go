@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/goccy/go-json"
-	"log"
 	"net/http"
 	"strconv"
 )
@@ -215,20 +214,20 @@ func WorkflowGet(c *gin.Context) {
 			paramData := models.ParametersRequest{
 				Name:  parameter.Name,
 				Type:  parameter.Type,
-				Value: param.Value,
+				Value: &param.Value,
 			}
 			paramsData = append(paramsData, paramData)
 		}
-		eventData.Parameters = paramsData
+		eventData.Parameters = &paramsData
 		events = append(events, eventData)
 	}
 
 	var workflowData = models.WorkflowRequest{
-		Name:        workflow.Name,
-		Description: workflow.Description,
-		Services:    services,
-		Events:      events,
-		IsActive:    workflow.IsActive,
+		Name:        &workflow.Name,
+		Description: &workflow.Description,
+		Services:    &services,
+		Events:      &events,
+		IsActive:    &workflow.IsActive,
 	}
 	c.JSON(http.StatusOK, gin.H{"workflow": workflowData})
 }
@@ -271,23 +270,36 @@ func WorkflowUpdate(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request format", "details": err.Error()})
 		return
 	}
-	log.Printf("Request: %v", request)
-	workflow.Description = request.Description
-	workflow.Name = request.Name
-	for _, eventReq := range request.Events {
-		for _, paramReq := range eventReq.Parameters {
-			var parameterValue models.ParametersValue
-			if err := pkg.DB.
-				Joins("JOIN parameters ON parameters.id = parameters_values.parameters_id").
-				Where("parameters.event_id = ? AND parameters.name = ?", eventReq.Id, paramReq.Name).
-				First(&parameterValue).Error; err != nil {
-				c.JSON(http.StatusNotFound, gin.H{"error": "Parameter value not found", "details": err.Error()})
-				return
+	if request.Description != nil {
+		workflow.Description = *request.Description
+	}
+	if request.Name != nil {
+		workflow.Name = *request.Name
+	}
+	if request.IsActive != nil {
+		workflow.IsActive = *request.IsActive
+	}
+	if request.Events != nil {
+		for _, eventReq := range *request.Events {
+			if eventReq.Parameters == nil {
+				continue
 			}
-			parameterValue.Value = paramReq.Value
-			if err := pkg.DB.Save(&parameterValue).Error; err != nil {
-				c.JSON(500, gin.H{"error": "Failed to update parameter value", "details": err.Error()})
-				return
+			for _, paramReq := range *eventReq.Parameters {
+				var parameterValue models.ParametersValue
+				if err := pkg.DB.
+					Joins("JOIN parameters ON parameters.id = parameters_values.parameters_id").
+					Where("parameters.event_id = ? AND parameters.name = ?", eventReq.Id, paramReq.Name).
+					First(&parameterValue).Error; err != nil {
+					c.JSON(http.StatusNotFound, gin.H{"error": "Parameter value not found", "details": err.Error()})
+					return
+				}
+				if paramReq.Value != nil {
+					parameterValue.Value = *paramReq.Value
+					if err := pkg.DB.Save(&parameterValue).Error; err != nil {
+						c.JSON(500, gin.H{"error": "Failed to update parameter value", "details": err.Error()})
+						return
+					}
+				}
 			}
 		}
 	}
@@ -295,6 +307,5 @@ func WorkflowUpdate(c *gin.Context) {
 		c.JSON(500, gin.H{"error": "Failed to update workflow", "details": err.Error()})
 		return
 	}
-	workflow.IsActive = request.IsActive
 	c.JSON(http.StatusOK, gin.H{"workflow": workflow})
 }
