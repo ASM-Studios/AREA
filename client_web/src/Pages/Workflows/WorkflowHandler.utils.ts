@@ -60,16 +60,16 @@ const isWorkflowValid = (
 
     if (workflowActions.length === 0 || workflowReactions.length === 0) return false;
 
-    const actionParamsValid = workflowActions.every(item => 
-      item.action.parameters.every(param => 
-        item.parameters[param.name] && item.parameters[param.name].trim() !== ''
-      )
+    const actionParamsValid = workflowActions.every(item =>
+        !item?.action?.parameters?.length || item.action.parameters.every(param =>
+            item.parameters[param.name] && item.parameters[param.name].trim() !== ''
+        )
     );
 
-    const reactionParamsValid = workflowReactions.every(item => 
-      item.reaction.parameters.every(param => 
-        item.parameters[param.name] && item.parameters[param.name].trim() !== ''
-      )
+    const reactionParamsValid = workflowReactions.every(item =>
+        !item?.reaction?.parameters?.length || item.reaction.parameters.every(param =>
+            item.parameters[param.name] && item.parameters[param.name].trim() !== ''
+        )
     );
 
     return actionParamsValid && reactionParamsValid;

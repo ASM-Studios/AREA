@@ -12,7 +12,6 @@ import { setDefaultData, isWorkflowValid } from './WorkflowHandler.utils';
 
 const { Text } = Typography;
 const { Step } = Steps;
-const { Panel } = Collapse;
 
 const WorkflowHandler: React.FC = () => {
     /* Input data */
@@ -112,7 +111,7 @@ const WorkflowHandler: React.FC = () => {
                   
                   return action ? {
                       action,
-                      parameters: event.parameters.reduce((acc, param) => ({
+                      parameters: event?.parameters?.reduce((acc, param) => ({
                           ...acc,
                           [param.name]: param.value
                       }), {})
@@ -126,7 +125,7 @@ const WorkflowHandler: React.FC = () => {
                   
                   return reaction ? {
                       reaction,
-                      parameters: event.parameters.reduce((acc, param) => ({
+                      parameters: event?.parameters?.reduce((acc, param) => ({
                           ...acc,
                           [param.name]: param.value
                       }), {})
@@ -208,7 +207,7 @@ const WorkflowHandler: React.FC = () => {
                 description: item.action.description,
                 parameters: Object.entries(item.parameters).map(([name, value]) => ({
                     name,
-                    type: item.action.parameters.find(p => p.name === name)?.type || 'string',
+                    type: item?.action?.parameters?.find(p => p.name === name)?.type || 'string',
                     value
                 }))
             })),
@@ -219,7 +218,7 @@ const WorkflowHandler: React.FC = () => {
                 description: item.reaction.description,
                 parameters: Object.entries(item.parameters).map(([name, value]) => ({
                     name,
-                    type: item.reaction.parameters.find(p => p.name === name)?.type || 'string',
+                    type: item?.reaction?.parameters?.find(p => p.name === name)?.type || 'string',
                     value
                 }))
             }))
@@ -241,241 +240,242 @@ const WorkflowHandler: React.FC = () => {
         });
     };
 
+    const collapseActionItems = filteredActions.map((service) => ({
+        key: service.service + '-actions',
+        label: service.service,
+        children: service.events.map((action: Action) => (
+            <Card
+                key={action.id}
+                size="small"
+                className="event-item"
+                extra={<Button type="link" onClick={() => handleAddAction(action)}><PlusOutlined /></Button>}
+                style={{
+                    borderRadius: '8px',
+                    marginBottom: '12px',
+                    backgroundColor: '#f8f9fa'
+                }}
+            >
+                <Text strong>{action.name}</Text>
+                <Text type="secondary" style={{display: 'block'}}>{action.description}</Text>
+            </Card>
+        ))
+    }));
+
+    const collapseReactionItems = filteredReactions.map((service) => ({
+        key: service.service + '-reactions',
+        label: service.service,
+        children: service.events.map((reaction: Reaction) => (
+            <Card
+                key={reaction.id}
+                size="small"
+                className="event-item"
+                extra={<Button type="link" onClick={() => handleAddReaction(reaction)}><PlusOutlined /></Button>}
+                style={{
+                    borderRadius: '8px',
+                    marginBottom: '12px',
+                    backgroundColor: '#f8f9fa'
+                }}
+            >
+                <Text strong>{reaction.name}</Text>
+                <Text type="secondary" style={{display: 'block'}}>{reaction.description}</Text>
+            </Card>
+        ))
+    }));
+
     const renderNoServicesResult = () => (
-    <Card>
-      <Result
-        status="error"
-        title={translations?.workflow.handler.errors.noServices.title}
-        subTitle={translations?.workflow.handler.errors.noServices.subtitle}
-        extra={
-          <Space>
-            <LinkButton
-              text={translations?.workflow.handler.errors.noServices.goBack}
-              goBack
-              type="default"
-            />
-            <LinkButton
-              text={translations?.workflow.handler.errors.noServices.connectService}
-              url="/account/me"
-              type="primary"
-            />
-          </Space>
-        }
-      />
-    </Card>
-    );
-    const renderWorkflowContent = () => (
-    <Layout className="workflow-layout">
-      <Form layout="vertical" initialValues={formData}>
-        <Card className="workflow-card" style={{ borderRadius: '12px', marginBottom: '24px' }}>
-          <Steps current={currentStep} onChange={setCurrentStep} style={{ marginBottom: '32px' }}>
-            <Step title={translations?.workflow.handler.form.name.label} description={translations?.workflow.handler.form.description.label} />
-            <Step title={translations?.workflow.handler.sections.when} description={translations?.workflow.handler.sections.availableActions} />
-            <Step title={translations?.workflow.handler.sections.then} description={translations?.workflow.handler.sections.availableReactions} />
-          </Steps>
-
-          <div style={{ marginBottom: '24px' }}>
-            {currentStep === 0 && (
-              <div className="step-content">
-                <Form.Item
-                  label={translations?.workflow.handler.form.name.label}
-                  required
-                >
-                  <Input
-                    placeholder={translations?.workflow.handler.form.name.placeholder}
-                    value={formData.name}
-                    onChange={(e) => setFormData({...formData, name: e.target.value})}
-                  />
-                </Form.Item>
-                <Form.Item label={translations?.workflow.handler.form.description.label}>
-                  <Input.TextArea
-                    placeholder={translations?.workflow.handler.form.description.placeholder}
-                    value={formData.description}
-                    onChange={(e) => setFormData({...formData, description: e.target.value})}
-                  />
-                </Form.Item>
-              </div>
-            )}
-
-            {currentStep === 1 && (
-              <div className="step-content">
-                <Row gutter={[16, 16]}>
-                  <Col span={12}>
-                    <Card title={translations?.workflow.handler.sections.availableActions} className="events-card" style={{ borderRadius: '8px' }}>
-                      <Collapse>
-                        {filteredActions.map((service) => (
-                          <Panel header={service.service} key={service.service}>
-                            {service.events.map((action: Action) => (
-                              <Card
-                                key={action.id}
-                                size="small"
-                                className="event-item"
-                                extra={<Button type="link" onClick={() => handleAddAction(action)}><PlusOutlined /></Button>}
-                                style={{
-                                  borderRadius: '8px',
-                                  marginBottom: '12px',
-                                  backgroundColor: '#f8f9fa'
-                                }}
-                              >
-                                <Text strong>{action.name}</Text>
-                                <Text type="secondary" style={{display: 'block'}}>{action.description}</Text>
-                              </Card>
-                            ))}
-                          </Panel>
-                        ))}
-                      </Collapse>
-                    </Card>
-                  </Col>
-                  <Col span={12}>
-                    <Card title={translations?.workflow.handler.sections.selectedItems} className="selected-events-card" style={{ borderRadius: '8px' }}>
-                      {workflowActions.map((item, index) => (
-                        <Card
-                          key={index}
-                          size="small"
-                          className="selected-event-item"
-                          style={{
-                            borderRadius: '8px',
-                            marginBottom: '12px',
-                            backgroundColor: '#f8f9fa'
-                          }}
-                          extra={
-                            <Button type="link" danger onClick={() => handleRemoveAction(index)}>
-                              <DeleteOutlined />
-                            </Button>
-                          }
-                        >
-                          <Text strong>{item.action.name}</Text>
-                          {item.action.parameters.map((param) => (
-                            <Form.Item key={param.name} label={param.name}>
-                              {memoizedRenderParameterInput(
-                                param,
-                                item.parameters[param.name] || '',
-                                (value) => handleParameterChange(index, param.name, value, true)
-                              )}
-                            </Form.Item>
-                          ))}
-                        </Card>
-                      ))}
-                    </Card>
-                  </Col>
-                </Row>
-              </div>
-            )}
-
-            {currentStep === 2 && (
-              <div className="step-content">
-                <Row gutter={[16, 16]}>
-                  <Col span={12}>
-                    <Card title={translations?.workflow.handler.sections.availableReactions} className="events-card" style={{ borderRadius: '8px' }}>
-                      <Collapse>
-                        {filteredReactions.map((service) => (
-                          <Panel header={service.service} key={service.service}>
-                            {service.events.map((reaction: Reaction) => (
-                              <Card
-                                key={reaction.id}
-                                size="small"
-                                className="event-item"
-                                extra={<Button type="link" onClick={() => handleAddReaction(reaction)}><PlusOutlined /></Button>}
-                                style={{
-                                  borderRadius: '8px',
-                                  marginBottom: '12px',
-                                  backgroundColor: '#f8f9fa'
-                                }}
-                              >
-                                <Text strong>{reaction.name}</Text>
-                                <Text type="secondary" style={{display: 'block'}}>{reaction.description}</Text>
-                              </Card>
-                            ))}
-                          </Panel>
-                        ))}
-                      </Collapse>
-                    </Card>
-                  </Col>
-                  <Col span={12}>
-                    <Card title={translations?.workflow.handler.sections.selectedItems} className="selected-events-card" style={{ borderRadius: '8px' }}>
-                      {workflowReactions.map((item, index) => (
-                        <Card
-                          key={index}
-                          size="small"
-                          className="selected-event-item"
-                          style={{
-                            borderRadius: '8px',
-                            marginBottom: '12px',
-                            backgroundColor: '#f8f9fa'
-                          }}
-                          extra={
-                            <Button type="link" danger onClick={() => handleRemoveReaction(index)}>
-                              <DeleteOutlined />
-                            </Button>
-                          }
-                        >
-                          <Text strong>{item.reaction.name}</Text>
-                          {item.reaction.parameters.map((param) => (
-                            <Form.Item key={param.name} label={param.name}>
-                              {memoizedRenderParameterInput(
-                                param,
-                                item.parameters[param.name] || '',
-                                (value) => handleParameterChange(index, param.name, value, false)
-                              )}
-                            </Form.Item>
-                          ))}
-                        </Card>
-                      ))}
-                    </Card>
-                  </Col>
-                </Row>
-              </div>
-            )}
-          </div>
-
-          <div className="steps-action" style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <div>
-              {currentStep > 0 && (
-                <Button style={{ margin: '0 8px' }} onClick={() => setCurrentStep(currentStep - 1)}>
-                  {translations?.common.table.cancel}
-                </Button>
-              )}
-              {currentStep < 2 && (
-                <Button type="primary" onClick={() => setCurrentStep(currentStep + 1)}>
-                  {translations?.common.table.next}
-                </Button>
-              )}
-              {currentStep === 2 && (
-                <Button
+        <Card>
+          <Result
+            status="error"
+            title={translations?.workflow.handler.errors.noServices.title}
+            subTitle={translations?.workflow.handler.errors.noServices.subtitle}
+            extra={
+              <Space>
+                <LinkButton
+                  text={translations?.workflow.handler.errors.noServices.goBack}
+                  goBack
+                  type="default"
+                />
+                <LinkButton
+                  text={translations?.workflow.handler.errors.noServices.connectService}
+                  url="/account/me"
                   type="primary"
-                  onClick={handleCreateWorkflow}
-                  disabled={!isWorkflowValidMemo}
-                >
-                  {edit
-                      ? translations?.workflow.handler.buttons.update
-                      : translations?.workflow.handler.buttons.create
-                  }
-                </Button>
-              )}
-            </div>
-            <LinkButton text={translations?.workflow.handler.buttons.cancel} goBack type="danger" />
-          </div>
+                />
+              </Space>
+            }
+          />
         </Card>
-      </Form>
-    </Layout>
+    );
+
+    const renderWorkflowContent = () => (
+        <Layout className="workflow-layout">
+          <Form layout="vertical" initialValues={formData}>
+            <Card className="workflow-card" style={{ borderRadius: '12px', marginBottom: '24px' }}>
+              <Steps current={currentStep} onChange={setCurrentStep} style={{ marginBottom: '32px' }}>
+                <Step title={translations?.workflow.handler.form.name.label} description={translations?.workflow.handler.form.description.label} />
+                <Step title={translations?.workflow.handler.sections.when} description={translations?.workflow.handler.sections.availableActions} />
+                <Step title={translations?.workflow.handler.sections.then} description={translations?.workflow.handler.sections.availableReactions} />
+              </Steps>
+
+              <div style={{ marginBottom: '24px' }}>
+                {currentStep === 0 && (
+                  <div className="step-content">
+                    <Form.Item
+                      label={translations?.workflow.handler.form.name.label}
+                      required
+                    >
+                      <Input
+                        placeholder={translations?.workflow.handler.form.name.placeholder}
+                        value={formData.name}
+                        onChange={(e) => setFormData({...formData, name: e.target.value})}
+                      />
+                    </Form.Item>
+                    <Form.Item label={translations?.workflow.handler.form.description.label}>
+                      <Input.TextArea
+                        placeholder={translations?.workflow.handler.form.description.placeholder}
+                        value={formData.description}
+                        onChange={(e) => setFormData({...formData, description: e.target.value})}
+                      />
+                    </Form.Item>
+                  </div>
+                )}
+
+                {currentStep === 1 && (
+                  <div className="step-content">
+                    <Row gutter={[16, 16]}>
+                      <Col span={12}>
+                        <Card title={translations?.workflow.handler.sections.availableActions} className="events-card" style={{ borderRadius: '8px' }}>
+                            <Collapse items={collapseActionItems} />
+                        </Card>
+                      </Col>
+                      <Col span={12}>
+                        <Card title={translations?.workflow.handler.sections.selectedItems} className="selected-events-card" style={{ borderRadius: '8px' }}>
+                          {workflowActions.map((item, index) => (
+                            <Card
+                              key={index}
+                              size="small"
+                              className="selected-event-item"
+                              style={{
+                                borderRadius: '8px',
+                                marginBottom: '12px',
+                                backgroundColor: '#f8f9fa'
+                              }}
+                              extra={
+                                <Button type="link" danger onClick={() => handleRemoveAction(index)}>
+                                  <DeleteOutlined />
+                                </Button>
+                              }
+                            >
+                              <Text strong>{item.action.name}</Text>
+                              {item?.action?.parameters?.map((param) => (
+                                <Form.Item key={param.name} label={param.name}>
+                                  {memoizedRenderParameterInput(
+                                    param,
+                                    item.parameters[param.name] || '',
+                                    (value) => handleParameterChange(index, param.name, value, true)
+                                  )}
+                                </Form.Item>
+                              ))}
+                            </Card>
+                          ))}
+                        </Card>
+                      </Col>
+                    </Row>
+                  </div>
+                )}
+
+                {currentStep === 2 && (
+                  <div className="step-content">
+                    <Row gutter={[16, 16]}>
+                      <Col span={12}>
+                        <Card title={translations?.workflow.handler.sections.availableReactions} className="events-card" style={{ borderRadius: '8px' }}>
+                            <Collapse items={collapseReactionItems} />
+                        </Card>
+                      </Col>
+                      <Col span={12}>
+                        <Card title={translations?.workflow.handler.sections.selectedItems} className="selected-events-card" style={{ borderRadius: '8px' }}>
+                          {workflowReactions.map((item, index) => (
+                            <Card
+                              key={index}
+                              size="small"
+                              className="selected-event-item"
+                              style={{
+                                borderRadius: '8px',
+                                marginBottom: '12px',
+                                backgroundColor: '#f8f9fa'
+                              }}
+                              extra={
+                                <Button type="link" danger onClick={() => handleRemoveReaction(index)}>
+                                  <DeleteOutlined />
+                                </Button>
+                              }
+                            >
+                              <Text strong>{item.reaction.name}</Text>
+                              {item?.reaction?.parameters?.map((param) => (
+                                <Form.Item key={param.name} label={param.name}>
+                                  {memoizedRenderParameterInput(
+                                    param,
+                                    item.parameters[param.name] || '',
+                                    (value) => handleParameterChange(index, param.name, value, false)
+                                  )}
+                                </Form.Item>
+                              ))}
+                            </Card>
+                          ))}
+                        </Card>
+                      </Col>
+                    </Row>
+                  </div>
+                )}
+              </div>
+
+              <div className="steps-action" style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <div>
+                  {currentStep > 0 && (
+                    <Button style={{ margin: '0 8px' }} onClick={() => setCurrentStep(currentStep - 1)}>
+                      {translations?.common.table.cancel}
+                    </Button>
+                  )}
+                  {currentStep < 2 && (
+                    <Button type="primary" onClick={() => setCurrentStep(currentStep + 1)}>
+                      {translations?.common.table.next}
+                    </Button>
+                  )}
+                  {currentStep === 2 && (
+                    <Button
+                      type="primary"
+                      onClick={handleCreateWorkflow}
+                      disabled={!isWorkflowValidMemo}
+                    >
+                      {edit
+                          ? translations?.workflow.handler.buttons.update
+                          : translations?.workflow.handler.buttons.create
+                      }
+                    </Button>
+                  )}
+                </div>
+                <LinkButton text={translations?.workflow.handler.buttons.cancel} goBack type="danger" />
+              </div>
+            </Card>
+          </Form>
+        </Layout>
     );
 
     return (
-    <Security>
-      <div style={{ padding: '16px 24px', position: 'relative', zIndex: 1, height: '100%' }} role="main">
-        {userHasNoServices ? (
-          renderNoServicesResult()
-        ) : (
-          <>
-            {loading || !about ? (
-              <Spin size="large" tip={translations?.workflow.handler.loading} />
+        <Security>
+          <div style={{ padding: '16px 24px', position: 'relative', zIndex: 1, height: '100%' }} role="main">
+            {userHasNoServices ? (
+              renderNoServicesResult()
             ) : (
-              renderWorkflowContent()
+              <>
+                {loading || !about ? (
+                  <Spin size="large" />
+                ) : (
+                  renderWorkflowContent()
+                )}
+              </>
             )}
-          </>
-        )}
-      </div>
-    </Security>
+          </div>
+        </Security>
     );
 };
 
