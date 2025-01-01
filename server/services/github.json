@@ -1,5 +1,77 @@
 {
   "name": "github",
   "events": [
+    {
+      "name": "A pull request is created",
+      "description": "Triggered when a pull request is created",
+      "type": "action",
+      "parameters": [
+        {
+          "name": "owner",
+          "description": "Owner of the repository",
+          "type": "string",
+          "is_required": true
+        },
+        {
+          "name": "repo",
+          "description": "Name of the repository",
+          "type": "string",
+          "is_required": true
+        }
+      ]
+    },
+    {
+      "name": "An user repo is created",
+      "description": "Triggered when an user create a repo",
+      "type": "action",
+      "parameters": [
+        {
+          "name": "user",
+          "description": "User who creates the repository",
+          "type": "string",
+          "is_required": true
+        }
+      ]
+    },
+
+
+
+    {
+      "name": "Create a repo",
+      "description": "Create a repo on user profile",
+      "type": "reaction",
+      "parameters": [
+        {
+          "name": "name",
+          "description": "Name of the repo",
+          "type": "string",
+          "is_required": true
+        },
+        {
+          "name": "description",
+          "description": "Description of the repo",
+          "type": "string",
+          "is_required": false
+        },
+        {
+          "name": "public",
+          "description": "Visibility of the repo",
+          "type": "boolean",
+          "is_required": true
+        },
+        {
+          "name": "gitignore_template",
+          "description": "Default gitignore template",
+          "type": "string",
+          "is_required": false
+        },
+        {
+          "name": "license_template",
+          "description": "License to apply",
+          "type": "string",
+          "is_required": false
+        }
+      ]
+    }
   ]
 }

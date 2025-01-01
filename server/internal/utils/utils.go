@@ -39,6 +39,20 @@ func SendRequest(request *http.Request) (*http.Response, error) {
         return resp, nil
 }
 
+func ExtractBody[T any](response *http.Response) (*T, error) {
+        b, err := io.ReadAll(response.Body)
+        if err != nil {
+                return nil, err
+        }
+        var body T
+        err = json.Unmarshal([]byte(b), &body)
+        if err != nil {
+                return nil, err
+        }
+        return &body, err
+}
+
+// Deprecated: Use oauth.SendRequest and utils.ExtractBody instead
 func SendRequestBody[T any](request *http.Request) (*http.Response, *T, error) {
         var client http.Client
         var body T

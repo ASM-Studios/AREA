@@ -3,16 +3,21 @@ package main
 import (
 	"AREA/cmd/action_consumer/consts"
 	"AREA/cmd/action_consumer/trigger"
+	"AREA/cmd/action_consumer/vars"
 	"AREA/internal/amqp"
+	"AREA/internal/models"
 	"AREA/internal/pkg"
 	"AREA/internal/utils"
 	"bytes"
+	"errors"
+	"fmt"
 	"log"
 	"os"
 	"os/signal"
 	"syscall"
 
 	"github.com/rabbitmq/amqp091-go"
+	"gorm.io/gorm"
 )
 
 var service string
@@ -23,14 +28,24 @@ func handlerAction(message amqp091.Delivery) {
         }
 }
 
-func main() {
+func setService() {
         if len(os.Args) < 2 {
-                service  = "twitch" //TODO CHANGE WITH DOCKER
-        } else {
-                service = os.Args[1]
+                return
         }
+        service = os.Args[1]
+        var service models.Service
+        err := pkg.DB.Where("name = ?", service).First(&service).Error
+        if errors.Is(err, gorm.ErrRecordNotFound) {
+                return
+        }
+        vars.ServiceId = fmt.Sprintf("%d", service.ID)
+}
+
+func main() {
         rabbitMQConnection := utils.GetEnvVar("RMQ_URL")
         pkg.InitDB()
+        setService()
+        fmt.Printf("Service: %s\n", vars.ServiceId)
         err := amqp.Consumer.Init(rabbitMQConnection, consts.MessageQueue, consts.Key)
         if err != nil {
                 log.Fatalf("Failed to initialize consumer: %v", err)

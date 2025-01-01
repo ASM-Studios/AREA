@@ -64,6 +64,11 @@ const uri: UriConfig = {
             scope: [
                 'user-read-private',
                 'user-read-email',
+                'user-modify-playback-state',
+                'user-read-playback-state',
+                'playlist-read-private',
+                'playlist-modify-public',
+                'playlist-modify-private',
             ]
         }
     },
@@ -91,6 +96,7 @@ const uri: UriConfig = {
                 'identify',
                 'email',
                 'guilds',
+                'dm_channels.read'
             ]
         }
     },
@@ -103,6 +109,7 @@ const uri: UriConfig = {
             scope: [
                 'read:user',
                 'user:email',
+                'repo'
             ]
         }
     }

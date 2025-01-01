@@ -10,4 +10,5 @@ type Token struct {
         Email           string
         ServiceID       uint
         UserID          uint
+        Expired         bool
 }
