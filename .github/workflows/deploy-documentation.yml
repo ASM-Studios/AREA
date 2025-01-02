@@ -4,6 +4,11 @@ on:
   push:
     branches:
       - 'master'
+    paths-ignore:
+      - 'client_web/**'
+      - 'client_mobile/**'
+      - 'server/**'
+      - 'rabbit-mq/**'
 
 permissions:
   contents: write
