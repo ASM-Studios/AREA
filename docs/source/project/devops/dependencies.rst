@@ -1,91 +1,58 @@
 Project Dependencies
 ==================
 
-This page details all the technologies, tools, and external projects used in our DevOps setup.
+Core Technologies
+---------------
 
-Container Technologies
--------------------
+Docker & Orchestration
+~~~~~~~~~~~~~~~~~~~~
+- **Docker**: Latest version for containerization
+- **Docker Compose**: Version 3.x for service orchestration
+- **RabbitMQ**: Version 4.0.4-management-alpine for message queuing
+- **MariaDB**: Version 11.4.4 for database
 
-Docker
-~~~~~~
-- **Version**: Latest
-- **Usage**: Container orchestration and deployment
-- **Purpose**: Ensures consistent development and production environments
-- **Source**: `Official Docker <https://www.docker.com/>`_
+Development Stack
+---------------
 
-Docker Compose
-~~~~~~~~~~~~
-- **Version**: 3.x
-- **Usage**: Multi-container application definition and running
-- **Purpose**: Orchestrates our microservices architecture
-- **Source**: `Docker Compose <https://docs.docker.com/compose/>`_
+Frontend Technologies
+~~~~~~~~~~~~~~~~~~~
+- **Node.js**: Version 20 LTS
+- **React**: Latest version for web client
+- **Flutter**: Stable channel for mobile client
+- **Nginx**: Alpine-based for web serving
 
-Web Technologies
---------------
+Backend Technologies
+~~~~~~~~~~~~~~~~~~
+- **Go**: Latest version for server implementation
+- **MariaDB**: For data persistence
+- **RabbitMQ**: For message queue management
 
-Nginx
-~~~~~
-- **Version**: Alpine-based
-- **Usage**: Web server and reverse proxy
-- **Purpose**: Serves web client and handles APK downloads
-- **Image**: nginx:alpine
-- **Source**: `Official Nginx <https://hub.docker.com/_/nginx>`_
+Testing & CI/CD
+-------------
 
-Development Technologies
----------------------
+Testing Frameworks
+~~~~~~~~~~~~~~~~
+- **npm test**: For web client testing
+- **GitHub Actions**: For CI/CD pipelines
 
-Flutter
-~~~~~~
-- **Version**: Stable
-- **Usage**: Mobile client development
-- **Purpose**: Cross-platform mobile application development
-- **Image**: ghcr.io/cirruslabs/flutter:stable
-- **Source**: `CirrusLabs Flutter <https://github.com/cirruslabs/docker-images-flutter>`_
+Documentation Tools
+----------------
 
-Node.js
-~~~~~~~
-- **Version**: Latest LTS
-- **Usage**: Web client development
-- **Purpose**: React application building and serving
-- **Image**: node:latest
-- **Source**: `Official Node.js <https://hub.docker.com/_/node>`_
+- **Sphinx**: Latest version
+- **Read the Docs Theme**
+- **Myst Parser**
+- **Sphinxcontrib-mermaid**
 
 Development Tools
 ---------------
 
-mkcert
-~~~~~~
-- **Purpose**: Local SSL certificate generation
-- **Usage**: Development SSL certificates
-- **Source**: `FiloSottile/mkcert <https://github.com/FiloSottile/mkcert>`_
-
-Sphinx
-~~~~~~
-- **Purpose**: Documentation generation
-- **Version**: Latest
-- **Usage**: Project documentation
-- **Source**: `Sphinx Documentation <https://www.sphinx-doc.org/>`_
+Version Control
+~~~~~~~~~~~~~
+- **Git**: Latest version
+- **GitHub**: For repository hosting and CI/CD
 
 Package Managers
---------------
-
-npm
-~~~
-- **Purpose**: Node.js package management
-- **Used By**: Web client
-- **Source**: `npm <https://www.npmjs.com/>`_
-
-pub
-~~~
-- **Purpose**: Flutter/Dart package management
-- **Used By**: Mobile client
-- **Source**: `pub.dev <https://pub.dev/>`_
-
-Version Control
--------------
-
-Git
-~~~
-- **Usage**: Source code management
-- **Purpose**: Version control and collaboration
-- **Source**: `Git <https://git-scm.com/>`_ 
+~~~~~~~~~~~~~~
+- **npm**: For web client dependencies
+- **go mod**: For server dependencies
+- **pub**: For Flutter dependencies 
