@@ -17,7 +17,7 @@ env:
 
 jobs:
   test-client-web:
-    if: "!contains(github.event.head_commit.message, 'WIP') && !contains(github.event.head_commit.message, 'wip')"
+    if: ${{ !contains(github.event.head_commit.message, 'WIP') && !contains(github.event.head_commit.message, 'wip') }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -40,7 +40,7 @@ jobs:
 
   build:
     needs: test-client-web
-    if: "!contains(github.event.head_commit.message, 'WIP') && !contains(github.event.head_commit.message, 'wip')"
+    if: ${{ !contains(github.event.head_commit.message, 'WIP') && !contains(github.event.head_commit.message, 'wip') }}
     runs-on: ubuntu-latest
     environment: docker-build
     permissions:
@@ -74,7 +74,6 @@ jobs:
           echo "DB_HOST=${{ secrets.DB_HOST }}" >> .env
           echo "DB_PORT=${{ secrets.DB_PORT }}" >> .env
           echo "DB_USER=${{ secrets.DB_USER }}" >> .env
-          cat .env
 
           # Client Web .env
           echo "VITE_PORT=${{ secrets.VITE_PORT }}" >> client_web/.env
@@ -107,7 +106,7 @@ jobs:
           echo "DB_USER=${{ secrets.DB_USER }}" >> server/.env
 
       - name: Build and test
-        run: docker compose --profile full up --build -d
+        run: docker compose --profile full build
 
       - name: Push images if on main branch
         if: ${{ github.ref == 'refs/heads/main' && env.ACT != 'true' }}
