@@ -35,10 +35,11 @@ func FetchNewToken(dbToken *models.Token) (error) {
         req.Header.Set("Origin", "http://localhost")
         req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 
-        resp, serviceBearerToken, err := utils.SendRequestBody[ServiceBearerToken](req)
+        resp, err := utils.SendRequest(req)
         if err != nil || resp.StatusCode != 200 {
                 return errors.New("Invalid request")
         }
+        serviceBearerToken, err := utils.ExtractBody[ServiceBearerToken](resp)
         dbToken.Token = serviceBearerToken.Token
         if len(serviceBearerToken.RefreshToken) > 0 {
                 dbToken.RefreshToken = serviceBearerToken.RefreshToken

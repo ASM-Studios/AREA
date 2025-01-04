@@ -2,6 +2,22 @@
   "name": "twitch",
   "events": [
     {
+      "name": "Stream start",
+      "description": "Detect stream start",
+      "type": "action",
+      "parameters": [
+        {
+          "name": "streamer",
+          "description": "Streamer which will trigger the action",
+          "type": "string",
+          "is_required": true
+        }
+      ]
+    },
+
+
+
+    {
       "name": "Send message",
       "description": "Send a message on a tchat",
       "type": "reaction",
@@ -9,12 +25,14 @@
         {
           "name": "destination",
           "description": "Tchat on which message will be send",
-          "type": "string"
+          "type": "string",
+          "is_required": true
         },
         {
           "name": "content",
           "description": "Content of the message",
-          "type": "string"
+          "type": "string",
+          "is_required": true
         }
       ]
     },
@@ -26,24 +44,14 @@
         {
           "name": "receiver",
           "description": "Receiver of the message",
-          "type": "string"
+          "type": "string",
+          "is_required": true
         },
         {
           "name": "content",
           "description": "Content of the message",
-          "type": "string"
-        }
-      ]
-    },
-    {
-      "name": "Stream start",
-      "description": "Detect stream start",
-      "type": "action",
-      "parameters": [
-        {
-          "name": "streamer",
-          "description": "Streamer which will trigger the action",
-          "type": "string"
+          "type": "string",
+          "is_required": true
         }
       ]
     }

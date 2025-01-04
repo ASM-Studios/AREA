@@ -1,6 +1,8 @@
 package trigger
 
 import (
+	"AREA/cmd/action_consumer/github"
+	"AREA/cmd/action_consumer/spotify"
 	"AREA/cmd/action_consumer/twitch"
 	"AREA/cmd/action_consumer/vars"
 	"AREA/internal/models"
@@ -50,26 +52,41 @@ func sendEvents(workflow *models.Workflow) {
                         ConnectionString: utils.GetEnvVar("RMQ_URL"),
                 }
                 body, _ := json.Marshal(workflowEvent)
+                fmt.Println("HERE")
                 producer.PublishMessage("json", body)
         }
 }
 
-var triggerCallbacks = map[uint]func(*models.User, []string) bool {
-                33: twitch.StreamStart,
+var triggerCallbacks = map[uint]func(*models.User, map[string]string) bool {
+        7: github.PRCreated,
+        8: github.UserRepoCreated,
+
+        30: spotify.StartPlaying,
+        35: twitch.StreamStart,
 }
 
 func triggerCallback(workflowEventId uint, refEventId uint, user *models.User) bool {
-        var parameters []string
+        var parameters []struct {
+                Name    string
+                Value   string
+        }
         pkg.DB.Raw(`
                 SELECT
-                        parameters_values.value
+                        parameters.name AS name,
+                        parameters_values.value AS value
                 FROM workflow_events
                 JOIN parameters_values ON parameters_values.workflow_event_id = workflow_events.id
+                JOIN parameters ON parameters.id = parameters_values.parameters_id
                 WHERE workflow_events.id = ?`,
                 workflowEventId).Scan(&parameters)
-        
+
+        parametersMap := make(map[string]string)
+        for _, parameter := range parameters {
+                parametersMap[parameter.Name] = parameter.Value
+        }
+
         if callback, ok := triggerCallbacks[refEventId]; ok {
-                return callback(user, parameters)
+                return callback(user, parametersMap)
         } else {
                 fmt.Printf("Callback not found for workflow event id: %d\n", refEventId)
         }
@@ -82,14 +99,18 @@ func detectWorkflowEvent(workflow *models.Workflow, user *models.User) bool {
                 RefEventID      uint
         }
 
-        rows, err := pkg.DB.Raw(`
-                SELECT
+        query := `SELECT
                         workflow_events.id AS id,
                         events.id AS ref_event_id
                 FROM workflow_events
                 JOIN events ON events.id = workflow_events.event_id
-                WHERE workflow_events.workflow_id = ? AND events.type = 'action'
-                `, workflow.ID) .Rows()
+                JOIN services ON services.id = events.service_id
+                WHERE workflow_events.workflow_id = ? AND events.type = 'action'`
+
+        if vars.ServiceId != "*" {
+                query += fmt.Sprintf(" AND services.id = %s", vars.ServiceId)
+        }
+        rows, err := pkg.DB.Raw(query, workflow.ID) .Rows()
         if err != nil {
                 return false
         }
@@ -116,9 +137,10 @@ func DetectWorkflowsEvent(serviceName string) {
                 pkg.DB.ScanRows(rows, &workflow)
                 pkg.DB.Where("id = ?", workflow.UserID).First(&user)
                 if detectWorkflowEvent(&workflow, &user) {
-                        sendEvents(&workflow)
+                        sendEvents(&workflow)   // TODO RESTORE
+                        // TODO RESTORE HERE
                 }
         }
 
-        vars.LastFetch = time.Now()
+        vars.LastFetch = time.Now().Unix()
 }

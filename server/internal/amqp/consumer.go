@@ -15,6 +15,33 @@ type EventConsumer struct {
         channel    *amqp091.Channel
 }
 
+func DeclareQueue(rabbitMQConnection string, messageQueue string, key string) error {
+        conn, err := amqp091.Dial(rabbitMQConnection)
+        if err != nil {
+                return fmt.Errorf("failed to connect to RabbitMQ: %w", err)
+        }
+        ch, err := conn.Channel()
+        if err != nil {
+                return fmt.Errorf("failed to open")
+        }
+        ch.QueueDeclare(
+                messageQueue,   // Queue name
+                true,           // Durable
+                false,          // Delete when unused
+                false,          // Exclusive
+                false,          // No-wait
+                nil,            // Arguments
+        )
+        ch.QueueBind(
+                messageQueue,   // Queue name
+                key,            // Routing key
+                gconsts.ExchangeName,   // Exchange name
+                false,          // No-wait
+                nil,            // Arguments
+        )
+        return nil
+}
+
 func (ec *EventConsumer) Consume(messageQueue string, handler func(amqp091.Delivery)) error {
         msgs, err := ec.channel.Consume(
                 messageQueue, // Queue name
@@ -31,6 +58,7 @@ func (ec *EventConsumer) Consume(messageQueue string, handler func(amqp091.Deliv
 
         go func() {
                 for msg := range msgs {
+                        fmt.Printf("Received a message: %s\n", msg.Body)
                         handler(msg)
                 }
         }()

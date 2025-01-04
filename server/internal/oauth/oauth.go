@@ -5,6 +5,8 @@ import (
 	"AREA/internal/utils"
 	"bytes"
 	"errors"
+	"fmt"
+	"io"
 	"net/http"
 	"net/url"
 
@@ -80,10 +82,14 @@ func getServiceBearer(serviceApp ServiceApp, serviceCode ServiceCode) (*ServiceB
         req.Header.Set("Origin", "http://localhost")
         req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 
-        resp, serviceBearerToken, err := utils.SendRequestBody[ServiceBearerToken](req)
+        resp, err := utils.SendRequest(req)
         if err != nil || resp.StatusCode != 200 {
+                fmt.Printf("HERE %d\n", resp.StatusCode)
+                b, _ := io.ReadAll(resp.Body)
+                fmt.Println(string(b))
                 return nil, errors.New("Failed to fetch bearer token")
         }
+        serviceBearerToken, err := utils.ExtractBody[ServiceBearerToken](resp)
         return serviceBearerToken, nil
 }
 
@@ -114,12 +120,14 @@ func createDBToken(serviceId uint, serviceApp ServiceApp, serviceBearerToken Ser
 func BasicServiceCallback(c *gin.Context, serviceId uint, serviceApp ServiceApp) (*models.Token, error) {
         var serviceCode ServiceCode
         if err := c.ShouldBindJSON(&serviceCode); err != nil {
+                fmt.Println("Invalid body")
                 return nil, errors.New("Invalid body")
         }
 
         bearerToken, err := getServiceBearer(serviceApp, serviceCode)
         if err != nil || bearerToken == nil {
-            return nil, errors.New("Failed to fetch bearer token")
+                fmt.Println("Failed to fetch jwt")
+                return nil, errors.New("Failed to fetch bearer token")
         }
 
         return createDBToken(serviceId, serviceApp, *bearerToken)
