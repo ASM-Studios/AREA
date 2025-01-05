@@ -100,7 +100,7 @@ class _LoginPageState extends State<LoginPage> {
                         if (!isLoggingViaOauth) {
                           isLoggingViaOauth = true;
                           OAuthService.handleOAuth(context, "discord",
-                              signUp: false);
+                              signUp: true);
                           isLoggingViaOauth = false;
                         }
                       },
@@ -117,7 +117,7 @@ class _LoginPageState extends State<LoginPage> {
                         if (!isLoggingViaOauth) {
                           isLoggingViaOauth = true;
                           OAuthService.handleOAuth(context, "spotify",
-                              signUp: false);
+                              signUp: true);
                           isLoggingViaOauth = false;
                         }
                       },
