@@ -14,6 +14,11 @@ class SpotifyAuthService {
 
   static const String scopes = "user-read-private user-read-email";
 
+  // static void (String code)
+  // {
+
+  // }
+
   static Future<bool> _fetchSpotifyAccessToken(String code) async {
     final tokenUrl = Uri.https("accounts.spotify.com", "/api/token");
 
@@ -62,7 +67,8 @@ class SpotifyAuthService {
       final code = Uri.parse(result).queryParameters["code"];
       if (code == null) return (false);
       print("code a echanger : $code");
-      return (_fetchSpotifyAccessToken(code));
+      return (false);
+      // return (_fetchSpotifyAccessToken(code));
     } catch (e) {
       print("error authentification spotify : $e");
       return (false);

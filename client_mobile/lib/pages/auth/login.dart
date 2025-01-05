@@ -1,5 +1,6 @@
 import 'package:client_mobile/services/login/auth_service.dart';
 import 'package:client_mobile/services/microsoft/microsoft_auth_service.dart';
+import 'package:client_mobile/services/oauth/oauth_service.dart';
 import 'package:client_mobile/tools/utils.dart';
 import 'package:client_mobile/widgets/button.dart';
 import 'package:client_mobile/widgets/clickable_text.dart';
@@ -32,24 +33,6 @@ class _LoginPageState extends State<LoginPage> {
 
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-
-  void handleMicrosoftOAuth() async {
-    if (!isLoggingViaOauth) {
-      isLoggingViaOauth = true;
-      bool isRegistered =
-          await MicrosoftAuthService.auth(context, signUp: true);
-
-      if (!mounted) {
-        isLoggingViaOauth = false;
-        return;
-      }
-
-      if (isRegistered) {
-        context.pushReplacement("/dashboard");
-      }
-      isLoggingViaOauth = false;
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -109,16 +92,43 @@ class _LoginPageState extends State<LoginPage> {
                 const SizedBox(height: 40),
                 const DividerWithText(label: "Or Sign in with"),
                 const SizedBox(height: 15),
-                Center(
-                  child: SignInButton(
-                    onPressed: handleMicrosoftOAuth,
-                    label: "Microsoft",
-                    image: Image.asset(
-                      "assets/images/microsoft.png",
-                      width: 40,
-                      height: 20,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    SignInButton(
+                      onPressed: () {
+                        if (!isLoggingViaOauth) {
+                          isLoggingViaOauth = true;
+                          OAuthService.handleOAuth(context, "discord",
+                              signUp: false);
+                          isLoggingViaOauth = false;
+                        }
+                      },
+                      label: "Discord",
+                      image: Image.asset(
+                        "assets/images/discord.png",
+                        width: 40,
+                        height: 20,
+                      ),
                     ),
-                  ),
+                    // Spacer(),
+                    SignInButton(
+                      onPressed: () {
+                        if (!isLoggingViaOauth) {
+                          isLoggingViaOauth = true;
+                          OAuthService.handleOAuth(context, "spotify",
+                              signUp: false);
+                          isLoggingViaOauth = false;
+                        }
+                      },
+                      label: "Spotify",
+                      image: Image.asset(
+                        "assets/images/spotify_green.png",
+                        width: 40,
+                        height: 20,
+                      ),
+                    ),
+                  ],
                 ),
                 const SizedBox(height: 5),
                 Align(

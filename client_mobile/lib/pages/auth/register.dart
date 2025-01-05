@@ -1,5 +1,5 @@
 import 'package:client_mobile/services/login/auth_service.dart';
-import 'package:client_mobile/services/microsoft/microsoft_auth_service.dart';
+import 'package:client_mobile/services/oauth/oauth_service.dart';
 import 'package:client_mobile/tools/utils.dart';
 import 'package:client_mobile/widgets/button.dart';
 import 'package:client_mobile/widgets/clickable_text.dart';
@@ -33,24 +33,6 @@ class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController confirmPasswordController =
       TextEditingController();
-
-  void handleMicrosoftOAuth() async {
-    if (!isLoggingViaOauth) {
-      isLoggingViaOauth = true;
-      bool isRegistered =
-          await MicrosoftAuthService.auth(context, signUp: true);
-
-      if (!mounted) {
-        isLoggingViaOauth = false;
-        return;
-      }
-
-      if (isRegistered) {
-        context.pushReplacement("/dashboard");
-      }
-      isLoggingViaOauth = false;
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -136,17 +118,41 @@ class _RegisterPageState extends State<RegisterPage> {
                 const SizedBox(height: 40),
                 const DividerWithText(label: "Or Register with"),
                 const SizedBox(height: 15),
-                Align(
-                  alignment: Alignment.center,
-                  child: SignInButton(
-                    onPressed: handleMicrosoftOAuth,
-                    label: "Microsoft",
-                    image: Image.asset(
-                      "assets/images/microsoft.png",
-                      width: 40,
-                      height: 20,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    SignInButton(
+                      onPressed: () {
+                        if (!isLoggingViaOauth) {
+                          isLoggingViaOauth = true;
+                          OAuthService.handleOAuth(context, "discord", signUp: true);
+                          isLoggingViaOauth = false;
+                        }
+                      },
+                      label: "Discord",
+                      image: Image.asset(
+                        "assets/images/discord.png",
+                        width: 40,
+                        height: 20,
+                      ),
                     ),
-                  ),
+                    // Spacer(),
+                    SignInButton(
+                      onPressed: () {
+                        if (!isLoggingViaOauth) {
+                          isLoggingViaOauth = true;
+                          OAuthService.handleOAuth(context, "spotify", signUp: true);
+                          isLoggingViaOauth = false;
+                        }
+                      },
+                      label: "Spotify",
+                      image: Image.asset(
+                        "assets/images/spotify_green.png",
+                        width: 40,
+                        height: 20,
+                      ),
+                    ),
+                  ],
                 ),
                 const SizedBox(height: 5),
                 Align(
