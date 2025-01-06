@@ -1,6 +1,8 @@
 package utils
 
 import (
+	"AREA/internal/gconsts"
+
 	amqp "github.com/rabbitmq/amqp091-go"
 	"github.com/rs/zerolog/log"
 )
@@ -36,7 +38,7 @@ func (x RMQProducer) PublishMessage(contentType string, body []byte) {
 	x.OnError(err, "Failed to declare a queue")
 
 	err = ch.Publish(
-		"",     // exchange
+		gconsts.ExchangeName,     // exchange
 		q.Name, // routing key
 		false,  // mandatory
 		false,  // immediate

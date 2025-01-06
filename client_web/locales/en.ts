@@ -39,6 +39,7 @@ const en_language: Translation = {
             title: "Login",
             form: {
                 email: {
+                    label: "email",
                     placeholder: "example@example.com",
                     tooltip: "Please enter your email address",
                     validation: {
@@ -47,6 +48,7 @@ const en_language: Translation = {
                     }
                 },
                 password: {
+                    label: "password",
                     placeholder: "********",
                     tooltip: "Please enter your password",
                     validation: {
@@ -67,6 +69,7 @@ const en_language: Translation = {
             title: "Register",
             form: {
                 username: {
+                    label: "username",
                     placeholder: "Enter your username",
                     tooltip: "Please enter your desired username",
                     validation: {
@@ -74,6 +77,7 @@ const en_language: Translation = {
                     }
                 },
                 email: {
+                    label: "email",
                     placeholder: "example@example.com",
                     tooltip: "Please enter your email address",
                     validation: {
@@ -82,6 +86,7 @@ const en_language: Translation = {
                     }
                 },
                 password: {
+                    label: "password",
                     placeholder: "********",
                     tooltip: "Please enter your password",
                     validation: {
@@ -91,6 +96,7 @@ const en_language: Translation = {
                     }
                 },
                 confirmPassword: {
+                    label: "password confirmation",
                     placeholder: "********",
                     tooltip: "Please confirm your password",
                     validation: {
@@ -232,7 +238,7 @@ const en_language: Translation = {
                 deleteFailed: "Failed to delete workflow"
             }
         },
-        create: {
+        handler: {
             form: {
                 name: {
                     label: "Name",
@@ -259,7 +265,8 @@ const en_language: Translation = {
                 clearActions: "Clear Actions",
                 clearReactions: "Clear Reactions",
                 create: "Create Workflow",
-                cancel: "Cancel"
+                cancel: "Cancel",
+                update: "Update"
             },
             errors: {
                 noServices: {
@@ -370,6 +377,11 @@ const en_language: Translation = {
         notFound: {
             title: "404",
             subtitle: "Sorry, the page you visited does not exist.",
+            backHome: "Back Home"
+        },
+        attack: {
+            title: "Attack Detected",
+            subtitle: "Sorry, the page you visited is not available.",
             backHome: "Back Home"
         }
     },

@@ -1,0 +1,17 @@
+# Development stage
+FROM golang:1.23.4-alpine AS development
+
+WORKDIR /app
+
+RUN apk add --no-cache wget git
+
+RUN go install github.com/air-verse/air@latest
+
+COPY go.mod go.sum ./
+RUN go mod download
+
+COPY . .
+
+EXPOSE 8080
+
+CMD ["air", "-c", ".air.toml.action_consumer"]

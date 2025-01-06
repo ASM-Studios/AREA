@@ -39,6 +39,7 @@ const es_language: Translation = {
             title: "Iniciar Sesión",
             form: {
                 email: {
+                    label: "correo electrónico",
                     placeholder: "ejemplo@ejemplo.com",
                     tooltip: "Por favor ingresa tu correo electrónico",
                     validation: {
@@ -47,6 +48,7 @@ const es_language: Translation = {
                     }
                 },
                 password: {
+                    label: "contraseña",
                     placeholder: "********",
                     tooltip: "Por favor ingresa tu contraseña",
                     validation: {
@@ -67,6 +69,7 @@ const es_language: Translation = {
             title: "Registrarse",
             form: {
                 username: {
+                    label : "nombre de usuario",
                     placeholder: "Ingresa tu nombre de usuario",
                     tooltip: "Por favor ingresa el nombre de usuario deseado",
                     validation: {
@@ -74,6 +77,7 @@ const es_language: Translation = {
                     }
                 },
                 email: {
+                    label: "correo electrónico",
                     placeholder: "ejemplo@ejemplo.com",
                     tooltip: "Por favor ingresa tu correo electrónico",
                     validation: {
@@ -82,6 +86,7 @@ const es_language: Translation = {
                     }
                 },
                 password: {
+                    label: "contraseña",
                     placeholder: "********",
                     tooltip: "Por favor ingresa tu contraseña",
                     validation: {
@@ -91,6 +96,7 @@ const es_language: Translation = {
                     }
                 },
                 confirmPassword: {
+                    label: "confirmar contraseña",
                     placeholder: "********",
                     tooltip: "Por favor confirma tu contraseña",
                     validation: {
@@ -232,7 +238,7 @@ const es_language: Translation = {
                 deleteFailed: "Error al eliminar el flujo de trabajo"
             }
         },
-        create: {
+        handler: {
             form: {
                 name: {
                     label: "Nombre",
@@ -259,7 +265,8 @@ const es_language: Translation = {
                 clearActions: "Limpiar Acciones",
                 clearReactions: "Limpiar Reacciones",
                 create: "Crear",
-                cancel: "Cancelar"
+                cancel: "Cancelar",
+                update: "Actualizar"
             },
             errors: {
                 noServices: {
@@ -370,6 +377,11 @@ const es_language: Translation = {
         notFound: {
             title: "404",
             subtitle: "Lo sentimos, la página que visitaste no existe.",
+            backHome: "Volver al Inicio"
+        },
+        attack: {
+            title: "¡Ataque Detectado!",
+            subtitle: "Nuestro sistema ha detectado un ataque y ha bloqueado tu solicitud.",
             backHome: "Volver al Inicio"
         }
     },

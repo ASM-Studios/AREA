@@ -1,7 +1,5 @@
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import { ContextManager } from "@/Context/ContextManager";
-
-import { useEffect, useMemo, useState } from "react";
+import React from "react";
+import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
 import Particles, { initParticlesEngine } from "@tsparticles/react";
 import {
     type ISourceOptions,
@@ -9,33 +7,43 @@ import {
     OutMode,
 } from "@tsparticles/engine";
 import { loadSlim } from "@tsparticles/slim";
-
-import Home from '@/Pages/Home';
-import NotFound from '@/Pages/Errors/NotFound';
-import ApiNotConnected from "@/Pages/Errors/ApiNotConnected";
-import CustomError from "@/Pages/Errors/CustomError";
-
-import UserPage from "@/Pages/Account/UserPage";
-
-import Layout from '@/Components/Layout/Layout';
-import Login from '@/Pages/Auth/Forms/Login';
-import Register from '@/Pages/Auth/Forms/Register';
-
-import GenericCallback from "@/Pages/Auth/Callback/GenericCallback";
-
-import UpdateWorkflow from "@/Pages/Workflows/UpdateWorkflow";
-import WorkflowHandler from '@/Pages/Workflows/WorkflowHandler';
-
-import Dashboard from './Pages/Dashboard/Dashboard';
-
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-const App = () => {
-    const [init, setInit] = useState(false);
-    const [backgroundColor, setBackgroundColor] = useState("#FFA500");
+import { ContextManager } from "@/Context/ContextManager";
 
-    useEffect(() => {
+import Home from '@/Pages/Home';
+import Dashboard from './Pages/Dashboard/Dashboard';
+
+import NotFoundError from '@/Pages/Errors/NotFoundError';
+import ApiError from "@/Pages/Errors/ApiError";
+import CustomError from "@/Pages/Errors/CustomError";
+import AttackError from "@/Pages/Errors/AttackError";
+
+import Login from '@/Pages/Auth/Forms/Login';
+import Register from '@/Pages/Auth/Forms/Register';
+
+import Layout from '@/Components/Layout/Layout';
+
+import UserPage from "@/Pages/Account/UserPage";
+
+import GenericCallback from "@/Pages/Auth/Callback/GenericCallback";
+
+import WorkflowHandler from '@/Pages/Workflows/WorkflowHandler';
+
+const App = () => {
+    const [init, setInit] = React.useState(false);
+    const [backgroundColor, setBackgroundColor] = React.useState("#FFA500");
+    const [isAttackPath, setIsAttackPath] = React.useState(false);
+
+    const attackExtensions: string[] = [
+        '.php',
+        '.json',
+        '.xml',
+        '.html',
+    ];
+
+    React.useEffect(() => {
         initParticlesEngine(async (engine) => {
             await loadSlim(engine);
         }).then(() => {
@@ -46,7 +54,7 @@ const App = () => {
 
     const particlesLoaded = async (): Promise<void> => {};
 
-    const options: ISourceOptions = useMemo(
+    const options: ISourceOptions = React.useMemo(
         () => ({
             background: {
                 color: {
@@ -141,29 +149,48 @@ const App = () => {
             )}
             <ContextManager>
                 <Router>
-                    <Layout>
-                        <Routes>
-                            <Route path="/" element={<Home backgroundColor={backgroundColor} />} />
-                            <Route path="/login" element={<Login />} />
-                            <Route path="/register" element={<Register />} />
-                            <Route path="/dashboard" element={<Dashboard />} />
-
-                            <Route path="/auth/:service/callback" element={<GenericCallback />} />
-
-                            <Route path="/workflow/create" element={<WorkflowHandler />} />
-                            <Route path="/workflow/update/:id" element={<UpdateWorkflow />} />
-
-                            <Route path="/account/me" element={<UserPage backgroundColor={backgroundColor} setBackgroundColor={setBackgroundColor} />} />
-
-                            <Route path="/error/connection" element={<ApiNotConnected />} />
-                            <Route path="/error/:error" element={<CustomError />} />
-                            <Route path="*" element={<NotFound />} />
-                        </Routes>
-                    </Layout>
+                    <LocationHandler attackExtensions={attackExtensions} setIsAttackPath={setIsAttackPath} />
+                    {isAttackPath
+                        ? <AttackError />
+                        : <Layout>
+                            <Routes>
+                                <Route path="/" element={<Home backgroundColor={backgroundColor} />} />
+                                <Route path="/login" element={<Login />} />
+                                <Route path="/register" element={<Register />} />
+                                <Route path="/dashboard" element={<Dashboard />} />
+                                <Route path="/auth/:service/callback" element={<GenericCallback />} />
+                                <Route path="/workflow/create" element={<WorkflowHandler />} />
+                                <Route path="/workflow/update/:id" element={<WorkflowHandler />} />
+                                <Route path="/account/me" element={<UserPage backgroundColor={backgroundColor} setBackgroundColor={setBackgroundColor} />} />
+                                <Route path="/error/connection" element={<ApiError />} />
+                                <Route path="/error/:error" element={<CustomError />} />
+                                <Route path="*" element={<NotFoundError />} />
+                            </Routes>
+                        </Layout>
+                    }
                 </Router>
             </ContextManager>
         </>
     );
+};
+
+interface LocationHandlerProps {
+    attackExtensions: string[];
+    setIsAttackPath: (isAttack: boolean) => void;
+}
+
+const LocationHandler: React.FC<LocationHandlerProps> = ({ attackExtensions, setIsAttackPath }) => {
+    const location = useLocation();
+
+    React.useEffect(() => {
+        const checkAttackPath = () => {
+            setIsAttackPath(attackExtensions.some(ext => location.pathname.endsWith(ext)));
+        };
+
+        checkAttackPath();
+    }, [location, attackExtensions, setIsAttackPath]);
+
+    return null;
 };
 
 export default App;

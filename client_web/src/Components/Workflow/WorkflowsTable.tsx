@@ -119,7 +119,6 @@ const WorkflowsTable: React.FC<WorkflowsTableProps> = ({ workflows, setNeedReloa
                             onClick={() => handleEdit(record)}
                             size="small"
                             aria-label={translations?.workflow.table.ariaLabels.edit}
-                            disabled={true} // TODO: Update component not reimplemented
                         />
                     </Tooltip>
                     <Tooltip title={record.is_active ? translations?.workflow.table.tooltips.deactivate : translations?.workflow.table.tooltips.activate}>

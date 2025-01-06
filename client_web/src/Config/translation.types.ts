@@ -37,6 +37,7 @@ export interface Translation {
             title: string;
             form: {
                 email: {
+                    label: string;
                     placeholder: string;
                     tooltip: string;
                     validation: {
@@ -45,6 +46,7 @@ export interface Translation {
                     };
                 };
                 password: {
+                    label: string;
                     placeholder: string;
                     tooltip: string;
                     validation: {
@@ -65,6 +67,7 @@ export interface Translation {
             title: string;
             form: {
                 username: {
+                    label: string;
                     placeholder: string;
                     tooltip: string;
                     validation: {
@@ -72,6 +75,7 @@ export interface Translation {
                     };
                 };
                 email: {
+                    label: string;
                     placeholder: string;
                     tooltip: string;
                     validation: {
@@ -80,6 +84,7 @@ export interface Translation {
                     };
                 };
                 password: {
+                    label: string;
                     placeholder: string;
                     tooltip: string;
                     validation: {
@@ -89,6 +94,7 @@ export interface Translation {
                     };
                 };
                 confirmPassword: {
+                    label: string;
                     placeholder: string;
                     tooltip: string;
                     validation: {
@@ -230,7 +236,7 @@ export interface Translation {
                 deleteFailed: string;
             };
         };
-        create: {
+        handler: {
             form: {
                 name: {
                     label: string;
@@ -258,6 +264,7 @@ export interface Translation {
                 clearReactions: string;
                 create: string;
                 cancel: string;
+                update: string;
             },
             errors: {
                 noServices: {
@@ -366,6 +373,11 @@ export interface Translation {
             backHome: string;
         };
         notFound: {
+            title: string;
+            subtitle: string;
+            backHome: string;
+        };
+        attack: {
             title: string;
             subtitle: string;
             backHome: string;

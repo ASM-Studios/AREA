@@ -16,6 +16,7 @@ author = 'Maël RABOT, Mathieu COULET, Mathieu BOREL, Charles MADJERI, Samuel BR
 
 extensions = [
     'sphinx_rtd_theme',
+    'sphinxcontrib.mermaid'
 ]
 
 templates_path = ['_templates']

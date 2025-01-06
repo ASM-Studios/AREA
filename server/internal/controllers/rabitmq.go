@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"AREA/internal/consts"
 	"AREA/internal/models"
 	"AREA/internal/utils"
 	"github.com/gin-gonic/gin"
@@ -19,12 +18,13 @@ import (
 // @Router /publish/message [post]
 func Message(c *gin.Context) {
 	var msg models.Message
+        messageQueue := c.PostForm("message_queue")
 	message := c.PostForm("message")
 	msg.Message = message
 
 	connectionString := utils.GetEnvVar("RMQ_URL")
 	rmqProducer := utils.RMQProducer{
-		Queue: consts.MessageQueue,
+		Queue: messageQueue,
 		ConnectionString:   connectionString,
 	}
 

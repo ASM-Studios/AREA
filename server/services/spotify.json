@@ -2,23 +2,6 @@
   "name": "spotify",
   "events": [
     {
-      "name": "A track start playing",
-      "description": "Triggered when a track starts playing on Spotify.",
-      "type": "action",
-      "parameters": [
-        {
-          "name": "track_id",
-          "description": "The ID of the track that starts playing.",
-          "type": "string"
-        },
-        {
-          "name": "device_id",
-          "description": "The ID of the device playing the track.",
-          "type": "string"
-        }
-      ]
-    },
-    {
       "name": "A track is paused/stopped",
       "description": "Triggered when a track is paused or stopped on Spotify.",
       "type": "action",
@@ -26,26 +9,31 @@
         {
           "name": "track_id",
           "description": "The ID of the track that is paused or stopped.",
-          "type": "string"
-        },
-        {
-          "name": "device_id",
-          "description": "The ID of the device where the track is paused or stopped.",
-          "type": "string"
+          "type": "string",
+          "is_required": false
         }
       ]
     },
+
+
+
     {
-      "name": "Pause a track",
+      "name": "Play/Pause a track",
       "description": "Pause the currently playing track on Spotify.",
       "type": "reaction",
-      "parameters": [
-        {
-          "name": "device_id",
-          "description": "The ID of the device where the track should be paused.",
-          "type": "string"
-        }
-      ]
+      "parameters": []
+    },
+    {
+      "name": "Skip to the previous track",
+      "description": "Skip to the previous track on Spotify.",
+      "type": "reaction",
+      "parameters": []
+    },
+    {
+      "name": "Skip to the next track",
+      "description": "Skip to the next track on Spotify.",
+      "type": "reaction",
+      "parameters": []
     },
     {
       "name": "Add track to a playlist",
@@ -55,12 +43,20 @@
         {
           "name": "track_id",
           "description": "The ID of the track to add.",
-          "type": "string"
+          "type": "string",
+          "is_required": true
         },
         {
-          "name": "playlist_id",
-          "description": "The ID of the playlist to which the track should be added.",
-          "type": "string"
+          "name": "playlist_name",
+          "description": "The name of the playlist to which the track should be added.",
+          "type": "string",
+          "is_required": true
+        },
+        {
+          "name": "position",
+          "description": "Position in the the playlist where the track should be added. (if empty, the track will be added at the end)",
+          "type": "int",
+          "is_required": false
         }
       ]
     }

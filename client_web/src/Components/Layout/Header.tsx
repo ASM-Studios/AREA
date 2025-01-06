@@ -91,13 +91,11 @@ const Header: React.FC = () => {
             <AntHeader style={{ backgroundColor: theme === "dark" ? '#001529' : 'white', display: 'flex', alignItems: 'center', zIndex: 1, borderRadius: '8px' }}>
                 {isMobile ? (
                     <Dropdown
-                        overlay={ // Deprecated but no alternative
-                            <Menu
-                                items={filteredMenuItems}
-                                selectedKeys={[selectedKey]}
-                                onClick={({ key }) => setSelectedKey(key)}
-                            />
-                        }
+                        menu={{
+                            items: filteredMenuItems,
+                            selectedKeys: [selectedKey],
+                            onClick: ({ key }) => setSelectedKey(key)
+                        }}
                         trigger={['click']}
                     >
                         <Button icon={<MenuOutlined />} />
@@ -149,7 +147,7 @@ const Header: React.FC = () => {
                                     }}
                                 >
                                     <UserOutlined />
-                                    <span>{translations?.header?.profile?.title}</span>
+                                    <p>{translations?.header?.profile?.title}</p>
                                 </Button>
                             </Dropdown>
                         </div>

@@ -39,6 +39,7 @@ const pirate_language: Translation = {
             title: "Board Yer Ship",
             form: {
                 email: {
+                    label: "message-in-a-bottle address",
                     placeholder: "captain@blackpearl.sea",
                     tooltip: "Enter yer message-in-a-bottle address",
                     validation: {
@@ -47,6 +48,7 @@ const pirate_language: Translation = {
                     }
                 },
                 password: {
+                    label: "secret code",
                     placeholder: "********",
                     tooltip: "Enter yer secret code",
                     validation: {
@@ -67,6 +69,7 @@ const pirate_language: Translation = {
             title: "Join the Crew",
             form: {
                 username: {
+                    label: "pirate name",
                     placeholder: "Enter yer pirate name",
                     tooltip: "What be yer sailor name?",
                     validation: {
@@ -74,6 +77,7 @@ const pirate_language: Translation = {
                     }
                 },
                 email: {
+                    label: "message-in-a-bottle address",
                     placeholder: "captain@blackpearl.sea",
                     tooltip: "Enter yer message-in-a-bottle address",
                     validation: {
@@ -82,6 +86,7 @@ const pirate_language: Translation = {
                     }
                 },
                 password: {
+                    label: "secret code",
                     placeholder: "********",
                     tooltip: "Enter yer secret code",
                     validation: {
@@ -91,6 +96,7 @@ const pirate_language: Translation = {
                     }
                 },
                 confirmPassword: {
+                    label: "confirm secret code",
                     placeholder: "********",
                     tooltip: "Confirm yer secret code",
                     validation: {
@@ -155,6 +161,11 @@ const pirate_language: Translation = {
         notFound: {
             title: "404 - Lost At Sea",
             subtitle: "Blimey! This map leads nowhere!",
+            backHome: "Back To Safe Harbor"
+        },
+        attack: {
+            title: "Attack Detected",
+            subtitle: "Arrr! We be under attack!",
             backHome: "Back To Safe Harbor"
         }
     },
@@ -244,7 +255,7 @@ const pirate_language: Translation = {
                 deleteFailed: "Failed to sink route"
             }
         },
-        create: {
+        handler: {
             form: {
                 name: {
                     label: "Route Name",
@@ -271,7 +282,8 @@ const pirate_language: Translation = {
                 clearActions: "Clear Orders",
                 clearReactions: "Clear Responses",
                 create: "Chart It",
-                cancel: "Abandon"
+                cancel: "Abandon",
+                update: "Change Route"
             },
             errors: {
                 noServices: {

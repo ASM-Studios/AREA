@@ -56,8 +56,9 @@ type WorkflowCreationRequest struct {
 // @Param id body uint true "Service ID"
 // @Param name body string true "Service name"
 type ServiceRequest struct {
-	ID   uint   `json:"id"`
-	Name string `json:"name"`
+	ID          uint   `json:"id"`
+	Name        string `json:"name"`
+	ConnectedAt string `json:"connectedAt"`
 }
 
 // UserRequest represents the response structure for user details.
@@ -77,9 +78,9 @@ type UserRequest struct {
 // @Param type body string true "Parameter type"
 // @Param value body string true "Parameter value"
 type ParametersRequest struct {
-	Name  string `json:"name"`
-	Type  string `json:"type"`
-	Value string `json:"value"`
+	Name  string  `json:"name"`
+	Type  string  `json:"type"`
+	Value *string `json:"value,omitempty"`
 }
 
 // EventRequest represents an event within a workflow.
@@ -90,11 +91,11 @@ type ParametersRequest struct {
 // @Param description body string true "Description of the event"
 // @Param parameters body []ParametersRequest false "List of parameters associated with the event"
 type EventRequest struct {
-	Id          uint                `json:"id"`
-	Name        string              `json:"name"`
-	Type        EventType           `json:"type"`
-	Description string              `json:"description"`
-	Parameters  []ParametersRequest `json:"parameters"`
+	Id          uint                 `json:"id"`
+	Name        string               `json:"name"`
+	Type        EventType            `json:"type"`
+	Description string               `json:"description"`
+	Parameters  *[]ParametersRequest `json:"parameters,omitempty"`
 }
 
 // WorkflowRequest represents the structure of a workflow update or creation request.
@@ -104,9 +105,9 @@ type EventRequest struct {
 // @Param is_active body boolean false "Whether the workflow is active"
 // @Param events body []EventRequest false "List of events associated with the workflow"
 type WorkflowRequest struct {
-	Name        string         `json:"name"`
-	Description string         `json:"description"`
-	Services    []uint         `json:"services"`
-	Events      []EventRequest `json:"events"`
-	IsActive    bool           `json:"is_active"`
+	Name        *string         `json:"name,omitempty"`
+	Description *string         `json:"description,omitempty"`
+	Services    *[]uint         `json:"services,omitempty"`
+	Events      *[]EventRequest `json:"events,omitempty"`
+	IsActive    *bool           `json:"is_active,omitempty"`
 }

@@ -1,7 +1,23 @@
-Installation
-============
+Installation Guide
+==================
 
-Follow these steps to set up and run the AREA Client Web project.
+Docker
+======
+
+This project is shipped inside a docker that let you run all parts of the project
+
+1. Run the docker
+-----------------
+
+.. code-block:: sh
+
+    make build && make start
+
+
+Standalone
+==========
+
+If you only wish for the web client to run, follow these steps to set up and run the AREA Client Web project.
 
 1. Clone the repository
 -----------------------
@@ -23,7 +39,7 @@ Follow these steps to set up and run the AREA Client Web project.
 
 To start the front-end, ensure that the following binaries are available:
 
-mkcert - For generating SSL certificates.
+- **mkcert**: For generating SSL certificates.
 
 .. code-block:: sh
 
