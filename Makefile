@@ -54,6 +54,9 @@ build: build-full
 ## Stop all containers
 stop:
 	docker compose --profile full down
+	docker compose --profile server down
+	docker compose --profile web down
+	docker compose --profile mobile down
 
 ## Restart all containers
 restart: restart-full

@@ -1,4 +1,4 @@
-FROM ghcr.io/cirruslabs/flutter:3.24.5 AS builder
+FROM ghcr.io/cirruslabs/flutter:3.27.1 AS base
 
 WORKDIR /app
 
@@ -24,7 +24,11 @@ ARG GITHUB_CLIENT_SECRET
 
 RUN yes | sdkmanager --licenses
 
-CMD flutter pub get && \
-    flutter run -d web-server --web-port 8082 --web-hostname 0.0.0.0 && \
+RUN mkdir -p /app/build/app/outputs/flutter-apk && \
+    flutter pub get && \
     flutter build apk --release && \
-    mv build/app/outputs/flutter-apk/app-release.apk build/app/outputs/flutter-apk/client.apk
+    mv /app/build/app/outputs/flutter-apk/app-release.apk /app/build/app/outputs/flutter-apk/client.apk
+
+# Run web server in background and use tail to keep container alive
+CMD flutter run -d web-server --web-port 8082 --web-hostname localhost & \
+    tail -f /dev/null

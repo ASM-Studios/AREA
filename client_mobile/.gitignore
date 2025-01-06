@@ -111,3 +111,18 @@ build/
 *.log
 flutter_cache/
 android_cache/
+
+# Dart tool directory
+.dart_tool/
+
+# Pub cache
+.pub-cache/
+
+# Build directory
+build/
+
+# Packages
+.packages
+
+# Pubspec lock
+pubspec.lock

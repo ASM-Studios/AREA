@@ -57,7 +57,12 @@ FROM builder AS development
 RUN apk add --no-cache \
     nss-tools \
     curl \
-    && curl -JLO "https://dl.filippo.io/mkcert/latest?for=linux/amd64" \
+    && for i in $(seq 1 5); do \
+    curl -JLO "https://dl.filippo.io/mkcert/latest?for=linux/amd64" && break || \
+    if [ $i -eq 5 ]; then exit 1; fi && \
+    echo "Attempt $i failed! Retrying in 15 seconds..." && \
+    sleep 15; \
+    done \
     && chmod +x mkcert-v*-linux-amd64 \
     && cp mkcert-v*-linux-amd64 /usr/local/bin/mkcert
 
