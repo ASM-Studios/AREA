@@ -46,6 +46,7 @@ services:
     ports:
       - "8080:8080"
     volumes:
+      - ./server:/app:rw
       - ./ssl:/app/ssl:ro
     environment:
       DB_HOST: ${DB_HOST}
@@ -53,6 +54,7 @@ services:
       DB_USER: ${DB_USER}
       DB_NAME: ${DB_NAME}
       DB_PASSWORD: ${DB_PASSWORD}
+      AIR_FORCE: "true"
     depends_on:
       mariadb:
         condition: service_healthy
@@ -250,6 +252,7 @@ services:
 volumes:
   mobile_builds:
   mariadb_data:
+
 
 networks:
   area_network:
