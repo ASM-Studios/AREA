@@ -1,0 +1,270 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Docker Setup &mdash; AREA  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            AREA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing.html">Contribution Guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../client_web/index.html">AREA Client Web</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../client_mobile/index.html">AREA Client Mobile</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../server/index.html">AREA Server</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">AREA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Docker Setup</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/project/devops/docker_setup.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="docker-setup">
+<h1>Docker Setup<a class="headerlink" href="#docker-setup" title="Link to this heading"></a></h1>
+<p>Our project uses Docker and Docker Compose for containerization and orchestration. The setup consists of multiple services working together to provide a complete application stack.</p>
+<section id="service-architecture">
+<h2>Service Architecture<a class="headerlink" href="#service-architecture" title="Link to this heading"></a></h2>
+<section id="core-services">
+<h3>Core Services<a class="headerlink" href="#core-services" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt><strong>Database (MariaDB)</strong></dt><dd><ul class="simple">
+<li><p>Image: <code class="docutils literal notranslate"><span class="pre">mariadb:11.4.4</span></code></p></li>
+<li><p>Port: 3306</p></li>
+<li><p>Persistent volume for data storage</p></li>
+<li><p>Initialized with custom SQL script</p></li>
+</ul>
+</dd>
+<dt><strong>Message Queue (RabbitMQ)</strong></dt><dd><ul class="simple">
+<li><p>Image: <code class="docutils literal notranslate"><span class="pre">rabbitmq:4.0.4-management-alpine</span></code></p></li>
+<li><p>Ports: 5672 (AMQP), 15672 (Management UI)</p></li>
+<li><p>Custom configuration via rabbitmq.conf</p></li>
+<li><p>Health monitoring enabled</p></li>
+</ul>
+</dd>
+<dt><strong>Server</strong></dt><dd><ul class="simple">
+<li><p>Custom Golang-based API server</p></li>
+<li><p>Port: 8080</p></li>
+<li><p>Dependencies: MariaDB, RabbitMQ</p></li>
+<li><p>Health endpoint monitoring</p></li>
+<li><p>SSL certificate volume mount</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="consumer-services">
+<h3>Consumer Services<a class="headerlink" href="#consumer-services" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt><strong>Action Consumer</strong></dt><dd><ul class="simple">
+<li><p>Processes action events from RabbitMQ</p></li>
+<li><p>Depends on server and message queue</p></li>
+<li><p>Shares environment with main server</p></li>
+</ul>
+</dd>
+<dt><strong>Reaction Consumer</strong></dt><dd><ul class="simple">
+<li><p>Handles reaction events from RabbitMQ</p></li>
+<li><p>Depends on server and message queue</p></li>
+<li><p>Shares environment with main server</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="client-services">
+<h3>Client Services<a class="headerlink" href="#client-services" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt><strong>Web Client</strong></dt><dd><ul class="simple">
+<li><p>React-based frontend</p></li>
+<li><p>Port: ${VITE_PORT} (default: 8081)</p></li>
+<li><p>Nginx-based serving</p></li>
+<li><p>Access to mobile builds for APK distribution</p></li>
+<li><p>Health monitoring enabled</p></li>
+</ul>
+</dd>
+<dt><strong>Mobile Client</strong></dt><dd><ul class="simple">
+<li><p>Flutter-based mobile application</p></li>
+<li><p>Builds Android APK</p></li>
+<li><p>Shares build output with web client</p></li>
+<li><p>No persistent runtime container</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+</section>
+<section id="volume-management">
+<h2>Volume Management<a class="headerlink" href="#volume-management" title="Link to this heading"></a></h2>
+<section id="persistent-volumes">
+<h3>Persistent Volumes<a class="headerlink" href="#persistent-volumes" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><strong>mariadb_data</strong>: Database persistence</p></li>
+<li><p><strong>mobile_builds</strong>: APK distribution between containers</p></li>
+<li><p><strong>ssl</strong>: SSL certificates (read-only)</p></li>
+</ul>
+</section>
+</section>
+<section id="environment-configuration">
+<h2>Environment Configuration<a class="headerlink" href="#environment-configuration" title="Link to this heading"></a></h2>
+<p>Each service uses dedicated .env files:</p>
+<ul class="simple">
+<li><p><strong>.env</strong>: Root environment variables</p></li>
+<li><p><strong>server/.env</strong>: Server-specific configuration</p></li>
+<li><p><strong>client_web/.env</strong>: Web client configuration</p></li>
+<li><p><strong>client_mobile/.env</strong>: Mobile client configuration</p></li>
+</ul>
+</section>
+<section id="deployment-profiles">
+<h2>Deployment Profiles<a class="headerlink" href="#deployment-profiles" title="Link to this heading"></a></h2>
+<p>The setup supports different deployment profiles:</p>
+<dl class="simple">
+<dt><strong>server</strong></dt><dd><ul class="simple">
+<li><p>MariaDB</p></li>
+<li><p>RabbitMQ</p></li>
+<li><p>Server + Consumers</p></li>
+<li><p>Healthcheck container</p></li>
+</ul>
+</dd>
+<dt><strong>web</strong></dt><dd><ul class="simple">
+<li><p>Server profile services</p></li>
+<li><p>Web client</p></li>
+<li><p>Healthcheck container</p></li>
+</ul>
+</dd>
+<dt><strong>mobile</strong></dt><dd><ul class="simple">
+<li><p>Server profile services</p></li>
+<li><p>Mobile client builder</p></li>
+<li><p>Healthcheck container</p></li>
+</ul>
+</dd>
+<dt><strong>full</strong></dt><dd><ul class="simple">
+<li><p>All services</p></li>
+<li><p>Complete healthcheck</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="network-configuration">
+<h2>Network Configuration<a class="headerlink" href="#network-configuration" title="Link to this heading"></a></h2>
+<p>All services communicate through the <code class="docutils literal notranslate"><span class="pre">area_network</span></code> bridge network, providing isolated container communication.</p>
+</section>
+<section id="health-monitoring">
+<h2>Health Monitoring<a class="headerlink" href="#health-monitoring" title="Link to this heading"></a></h2>
+<p>Each major service includes health checks:</p>
+<ul class="simple">
+<li><p><strong>MariaDB</strong>: Database connection check</p></li>
+<li><p><strong>RabbitMQ</strong>: Management API check</p></li>
+<li><p><strong>Server</strong>: HTTP endpoint check</p></li>
+<li><p><strong>Web Client</strong>: HTTPS endpoint check</p></li>
+</ul>
+</section>
+<section id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Link to this heading"></a></h2>
+<p>Basic Commands:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Start all services</span>
+make<span class="w"> </span>start
+
+<span class="c1"># Start specific profile</span>
+make<span class="w"> </span>start-web
+make<span class="w"> </span>start-mobile
+make<span class="w"> </span>start-server
+
+<span class="c1"># Build services</span>
+make<span class="w"> </span>build
+
+<span class="c1"># Stop all services</span>
+make<span class="w"> </span>stop
+
+<span class="c1"># View logs</span>
+make<span class="w"> </span>logs
+</pre></div>
+</div>
+</section>
+<section id="access-points">
+<h2>Access Points<a class="headerlink" href="#access-points" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Web Client: <code class="docutils literal notranslate"><span class="pre">https://localhost:8081</span></code></p></li>
+<li><p>API Server: <code class="docutils literal notranslate"><span class="pre">http://localhost:8080</span></code></p></li>
+<li><p>RabbitMQ UI: <code class="docutils literal notranslate"><span class="pre">http://localhost:15672</span></code></p></li>
+<li><p>Mobile APK: <code class="docutils literal notranslate"><span class="pre">https://localhost:8081/mobile_builds/client.apk</span></code></p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Maël RABOT, Mathieu COULET, Mathieu BOREL, Charles MADJERI, Samuel BRUSCHET.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

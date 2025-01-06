@@ -1,0 +1,375 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tech Stack Benchmark and Justification &mdash; AREA  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            AREA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contribution Guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../client_web/index.html">AREA Client Web</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../client_mobile/index.html">AREA Client Mobile</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../server/index.html">AREA Server</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">AREA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Tech Stack Benchmark and Justification</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/project/benchmark.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="tech-stack-benchmark-and-justification">
+<h1>Tech Stack Benchmark and Justification<a class="headerlink" href="#tech-stack-benchmark-and-justification" title="Link to this heading"></a></h1>
+<p>This document provides a comparative study and justification for the chosen tech stack for a project aimed at creating an app (web and mobile) for automation via connection services. The app will provide triggers and actions that users can combine. The chosen stack includes:</p>
+<ul class="simple">
+<li><p><strong>Web</strong>: Vite + React + TypeScript</p></li>
+<li><p><strong>Mobile</strong>: Flutter</p></li>
+<li><p><strong>Server</strong>: Go</p></li>
+<li><p><strong>Database</strong>: MariaDB</p></li>
+</ul>
+<p>Below is the detailed analysis of the stack and comparisons with alternatives.</p>
+<section id="web-vite-react-typescript">
+<h2>Web: Vite + React + TypeScript<a class="headerlink" href="#web-vite-react-typescript" title="Link to this heading"></a></h2>
+<p><strong>Justification</strong>:</p>
+<ul>
+<li><dl class="simple">
+<dt><strong>React</strong>:</dt><dd></dd>
+</dl>
+<ul class="simple">
+<li><p><strong>Mature Ecosystem</strong>: A well-established library with vast community support, making development fast and reliable.</p></li>
+<li><p><strong>Declarative UI</strong>: Simplifies the creation of dynamic, interactive user interfaces.</p></li>
+<li><p><strong>Component Reusability</strong>: Promotes modular and maintainable code.</p></li>
+</ul>
+</li>
+<li><dl class="simple">
+<dt><strong>Vite</strong>:</dt><dd></dd>
+</dl>
+<ul class="simple">
+<li><p><strong>Fast Development</strong>: Extremely fast build and hot module replacement (HMR) compared to alternatives like Webpack.</p></li>
+<li><p><strong>Optimized Builds</strong>: Produces smaller and faster production builds.</p></li>
+</ul>
+</li>
+<li><dl class="simple">
+<dt><strong>TypeScript</strong>:</dt><dd></dd>
+</dl>
+<ul class="simple">
+<li><p><strong>Type Safety</strong>: Reduces runtime errors and enhances code maintainability.</p></li>
+<li><p><strong>Better Tooling</strong>: Superior editor autocompletion and refactoring support.</p></li>
+</ul>
+</li>
+</ul>
+<p><strong>Comparisons</strong>:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>Tech</strong></p></th>
+<th class="head"><p><strong>React</strong></p></th>
+<th class="head"><p><strong>Vue</strong></p></th>
+<th class="head"><p><strong>Angular</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Learning Curve</p></td>
+<td><p>Moderate</p></td>
+<td><p>Easy</p></td>
+<td><p>Steep</p></td>
+</tr>
+<tr class="row-odd"><td><p>Performance</p></td>
+<td><p>Fast</p></td>
+<td><p>Comparable to React</p></td>
+<td><p>Slower for large apps</p></td>
+</tr>
+<tr class="row-even"><td><p>Ecosystem</p></td>
+<td><p>Extensive</p></td>
+<td><p>Growing but smaller</p></td>
+<td><p>Complete framework</p></td>
+</tr>
+</tbody>
+</table>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>Build Tool</strong></p></th>
+<th class="head"><p><strong>Vite</strong></p></th>
+<th class="head"><p><strong>Webpack</strong></p></th>
+<th class="head"><p><strong>Parcel</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Speed</p></td>
+<td><p>Fastest</p></td>
+<td><p>Slow</p></td>
+<td><p>Moderate</p></td>
+</tr>
+<tr class="row-odd"><td><p>Simplicity</p></td>
+<td><p>Simple</p></td>
+<td><p>Complex</p></td>
+<td><p>Simple</p></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Conclusion</strong>:
+React, Vite, and TypeScript combine speed, maintainability, and a robust ecosystem, outperforming alternatives for this web project.</p>
+</section>
+<section id="mobile-flutter">
+<h2>Mobile: Flutter<a class="headerlink" href="#mobile-flutter" title="Link to this heading"></a></h2>
+<p><strong>Justification</strong>:</p>
+<ul class="simple">
+<li><p><strong>Single Codebase</strong>: Write once, deploy to Android, iOS, and web.</p></li>
+<li><p><strong>Performance</strong>: Near-native performance due to Dart compiling to native machine code.</p></li>
+<li><p><strong>Customizable UI</strong>: Powerful widgets for designing complex UIs.</p></li>
+<li><p><strong>Fast Development</strong>: Hot reload and an extensive library of plugins.</p></li>
+<li><p><strong>Comprehensive Documentation</strong>: Detailed and well-maintained documentation, making it easy to learn and use.</p></li>
+<li><p><strong>Familiarity</strong>: Already comfortable with the technology, speeding up development and reducing the learning curve.</p></li>
+</ul>
+<p><strong>Comparisons</strong>:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>Tech</strong></p></th>
+<th class="head"><p><strong>Flutter</strong></p></th>
+<th class="head"><p><strong>React Native</strong></p></th>
+<th class="head"><p><strong>Swift/Kotlin</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Code Reuse</p></td>
+<td><p>High</p></td>
+<td><p>High</p></td>
+<td><p>None</p></td>
+</tr>
+<tr class="row-odd"><td><p>Performance</p></td>
+<td><p>Near-native</p></td>
+<td><p>Moderate (JS bridge)</p></td>
+<td><p>Native</p></td>
+</tr>
+<tr class="row-even"><td><p>UI Flexibility</p></td>
+<td><p>Highly Customizable</p></td>
+<td><p>Limited</p></td>
+<td><p>Native-specific</p></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Conclusion</strong>:
+Flutter’s cross-platform capabilities, performance and comprehensive widget library make it ideal for quickly developing a polished mobile app.</p>
+</section>
+<section id="server-go">
+<h2>Server: Go<a class="headerlink" href="#server-go" title="Link to this heading"></a></h2>
+<p><strong>Justification</strong>:</p>
+<ul class="simple">
+<li><p><strong>Performance</strong>: Compiles to native machine code, offering fast execution and low resource usage.</p></li>
+<li><p><strong>Scalability</strong>: Excellent concurrency model using goroutines and channels.</p></li>
+<li><p><strong>Minimalistic</strong>: Clean syntax and reduced dependencies compared to verbose frameworks.</p></li>
+</ul>
+<p><strong>Comparison with Alternatives</strong>:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>Tech</strong></p></th>
+<th class="head"><p><strong>Go</strong></p></th>
+<th class="head"><p><strong>NestJS (TypeScript)</strong></p></th>
+<th class="head"><p><strong>Flask (Python)</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Performance</p></td>
+<td><p>High</p></td>
+<td><p>Moderate</p></td>
+<td><p>Low</p></td>
+</tr>
+<tr class="row-odd"><td><p>Scalability</p></td>
+<td><p>Excellent</p></td>
+<td><p>Good</p></td>
+<td><p>Poor</p></td>
+</tr>
+<tr class="row-even"><td><p>Learning Curve</p></td>
+<td><p>Moderate</p></td>
+<td><p>Easy</p></td>
+<td><p>Easy</p></td>
+</tr>
+<tr class="row-odd"><td><p>Ecosystem</p></td>
+<td><p>Moderate</p></td>
+<td><p>Mature</p></td>
+<td><p>Mature</p></td>
+</tr>
+</tbody>
+</table>
+<ul class="simple">
+<li><p><strong>NestJS</strong>: Strong for projects already using TypeScript but adds framework overhead.</p></li>
+<li><p><strong>Flask</strong>: Lightweight but lacks built-in scalability and performance for heavy tasks.</p></li>
+</ul>
+<p><strong>Conclusion</strong>:
+Go’s high performance and concurrency handling make it a better choice for a scalable automation service backend.</p>
+</section>
+<section id="orm-server-gorm">
+<h2>ORM Server: Gorm<a class="headerlink" href="#orm-server-gorm" title="Link to this heading"></a></h2>
+<p><strong>Justification</strong>:</p>
+<ul class="simple">
+<li><p><strong>User-friendly</strong>: Easy to learn and use</p></li>
+<li><p><strong>Flexibility</strong>: Supports auto migration and complex queries</p></li>
+<li><p><strong>Large Community</strong>: Extensive resources and support</p></li>
+</ul>
+<p><strong>Comparison with Alternatives</strong>:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>Pros/Cons</strong></p></th>
+<th class="head"><p><strong>Pros</strong></p></th>
+<th class="head"><p><strong>Cons</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>GORM</p></td>
+<td><p>User-friendly</p>
+<p>Flexible</p>
+<p>Large community</p>
+</td>
+<td><p>A bit less performant than some alternatives</p></td>
+</tr>
+<tr class="row-odd"><td><p>EntGo</p></td>
+<td><p>Strongly typed</p>
+<p>Can handle complex type</p>
+</td>
+<td><p>Long compile times</p>
+<p>Hard learning curve</p>
+</td>
+</tr>
+<tr class="row-even"><td><p>SQLx</p></td>
+<td><p>Strongly typed</p></td>
+<td><p>Raw SQL</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="database-mariadb">
+<h2>Database: MariaDB<a class="headerlink" href="#database-mariadb" title="Link to this heading"></a></h2>
+<p><strong>Justification</strong>:</p>
+<ul class="simple">
+<li><p><strong>Relational Structure</strong>: Supports complex queries and ensures data consistency, ideal for user workflows and triggers.</p></li>
+<li><p><strong>Performance</strong>: Optimized for high transaction rates with multi-threading and memory improvements.</p></li>
+<li><p><strong>Compatibility</strong>: Drop-in replacement for MySQL with a large community and ecosystem.</p></li>
+</ul>
+<p><strong>Comparisons</strong>:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>Database</strong></p></th>
+<th class="head"><p><strong>MariaDB</strong></p></th>
+<th class="head"><p><strong>MongoDB</strong></p></th>
+<th class="head"><p><strong>PostgreSQL</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Schema</p></td>
+<td><p>Relational (Strict Schema)</p></td>
+<td><p>NoSQL (Schema-free)</p></td>
+<td><p>Relational (Flexible)</p></td>
+</tr>
+<tr class="row-odd"><td><p>Scalability</p></td>
+<td><p>High</p></td>
+<td><p>High</p></td>
+<td><p>Moderate</p></td>
+</tr>
+<tr class="row-even"><td><p>Querying</p></td>
+<td><p>SQL</p></td>
+<td><p>JSON/BSON</p></td>
+<td><p>Advanced SQL</p></td>
+</tr>
+</tbody>
+</table>
+<ul class="simple">
+<li><p><strong>MongoDB</strong>: Better for schema-less, document-based storage but less suited for relational data.</p></li>
+<li><p><strong>PostgreSQL</strong>: Advanced features but overkill for simple relational use cases.</p></li>
+</ul>
+<p><strong>Conclusion</strong>:
+MariaDB balances simplicity, performance, and compatibility, fitting the automation app’s needs.</p>
+</section>
+<section id="overall-synergy">
+<h2>Overall Synergy<a class="headerlink" href="#overall-synergy" title="Link to this heading"></a></h2>
+<p>The selected tech stack optimizes for:</p>
+<ul class="simple">
+<li><p><strong>Performance</strong>: Go and Flutter ensure fast server and mobile app execution.</p></li>
+<li><p><strong>Scalability</strong>: Go and MariaDB handle high concurrency and transaction rates.</p></li>
+<li><p><strong>Developer Experience</strong>: React, Vite, and TypeScript streamline web development.</p></li>
+<li><p><strong>Cross-Platform Reach</strong>: Flutter enables rapid multi-platform deployment.</p></li>
+</ul>
+<p>This stack effectively balances development speed, scalability, and maintainability while outperforming alternatives for this automation-focused app.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Maël RABOT, Mathieu COULET, Mathieu BOREL, Charles MADJERI, Samuel BRUSCHET.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
