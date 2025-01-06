@@ -9,8 +9,7 @@
         {
           "name": "streamer",
           "description": "Streamer which will trigger the action",
-          "type": "string",
-          "is_required": true
+          "type": "string"
         }
       ]
     },
@@ -25,14 +24,12 @@
         {
           "name": "destination",
           "description": "Tchat on which message will be send",
-          "type": "string",
-          "is_required": true
+          "type": "string"
         },
         {
           "name": "content",
           "description": "Content of the message",
-          "type": "string",
-          "is_required": true
+          "type": "string"
         }
       ]
     },
@@ -44,14 +41,12 @@
         {
           "name": "receiver",
           "description": "Receiver of the message",
-          "type": "string",
-          "is_required": true
+          "type": "string"
         },
         {
           "name": "content",
           "description": "Content of the message",
-          "type": "string",
-          "is_required": true
+          "type": "string"
         }
       ]
     }

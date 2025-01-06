@@ -25,7 +25,7 @@ func SendRequest(token *models.Token, req *http.Request) (*http.Response, error)
                 }
                 fmt.Println("Token refreshed")
                 pkg.DB.Save(token)
+                resp, err = utils.SendRequest(req)
         }
-        resp, err = utils.SendRequest(req)
         return resp, err
 }

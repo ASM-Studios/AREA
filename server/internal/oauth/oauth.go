@@ -5,8 +5,6 @@ import (
 	"AREA/internal/utils"
 	"bytes"
 	"errors"
-	"fmt"
-	"io"
 	"net/http"
 	"net/url"
 
@@ -22,7 +20,7 @@ type ServiceApp struct {
 }
 
 var OAuthApps = map[string]ServiceApp {
-        "microsoft": {ServiceName: "microsoft", ClientId: "MICROSOFT_CLIENT_ID", ClientSecret: "MICROSOFT_CLIENT_SECRET",
+        "microsoft": {ServiceName: "microsoft", ClientId: "MICROSOFT_CLIENT_ID", ClientSecret: "",
                 TokenURL: "https://login.microsoftonline.com/common/oauth2/v2.0/token", MeURL: "https://graph.microsoft.com/v1.0/me"},
         "github": {ServiceName: "github", ClientId: "GITHUB_CLIENT_ID", ClientSecret: "GITHUB_CLIENT_SECRET",
                 TokenURL: "https://github.com/login/oauth/access_token", MeURL: "https://api.github.com/user"},
@@ -52,7 +50,7 @@ type ServiceResponse struct {
         DisplayName string
 }
 
-type ServiceResponseConverter func(*http.Response) (*ServiceResponse, error)
+type ServiceResponseConverter func(*http.Response, string) (*ServiceResponse, error)
 
 var ServiceResponseConverters = map[string]ServiceResponseConverter {
         "github": GetGithubResponse,
@@ -71,8 +69,12 @@ func getServiceBearer(serviceApp ServiceApp, serviceCode ServiceCode) (*ServiceB
                 form.Add("code_verifier", serviceCode.CodeVerifier)
         }
         form.Add("redirect_uri", serviceCode.RedirectUri)
-        form.Add("client_id", utils.GetEnvVar(serviceApp.ClientId))
-        form.Add("client_secret", utils.GetEnvVar(serviceApp.ClientSecret))
+        if utils.GetEnvVar(serviceApp.ClientId) != "" {
+                form.Add("client_id", utils.GetEnvVar(serviceApp.ClientId))
+        }
+        if utils.GetEnvVar(serviceApp.ClientSecret) != "" {
+                form.Add("client_secret", utils.GetEnvVar(serviceApp.ClientSecret))
+        }
 
         req, err := http.NewRequest("POST", serviceApp.TokenURL, bytes.NewBufferString(form.Encode()))
         if err != nil {
@@ -83,10 +85,11 @@ func getServiceBearer(serviceApp ServiceApp, serviceCode ServiceCode) (*ServiceB
         req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 
         resp, err := utils.SendRequest(req)
-        if err != nil || resp.StatusCode != 200 {
-                fmt.Printf("HERE %d\n", resp.StatusCode)
-                b, _ := io.ReadAll(resp.Body)
-                fmt.Println(string(b))
+        if err != nil {
+                return nil, errors.New("Failed to fetch bearer token")
+        }
+        defer resp.Body.Close()
+        if resp.StatusCode != 200 {
                 return nil, errors.New("Failed to fetch bearer token")
         }
         serviceBearerToken, err := utils.ExtractBody[ServiceBearerToken](resp)
@@ -107,8 +110,11 @@ func createDBToken(serviceId uint, serviceApp ServiceApp, serviceBearerToken Ser
         if err != nil || resp.StatusCode != 200 {
                 return nil, errors.New("Failed to fetch user info")
         }
-        serviceResponse, err := ServiceResponseConverters[serviceApp.ServiceName](resp)
+        serviceResponse, err := ServiceResponseConverters[serviceApp.ServiceName](resp, serviceBearerToken.Token)
 
+        if err != nil {
+                return nil, errors.New("Failed to fetch user info")
+        }
         dbToken.Token = serviceBearerToken.Token
         dbToken.RefreshToken = serviceBearerToken.RefreshToken
         dbToken.DisplayName = serviceResponse.DisplayName
@@ -120,14 +126,12 @@ func createDBToken(serviceId uint, serviceApp ServiceApp, serviceBearerToken Ser
 func BasicServiceCallback(c *gin.Context, serviceId uint, serviceApp ServiceApp) (*models.Token, error) {
         var serviceCode ServiceCode
         if err := c.ShouldBindJSON(&serviceCode); err != nil {
-                fmt.Println("Invalid body")
                 return nil, errors.New("Invalid body")
         }
 
         bearerToken, err := getServiceBearer(serviceApp, serviceCode)
-        if err != nil || bearerToken == nil {
-                fmt.Println("Failed to fetch jwt")
-                return nil, errors.New("Failed to fetch bearer token")
+        if err != nil {
+                return nil, err
         }
 
         return createDBToken(serviceId, serviceApp, *bearerToken)

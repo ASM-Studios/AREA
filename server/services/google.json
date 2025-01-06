@@ -5,99 +5,47 @@
       "name": "Email Received",
       "description": "Triggered when a new email is received in your Gmail inbox.",
       "type": "action",
-      "parameters": [
-        {
-          "name": "sender_email",
-          "description": "The email address of the sender.",
-          "type": "string"
-        },
-        {
-          "name": "subject",
-          "description": "The subject of the email.",
-          "type": "string"
-        },
-        {
-          "name": "received_date",
-          "description": "The date and time when the email was received.",
-          "type": "string"
-        }
-      ]
+      "parameters": []
     },
+
+
+
     {
-      "name": "Email Sent",
-      "description": "Triggered when an email is sent from your Gmail account.",
-      "type": "action",
-      "parameters": [
-        {
-          "name": "recipient_email",
-          "description": "The email address of the recipient.",
-          "type": "string"
-        },
-        {
-          "name": "subject",
-          "description": "The subject of the sent email.",
-          "type": "string"
-        },
-        {
-          "name": "sent_date",
-          "description": "The date and time when the email was sent.",
-          "type": "string"
-        }
-      ]
-    },
-    {
-      "name": "Send an Email",
-      "description": "Send an email using your Gmail account.",
+      "name": "Add event to calendar",
+      "description": "Add an event in your calendar.",
       "type": "reaction",
       "parameters": [
         {
-          "name": "recipient_email",
-          "description": "The email address of the recipient.",
+          "name": "calendar_name",
+          "description": "Calendar where to add event",
           "type": "string"
         },
         {
-          "name": "subject",
-          "description": "The subject of the email.",
+          "name": "summary",
+          "description": "Summary of the event",
           "type": "string"
         },
         {
-          "name": "body",
-          "description": "The content of the email.",
-          "type": "string"
-        }
-      ]
-    },
-    {
-      "name": "Reply to an Email",
-      "description": "Reply to a specific email in your Gmail inbox.",
-      "type": "reaction",
-      "parameters": [
-        {
-          "name": "email_id",
-          "description": "The unique ID of the email to reply to.",
-          "type": "string"
+          "name": "description",
+          "description": "Description of the event",
+          "type": "string",
+          "is_required": false
         },
         {
-          "name": "reply_body",
-          "description": "The content of the reply.",
-          "type": "string"
-        }
-      ]
-    },
-    {
-      "name": "Marked as read/unread",
-      "description": "Mark an email as read or unread in your Gmail inbox.",
-      "type": "reaction",
-      "parameters": [
-        {
-          "name": "email_id",
-          "description": "The unique ID of the email to mark.",
-          "type": "string"
+          "name": "location",
+          "description": "Location of the event",
+          "type": "string",
+          "is_required": false
         },
         {
-          "name": "is_read",
-          "description": "Set to true to mark as read, or false to mark as unread.",
-          "type": "bool"
+          "name": "start",
+          "description": "Start date of the event",
+          "type": "datetime"
+        },
+        {
+          "name": "end",
+          "description": "Start date of the event",
+          "type": "datetime"
         }
       ]
     }

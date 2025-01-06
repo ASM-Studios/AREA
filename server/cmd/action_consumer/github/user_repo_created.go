@@ -1,7 +1,6 @@
 package github
 
 import (
-	"AREA/cmd/action_consumer/vars"
 	"AREA/internal/models"
 	"AREA/internal/oauth"
 	"AREA/internal/pkg"
@@ -18,17 +17,17 @@ type Repo struct {
         CreatedAt       string  `json:"created_at"`
 }
 
-func DetectUserRepo(repos []Repo) bool {
+func DetectUserRepo(workflow *models.Workflow, repos []Repo) bool {
         for _, repo := range repos {
                 timestamp, _ := time.Parse(time.RFC3339, repo.CreatedAt)
-                if timestamp.Unix() > vars.LastFetch {
+                if timestamp.Unix() > workflow.LastTrigger {
                         return true
                 }
         }
         return false
 }
 
-func UserRepoCreated(user *models.User, args map[string]string) bool {
+func UserRepoCreated(workflow *models.Workflow, user *models.User, args map[string]string) bool {
         var token models.Token
         pkg.DB.Where("user_id = ? AND service_id = ?", user.ID, 2).First(&token)
 
@@ -49,5 +48,5 @@ func UserRepoCreated(user *models.User, args map[string]string) bool {
         }
 
         result, err := utils.ExtractBody[[]Repo](resp)
-        return DetectUserRepo(*result)
+        return DetectUserRepo(workflow, *result)
 }
