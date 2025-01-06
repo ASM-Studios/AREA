@@ -2,5 +2,5 @@ package vars
 
 import "time"
 
-var LastFetch int64 = time.Now().Unix()
+var LastFetch time.Time = time.Now()
 var ServiceId = "*"

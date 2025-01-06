@@ -10,6 +10,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"strconv"
 	"time"
 )
 
@@ -47,13 +48,13 @@ func hasNewMessagesInChannel(body []byte) bool {
 	return false
 }
 
-func NewMessageInChannel(user *models.User, args []string) bool {
+func NewMessageInChannel(user *models.User, args map[string]string) bool {
 	if len(args) < 2 {
 		fmt.Println("Error: NewMessageInChannel requires at least two parameters (TEAM_ID, CHANNEL_ID).")
 		return false
 	}
-	teamID := args[0]
-	channelID := args[1]
+	teamID := args[strconv.Itoa(0)]
+	channelID := args[strconv.Itoa(1)]
 	var token models.Token
 	err := pkg.DB.Where("user_id = ? AND service_id = ?", user.ID, serviceId).
 		First(&token).Error

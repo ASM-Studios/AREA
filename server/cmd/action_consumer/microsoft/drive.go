@@ -46,7 +46,7 @@ func fetchDriveFiles(body []byte) bool {
 	return false
 }
 
-func DriveFileAdded(user *models.User, args []string) bool {
+func DriveFileAdded(user *models.User, args map[string]string) bool {
 	var token models.Token
 	err := pkg.DB.Where("user_id = ? AND service_id = ?", user.ID, serviceId).First(&token).Error
 	if err != nil {
