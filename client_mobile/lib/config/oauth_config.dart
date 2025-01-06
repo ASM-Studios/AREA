@@ -60,6 +60,14 @@ class OAuthConfigManager {
       clientId: dotenv.env["TWITCH_CLIENT_ID"] ?? "",
       redirectUri: "https://maelrabot.com/oauth/callback/twitch",
       pkce: false,
+    ),
+    "github": OAuthServiceConfig(
+      scope: "read:user user:email repo",
+      authority: "github.com",
+      path: "/login/oauth/authorize",
+      clientId: dotenv.env["GITHUB_CLIENT_ID"] ?? "",
+      redirectUri: "https://localhost:8081/auth/github/callback",
+      pkce: false,
     )
   };
 

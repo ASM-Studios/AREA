@@ -41,7 +41,9 @@ class OAuthService {
     }
   }
 
-  static Future<bool> showWebView(BuildContext context, String serviceId) async {
+  // static Future<bool> exchangeCode(String code, {String ?codeChallenge})
+
+  static Future<bool> requestOAuth(BuildContext context, String serviceId) async {
     OAuthServiceConfig? serviceConfig = OAuthConfigManager.getServiceConfig(serviceId);
 
     if (serviceConfig == null)
@@ -66,20 +68,20 @@ class OAuthService {
               // width: 400,
               child: InAppWebView(
                 initialUrlRequest: URLRequest(url: WebUri(authUrl)),
-                onLoadStart:
-                    (InAppWebViewController controller, WebUri? url) async {
-                  // Si l'URL contient le code d'autorisation, on l'extrait
-                  if (url.toString().startsWith(serviceConfig.redirectUri)) {
-                    final code = Uri.parse(url.toString()).queryParameters['code'];
-                    if (code != null) {
-                      print("Code d'autorisation reçu : $code");
-                      Navigator.pop(
-                          context, true); // Ferme le dialog et renvoie `true`
-                      // return await _fetchSpotifyAccessToken(
-                          // code); // Échange le code contre un token
-                    }
-                  }
-                },
+                // onLoadStart:
+                //     (InAppWebViewController controller, WebUri? url) async {
+                //   // Si l'URL contient le code d'autorisation, on l'extrait
+                //   if (url.toString().startsWith(serviceConfig.redirectUri)) {
+                //     final code = Uri.parse(url.toString()).queryParameters['code'];
+                //     if (code != null) {
+                //       print("Code d'autorisation reçu : $code");
+                //       // Navigator.pop(
+                //       //     context, true); // Ferme le dialog et renvoie `true`
+                //       // return await _fetchSpotifyAccessToken(
+                //           // code); // Échange le code contre un token
+                //     }
+                //   }
+                // },
                 // onLoadError: (controller, url, code, message) {
                 //   print("Erreur de chargement de l'URL : $message");
                 // },

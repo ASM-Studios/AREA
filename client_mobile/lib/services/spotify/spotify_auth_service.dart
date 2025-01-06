@@ -61,6 +61,6 @@ class SpotifyAuthService {
     }).toString();
 
     // print("url spotify : $authUrl");
-    return await OAuthService.showWebView(context, "spotify");
+    return await OAuthService.requestOAuth(context, "spotify");
   }
 }

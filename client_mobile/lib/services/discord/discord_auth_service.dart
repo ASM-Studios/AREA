@@ -61,6 +61,6 @@ class DiscordAuthService {
       "code_challenge_method": "S256"
     }).toString();
 
-    return await OAuthService.showWebView(context, "discord");
+    return await OAuthService.requestOAuth(context, "discord");
   }
 }

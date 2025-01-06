@@ -55,7 +55,7 @@ class TwitchAuthService {
 
     print("url twitch : $authUrl");
 
-    return await OAuthService.showWebView(context, "twitch");
+    return await OAuthService.requestOAuth(context, "twitch");
   //   try {
   //     final result = await FlutterWebAuth.authenticate(
   //       url: authUrl.toString(),
