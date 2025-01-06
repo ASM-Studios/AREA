@@ -31,9 +31,9 @@ class OAuthConfigManager {
     ),
     "google": OAuthServiceConfig(
       scope: "email profile",
-      authority: "accounts.google.com/o/oauth2/auth",
-      path: "",
-      redirectUri: "",
+      authority: "accounts.google.com",
+      path: "/o/oauth2/v2/auth",
+      redirectUri: "https://localhost:8081/auth/google/callback",
       clientId: dotenv.env["GOOGLE_CLIENT_ID"] ?? "",
       pkce: false,
     ),
