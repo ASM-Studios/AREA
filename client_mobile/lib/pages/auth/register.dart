@@ -5,6 +5,7 @@ import 'package:client_mobile/widgets/button.dart';
 import 'package:client_mobile/widgets/clickable_text.dart';
 import 'package:client_mobile/widgets/divider_with_text.dart';
 import 'package:client_mobile/widgets/form_field.dart';
+import 'package:client_mobile/widgets/oauth_buttons.dart';
 import 'package:client_mobile/widgets/password_form_field.dart';
 import 'package:client_mobile/widgets/sign_in_button.dart';
 import 'package:client_mobile/widgets/simple_text.dart';
@@ -118,42 +119,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 const SizedBox(height: 40),
                 const DividerWithText(label: "Or Register with"),
                 const SizedBox(height: 15),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    SignInButton(
-                      onPressed: () {
-                        if (!isLoggingViaOauth) {
-                          isLoggingViaOauth = true;
-                          OAuthService.handleOAuth(context, "discord", signUp: true);
-                          isLoggingViaOauth = false;
-                        }
-                      },
-                      label: "Discord",
-                      image: Image.asset(
-                        "assets/images/discord.png",
-                        width: 40,
-                        height: 20,
-                      ),
-                    ),
-                    // Spacer(),
-                    SignInButton(
-                      onPressed: () {
-                        if (!isLoggingViaOauth) {
-                          isLoggingViaOauth = true;
-                          OAuthService.handleOAuth(context, "spotify", signUp: true);
-                          isLoggingViaOauth = false;
-                        }
-                      },
-                      label: "Spotify",
-                      image: Image.asset(
-                        "assets/images/spotify_green.png",
-                        width: 40,
-                        height: 20,
-                      ),
-                    ),
-                  ],
-                ),
+                OAuthButtons(),
                 const SizedBox(height: 5),
                 Align(
                   alignment: Alignment.center,
