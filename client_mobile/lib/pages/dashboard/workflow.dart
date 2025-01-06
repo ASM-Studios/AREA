@@ -4,9 +4,9 @@ import 'package:client_mobile/data/workflow.dart';
 import 'package:client_mobile/services/login/auth_service.dart';
 import 'package:client_mobile/services/workflow/workflow_service.dart';
 import 'package:client_mobile/widgets/action_button.dart';
+import 'package:client_mobile/widgets/profile_button.dart';
 import 'package:client_mobile/widgets/reaction_button.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
 class WorkflowPage extends StatefulWidget {
   const WorkflowPage({super.key});
@@ -92,6 +92,12 @@ class _WorkflowPageState extends State<WorkflowPage> {
     return Scaffold(
       body: Column(
         children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0, 30, 20, 0),
+            child: Align(
+              alignment: Alignment.topRight,
+              child: ProfileButton()),
+          ),
           const SizedBox(height: 50),
           ActionButton(onActionSelected: onActionSelected, action: action),
           const SizedBox(height: 30),
@@ -155,14 +161,14 @@ class _WorkflowPageState extends State<WorkflowPage> {
               child: const Text("Create"))
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          bool hasLogout = await AuthService.logout();
-          if (hasLogout) context.pushReplacement("/login");
-        },
-        tooltip: 'Logout',
-        child: const Icon(Icons.login),
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () async {
+      //     bool hasLogout = await AuthService.logout();
+      //     if (hasLogout) context.pushReplacement("/login");
+      //   },
+      //   tooltip: 'Logout',
+      //   child: const Icon(Icons.login),
+      // ),
     );
   }
 }

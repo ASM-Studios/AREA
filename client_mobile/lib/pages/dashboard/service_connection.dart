@@ -23,6 +23,8 @@ class _ServiceConnectionPageState extends State<ServiceConnectionPage> {
 
   Future<void> _loadMicrosoftToken() async {
     String? token = await secureStorage.read(key: "microsoft_access_token");
+    String? bearerToken = await secureStorage.read(key: "bearer_token");
+    print("bearer token : $bearerToken");
     print("token microsoft : $token");
     setState(() {
       microsoftToken = token;
