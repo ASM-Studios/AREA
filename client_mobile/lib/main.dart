@@ -20,7 +20,7 @@ Future<void> main() async {
       ),
       GoRoute(
         path: '/login',
-        builder: (context, state) => TestPage(),
+        builder: (context, state) => LoginPage(),
       ),
       GoRoute(
         path: '/register',

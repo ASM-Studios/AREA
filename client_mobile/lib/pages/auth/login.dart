@@ -99,15 +99,29 @@ class _LoginPageState extends State<LoginPage> {
                       onPressed: () {
                         if (!isLoggingViaOauth) {
                           isLoggingViaOauth = true;
-                          OAuthService.handleOAuth(context, "discord",
-                              signUp: true);
+                          OAuthService.requestOAuth(context, "google", signUp: true);
                           isLoggingViaOauth = false;
                         }
                       },
-                      label: "Discord",
+                      label: "Google",
                       image: Image.asset(
-                        "assets/images/discord.png",
-                        width: 40,
+                        "assets/images/google.png",
+                        width: 34,
+                        height: 20,
+                      ),
+                    ),
+                      SignInButton(
+                      onPressed: () {
+                        if (!isLoggingViaOauth) {
+                          isLoggingViaOauth = true;
+                          OAuthService.requestOAuth(context, "microsoft", signUp: true);
+                          isLoggingViaOauth = false;
+                        }
+                      },
+                      label: "Microsoft",
+                      image: Image.asset(
+                        "assets/images/microsoft.png",
+                        width: 33,
                         height: 20,
                       ),
                     ),
@@ -116,15 +130,66 @@ class _LoginPageState extends State<LoginPage> {
                       onPressed: () {
                         if (!isLoggingViaOauth) {
                           isLoggingViaOauth = true;
-                          OAuthService.handleOAuth(context, "spotify",
-                              signUp: true);
+                          OAuthService.requestOAuth(context, "github", signUp: true);
+                          isLoggingViaOauth = false;
+                        }
+                      },
+                      label: "Github",
+                      image: Image.asset(
+                        "assets/images/github.png",
+                        width: 33,
+                        height: 20,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                  Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    SignInButton(
+                      onPressed: () {
+                        if (!isLoggingViaOauth) {
+                          isLoggingViaOauth = true;
+                          OAuthService.requestOAuth(context, "discord", signUp: true);
+                          isLoggingViaOauth = false;
+                        }
+                      },
+                      label: "Discord",
+                      image: Image.asset(
+                        "assets/images/discord.png",
+                        width: 38,
+                        height: 20,
+                      ),
+                    ),
+                      SignInButton(
+                      onPressed: () {
+                        if (!isLoggingViaOauth) {
+                          isLoggingViaOauth = true;
+                          OAuthService.requestOAuth(context, "twitch", signUp: true);
+                          isLoggingViaOauth = false;
+                        }
+                      },
+                      label: "Twitch",
+                      image: Image.asset(
+                        "assets/images/twitch.png",
+                        width: 37,
+                        height: 20,
+                      ),
+                    ),
+                    // Spacer(),
+                    SignInButton(
+                      onPressed: () {
+                        if (!isLoggingViaOauth) {
+                          isLoggingViaOauth = true;
+                          OAuthService.requestOAuth(context, "spotify", signUp: true);
                           isLoggingViaOauth = false;
                         }
                       },
                       label: "Spotify",
                       image: Image.asset(
                         "assets/images/spotify_green.png",
-                        width: 40,
+                        width: 37,
                         height: 20,
                       ),
                     ),

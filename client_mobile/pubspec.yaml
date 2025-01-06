@@ -79,6 +79,8 @@ flutter:
       - assets/images/spotify_green.png
       - assets/images/google.png
       - assets/images/discord.png
+      - assets/images/github.png
+      - assets/images/twitch.png
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 
