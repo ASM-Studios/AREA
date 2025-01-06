@@ -5,11 +5,14 @@ import (
 	"AREA/cmd/reaction_consumer/github"
 	"AREA/cmd/reaction_consumer/spotify"
 	"AREA/cmd/reaction_consumer/twitch"
+	"AREA/cmd/reaction_consumer/vars"
 	"AREA/internal/amqp"
+	"AREA/internal/gconsts"
 	"AREA/internal/models"
 	"AREA/internal/pkg"
 	"AREA/internal/utils"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"log"
 	"os"
@@ -17,6 +20,7 @@ import (
 	"syscall"
 
 	"github.com/rabbitmq/amqp091-go"
+	"gorm.io/gorm"
 )
 
 var service string
@@ -72,25 +76,50 @@ func handlerAction(message amqp091.Delivery) {
         }
 }
 
-func declareQueues() {
+func declareExchanges() {
+        rabbitMQConnection := utils.GetEnvVar("RMQ_URL")
+        actionExchange, reactionExchange := utils.InitExchange(rabbitMQConnection)
+        gconsts.ActionExchange = actionExchange
+        gconsts.ReactionExchange = reactionExchange
+}
+
+func declareQueues(exchange *amqp.Exchange) {
         var services []models.Service
         pkg.DB.Find(&services)
         for _, service := range services {
-                amqp.DeclareQueue(utils.GetEnvVar("RMQ_URL"), consts.MessageQueue, service.Name)
+                exchange.DeclareQueue(consts.MessageQueue, service.Name)
         }
+}
+
+func setService() {
+        if len(os.Args) < 2 {
+                return
+        }
+        service = os.Args[1]
+        var service models.Service
+        err := pkg.DB.Where("name = ?", service).First(&service).Error
+        if errors.Is(err, gorm.ErrRecordNotFound) {
+                return
+        }
+        vars.ServiceId = fmt.Sprintf("%d", service.ID)
 }
 
 func main() {
         if len(os.Args) < 2 {
-                fmt.Println("Generic service")
-                service  = "reaction_queue" //TODO CHANGE WITH DOCKER
+                service  = "reaction_queue"
+                fmt.Printf("Connection to all services\n")
         } else {
                 service = os.Args[1]
+                fmt.Printf("Connecting to service: %s\n", service)
         }
-        rabbitMQConnection := utils.GetEnvVar("RMQ_URL")
+        declareExchanges()
+
         pkg.InitDB()
-        declareQueues()
-        err := amqp.Consumer.Init(rabbitMQConnection, consts.MessageQueue, service)
+        setService()
+        declareQueues(gconsts.ReactionExchange)
+
+        var consumer amqp.EventConsumer
+        err := consumer.Init(gconsts.ReactionExchange, consts.MessageQueue, service)
         if err != nil {
                 log.Fatalf("Failed to initialize consumer: %v", err)
         }
@@ -99,9 +128,9 @@ func main() {
                 signal.Notify(c, os.Interrupt, syscall.SIGTERM)
                 <-c
                 log.Println("Shutting down consumer...")
-                amqp.Consumer.Close()
                 os.Exit(0)
         }()
-
-        amqp.Consumer.StartConsuming(consts.MessageQueue, handlerAction)
+        consumer.StartConsuming(consts.MessageQueue, handlerAction)
+        gconsts.ActionExchange.Fini()
+        gconsts.ReactionExchange.Fini()
 }

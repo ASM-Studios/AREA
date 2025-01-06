@@ -31,7 +31,7 @@ func StartPlaying(user *models.User, args map[string]string) bool {
                 return false
         }
         defer resp.Body.Close()
-        if  resp.StatusCode != 200 {
+        if resp.StatusCode != 200 {
                 return false
         }
 

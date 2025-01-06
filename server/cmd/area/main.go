@@ -6,12 +6,25 @@ import (
 	"net/http"
 	"strconv"
 
+	"AREA/internal/amqp"
 	"AREA/internal/config"
+	"AREA/internal/gconsts"
 	"AREA/internal/pkg"
 	"AREA/internal/routers"
+	"AREA/internal/utils"
 
 	"github.com/gin-gonic/gin"
 )
+
+func initRMQConnection() {
+        var connection amqp.Connection
+        err := connection.Init(utils.GetEnvVar("RMQ_URL"))
+        if err != nil {
+                log.Fatalf("Failed to initialize connection: %v", err)
+                return
+        }
+        gconsts.Connection = &connection
+}
 
 // @title           AREA API
 // @version         1.0
@@ -32,31 +45,35 @@ import (
 // @in header
 // @name Authorization
 func main() {
-	config.LoadConfig()
+        config.LoadConfig()
 
-	sqlDB := pkg.InitDB()
-	if sqlDB == nil {
-		log.Fatal("Failed to initialize database")
-	}
-	defer sqlDB.Close()
-	pkg.InitServiceList()
-	rmq, err := pkg.InitRabbitMQ()
-	if err != nil {
-		log.Fatalf("Failed to initialize RabbitMQ: %v", err)
-	}
-	defer rmq.Close()
+        sqlDB := pkg.InitDB()
+        if sqlDB == nil {
+                log.Fatal("Failed to initialize database")
+        }
+        defer sqlDB.Close()
 
-	gin.SetMode(config.AppConfig.GinMode)
-	router := routers.SetupRouter(sqlDB, rmq)
-	port := strconv.Itoa(config.AppConfig.Port)
-	log.Printf("Starting %s on port %s in %s mode", config.AppConfig.AppName, port, config.AppConfig.GinMode)
+        pkg.InitServiceList()
 
-	server := &http.Server{
-		Addr:    fmt.Sprintf(":%s", port),
-		Handler: router,
-	}
+        rmq, err := pkg.InitRabbitMQ()
+        if err != nil {
+                log.Fatalf("Failed to initialize RabbitMQ: %v", err)
+        }
+        defer rmq.Close()
 
-	if err := server.ListenAndServe(); err != nil {
-		log.Printf("Server error: %v", err)
-	}
+        initRMQConnection()
+
+        gin.SetMode(config.AppConfig.GinMode)
+        router := routers.SetupRouter(sqlDB, rmq)
+        port := strconv.Itoa(config.AppConfig.Port)
+        log.Printf("Starting %s on port %s in %s mode", config.AppConfig.AppName, port, config.AppConfig.GinMode)
+
+        server := &http.Server{
+                Addr:    fmt.Sprintf(":%s", port),
+                Handler: router,
+        }
+
+        if err := server.ListenAndServe(); err != nil {
+                log.Printf("Server error: %v", err)
+        }
 }

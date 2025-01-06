@@ -5,23 +5,7 @@
       "name": "Email Received",
       "description": "Triggered when a new email is received in your Gmail inbox.",
       "type": "action",
-      "parameters": [
-        {
-          "name": "sender_email",
-          "description": "The email address of the sender.",
-          "type": "string"
-        },
-        {
-          "name": "subject",
-          "description": "The subject of the email.",
-          "type": "string"
-        },
-        {
-          "name": "received_date",
-          "description": "The date and time when the email was received.",
-          "type": "string"
-        }
-      ]
+      "parameters": []
     },
     {
       "name": "Email Sent",

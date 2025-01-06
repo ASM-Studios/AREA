@@ -2,17 +2,19 @@ package trigger
 
 import (
 	"AREA/cmd/action_consumer/github"
+	"AREA/cmd/action_consumer/google"
 	"AREA/cmd/action_consumer/spotify"
 	"AREA/cmd/action_consumer/twitch"
 	"AREA/cmd/action_consumer/vars"
+	"AREA/internal/gconsts"
 	"AREA/internal/models"
 	"AREA/internal/pkg"
-	"AREA/internal/utils"
 	"encoding/json"
 	"errors"
 	"fmt"
 	"time"
 
+	"github.com/rabbitmq/amqp091-go"
 	"gorm.io/gorm"
 )
 
@@ -47,19 +49,19 @@ func sendEvents(workflow *models.Workflow) {
                         fmt.Println("NOT FOUND")
                         continue
                 }
-                producer := utils.RMQProducer{
-                        Queue: reaction.ServiceName,
-                        ConnectionString: utils.GetEnvVar("RMQ_URL"),
-                }
                 body, _ := json.Marshal(workflowEvent)
-                fmt.Println("HERE")
-                producer.PublishMessage("json", body)
+                gconsts.Connection.Channel.Publish("", fmt.Sprintf("reaction.%s", reaction.ServiceName), false, false, amqp091.Publishing{
+                        ContentType: "application/json",
+                        Body:        body,
+                })
         }
 }
 
 var triggerCallbacks = map[uint]func(*models.User, map[string]string) bool {
         7: github.PRCreated,
         8: github.UserRepoCreated,
+
+        10: google.EmailReceived,
 
         30: spotify.StartPlaying,
         35: twitch.StreamStart,
