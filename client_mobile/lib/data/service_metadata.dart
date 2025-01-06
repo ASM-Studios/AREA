@@ -28,6 +28,14 @@ class ServiceMetadata {
         name: "google",
         color: Colors.amber,
         imagePath: 'assets/images/google.png'),
+    ServiceMetadata(
+        name: "github",
+        color: Colors.white,
+        imagePath: 'assets/images/github.png'),
+    ServiceMetadata(
+        name: "twitch",
+        color: Colors.purple,
+        imagePath: 'assets/images/twitch.png'),
   ];
 
   static ServiceMetadata? getServiceByName(String name) {
