@@ -14,8 +14,6 @@ USER flutteruser
 RUN flutter config --enable-web && \
     flutter doctor -v
 
-COPY --chown=flutteruser:flutteruser . .
-
 ARG API_URL
 ARG WEB_CLIENT_URL
 ARG MOBILE_CLIENT_URL
@@ -24,11 +22,8 @@ ARG GITHUB_CLIENT_SECRET
 
 RUN yes | sdkmanager --licenses
 
-RUN mkdir -p /app/build/app/outputs/flutter-apk && \
-    flutter pub get && \
-    flutter build apk --release && \
-    mv /app/build/app/outputs/flutter-apk/app-release.apk /app/build/app/outputs/flutter-apk/client.apk
+# Create a script to handle both development and production modes
+COPY --chown=flutteruser:flutteruser docker-entrypoint.sh /docker-entrypoint.sh
+RUN chmod +x /docker-entrypoint.sh
 
-# Run web server in background and use tail to keep container alive
-CMD flutter run -d web-server --web-port 8082 --web-hostname localhost & \
-    tail -f /dev/null
+ENTRYPOINT ["/docker-entrypoint.sh"]
