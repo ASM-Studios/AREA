@@ -108,6 +108,6 @@ jobs:
       - name: Build and test
         run: docker compose --profile full build
 
-      - name: Push images if on main branch
-        if: ${{ github.ref == 'refs/heads/main' && env.ACT != 'true' }}
-        run: docker compose push 
+      - name: Push images if on master branch
+        if: ${{ github.ref == 'refs/heads/master' && env.ACT != 'true' }}
+        run: docker compose push
