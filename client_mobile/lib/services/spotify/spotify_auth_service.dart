@@ -1,6 +1,8 @@
 import 'dart:convert';
 
+import 'package:client_mobile/services/oauth/oauth_service.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_web_auth/flutter_web_auth.dart';
@@ -58,20 +60,7 @@ class SpotifyAuthService {
       "force_login": "true"
     }).toString();
 
-    print("url spotify : $authUrl");
-    try {
-      final result = await FlutterWebAuth.authenticate(
-        url: authUrl.toString(),
-        callbackUrlScheme: "my.area.app",
-      );
-      final code = Uri.parse(result).queryParameters["code"];
-      if (code == null) return (false);
-      print("code a echanger : $code");
-      return (false);
-      // return (_fetchSpotifyAccessToken(code));
-    } catch (e) {
-      print("error authentification spotify : $e");
-      return (false);
-    }
+    // print("url spotify : $authUrl");
+    return await OAuthService.showWebView(context, "spotify");
   }
 }

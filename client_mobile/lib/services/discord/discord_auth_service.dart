@@ -1,10 +1,12 @@
 import 'dart:convert';
+import 'package:client_mobile/services/oauth/oauth_service.dart';
 import 'package:client_mobile/tools/utils.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_web_auth/flutter_web_auth.dart';
 import 'package:http/http.dart' as http;
+import 'package:oauth2_client/oauth2_client.dart';
 
 class DiscordAuthService {
   static final String clientId = dotenv.env["DISCORD_CLIENT_ID"] ?? "";
@@ -59,17 +61,6 @@ class DiscordAuthService {
       "code_challenge_method": "S256"
     }).toString();
 
-    try {
-      final result = await FlutterWebAuth.authenticate(
-        url: authUrl.toString(),
-        callbackUrlScheme: "my.area.app",
-      );
-      final authorizationCode = Uri.parse(result).queryParameters["code"];
-      if (authorizationCode == null) return (false);
-      return (_fetchDiscordAccessToken(authorizationCode, codeVerifier));
-    } catch (e) {
-      print("error authentification discord : $e");
-      return (false);
-    }
+    return await OAuthService.showWebView(context, "discord");
   }
 }
