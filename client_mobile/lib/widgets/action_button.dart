@@ -19,9 +19,10 @@ class _ActionButtonState extends State<ActionButton> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.action != null)
+    if (widget.action != null) {
       serviceMetadata =
           ServiceMetadata.getServiceByName(widget.action!.serviceName!);
+    }
     return Container(
       padding: const EdgeInsets.all(20),
       margin: const EdgeInsets.fromLTRB(20, 0, 20, 0),

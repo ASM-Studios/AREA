@@ -51,8 +51,9 @@ class _RegisterPageState extends State<RegisterPage> {
                     label: "username",
                     controller: userController,
                     validator: (user) {
-                      if (user == null || user.isEmpty)
+                      if (user == null || user.isEmpty) {
                         return "Please input your username.";
+                      }
                       return (null);
                     }),
                 SimpleText("Email"),
@@ -88,8 +89,9 @@ class _RegisterPageState extends State<RegisterPage> {
                   label: "********",
                   controller: confirmPasswordController,
                   validator: (password) {
-                    if (password != passwordController.text)
+                    if (password != passwordController.text) {
                       return "Your password doesn't match.";
+                    }
                     return (null);
                   },
                 ),

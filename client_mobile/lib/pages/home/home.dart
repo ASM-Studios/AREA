@@ -17,10 +17,11 @@ class _HomePageState extends State<HomePage> {
   }
 
   void redirect() async {
-    if (await AuthService.isUserLogin())
+    if (await AuthService.isUserLogin()) {
       context.pushReplacement("/dashboard");
-    else
+    } else {
       context.pushReplacement("/login");
+    }
   }
 
   @override

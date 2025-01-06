@@ -123,8 +123,9 @@ class _WorkflowPageState extends State<WorkflowPage> {
                     print("Description: $description");
                     List<int> servicesId = [];
                     servicesId.add(action!.serviceId!);
-                    if (action!.serviceId! != reaction!.serviceId!)
+                    if (action!.serviceId! != reaction!.serviceId!) {
                       servicesId.add(reaction!.serviceId!);
+                    }
 
                     bool hasCreatedWorkflow =
                         await CreateWorkflowService.createWorkflow(

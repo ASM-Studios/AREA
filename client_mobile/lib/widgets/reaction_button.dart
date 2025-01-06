@@ -20,9 +20,10 @@ class _ReactionButtonState extends State<ReactionButton> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.reaction != null)
+    if (widget.reaction != null) {
       serviceMetadata =
           ServiceMetadata.getServiceByName(widget.reaction!.serviceName!);
+    }
 
     return Container(
       padding: const EdgeInsets.all(20),

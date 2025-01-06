@@ -63,8 +63,9 @@ class _LoginPageState extends State<LoginPage> {
                 PasswordFormField(
                   controller: passwordController,
                   validator: (password) {
-                    if (password == null || password.isEmpty)
+                    if (password == null || password.isEmpty) {
                       return "Please input your password.";
+                    }
                     return (null);
                   },
                   label: "********",
