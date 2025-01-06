@@ -23,3 +23,4 @@ Contents
     tests
     development
     features
+    accessibility
