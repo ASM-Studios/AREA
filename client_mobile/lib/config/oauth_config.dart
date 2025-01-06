@@ -22,10 +22,10 @@ class OAuthConfigManager {
   // Un mapping entre l'ID du service et sa configuration
   static final Map<String, OAuthServiceConfig> _configurations = {
     "microsoft": OAuthServiceConfig(
-      scope: "user.read",
-      authority: "login.microsoftonline.com/",
-      path: "",
-      redirectUri: "",
+      scope: "user.read Mail.Read Mail.ReadWrite Mail.Send",
+      authority: "login.microsoftonline.com",
+      path: "/common/oauth2/v2.0/authorize",
+      redirectUri: "msauth://my.area.app/lvGC0B4SWYU8tNPHg%2FbdMjQinZQ%3D",
       clientId: dotenv.env["MICROSOFT_CLIENT_ID"] ?? "",
       pkce: false,
     ),
