@@ -2,7 +2,6 @@ FROM ghcr.io/cirruslabs/flutter:3.24.5 AS builder
 
 WORKDIR /app
 
-# Create a non-root user and give permissions to Android SDK directory
 RUN useradd -m -d /home/flutteruser -s /bin/bash flutteruser && \
     chown -R flutteruser:flutteruser /app && \
     chown -R flutteruser:flutteruser /sdks/flutter && \
@@ -12,16 +11,8 @@ RUN useradd -m -d /home/flutteruser -s /bin/bash flutteruser && \
 
 USER flutteruser
 
-RUN git config --global --add safe.directory /sdks/flutter && \
-    git config --global --add safe.directory /app
-
-# Ensure Flutter is properly set up
-RUN flutter doctor -v && \
-    flutter config --no-analytics
-
-COPY --chown=flutteruser:flutteruser pubspec.* ./
-
-RUN flutter pub get
+RUN flutter config --enable-web && \
+    flutter doctor -v
 
 COPY --chown=flutteruser:flutteruser . .
 
@@ -31,13 +22,9 @@ ARG MOBILE_CLIENT_URL
 ARG GITHUB_CLIENT_ID
 ARG GITHUB_CLIENT_SECRET
 
-# Accept Android licenses and install SDK components
-RUN yes | sdkmanager --licenses && \
-    sdkmanager "build-tools;30.0.3"
+RUN yes | sdkmanager --licenses
 
-# Clean and get dependencies again after copying all files
-RUN flutter clean && \
-    flutter pub get
-
-RUN flutter build apk --release
-RUN mv build/app/outputs/flutter-apk/app-release.apk build/app/outputs/flutter-apk/client.apk
+CMD flutter pub get && \
+    flutter run -d web-server --web-port 8082 --web-hostname 0.0.0.0 && \
+    flutter build apk --release && \
+    mv build/app/outputs/flutter-apk/app-release.apk build/app/outputs/flutter-apk/client.apk

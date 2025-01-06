@@ -105,3 +105,9 @@ build/
 
 # But keep
 !.env.example
+
+# Docker development
+.docker/
+*.log
+flutter_cache/
+android_cache/
