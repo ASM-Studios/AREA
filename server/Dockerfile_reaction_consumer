@@ -15,38 +15,3 @@ COPY . .
 EXPOSE 8080
 
 CMD ["air", "-c", ".air.toml.reaction_consumer"]
-
-# Production stage
-FROM golang:1.23.4-alpine AS production
-
-WORKDIR /app
-
-COPY go.mod go.sum ./
-
-RUN go mod download
-
-COPY . .
-
-RUN CGO_ENABLED=0 GOOS=linux go build -o reaction_consumer cmd/reaction_consumer/main.go
-
-CMD ["./reaction_consumer"]
-
-# Final stage
-FROM alpine:3.20.3
-
-RUN apk add --no-cache ca-certificates wget && \
-    adduser -D appuser
-
-WORKDIR /app
-
-COPY --from=production /app/reaction_consumer .
-COPY --from=production /app/config.json .
-
-RUN chown -R appuser:appuser /app && \
-    chmod +x /app/reaction_consumer
-
-USER appuser
-
-EXPOSE 8080
-
-CMD ["./reaction_consumer"]

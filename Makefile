@@ -63,7 +63,7 @@ reset: reset-full
 
 ## Show container logs
 logs:
-	docker compose logs -f
+	docker compose --profile full logs -f
 
 ## Clean up containers, images and orphans
 clean:
