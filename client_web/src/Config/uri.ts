@@ -39,7 +39,9 @@ const uri: UriConfig = {
                 'user.read',
                 'Mail.Read',
                 'Mail.ReadWrite',
-                'Mail.Send'
+                'Mail.Send',
+                'Calendars.ReadWrite',
+                'Chat.ReadWrite'
             ]
         }
     },

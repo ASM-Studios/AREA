@@ -62,16 +62,10 @@
       ]
     },
     {
-      "name": "File deleted",
-      "description": "Triggered when a file is deleted from OneDrive.",
+      "name": "Event has started",
+      "description": "Triggered when an event has started in your calendar.",
       "type": "action",
-      "parameters": [
-        {
-          "name": "file_id",
-          "description": "ID of the deleted file.",
-          "type": "string"
-        }
-      ]
+      "parameters": []
     },
     {
       "name": "Send an Email",

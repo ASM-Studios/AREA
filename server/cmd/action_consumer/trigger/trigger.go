@@ -3,6 +3,7 @@ package trigger
 import (
 	"AREA/cmd/action_consumer/github"
 	"AREA/cmd/action_consumer/spotify"
+	"AREA/cmd/action_consumer/microsoft"
 	"AREA/cmd/action_consumer/twitch"
 	"AREA/cmd/action_consumer/vars"
 	"AREA/internal/models"
@@ -60,6 +61,9 @@ func sendEvents(workflow *models.Workflow) {
 var triggerCallbacks = map[uint]func(*models.User, map[string]string) bool {
         7: github.PRCreated,
         8: github.UserRepoCreated,
+        12: microsoft.MailReceived,
+        14: microsoft.NewMessageInChannel,
+        16: microsoft.DriveFileAdded,
 
         30: spotify.StartPlaying,
         35: twitch.StreamStart,
