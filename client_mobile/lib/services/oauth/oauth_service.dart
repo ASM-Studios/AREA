@@ -53,10 +53,12 @@ class OAuthService {
   {
     String baseUrl = dotenv.env["BACKEND_BASE_URL"] ?? "https://localhost:8080";
     final Uri endpoint = signUp ? Uri.parse('$baseUrl/oauth/$serviceId') : Uri.parse('$baseUrl/oauth/bind/$serviceId');
+    final String? bearerToken = await secureStorage.read(key: "bearer_token");
 
     final response = await http.post(
       endpoint,
-      headers: {'Content-Type': 'application/json'},
+      headers: {'Content-Type': 'application/json',
+      if (!signUp) 'Authorization': 'Bearer $bearerToken'},
       body: jsonEncode({
         "code": code,
         "redirect_uri": redirectUri,
