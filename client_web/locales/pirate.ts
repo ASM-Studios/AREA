@@ -122,6 +122,7 @@ const pirate_language: Translation = {
         register: "Join Crew",
         dashboard: "Captain's Quarters",
         createWorkflow: "Chart New Course",
+        accessibility: "Accessibility fer All Hands",
         profile: {
             title: "Sailor's Log",
             settings: "Ship Settings",

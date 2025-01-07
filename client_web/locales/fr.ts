@@ -122,6 +122,7 @@ const fr_language: Translation = {
         register: "Inscription",
         dashboard: "Tableau de bord",
         createWorkflow: "Créer un Workflow",
+        accessibility: "Accessibilité",
         profile: {
             title: "Profil",
             settings: "Paramètres",

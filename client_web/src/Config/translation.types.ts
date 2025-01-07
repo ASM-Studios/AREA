@@ -120,6 +120,7 @@ export interface Translation {
         register: string;
         dashboard: string;
         createWorkflow: string;
+        accessibility: string;
         profile: {
             title: string;
             settings: string;
