@@ -1,12 +1,11 @@
 import 'package:client_mobile/services/login/auth_service.dart';
-import 'package:client_mobile/services/microsoft/microsoft_auth_service.dart';
 import 'package:client_mobile/tools/utils.dart';
 import 'package:client_mobile/widgets/button.dart';
 import 'package:client_mobile/widgets/clickable_text.dart';
 import 'package:client_mobile/widgets/divider_with_text.dart';
 import 'package:client_mobile/widgets/form_field.dart';
+import 'package:client_mobile/widgets/oauth_buttons.dart';
 import 'package:client_mobile/widgets/password_form_field.dart';
-import 'package:client_mobile/widgets/sign_in_button.dart';
 import 'package:client_mobile/widgets/simple_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_appauth/flutter_appauth.dart';
@@ -32,24 +31,6 @@ class _LoginPageState extends State<LoginPage> {
 
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-
-  void handleMicrosoftOAuth() async {
-    if (!isLoggingViaOauth) {
-      isLoggingViaOauth = true;
-      bool isRegistered =
-          await MicrosoftAuthService.auth(context, signUp: true);
-
-      if (!mounted) {
-        isLoggingViaOauth = false;
-        return;
-      }
-
-      if (isRegistered) {
-        context.pushReplacement("/dashboard");
-      }
-      isLoggingViaOauth = false;
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -109,17 +90,7 @@ class _LoginPageState extends State<LoginPage> {
                 const SizedBox(height: 40),
                 const DividerWithText(label: "Or Sign in with"),
                 const SizedBox(height: 15),
-                Center(
-                  child: SignInButton(
-                    onPressed: handleMicrosoftOAuth,
-                    label: "Microsoft",
-                    image: Image.asset(
-                      "assets/images/microsoft.png",
-                      width: 40,
-                      height: 20,
-                    ),
-                  ),
-                ),
+                OAuthButtons(),
                 const SizedBox(height: 5),
                 Align(
                   alignment: Alignment.center,
