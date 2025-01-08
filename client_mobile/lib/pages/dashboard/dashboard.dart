@@ -1,5 +1,6 @@
 import 'package:client_mobile/pages/dashboard/service_connection.dart';
 import 'package:client_mobile/pages/dashboard/workflow.dart';
+import 'package:client_mobile/pages/dashboard/workflow_list_page.dart';
 import 'package:flutter/material.dart';
 
 class DashboardPage extends StatefulWidget {
@@ -13,7 +14,7 @@ class _DashboardPageState extends State<DashboardPage> {
   int _currentIndex = 0;
 
   final List<Widget> _pages = [
-    const WorkflowPage(),
+    const WorkflowListPage(),
     const ServiceConnectionPage(),
   ];
 

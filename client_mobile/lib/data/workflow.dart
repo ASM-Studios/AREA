@@ -17,12 +17,14 @@ class Workflow {
   final String description;
   final List<int> servicesId;
   final List<WorkflowEvent> events;
+  final String? status;
 
   Workflow({
     required this.name,
     required this.description,
     required this.servicesId,
     required this.events,
+    this.status,
   });
 
 
