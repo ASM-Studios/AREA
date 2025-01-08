@@ -11,7 +11,7 @@ type GoogleResponse struct {
         DisplayName string `json:"name"`
 }
 
-func GetGoogleResponse(serviceRawResponse *http.Response) (*ServiceResponse, error) {
+func GetGoogleResponse(serviceRawResponse *http.Response, token string) (*ServiceResponse, error) {
         var googleResponse GoogleResponse
 
         body, err := io.ReadAll(serviceRawResponse.Body)

@@ -50,7 +50,7 @@ type ServiceResponse struct {
         DisplayName string
 }
 
-type ServiceResponseConverter func(*http.Response) (*ServiceResponse, error)
+type ServiceResponseConverter func(*http.Response, string) (*ServiceResponse, error)
 
 var ServiceResponseConverters = map[string]ServiceResponseConverter {
         "github": GetGithubResponse,
@@ -110,8 +110,11 @@ func createDBToken(serviceId uint, serviceApp ServiceApp, serviceBearerToken Ser
         if err != nil || resp.StatusCode != 200 {
                 return nil, errors.New("Failed to fetch user info")
         }
-        serviceResponse, err := ServiceResponseConverters[serviceApp.ServiceName](resp)
+        serviceResponse, err := ServiceResponseConverters[serviceApp.ServiceName](resp, serviceBearerToken.Token)
 
+        if err != nil {
+                return nil, errors.New("Failed to fetch user info")
+        }
         dbToken.Token = serviceBearerToken.Token
         dbToken.RefreshToken = serviceBearerToken.RefreshToken
         dbToken.DisplayName = serviceResponse.DisplayName
