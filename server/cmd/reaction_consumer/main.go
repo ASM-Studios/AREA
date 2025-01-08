@@ -1,18 +1,14 @@
 package main
 
 import (
-	"AREA/cmd/reaction_consumer/consts"
 	"AREA/cmd/reaction_consumer/github"
 	"AREA/cmd/reaction_consumer/spotify"
 	"AREA/cmd/reaction_consumer/twitch"
-	"AREA/cmd/reaction_consumer/vars"
 	"AREA/internal/amqp"
 	"AREA/internal/gconsts"
 	"AREA/internal/models"
 	"AREA/internal/pkg"
-	"AREA/internal/utils"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"log"
 	"os"
@@ -20,10 +16,7 @@ import (
 	"syscall"
 
 	"github.com/rabbitmq/amqp091-go"
-	"gorm.io/gorm"
 )
-
-var service string
 
 var actionCallbacks = map[uint]func(*models.User, map[string]string) {
         9: github.CreateUserRepo,
@@ -37,8 +30,7 @@ var actionCallbacks = map[uint]func(*models.User, map[string]string) {
         37: twitch.WhisperMessage,
 }
 
-
-func handlerAction(message amqp091.Delivery) {
+func executeWorkflowEvent(message amqp091.Delivery, service string) {
         var workflowEvent models.WorkflowEvent
         err := json.Unmarshal(message.Body, &workflowEvent)
         if err != nil {
@@ -76,61 +68,74 @@ func handlerAction(message amqp091.Delivery) {
         }
 }
 
-func declareExchanges() {
-        rabbitMQConnection := utils.GetEnvVar("RMQ_URL")
-        actionExchange, reactionExchange := utils.InitExchange(rabbitMQConnection)
-        gconsts.ActionExchange = actionExchange
-        gconsts.ReactionExchange = reactionExchange
+func handlerAction(message amqp091.Delivery, queue string) {
+        var service string
+        fmt.Sscanf(queue, "reaction.%s", &service)
+        executeWorkflowEvent(message, service)
 }
 
-func declareQueues(exchange *amqp.Exchange) {
+func declareExchanges() error {
+        err := gconsts.Connection.Channel.ExchangeDeclare("reaction", "topic", true, false, false, false, nil)
+        if err != nil {
+                return err
+        }
+        return nil
+}
+
+func declareQueues() {
         var services []models.Service
         pkg.DB.Find(&services)
         for _, service := range services {
-                exchange.DeclareQueue(consts.MessageQueue, service.Name)
+                queueName := fmt.Sprintf("reaction.%s", service.Name)
+                routingKey := fmt.Sprintf("reaction.%s", service.Name)
+                gconsts.Connection.Channel.QueueDeclare(queueName, true, false, false, false, nil)
+                gconsts.Connection.Channel.QueueBind(queueName, routingKey, "reaction", false, nil)
         }
 }
 
-func setService() {
+func getServices() []string {
+        var services []string
         if len(os.Args) < 2 {
+                pkg.DB.Raw("SELECT name FROM services").Scan(&services)
+        } else {
+                for _, arg := range os.Args[1:] {
+                        services = append(services, arg)
+                }
+        }
+        for i, service := range services {
+                services[i] = fmt.Sprintf("reaction.%s", service)
+        }
+        return services
+}
+
+func initRMQConnection() {
+        var connection amqp.Connection
+        err := connection.Init("amqp://guest:guest@localhost:5672")
+        if err != nil {
+                log.Fatalf("Failed to initialize connection: %v\n", err)
                 return
         }
-        service = os.Args[1]
-        var service models.Service
-        err := pkg.DB.Where("name = ?", service).First(&service).Error
-        if errors.Is(err, gorm.ErrRecordNotFound) {
-                return
-        }
-        vars.ServiceId = fmt.Sprintf("%d", service.ID)
+        gconsts.Connection = &connection
 }
 
 func main() {
-        if len(os.Args) < 2 {
-                service  = "reaction_queue"
-                fmt.Printf("Connection to all services\n")
-        } else {
-                service = os.Args[1]
-                fmt.Printf("Connecting to service: %s\n", service)
-        }
-        declareExchanges()
-
         pkg.InitDB()
-        setService()
-        declareQueues(gconsts.ReactionExchange)
+        initRMQConnection()
 
-        var consumer amqp.EventConsumer
-        err := consumer.Init(gconsts.ReactionExchange, consts.MessageQueue, service)
-        if err != nil {
-                log.Fatalf("Failed to initialize consumer: %v", err)
-        }
+        declareExchanges()
+        declareQueues()
+
+        services := getServices()
+        fmt.Printf("Looking on %v\n", services)
+
+        consumer := amqp.EventConsumer{Connection: gconsts.Connection}
         go func() {
                 c := make(chan os.Signal, 1)
                 signal.Notify(c, os.Interrupt, syscall.SIGTERM)
                 <-c
                 log.Println("Shutting down consumer...")
+                gconsts.Connection.Fini()
                 os.Exit(0)
         }()
-        consumer.StartConsuming(consts.MessageQueue, handlerAction)
-        gconsts.ActionExchange.Fini()
-        gconsts.ReactionExchange.Fini()
+        consumer.StartConsuming(services, handlerAction)
 }

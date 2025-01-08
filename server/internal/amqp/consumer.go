@@ -33,7 +33,6 @@ func (ec *EventConsumer) Consume(messageQueue []string, handler func(amqp091.Del
                                 fmt.Printf("Received a message on %s: %s\n", queue, msg.Body)
                                 handler(msg, queue)
                         }
-                        fmt.Println("-----")
                 }()
         }
         return nil

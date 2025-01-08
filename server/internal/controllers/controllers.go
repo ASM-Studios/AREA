@@ -34,7 +34,7 @@ func Trigger(c *gin.Context) {
                 Workflow: "*",
         }
         bytes, _ := json.Marshal(triggerRequest)
-        gconsts.Connection.Channel.Publish("action", "", false, false, amqp091.Publishing{
+        gconsts.Connection.Channel.Publish("action", "trigger", false, false, amqp091.Publishing{
                 ContentType: "application/json",
                 Body:        bytes,
         })

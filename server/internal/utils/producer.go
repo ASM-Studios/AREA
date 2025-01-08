@@ -1,13 +1,13 @@
 package utils
 
 import (
-	_ "AREA/internal/gconsts"
+	"AREA/internal/gconsts"
 
-	_ "github.com/rabbitmq/amqp091-go"
-	_ "github.com/rs/zerolog/log"
+	amqp "github.com/rabbitmq/amqp091-go"
+	"github.com/rs/zerolog/log"
 )
 
-/*type RMQProducer struct {
+type RMQProducer struct {
 	Queue            string
 	ConnectionString string
 }
@@ -47,4 +47,4 @@ func (x RMQProducer) PublishMessage(contentType string, body []byte) {
 			Body:        body,
 		})
 	x.OnError(err, "Failed to publish a message")
-}*/
+}

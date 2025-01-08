@@ -126,7 +126,7 @@ func detectWorkflowEvent(workflow *models.Workflow, user *models.User) bool {
         return false
 }
 
-func DetectWorkflowsEvent(serviceName string) {
+func DetectWorkflowsEvent() {
         var user models.User
         var workflow models.Workflow
 
@@ -139,8 +139,7 @@ func DetectWorkflowsEvent(serviceName string) {
                 pkg.DB.ScanRows(rows, &workflow)
                 pkg.DB.Where("id = ?", workflow.UserID).First(&user)
                 if detectWorkflowEvent(&workflow, &user) {
-                        sendEvents(&workflow)   // TODO RESTORE
-                        // TODO RESTORE HERE
+                        sendEvents(&workflow)
                 }
         }
 
