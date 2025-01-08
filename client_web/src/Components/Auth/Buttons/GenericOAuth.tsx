@@ -24,6 +24,7 @@ const GenericOAuthButton: React.FC<GenericOAuthButtonProps> = ({
                 onClick={handleLogin}
                 className={"w-full flex items-center justify-center gap-2 bg-[#5865F2] text-white py-2 px-4 rounded-md hover:bg-[#4752C4] transition-colors"}
                 disabled={disabled}
+                aria-label={`Login with ${service}`}
             >
                 <img
                     src={iconSrc}

@@ -23,19 +23,20 @@ const Header: React.FC = () => {
         AUTH = 'auth',
         GUEST = 'guest',
     }
-    
+
     interface MenuItems {
         key: string;
         label: React.ReactNode;
         visibility?: Visibility;
     }
-    
+
     const menuItems: MenuItems[] = [
         { key: '/', label: <Link to="/">{translations?.header?.home}</Link>, visibility: Visibility.ALWAYS },
         { key: '/login', label: <Link to="/login">{translations?.header?.login}</Link>, visibility: Visibility.GUEST },
         { key: '/register', label: <Link to="/register">{translations?.header?.register}</Link>, visibility: Visibility.GUEST },
         { key: '/dashboard', label: <Link to="/dashboard">{translations?.header?.dashboard}</Link>, visibility: Visibility.AUTH },
         { key: '/workflow/create', label: <Link to="/workflow/create">{translations?.header?.createWorkflow}</Link>, visibility: Visibility.AUTH },
+        { key: '/accessibility', label: <Link to="/accessibility">{translations?.header?.accessibility}</Link>, visibility: Visibility.ALWAYS },
     ];
 
     const languageOptions = [
@@ -97,8 +98,9 @@ const Header: React.FC = () => {
                             onClick: ({ key }) => setSelectedKey(key)
                         }}
                         trigger={['click']}
+                        aria-label="Mobile navigation menu"
                     >
-                        <Button icon={<MenuOutlined />} />
+                        <Button icon={<MenuOutlined />} aria-label="Open menu" />
                     </Dropdown>
                 ) : (
                     <Menu
@@ -107,6 +109,7 @@ const Header: React.FC = () => {
                         style={{ flex: 1 }}
                         items={filteredMenuItems}
                         selectedKeys={[selectedKey]}
+                        aria-label="Main navigation menu"
                     />
                 )}
                 <Space style={{ marginLeft: 'auto' }}>
@@ -120,8 +123,9 @@ const Header: React.FC = () => {
                         }}
                         placement="bottomRight"
                         arrow
+                        aria-label="Language selection menu"
                     >
-                        <Button type="text">
+                        <Button type="text" aria-label="Select language">
                             {languageOptions.find(lang => lang.value === language)?.label || '🌐 Language'}
                         </Button>
                     </Dropdown>
@@ -135,6 +139,7 @@ const Header: React.FC = () => {
                                 placement="bottomRight"
                                 arrow
                                 disabled={!isAuthenticated}
+                                aria-label="Profile menu"
                             >
                                 <Button
                                     type="text"
@@ -145,6 +150,7 @@ const Header: React.FC = () => {
                                         alignItems: 'center',
                                         gap: '8px'
                                     }}
+                                    aria-label="Profile options"
                                 >
                                     <UserOutlined />
                                     <p>{translations?.header?.profile?.title}</p>

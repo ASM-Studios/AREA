@@ -15,6 +15,8 @@ import { ContextManager } from "@/Context/ContextManager";
 import Home from '@/Pages/Home';
 import Dashboard from './Pages/Dashboard/Dashboard';
 
+import Accessibility from "@/Pages/Accessibility";
+
 import NotFoundError from '@/Pages/Errors/NotFoundError';
 import ApiError from "@/Pages/Errors/ApiError";
 import CustomError from "@/Pages/Errors/CustomError";
@@ -158,6 +160,7 @@ const App = () => {
                                 <Route path="/login" element={<Login />} />
                                 <Route path="/register" element={<Register />} />
                                 <Route path="/dashboard" element={<Dashboard />} />
+                                <Route path="/accessibility" element={<Accessibility />} />
                                 <Route path="/auth/:service/callback" element={<GenericCallback />} />
                                 <Route path="/workflow/create" element={<WorkflowHandler />} />
                                 <Route path="/workflow/update/:id" element={<WorkflowHandler />} />

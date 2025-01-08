@@ -27,6 +27,7 @@ jest.mock('@/Context/ContextHooks', () => ({
         login: 'header.login',
         register: 'header.register',
         dashboard: 'header.dashboard',
+        accessibility: 'header.accessibility',
         profile: {
           title: 'header.profile.title',
           tooltip: 'header.profile.tooltip',
@@ -65,6 +66,7 @@ describe('Header Component', () => {
     expect(screen.getByText('header.login')).toBeInTheDocument();
     expect(screen.getByText('header.register')).toBeInTheDocument();
     expect(screen.queryByText('header.dashboard')).not.toBeInTheDocument();
+    expect(screen.getByText('header.accessibility')).toBeInTheDocument();
   });
 
   it('shows language dropdown', async () => {
@@ -80,16 +82,10 @@ describe('Header Component', () => {
     await renderHeader();
     const profileButton = screen.getByText('header.profile.title');
     expect(profileButton).toBeInTheDocument();
-    
-    // Find the button container
-    const buttonContainer = screen.getByRole('button', { 
-      name: /header\.profile\.title/i 
-    });
-    expect(buttonContainer).toBeInTheDocument();
 
     // Hover over the button to trigger tooltip
     await act(async () => {
-      fireEvent.mouseEnter(buttonContainer);
+      fireEvent.mouseEnter(profileButton);
     });
 
     // Wait for tooltip to appear
