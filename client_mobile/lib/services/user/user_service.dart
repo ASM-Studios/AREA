@@ -3,7 +3,6 @@ import 'package:client_mobile/data/user_infos.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
-import 'package:client_mobile/data/service.dart';
 
 class UserService {
   static const FlutterSecureStorage secureStorage = FlutterSecureStorage();
@@ -26,10 +25,6 @@ class UserService {
       return UserInfos(username: jsonData["user"]["username"], mail: jsonData["user"]["email"], services: (jsonData['user']['services'] as List)
             .map((service) => service["name"] as String)
             .toList());
-
-      // return (jsonData['server']['services'] as List)
-      //       .map((service) => WorkflowService.fromJson(service))
-      //       .toList();
     } else {
       throw Exception('Failed to load services');
     }

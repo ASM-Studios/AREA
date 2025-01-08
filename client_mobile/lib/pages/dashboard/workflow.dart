@@ -1,7 +1,6 @@
 import 'package:client_mobile/data/action.dart';
 import 'package:client_mobile/data/service.dart';
 import 'package:client_mobile/data/workflow.dart';
-import 'package:client_mobile/services/login/auth_service.dart';
 import 'package:client_mobile/services/workflow/workflow_service.dart';
 import 'package:client_mobile/widgets/action_button.dart';
 import 'package:client_mobile/widgets/profile_button.dart';
@@ -161,14 +160,6 @@ class _WorkflowPageState extends State<WorkflowPage> {
               child: const Text("Create"))
         ],
       ),
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: () async {
-      //     bool hasLogout = await AuthService.logout();
-      //     if (hasLogout) context.pushReplacement("/login");
-      //   },
-      //   tooltip: 'Logout',
-      //   child: const Icon(Icons.login),
-      // ),
     );
   }
 }

@@ -81,6 +81,7 @@ flutter:
       - assets/images/discord.png
       - assets/images/github.png
       - assets/images/twitch.png
+      - assets/images/twitch_white.png
       - assets/images/profile.png
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg

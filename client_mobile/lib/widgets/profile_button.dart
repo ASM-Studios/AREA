@@ -30,7 +30,7 @@ class ProfileButton extends StatelessWidget {
         ];
       },
       style: ButtonStyle(),
-      icon: Icon(Icons.person, size: 32), // Vous pouvez changer l'icône selon vos besoins
+      icon: Icon(Icons.person, size: 32),
     );
   }
 }

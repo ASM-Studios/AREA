@@ -1,6 +1,4 @@
 import 'package:client_mobile/services/login/auth_service.dart';
-import 'package:client_mobile/services/microsoft/microsoft_auth_service.dart';
-import 'package:client_mobile/services/oauth/oauth_service.dart';
 import 'package:client_mobile/tools/utils.dart';
 import 'package:client_mobile/widgets/button.dart';
 import 'package:client_mobile/widgets/clickable_text.dart';
@@ -8,7 +6,6 @@ import 'package:client_mobile/widgets/divider_with_text.dart';
 import 'package:client_mobile/widgets/form_field.dart';
 import 'package:client_mobile/widgets/oauth_buttons.dart';
 import 'package:client_mobile/widgets/password_form_field.dart';
-import 'package:client_mobile/widgets/sign_in_button.dart';
 import 'package:client_mobile/widgets/simple_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_appauth/flutter_appauth.dart';

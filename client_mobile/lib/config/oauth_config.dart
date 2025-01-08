@@ -19,7 +19,6 @@ class OAuthServiceConfig {
 }
 
 class OAuthConfigManager {
-  // Un mapping entre l'ID du service et sa configuration
   static final Map<String, OAuthServiceConfig> _configurations = {
     "microsoft": OAuthServiceConfig(
       scope: "user.read Mail.Read Mail.ReadWrite Mail.Send",
@@ -33,7 +32,8 @@ class OAuthConfigManager {
       scope: "email profile",
       authority: "accounts.google.com",
       path: "/o/oauth2/v2/auth",
-      redirectUri: "https://localhost:8081/auth/google/callback",
+      redirectUri: "https://maelrabot.com/oauth/callback/google",
+      // redirectUri: "https://localhost:8081/auth/google/callback",
       clientId: dotenv.env["GOOGLE_CLIENT_ID"] ?? "",
       pkce: false,
     ),
@@ -71,7 +71,6 @@ class OAuthConfigManager {
     )
   };
 
-  // Fonction pour obtenir la configuration par serviceId
   static OAuthServiceConfig? getServiceConfig(String serviceId) {
     return _configurations[serviceId];
   }

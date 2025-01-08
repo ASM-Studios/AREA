@@ -33,11 +33,11 @@ class _DashboardPageState extends State<DashboardPage> {
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
-            label: 'Home',
+            label: '',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.settings),
-            label: 'Services',
+            label: '',
           ),
         ],
       ),

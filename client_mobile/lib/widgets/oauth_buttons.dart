@@ -3,8 +3,6 @@ import 'package:client_mobile/widgets/sign_in_button.dart';
 import 'package:flutter/material.dart';
 
 class OAuthButtons extends StatelessWidget {
-  // final bool isLoggingViaOauth;
-  // final Function(BuildContext context, String provider) onSignIn;
 
   bool isLoggingViaOAuth = false;
 
