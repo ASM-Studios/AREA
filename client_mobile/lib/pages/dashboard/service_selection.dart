@@ -1,9 +1,9 @@
-import 'package:client_mobile/data/action.dart';
-import 'package:client_mobile/data/service.dart';
-import 'package:client_mobile/data/service_metadata.dart';
-import 'package:client_mobile/pages/dashboard/action_selection_page.dart';
-import 'package:client_mobile/services/about/about_service.dart';
-import 'package:client_mobile/services/user/user_service.dart';
+import 'package:area/data/action.dart';
+import 'package:area/data/service.dart';
+import 'package:area/data/service_metadata.dart';
+import 'package:area/pages/dashboard/action_selection_page.dart';
+import 'package:area/services/about/about_service.dart';
+import 'package:area/services/user/user_service.dart';
 import 'package:flutter/material.dart';
 
 class ServiceSelectionPage extends StatelessWidget {
@@ -59,7 +59,8 @@ class ServiceSelectionPage extends StatelessWidget {
                       if (!userInfos.services.contains(services[index].name)) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
-                            content: Text("Your account is not linked with this service. Please refer to your profile page to link this service."),
+                            content: Text(
+                                "Your account is not linked with this service. Please refer to your profile page to link this service."),
                             backgroundColor: Colors.red,
                           ),
                         );

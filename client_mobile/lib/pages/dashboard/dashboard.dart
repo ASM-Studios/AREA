@@ -1,5 +1,5 @@
-import 'package:client_mobile/pages/dashboard/service_connection.dart';
-import 'package:client_mobile/pages/dashboard/workflow.dart';
+import 'package:area/pages/dashboard/service_connection.dart';
+import 'package:area/pages/dashboard/workflow.dart';
 import 'package:flutter/material.dart';
 
 class DashboardPage extends StatefulWidget {

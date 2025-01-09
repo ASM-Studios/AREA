@@ -1,4 +1,4 @@
-import 'package:client_mobile/data/action.dart';
+import 'package:area/data/action.dart';
 
 class WorkflowService {
   final int id;
@@ -17,8 +17,7 @@ class WorkflowService {
     try {
       return WorkflowService(
         id: json['id'] ?? 0,
-        name: json['name'] ??
-            'Unknown',
+        name: json['name'] ?? 'Unknown',
         actions: _parseActionsOrReactions(json['actions']),
         reactions: _parseActionsOrReactions(json['reactions']),
       );

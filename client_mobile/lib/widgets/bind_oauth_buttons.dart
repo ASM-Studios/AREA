@@ -1,5 +1,5 @@
-import 'package:client_mobile/services/oauth/oauth_service.dart';
-import 'package:client_mobile/widgets/sign_in_button.dart';
+import 'package:area/services/oauth/oauth_service.dart';
+import 'package:area/widgets/sign_in_button.dart';
 import 'package:flutter/material.dart';
 
 class BindOAuthButtons extends StatelessWidget {
@@ -61,7 +61,7 @@ class BindOAuthButtons extends StatelessWidget {
         ),
         SignInButton(
           onPressed: () {
-              OAuthService.requestOAuth(context, "twitch", signUp: false);
+            OAuthService.requestOAuth(context, "twitch", signUp: false);
           },
           label: "Link with Twitch",
           image: Image.asset(
@@ -73,7 +73,7 @@ class BindOAuthButtons extends StatelessWidget {
         ),
         SignInButton(
           onPressed: () {
-              OAuthService.requestOAuth(context, "spotify", signUp: false);
+            OAuthService.requestOAuth(context, "spotify", signUp: false);
           },
           label: "Link with Spotify",
           image: Image.asset(

@@ -1,10 +1,10 @@
-import 'package:client_mobile/data/action.dart';
-import 'package:client_mobile/data/service.dart';
-import 'package:client_mobile/data/workflow.dart';
-import 'package:client_mobile/services/workflow/workflow_service.dart';
-import 'package:client_mobile/widgets/action_button.dart';
-import 'package:client_mobile/widgets/profile_button.dart';
-import 'package:client_mobile/widgets/reaction_button.dart';
+import 'package:area/data/action.dart';
+import 'package:area/data/service.dart';
+import 'package:area/data/workflow.dart';
+import 'package:area/services/workflow/workflow_service.dart';
+import 'package:area/widgets/action_button.dart';
+import 'package:area/widgets/profile_button.dart';
+import 'package:area/widgets/reaction_button.dart';
 import 'package:flutter/material.dart';
 
 class WorkflowPage extends StatefulWidget {
@@ -93,9 +93,7 @@ class _WorkflowPageState extends State<WorkflowPage> {
         children: [
           Padding(
             padding: const EdgeInsets.fromLTRB(0, 30, 20, 0),
-            child: Align(
-              alignment: Alignment.topRight,
-              child: ProfileButton()),
+            child: Align(alignment: Alignment.topRight, child: ProfileButton()),
           ),
           const SizedBox(height: 50),
           ActionButton(onActionSelected: onActionSelected, action: action),

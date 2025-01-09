@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
-import 'package:client_mobile/data/service.dart';
+import 'package:area/data/service.dart';
 
 class AboutService {
   static const FlutterSecureStorage secureStorage = FlutterSecureStorage();
@@ -23,8 +23,8 @@ class AboutService {
       final jsonData = json.decode(response.body);
 
       return (jsonData['server']['services'] as List)
-            .map((service) => WorkflowService.fromJson(service))
-            .toList();
+          .map((service) => WorkflowService.fromJson(service))
+          .toList();
     } else {
       throw Exception('Failed to load services');
     }

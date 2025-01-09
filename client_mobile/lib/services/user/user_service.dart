@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:client_mobile/data/user_infos.dart';
+import 'package:area/data/user_infos.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
@@ -22,9 +22,12 @@ class UserService {
     if (response.statusCode == 200) {
       final jsonData = json.decode(response.body);
 
-      return UserInfos(username: jsonData["user"]["username"], mail: jsonData["user"]["email"], services: (jsonData['user']['services'] as List)
-            .map((service) => service["name"] as String)
-            .toList());
+      return UserInfos(
+          username: jsonData["user"]["username"],
+          mail: jsonData["user"]["email"],
+          services: (jsonData['user']['services'] as List)
+              .map((service) => service["name"] as String)
+              .toList());
     } else {
       throw Exception('Failed to load services');
     }

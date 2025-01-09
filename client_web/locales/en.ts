@@ -123,6 +123,7 @@ const en_language: Translation = {
         dashboard: "Dashboard",
         createWorkflow: "Create Workflow",
         accessibility: "Accessibility",
+        download: "Downloads",
         profile: {
             title: "Profile",
             settings: "Settings",
@@ -386,6 +387,11 @@ const en_language: Translation = {
             backHome: "Back Home"
         }
     },
+    download: {
+        title: "Preparing Android App",
+        description1: "Please wait while we prepare your download.",
+        description2: "This might take a few moments.",
+    }
 };
 
 export default en_language;

@@ -1,4 +1,4 @@
-import 'package:client_mobile/services/oauth/oauth_service.dart';
+import 'package:area/services/oauth/oauth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
@@ -26,7 +26,8 @@ class WebViewPage extends StatelessWidget {
       ),
       body: InAppWebView(
         initialUrlRequest: URLRequest(url: WebUri(authUrl)),
-        shouldOverrideUrlLoading: (InAppWebViewController controller, NavigationAction action) async {
+        shouldOverrideUrlLoading:
+            (InAppWebViewController controller, NavigationAction action) async {
           final url = action.request.url.toString();
           if (url.startsWith(serviceConfigRedirectUri)) {
             final code = Uri.parse(url).queryParameters['code'];

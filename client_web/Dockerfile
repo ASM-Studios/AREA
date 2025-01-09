@@ -17,39 +17,40 @@ WORKDIR /app
 
 COPY package*.json ./
 
-RUN if [ "$NODE_ENV" = "production" ] ; then npm ci ; else npm install ; fi
+# RUN if [ "$NODE_ENV" = "production" ] ; then npm ci ; else npm install ; fi
+RUN npm install
 
 COPY . .
 
-RUN if [ "$NODE_ENV" = "production" ] ; then npm run build ; fi
+# RUN if [ "$NODE_ENV" = "production" ] ; then npm run build ; fi
 
-###----------------------- Production stage -----------------------###
-FROM nginx:1.25.3-alpine AS production
+# ###----------------------- Production stage -----------------------###
+# FROM nginx:1.25.3-alpine AS production
 
-ARG VITE_PORT
+# ARG VITE_PORT
 
-RUN adduser -D nginxuser && \
-    mkdir -p /usr/share/nginx/html/mobile_builds && \
-    mkdir -p /etc/nginx/ssl && \
-    chown -R nginxuser:nginxuser /usr/share/nginx/html && \
-    chown -R nginxuser:nginxuser /etc/nginx/ssl && \
-    chown -R nginxuser:nginxuser /var/cache/nginx && \
-    chown -R nginxuser:nginxuser /var/log/nginx && \
-    touch /var/run/nginx.pid && \
-    chown -R nginxuser:nginxuser /var/run/nginx.pid
+# RUN adduser -D nginxuser && \
+#     mkdir -p /usr/share/nginx/html/mobile_builds && \
+#     mkdir -p /etc/nginx/ssl && \
+#     chown -R nginxuser:nginxuser /usr/share/nginx/html && \
+#     chown -R nginxuser:nginxuser /etc/nginx/ssl && \
+#     chown -R nginxuser:nginxuser /var/cache/nginx && \
+#     chown -R nginxuser:nginxuser /var/log/nginx && \
+#     touch /var/run/nginx.pid && \
+#     chown -R nginxuser:nginxuser /var/run/nginx.pid
 
-COPY --from=cert-builder --chown=nginxuser:nginxuser /etc/nginx/ssl /etc/nginx/ssl
-COPY --from=builder --chown=nginxuser:nginxuser /app/dist /usr/share/nginx/html
-COPY --chown=nginxuser:nginxuser ./nginx.conf /etc/nginx/conf.d/default.conf
+# COPY --from=cert-builder --chown=nginxuser:nginxuser /etc/nginx/ssl /etc/nginx/ssl
+# COPY --from=builder --chown=nginxuser:nginxuser /app/dist /usr/share/nginx/html
+# COPY --chown=nginxuser:nginxuser ./nginx.conf /etc/nginx/conf.d/default.conf
 
-USER nginxuser
+# USER nginxuser
 
-EXPOSE ${VITE_PORT}
+# EXPOSE ${VITE_PORT}
 
-HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
-    CMD wget --no-verbose --tries=1 --spider http://localhost:${VITE_PORT}/health || exit 1
+# HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
+#     CMD wget --no-verbose --tries=1 --spider http://localhost:${VITE_PORT}/health || exit 1
 
-CMD ["nginx", "-g", "daemon off;"]
+# CMD ["nginx", "-g", "daemon off;"]
 
 ###----------------------- Development stage -----------------------###
 FROM builder AS development

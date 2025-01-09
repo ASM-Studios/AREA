@@ -1,12 +1,12 @@
-import 'package:client_mobile/services/login/auth_service.dart';
-import 'package:client_mobile/tools/utils.dart';
-import 'package:client_mobile/widgets/button.dart';
-import 'package:client_mobile/widgets/clickable_text.dart';
-import 'package:client_mobile/widgets/divider_with_text.dart';
-import 'package:client_mobile/widgets/form_field.dart';
-import 'package:client_mobile/widgets/oauth_buttons.dart';
-import 'package:client_mobile/widgets/password_form_field.dart';
-import 'package:client_mobile/widgets/simple_text.dart';
+import 'package:area/services/login/auth_service.dart';
+import 'package:area/tools/utils.dart';
+import 'package:area/widgets/button.dart';
+import 'package:area/widgets/clickable_text.dart';
+import 'package:area/widgets/divider_with_text.dart';
+import 'package:area/widgets/form_field.dart';
+import 'package:area/widgets/oauth_buttons.dart';
+import 'package:area/widgets/password_form_field.dart';
+import 'package:area/widgets/simple_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_appauth/flutter_appauth.dart';
 import 'package:go_router/go_router.dart';
@@ -18,7 +18,7 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  final String callbackUrlScheme = 'my.area.app';
+  final String callbackUrlScheme = 'com.asm_studios.area';
   String get spotifyRedirectUrlMobile => '$callbackUrlScheme://callback';
   bool isLoggingViaOauth = false;
 

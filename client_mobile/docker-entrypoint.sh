@@ -1,5 +1,9 @@
 #!/bin/bash
 
+echo "Generating launcher icons..."
+flutter pub run flutter_launcher_icons
+
+echo "Getting dependencies..."
 flutter pub get
 
 echo "Building APK..."
