@@ -1,5 +1,4 @@
 import 'package:client_mobile/pages/dashboard/service_connection.dart';
-import 'package:client_mobile/pages/dashboard/workflow.dart';
 import 'package:client_mobile/pages/dashboard/workflow_list_page.dart';
 import 'package:flutter/material.dart';
 

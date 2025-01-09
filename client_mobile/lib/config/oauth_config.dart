@@ -1,4 +1,3 @@
-import 'package:client_mobile/services/oauth/oauth_service.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class OAuthServiceConfig {

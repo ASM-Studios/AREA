@@ -18,6 +18,7 @@ class Workflow {
   final List<int> servicesId;
   final List<WorkflowEvent> events;
   final String? status;
+  int id;
 
   Workflow({
     required this.name,
@@ -25,6 +26,7 @@ class Workflow {
     required this.servicesId,
     required this.events,
     this.status,
+    this.id = 0
   });
 
 
@@ -33,7 +35,25 @@ class Workflow {
       'name': name,
       'description': description,
       'services': servicesId,
-      'events': events.map((a) => a.action.toJson(a.type)).toList(),
+      'events': events.map((event) => event.action.toJson(event.type)).toList(),
     };
+  }
+
+   factory Workflow.fromJson(Map<String, dynamic> json) {
+    try {
+      return Workflow(
+        id: json['ID'] ?? 0,
+        name: json['name'] ??
+            'Unknown',
+        description: json['description'],
+        status: json['status'],
+        servicesId: [],
+        events: []
+      );
+    } catch (e) {
+      print('Error parsing WorkflowService: $e');
+      return Workflow(
+          name: 'Unknown', status: "failed", description: "Unknown", servicesId: [], events: []);
+    }
   }
 }

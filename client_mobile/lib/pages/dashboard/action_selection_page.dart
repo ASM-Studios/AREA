@@ -32,7 +32,12 @@ class ActionSelectionPage extends StatelessWidget {
                 param.value = updatedValue;
               }
               onActionSelected(actions[index], service);
-              Navigator.popUntil(context, (route) => route.isFirst);
+              Navigator.of(context).popUntil((route) {
+                return route.settings.name == "workflowCreation";
+              });
+
+              // GoRouter.of(context).go("/workflow/create");
+              // Navigator.popUntil(context, (route) => route.isFirst);
             },
           );
         },

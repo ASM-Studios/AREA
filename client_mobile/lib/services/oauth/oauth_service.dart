@@ -80,7 +80,7 @@ class OAuthService {
               backgroundColor: Colors.black,
             ),
           );
-      context.pushReplacement("/dashboard");
+      context.pushReplacement("/workflow/list");
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(

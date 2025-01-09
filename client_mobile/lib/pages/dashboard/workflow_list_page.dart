@@ -1,12 +1,26 @@
 import 'package:client_mobile/data/workflow.dart';
-import 'package:client_mobile/services/about/about_service.dart';
+import 'package:client_mobile/services/workflow/workflow_service.dart';
 import 'package:client_mobile/widgets/profile_button.dart';
 import 'package:client_mobile/widgets/workflow_container.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class WorkflowListPage extends StatelessWidget {
+class WorkflowListPage extends StatefulWidget {
   const WorkflowListPage({super.key});
+
+  @override
+  State<WorkflowListPage> createState() => _WorkflowListPageState();
+}
+
+class _WorkflowListPageState extends State<WorkflowListPage> {
+  List<Workflow> workflows = [];
+
+   void removeWorkflow(int id) {
+    setState(() {
+      workflows.removeWhere((workflow) => workflow.id == id);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +40,7 @@ class WorkflowListPage extends StatelessWidget {
             ),
           ),
           FutureBuilder(
-            future: AboutService.getAbout(),
+            future: UpdateWorkflowService.getWorkflowList(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Center(child: CircularProgressIndicator());
@@ -38,26 +52,46 @@ class WorkflowListPage extends StatelessWidget {
               }
 
               if (snapshot.hasData) {
-                final workflows = snapshot.data!;
+                workflows = snapshot.data!;
 
                 return Expanded(
-                  child: GridView.builder(
-                    itemCount: 5,
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 1,
-                      crossAxisSpacing: 8.0,
-                      mainAxisSpacing: 8.0,
-                      childAspectRatio: 2.0,
-                    ),
-                    itemBuilder: (ctx, index) => WorkflowContainer(workflow: Workflow(description: "tqt", name: "Oui", servicesId: [], events: []),),
-                  ),
+                  child: workflows.isNotEmpty
+                      ? GridView.builder(
+                          itemCount: workflows.length,
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 1,
+                            crossAxisSpacing: 8.0,
+                            mainAxisSpacing: 8.0,
+                            childAspectRatio: 2.0,
+                          ),
+                          itemBuilder: (ctx, index) => WorkflowContainer(
+                            workflow: workflows[index],
+                            onRemove: removeWorkflow,
+                          ),
+                        )
+                      : Center(
+                          child: Text(
+                            "No workflow available",
+                            style: GoogleFonts.fjallaOne(
+                              textStyle: const TextStyle(
+                                  color: Colors.black, fontSize: 14),
+                            ),
+                          ),
+                        ),
                 );
               }
               return const Center(child: Text('No workflow available'));
             },
           ),
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          context.push("/workflow/create");
+        },
+        tooltip: 'Ajouter',
+        child: Icon(Icons.add),
       ),
     );
   }

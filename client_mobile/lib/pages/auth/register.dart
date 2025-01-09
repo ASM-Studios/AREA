@@ -108,7 +108,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                       username: userController.text)
                                   .toJson());
                           if (isRegistered) {
-                            context.pushReplacement("/dashboard");
+                            context.pushReplacement("/workflow/list");
                           }
                         }
                       },
