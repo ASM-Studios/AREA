@@ -50,7 +50,7 @@ class OAuthConfigManager {
       authority: "discord.com",
       path: "/oauth2/authorize",
       clientId: dotenv.env["DISCORD_CLIENT_ID"] ?? "",
-      redirectUri: "com.asm_studios.area://callback",
+      redirectUri: "https://localhost:8081/auth/discord/callback",
       pkce: true,
     ),
     "twitch": OAuthServiceConfig(
