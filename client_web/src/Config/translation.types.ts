@@ -389,4 +389,44 @@ export interface Translation {
         title: string;
         description: string;
     };
+    accessibility: {
+        title: string;
+        introduction: {
+            title: string;
+            content: string;
+        };
+        importance: {
+            title: string;
+            content: string;
+        };
+        features: {
+            title: string;
+            items: {
+                semantic: string;
+                keyboard: string;
+                contrast: string;
+                aria: string;
+                responsive: string;
+            };
+        };
+        compliance: {
+            title: string;
+            intro: string;
+            standards: {
+                wcag: string;
+                rgaa: string;
+                en301: string;
+            };
+        };
+        scores: {
+            title: string;
+            intro: string;
+            mean: string;
+        };
+        conclusion: {
+            title: string;
+            content: string;
+            learnMore: string;
+        };
+    };
 }

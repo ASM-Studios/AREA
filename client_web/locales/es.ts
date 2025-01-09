@@ -390,7 +390,47 @@ const es_language: Translation = {
     download: {
         title: "Preparando aplicación móvil",
         description: "Por favor espera mientras preparamos tu descarga. Esto puede tomar unos momentos.",
-    }
+    },
+    accessibility: {
+        title: "Declaración de Accesibilidad",
+        introduction: {
+            title: "Introducción",
+            content: "Este documento proporciona una visión general de las características de accesibilidad implementadas en el proyecto AREA Client Web. La accesibilidad es un aspecto crucial del desarrollo web, asegurando que todos los usuarios, incluidos aquellos con discapacidades, puedan acceder e interactuar efectivamente con el sitio web."
+        },
+        importance: {
+            title: "Importancia de la Accesibilidad",
+            content: "La accesibilidad web es esencial para crear un entorno digital inclusivo. Asegura que las personas con discapacidades puedan percibir, entender, navegar e interactuar con la web. Al hacer el sitio accesible, no solo cumplimos con los requisitos legales, sino que también mejoramos la experiencia del usuario para todos."
+        },
+        features: {
+            title: "Características y Consideraciones de Accesibilidad",
+            items: {
+                semantic: "El uso de elementos HTML semánticos ayuda a los lectores de pantalla y otras tecnologías de asistencia a entender la estructura y el contenido de las páginas web.",
+                keyboard: "Todos los elementos interactivos son accesibles mediante navegación por teclado, permitiendo a los usuarios que no pueden usar un ratón navegar por el sitio.",
+                contrast: "El sitio asegura un contraste de color suficiente entre el texto y el fondo, facilitando la lectura para usuarios con discapacidades visuales.",
+                aria: "Los atributos ARIA (Aplicaciones de Internet Ricas Accesibles) se utilizan para mejorar la accesibilidad del contenido dinámico y componentes complejos de la interfaz.",
+                responsive: "El sitio está diseñado para ser responsivo, asegurando la accesibilidad en varios dispositivos y tamaños de pantalla."
+            }
+        },
+        compliance: {
+            title: "Cumplimiento de Normas de Accesibilidad",
+            intro: "El proyecto AREA Client Web cumple con varios estándares de accesibilidad, incluyendo:",
+            standards: {
+                wcag: "El proyecto se adhiere a las pautas WCAG 2.1, asegurando que el contenido sea perceptible, operable, comprensible y robusto.",
+                rgaa: "Este es el estándar francés de accesibilidad que se alinea con WCAG 2.1 pero incluye requisitos adicionales específicos para Francia.",
+                en301: "Este es el estándar europeo para requisitos de accesibilidad de productos y servicios TIC, que también se alinea con WCAG 2.1."
+            }
+        },
+        scores: {
+            title: "Puntuaciones de Accesibilidad",
+            intro: "Las siguientes son las puntuaciones de accesibilidad para cada página, medidas por Google Chrome Lighthouse:",
+            mean: "La puntuación media de accesibilidad en todas las páginas es 97, indicando un alto nivel de cumplimiento de accesibilidad."
+        },
+        conclusion: {
+            title: "Conclusión",
+            content: "El proyecto AREA Client Web está comprometido a proporcionar una experiencia accesible para todos los usuarios. Al adherirse a los estándares de accesibilidad establecidos y evaluar continuamente nuestras prácticas, aseguramos que nuestro sitio web sea inclusivo y fácil de usar.",
+            learnMore: "Para más información sobre prácticas y pautas de accesibilidad, consulte la"
+        }
+    },
 };
 
 export default es_language;

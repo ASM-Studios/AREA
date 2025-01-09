@@ -390,6 +390,46 @@ const pirate_language: Translation = {
     download: {
         title: "Preparin' yer Android Vessel",
         description: "Hold fast while we ready yer treasure chest! Might take a few ticks of the compass",
+    },
+    accessibility: {
+        title: "Ship's Accessibility Manifest",
+        introduction: {
+            title: "Captain's Orders",
+            content: "This here scroll tells ye about how we make our digital vessel accessible to all hands aboard the AREA Client Web ship. We make sure every sailor, regardless of their abilities, can navigate our waters safely and efficiently."
+        },
+        importance: {
+            title: "Why All Hands Matter",
+            content: "Making our ship accessible to all crew members be vital for a successful voyage. It ensures that every sailor, regardless of their limitations, can navigate, understand, and interact with our vessel. By making our ship accessible, we not only follow the maritime laws but make sailing better for the entire crew!"
+        },
+        features: {
+            title: "Ship's Accessibility Features",
+            items: {
+                semantic: "We use proper ship's markings that help navigation tools understand our vessel's layout better than a seasoned navigator!",
+                keyboard: "Every part of our ship can be reached without using a mouse, perfect for sailors who prefer different ways of navigation!",
+                contrast: "Our ship's colors be chosen carefully, making sure every sign be as clear as a lighthouse on a dark night!",
+                aria: "We've got special markers (we call 'em ARIA) that help guide sailors through the more tricky parts of our vessel!",
+                responsive: "Our ship adjusts its shape to fit any size port, from tiny rowboats to mighty galleons!"
+            }
+        },
+        compliance: {
+            title: "Maritime Laws We Follow",
+            intro: "Our vessel follows these important sailing codes:",
+            standards: {
+                wcag: "We follow the Web Captain's Accessibility Guidelines, making sure our ship be seaworthy for all!",
+                rgaa: "This be the French sailing code - we follow it too, with some extra rules for French waters!",
+                en301: "This here's the European sailing standard - keeps us shipshape in European waters!"
+            }
+        },
+        scores: {
+            title: "Ship's Accessibility Ratings",
+            intro: "Here be how well our ship rates for accessibility in different parts:",
+            mean: "Our average accessibility score be 97 - that's better than most ships in these waters!"
+        },
+        conclusion: {
+            title: "Final Words from the Captain",
+            content: "We're committed to keeping our digital vessel accessible to every sailor who comes aboard. By following these maritime codes and constantly checking our ship's condition, we ensure smooth sailing for all!",
+            learnMore: "For more sailing tips and guidelines, check out the"
+        }
     }
 };
 

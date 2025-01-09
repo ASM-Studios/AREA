@@ -1,6 +1,9 @@
 import React from 'react';
+import { useUser } from "@/Context/ContextHooks";
 
 const Accessibility: React.FC = () => {
+    const { translations } = useUser();
+
     return (
         <div style={{
             minHeight: '100vh',
@@ -21,22 +24,20 @@ const Accessibility: React.FC = () => {
                     fontSize: 'clamp(1.75rem, 4vw, 2.5rem)',
                     marginBottom: '2rem',
                     color: '#1a1a1a'
-                }}>Accessibility Statement</h1>
+                }}>{translations?.accessibility?.title}</h1>
 
                 <section style={{ marginBottom: '2rem' }}>
                     <h2 style={{
                         fontSize: 'clamp(1.25rem, 3vw, 2rem)',
                         marginBottom: '1rem',
                         color: '#1a1a1a'
-                    }}>Introduction</h2>
+                    }}>{translations?.accessibility?.introduction?.title}</h2>
                     <p style={{
                         fontSize: 'clamp(1rem, 2vw, 1.125rem)',
                         lineHeight: '1.6',
                         color: '#333333'
                     }}>
-                        This document provides an overview of the accessibility features implemented in the AREA Client Web
-                        project. Accessibility is a crucial aspect of web development, ensuring that all users, including
-                        those with disabilities, can access and interact with the website effectively.
+                        {translations?.accessibility?.introduction?.content}
                     </p>
                 </section>
 
@@ -45,16 +46,13 @@ const Accessibility: React.FC = () => {
                         fontSize: 'clamp(1.25rem, 3vw, 2rem)',
                         marginBottom: '1rem',
                         color: '#1a1a1a'
-                    }}>Importance of Accessibility</h2>
+                    }}>{translations?.accessibility?.importance?.title}</h2>
                     <p style={{
                         fontSize: 'clamp(1rem, 2vw, 1.125rem)',
                         lineHeight: '1.6',
                         color: '#333333'
                     }}>
-                        Web accessibility is essential for creating an inclusive digital environment. It ensures that people
-                        with disabilities can perceive, understand, navigate, and interact with the web. By making the
-                        website accessible, we not only comply with legal requirements but also enhance the user experience
-                        for everyone.
+                        {translations?.accessibility?.importance?.content}
                     </p>
                 </section>
 
@@ -63,26 +61,26 @@ const Accessibility: React.FC = () => {
                         fontSize: 'clamp(1.25rem, 3vw, 2rem)',
                         marginBottom: '1rem',
                         color: '#1a1a1a'
-                    }}>Accessibility Features and Considerations</h2>
+                    }}>{translations?.accessibility?.features?.title}</h2>
                     <ul style={{
                         fontSize: 'clamp(1rem, 2vw, 1.125rem)',
                         lineHeight: '1.6',
                         color: '#333333',
                         paddingLeft: '1.5rem'
                     }}>
-                        <li><strong>Semantic HTML</strong>: The use of semantic HTML elements helps screen readers and other
+                        <li><strong>{translations?.accessibility?.features?.items?.semantic}</strong>: The use of semantic HTML elements helps screen readers and other
                             assistive technologies understand the structure and content of the web pages.
                         </li>
-                        <li><strong>Keyboard Navigation</strong>: All interactive elements are accessible via keyboard
+                        <li><strong>{translations?.accessibility?.features?.items?.keyboard}</strong>: All interactive elements are accessible via keyboard
                             navigation, allowing users who cannot use a mouse to navigate the site.
                         </li>
-                        <li><strong>Color Contrast</strong>: The website ensures sufficient color contrast between text and
+                        <li><strong>{translations?.accessibility?.features?.items?.contrast}</strong>: The website ensures sufficient color contrast between text and
                             background, making it easier for users with visual impairments to read the content.
                         </li>
-                        <li><strong>ARIA Attributes</strong>: ARIA (Accessible Rich Internet Applications) attributes are
+                        <li><strong>{translations?.accessibility?.features?.items?.aria}</strong>: ARIA (Accessible Rich Internet Applications) attributes are
                             used to enhance the accessibility of dynamic content and complex UI components.
                         </li>
-                        <li><strong>Responsive Design</strong>: The site is designed to be responsive, ensuring
+                        <li><strong>{translations?.accessibility?.features?.items?.responsive}</strong>: The site is designed to be responsive, ensuring
                             accessibility across various devices and screen sizes.
                         </li>
                     </ul>
@@ -93,13 +91,13 @@ const Accessibility: React.FC = () => {
                         fontSize: 'clamp(1.25rem, 3vw, 2rem)',
                         marginBottom: '1rem',
                         color: '#1a1a1a'
-                    }}>Compliance with Accessibility Norms</h2>
+                    }}>{translations?.accessibility?.compliance?.title}</h2>
                     <p style={{
                         fontSize: 'clamp(1rem, 2vw, 1.125rem)',
                         lineHeight: '1.6',
                         color: '#333333'
                     }}>
-                        The AREA Client Web project complies with several accessibility standards, including:
+                        {translations?.accessibility?.compliance?.intro}
                     </p>
                     <ul style={{
                         fontSize: 'clamp(1rem, 2vw, 1.125rem)',
@@ -107,15 +105,15 @@ const Accessibility: React.FC = () => {
                         color: '#333333',
                         paddingLeft: '1.5rem'
                     }}>
-                        <li><strong>WCAG 2.1 (Web Content Accessibility Guidelines)</strong>: The project adheres to the
+                        <li><strong>{translations?.accessibility?.compliance?.standards?.wcag}</strong>: The project adheres to the
                             guidelines set by WCAG 2.1, ensuring that the content is perceivable, operable, understandable,
                             and robust.
                         </li>
-                        <li><strong>RGAA</strong> (Référentiel Général d'Amélioration de l'Accessibilité): This is the
+                        <li><strong>{translations?.accessibility?.compliance?.standards?.rgaa}</strong> (Référentiel Général d'Amélioration de l'Accessibilité): This is the
                             French accessibility standard that aligns with WCAG 2.1 but includes additional requirements
                             specific to France.
                         </li>
-                        <li><strong>EN 301 549</strong>: This is the European standard for accessibility requirements for
+                        <li><strong>{translations?.accessibility?.compliance?.standards?.en301}</strong>: This is the European standard for accessibility requirements for
                             ICT products and services, which also aligns with WCAG 2.1.
                         </li>
                     </ul>
@@ -126,13 +124,13 @@ const Accessibility: React.FC = () => {
                         fontSize: 'clamp(1.25rem, 3vw, 2rem)',
                         marginBottom: '1rem',
                         color: '#1a1a1a'
-                    }}>Accessibility Scores</h2>
+                    }}>{translations?.accessibility?.scores?.title}</h2>
                     <p style={{
                         fontSize: 'clamp(1rem, 2vw, 1.125rem)',
                         lineHeight: '1.6',
                         color: '#333333'
                     }}>
-                        The following are the accessibility scores for each page, as measured by Google Chrome Lighthouse:
+                        {translations?.accessibility?.scores?.intro}
                     </p>
                     <ul style={{
                         fontSize: 'clamp(1rem, 2vw, 1.125rem)',
@@ -154,8 +152,7 @@ const Accessibility: React.FC = () => {
                         lineHeight: '1.6',
                         color: '#333333'
                     }}>
-                        The mean accessibility score across all pages is 97, indicating a high level of accessibility
-                        compliance.
+                        {translations?.accessibility?.scores?.mean}
                     </p>
                 </section>
 
@@ -164,22 +161,20 @@ const Accessibility: React.FC = () => {
                         fontSize: 'clamp(1.25rem, 3vw, 2rem)',
                         marginBottom: '1rem',
                         color: '#1a1a1a'
-                    }}>Conclusion</h2>
+                    }}>{translations?.accessibility?.conclusion?.title}</h2>
                     <p style={{
                         fontSize: 'clamp(1rem, 2vw, 1.125rem)',
                         lineHeight: '1.6',
                         color: '#333333'
                     }}>
-                        The AREA Client Web project is committed to providing an accessible experience for all users. By
-                        adhering to established accessibility standards and continuously evaluating our practices, we ensure
-                        that our website is inclusive and user-friendly.
+                        {translations?.accessibility?.conclusion?.content}
                     </p>
                     <p style={{
                         fontSize: 'clamp(1rem, 2vw, 1.125rem)',
                         lineHeight: '1.6',
                         color: '#333333'
                     }}>
-                        For more information on accessibility practices and guidelines, please refer to the <a
+                        {translations?.accessibility?.conclusion?.learnMore} <a
                         href="https://www.w3.org/WAI/" target="_blank" rel="noopener noreferrer">W3C Web Accessibility
                         Initiative</a>.
                     </p>
