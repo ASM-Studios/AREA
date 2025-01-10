@@ -13,13 +13,15 @@ TARGET_MAX_CHAR_NUM=20
 define check_health_and_report
 	@echo "Waiting for services to be healthy..."
 	@timeout 60 sh -c 'until docker compose ps | grep -q "healthy"; do sleep 1; done' || (echo "❌ Services failed to start properly" && exit 1)
-	@if [ "$$(docker compose ps | grep -c "healthy")" -eq 4 ]; then \
+	@if [ "$$(docker compose ps | grep -c "healthy")" -eq 5 ]; then \
 		echo "\n🚀 All services are up and running!"; \
-		echo "📱 Web client is available at: https://localhost:${VITE_PORT}"; \
+		echo "🌐 Web client is available at: https://localhost:${VITE_PORT}"; \
+		echo "📱 Mobile client is available at: http://localhost:8082"; \
 		echo "⚙️  API is available at: http://localhost:8080"; \
 		echo "🐰 RabbitMQ management UI is available at: http://localhost:15672\n"; \
 	else \
 		echo "❌ Some services are not healthy"; \
+		echo "Expected 5 healthy services (rabbitmq, mariadb, server, client_mobile, client_web)"; \
 		docker compose ps; \
 		exit 1; \
 	fi
@@ -54,6 +56,9 @@ build: build-full
 ## Stop all containers
 stop:
 	docker compose --profile full down
+	docker compose --profile server down
+	docker compose --profile web down
+	docker compose --profile mobile down
 
 ## Restart all containers
 restart: restart-full
@@ -68,6 +73,7 @@ logs:
 ## Clean up containers, images and orphans
 clean:
 	docker compose --profile full down --rmi local --remove-orphans -v
+	cd client_mobile && flutter clean && cd .. || true
 
 ## Clean up containers, images, volumes and orphans
 fclean: clean
@@ -143,16 +149,16 @@ restart-mobile: stop start-mobile
 restart-full: stop start-full
 
 ## Reset and rebuild server only
-reset-server: stop build-server start-server
+reset-server: stop clean build-server start-server
 
 ## Reset and rebuild web client and server
-reset-web: stop build-web start-web
+reset-web: stop clean build-web start-web
 
 ## Reset and rebuild mobile client and server
-reset-mobile: stop build-mobile start-mobile
+reset-mobile: stop clean build-mobile start-mobile
 
 ## Reset and rebuild all services (full mode)
-reset-full: stop build-full start-full
+reset-full: stop clean build-full start-full
 
 
 

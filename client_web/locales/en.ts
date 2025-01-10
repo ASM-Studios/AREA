@@ -122,6 +122,8 @@ const en_language: Translation = {
         register: "Register",
         dashboard: "Dashboard",
         createWorkflow: "Create Workflow",
+        accessibility: "Accessibility",
+        download: "Downloads",
         profile: {
             title: "Profile",
             settings: "Settings",
@@ -385,6 +387,10 @@ const en_language: Translation = {
             backHome: "Back Home"
         }
     },
+    download: {
+        title: "Preparing Android App",
+        description: "Please wait while we prepare your download. This might take a few moments.",
+    }
 };
 
 export default en_language;

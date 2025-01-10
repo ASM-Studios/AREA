@@ -1,9 +1,10 @@
-import 'package:client_mobile/data/action.dart';
-import 'package:client_mobile/data/service.dart';
-import 'package:client_mobile/data/workflow.dart';
-import 'package:client_mobile/services/workflow/workflow_service.dart';
-import 'package:client_mobile/widgets/action_button.dart';
-import 'package:client_mobile/widgets/reaction_button.dart';
+import 'package:area/data/action.dart';
+import 'package:area/data/service.dart';
+import 'package:area/data/workflow.dart';
+import 'package:area/services/workflow/workflow_service.dart';
+import 'package:area/widgets/action_button.dart';
+import 'package:area/widgets/profile_button.dart';
+import 'package:area/widgets/reaction_button.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -126,8 +127,9 @@ class _WorkflowPageState extends State<WorkflowPage> {
                     print("Description: $description");
                     List<int> servicesId = [];
                     servicesId.add(action!.serviceId!);
-                    if (action!.serviceId! != reaction!.serviceId!)
+                    if (action!.serviceId! != reaction!.serviceId!) {
                       servicesId.add(reaction!.serviceId!);
+                    }
 
                     bool hasCreatedWorkflow =
                         await UpdateWorkflowService.createWorkflow(

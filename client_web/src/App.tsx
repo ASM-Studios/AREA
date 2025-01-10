@@ -15,6 +15,8 @@ import { ContextManager } from "@/Context/ContextManager";
 import Home from '@/Pages/Home';
 import Dashboard from './Pages/Dashboard/Dashboard';
 
+import Accessibility from "@/Pages/Accessibility";
+
 import NotFoundError from '@/Pages/Errors/NotFoundError';
 import ApiError from "@/Pages/Errors/ApiError";
 import CustomError from "@/Pages/Errors/CustomError";
@@ -30,6 +32,7 @@ import UserPage from "@/Pages/Account/UserPage";
 import GenericCallback from "@/Pages/Auth/Callback/GenericCallback";
 
 import WorkflowHandler from '@/Pages/Workflows/WorkflowHandler';
+import Download from '@/Pages/Download';
 
 const App = () => {
     const [init, setInit] = React.useState(false);
@@ -158,12 +161,14 @@ const App = () => {
                                 <Route path="/login" element={<Login />} />
                                 <Route path="/register" element={<Register />} />
                                 <Route path="/dashboard" element={<Dashboard />} />
+                                <Route path="/accessibility" element={<Accessibility />} />
                                 <Route path="/auth/:service/callback" element={<GenericCallback />} />
                                 <Route path="/workflow/create" element={<WorkflowHandler />} />
                                 <Route path="/workflow/update/:id" element={<WorkflowHandler />} />
                                 <Route path="/account/me" element={<UserPage backgroundColor={backgroundColor} setBackgroundColor={setBackgroundColor} />} />
                                 <Route path="/error/connection" element={<ApiError />} />
                                 <Route path="/error/:error" element={<CustomError />} />
+                                <Route path="/download" element={<Download />} />
                                 <Route path="*" element={<NotFoundError />} />
                             </Routes>
                         </Layout>

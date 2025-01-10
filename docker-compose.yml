@@ -73,7 +73,7 @@ services:
       start_period: 40s
     profiles: [ "server", "web", "mobile", "full" ]
 
-  server-action-consumer:
+  server_action_consumer:
     build:
       context: ./server
       dockerfile: Dockerfile_action_consumer
@@ -99,7 +99,7 @@ services:
     restart: always
     profiles: [ "server", "web", "mobile", "full" ]
 
-  server-reaction-consumer:
+  server_reaction_consumer:
     build:
       context: ./server
       dockerfile: Dockerfile_reaction_consumer
@@ -129,14 +129,12 @@ services:
     build:
       context: ./client_mobile
       dockerfile: Dockerfile
-      args:
-        - API_URL
-        - WEB_CLIENT_URL
-        - MOBILE_CLIENT_URL
-        - GITHUB_CLIENT_ID
-        - GITHUB_CLIENT_SECRET
     volumes:
       - mobile_builds:/app/build/app/outputs/flutter-apk
+      - ./client_mobile:/app
+      - ./client_mobile/.dart_tool:/app/.dart_tool
+    ports:
+      - "8082:8082"
     networks:
       - area_network
     env_file:
@@ -146,6 +144,12 @@ services:
       server:
         condition: service_healthy
     restart: "no"
+    healthcheck:
+      test: [ "CMD", "test", "-f", "/app/build/app/outputs/flutter-apk/client.apk" ]
+      interval: 10s
+      timeout: 10s
+      retries: 30
+      start_period: 150s
 
   client_web:
     build:
@@ -169,12 +173,12 @@ services:
     ports:
       - "${VITE_PORT}:${VITE_PORT}"
     volumes:
-      - mobile_builds:/usr/share/nginx/html/mobile_builds:ro
+      - mobile_builds:/app/public:ro
     depends_on:
       server:
         condition: service_healthy
       client_mobile:
-        condition: service_completed_successfully
+        condition: service_started
         required: false # TODO: remove before final defense
     networks:
       - area_network
@@ -189,7 +193,7 @@ services:
       start_period: 60s
     profiles: [ "web", "full" ]
 
-  server-healthcheck:
+  server_healthcheck:
     image: alpine:3.20.3
     depends_on:
       mariadb:
@@ -201,7 +205,7 @@ services:
     profiles: [ "server" ]
     restart: "no"
 
-  web-healthcheck:
+  web_healthcheck:
     image: alpine:3.20.3
     depends_on:
       mariadb:
@@ -217,7 +221,7 @@ services:
     profiles: [ "web" ]
     restart: "no"
 
-  mobile-healthcheck:
+  mobile_healthcheck:
     image: alpine:3.20.3
     depends_on:
       mariadb:
@@ -227,11 +231,11 @@ services:
       server:
         condition: service_healthy
       client_mobile:
-        condition: service_completed_successfully
+        condition: service_healthy
     profiles: [ "mobile" ]
     restart: "no"
 
-  full-healthcheck:
+  full_healthcheck:
     image: alpine:3.20.3
     depends_on:
       mariadb:
@@ -243,7 +247,7 @@ services:
       client_web:
         condition: service_healthy
       client_mobile:
-        condition: service_completed_successfully
+        condition: service_healthy
     environment:
       - VITE_PORT=${VITE_PORT}
     profiles: [ "full" ]

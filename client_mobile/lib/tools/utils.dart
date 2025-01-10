@@ -12,8 +12,9 @@ class Utils {
   static String isValidPassword(String password) {
     String error = "";
 
-    if (password.length < 8)
+    if (password.length < 8) {
       error += "Your password must be at least 8 characters.\n";
+    }
     if (!RegExp(r'[a-zA-Z]').hasMatch(password)) {
       error += "Password must contain at least one letter.\n";
     }

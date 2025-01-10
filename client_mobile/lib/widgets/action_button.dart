@@ -1,7 +1,7 @@
-import 'package:client_mobile/data/action.dart';
-import 'package:client_mobile/data/service.dart';
-import 'package:client_mobile/data/service_metadata.dart';
-import 'package:client_mobile/pages/dashboard/service_selection.dart';
+import 'package:area/data/action.dart';
+import 'package:area/data/service.dart';
+import 'package:area/data/service_metadata.dart';
+import 'package:area/pages/dashboard/service_selection.dart';
 import 'package:flutter/material.dart';
 
 class ActionButton extends StatefulWidget {
@@ -19,9 +19,10 @@ class _ActionButtonState extends State<ActionButton> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.action != null)
+    if (widget.action != null) {
       serviceMetadata =
           ServiceMetadata.getServiceByName(widget.action!.serviceName!);
+    }
     return Container(
       padding: const EdgeInsets.all(20),
       margin: const EdgeInsets.fromLTRB(20, 0, 20, 0),

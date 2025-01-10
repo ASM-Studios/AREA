@@ -8,7 +8,34 @@ export default defineConfig(({ mode }) => {
   const port = parseInt(env.VITE_PORT) || 8081
 
   return {
-    plugins: [react()],
+    plugins: [
+      react(),
+      {
+        name: 'serve-apk',
+        configureServer(server) {
+          server.middlewares.use((req, res, next) => {
+            if (req.url === '/client.apk') {
+              try {
+                const apkPath = path.resolve(__dirname, 'public/client.apk');
+                if (fs.existsSync(apkPath)) {
+                  res.setHeader('Content-Type', 'application/vnd.android.package-archive');
+                  res.setHeader('Content-Disposition', 'attachment; filename="client.apk"');
+                  return res.end(fs.readFileSync(apkPath));
+                } else {
+                  res.statusCode = 404;
+                  return res.end();
+                }
+              } catch (error) {
+                console.error('APK serving error:', error);
+                res.statusCode = 500;
+                return res.end();
+              }
+            }
+            next();
+          });
+        }
+      }
+    ],
     server: {
       port: port,
       watch: {

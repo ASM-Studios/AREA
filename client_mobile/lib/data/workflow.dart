@@ -1,16 +1,11 @@
-import 'package:client_mobile/data/action.dart';
+import 'package:area/data/action.dart';
 
-class WorkflowEvent
-{
+class WorkflowEvent {
   final WorkflowActionReaction action;
   final String type;
 
-  WorkflowEvent({
-    required this.action,
-    required this.type
-  });
+  WorkflowEvent({required this.action, required this.type});
 }
-
 
 class Workflow {
   final String name;
@@ -29,7 +24,6 @@ class Workflow {
     this.id = 0
   });
 
-
   Map<String, dynamic> toJson() {
     return {
       'name': name,
@@ -37,6 +31,24 @@ class Workflow {
       'services': servicesId,
       'events': events.map((event) => event.action.toJson(event.type)).toList(),
     };
+  }
+
+   factory Workflow.fromJson(Map<String, dynamic> json) {
+    try {
+      return Workflow(
+        id: json['ID'] ?? 0,
+        name: json['name'] ??
+            'Unknown',
+        description: json['description'],
+        status: json['status'],
+        servicesId: [],
+        events: []
+      );
+    } catch (e) {
+      print('Error parsing WorkflowService: $e');
+      return Workflow(
+          name: 'Unknown', status: "failed", description: "Unknown", servicesId: [], events: []);
+    }
   }
 
    factory Workflow.fromJson(Map<String, dynamic> json) {

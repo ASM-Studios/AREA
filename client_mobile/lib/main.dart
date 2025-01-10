@@ -1,9 +1,7 @@
-import 'package:client_mobile/pages/auth/login.dart';
-import 'package:client_mobile/pages/auth/register.dart';
-import 'package:client_mobile/pages/dashboard/workflow.dart';
-import 'package:client_mobile/pages/dashboard/workflow_list_page.dart';
-import 'package:client_mobile/pages/home/home.dart';
-import 'package:client_mobile/pages/profile/profile_page.dart';
+import 'package:area/pages/auth/login.dart';
+import 'package:area/pages/auth/register.dart';
+import 'package:area/pages/dashboard/dashboard.dart';
+import 'package:area/pages/home/home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:go_router/go_router.dart';
@@ -55,7 +53,7 @@ Future<void> main() async {
 
   runApp(
     MaterialApp.router(
-      title: 'Area PoC Flutter',
+      title: 'Area',
       theme: ThemeData(primarySwatch: Colors.green),
       routerConfig: router,
     ),

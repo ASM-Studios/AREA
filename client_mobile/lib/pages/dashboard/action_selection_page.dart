@@ -1,6 +1,6 @@
-import 'package:client_mobile/data/action.dart';
-import 'package:client_mobile/data/parameter.dart';
-import 'package:client_mobile/data/service.dart';
+import 'package:area/data/action.dart';
+import 'package:area/data/parameter.dart';
+import 'package:area/data/service.dart';
 import 'package:flutter/material.dart';
 
 class ActionSelectionPage extends StatelessWidget {
