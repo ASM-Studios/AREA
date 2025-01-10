@@ -5,7 +5,6 @@ import (
 	"AREA/cmd/action_consumer/google"
 	"AREA/cmd/action_consumer/spotify"
 	"AREA/cmd/action_consumer/twitch"
-	"AREA/cmd/action_consumer/vars"
 	"AREA/internal/gconsts"
 	"AREA/internal/models"
 	"AREA/internal/pkg"
@@ -57,7 +56,7 @@ func sendEvents(workflow *models.Workflow) {
         }
 }
 
-var triggerCallbacks = map[uint]func(*models.User, map[string]string) bool {
+var triggerCallbacks = map[uint]func(*models.Workflow, *models.User, map[string]string) bool {
         7: github.PRCreated,
         8: github.UserRepoCreated,
 
@@ -67,7 +66,7 @@ var triggerCallbacks = map[uint]func(*models.User, map[string]string) bool {
         35: twitch.StreamStart,
 }
 
-func triggerCallback(workflowEventId uint, refEventId uint, user *models.User) bool {
+func triggerCallback(workflow *models.Workflow, workflowEventId uint, refEventId uint, user *models.User) bool {
         var parameters []struct {
                 Name    string
                 Value   string
@@ -88,7 +87,7 @@ func triggerCallback(workflowEventId uint, refEventId uint, user *models.User) b
         }
 
         if callback, ok := triggerCallbacks[refEventId]; ok {
-                return callback(user, parametersMap)
+                return callback(workflow, user, parametersMap)
         } else {
                 fmt.Printf("Callback not found for workflow event id: %d\n", refEventId)
         }
@@ -109,9 +108,6 @@ func detectWorkflowEvent(workflow *models.Workflow, user *models.User) bool {
                 JOIN services ON services.id = events.service_id
                 WHERE workflow_events.workflow_id = ? AND events.type = 'action'`
 
-        if vars.ServiceId != "*" {
-                query += fmt.Sprintf(" AND services.id = %s", vars.ServiceId)
-        }
         rows, err := pkg.DB.Raw(query, workflow.ID) .Rows()
         if err != nil {
                 return false
@@ -119,29 +115,19 @@ func detectWorkflowEvent(workflow *models.Workflow, user *models.User) bool {
         defer rows.Close()
         for rows.Next() {
                 pkg.DB.ScanRows(rows, &event)
-                if triggerCallback(event.ID, event.RefEventID, user) {
+                if triggerCallback(workflow, event.ID, event.RefEventID, user) {
                         return true
                 }
         }
         return false
 }
 
-func DetectWorkflowsEvent() {
+func DetectWorkflowsEvent(workflow *models.Workflow) {
         var user models.User
-        var workflow models.Workflow
 
-        rows, err := pkg.DB.Table("workflows").Rows()
-        if err != nil {
-                return
+        pkg.DB.Where("id = ?", workflow.UserID).First(&user)
+        if detectWorkflowEvent(workflow, &user) {
+                sendEvents(workflow)
         }
-        defer rows.Close()
-        for rows.Next() {
-                pkg.DB.ScanRows(rows, &workflow)
-                pkg.DB.Where("id = ?", workflow.UserID).First(&user)
-                if detectWorkflowEvent(&workflow, &user) {
-                        sendEvents(&workflow)
-                }
-        }
-
-        vars.LastFetch = time.Now().Unix()
+        workflow.LastTrigger = time.Now().Unix()
 }

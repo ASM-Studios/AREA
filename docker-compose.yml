@@ -73,57 +73,59 @@ services:
       start_period: 40s
     profiles: [ "server", "web", "mobile", "full" ]
 
-  server-action-consumer:
-    build:
-      context: ./server
-      dockerfile: Dockerfile_action_consumer
-    volumes:
-      - ./ssl:/app/ssl:ro
-    environment:
-      DB_HOST: ${DB_HOST}
-      DB_PORT: ${DB_PORT}
-      DB_USER: ${DB_USER}
-      DB_NAME: ${DB_NAME}
-      DB_PASSWORD: ${DB_PASSWORD}
-    depends_on:
-      mariadb:
-        condition: service_healthy
-      rabbitmq:
-        condition: service_healthy
-      server:
-        condition: service_healthy
-    networks:
-      - area_network
-    env_file:
-      - server/.env
-    restart: always
-    profiles: [ "server", "web", "mobile", "full" ]
-
-  server-reaction-consumer:
-    build:
-      context: ./server
-      dockerfile: Dockerfile_reaction_consumer
-    volumes:
-      - ./ssl:/app/ssl:ro
-    environment:
-      DB_HOST: ${DB_HOST}
-      DB_PORT: ${DB_PORT}
-      DB_USER: ${DB_USER}
-      DB_NAME: ${DB_NAME}
-      DB_PASSWORD: ${DB_PASSWORD}
-    depends_on:
-      mariadb:
-        condition: service_healthy
-      rabbitmq:
-        condition: service_healthy
-      server:
-        condition: service_healthy
-    networks:
-      - area_network
-    env_file:
-      - server/.env
-    restart: always
-    profiles: [ "server", "web", "mobile", "full" ]
+#  server-action-consumer:
+#    build:
+#      context: ./server
+#      dockerfile: Dockerfile_action_consumer
+#    volumes:
+#      - ./server:/app:rw
+#      - ./ssl:/app/ssl:ro
+#    environment:
+#      DB_HOST: ${DB_HOST}
+#      DB_PORT: ${DB_PORT}
+#      DB_USER: ${DB_USER}
+#      DB_NAME: ${DB_NAME}
+#      DB_PASSWORD: ${DB_PASSWORD}
+#    depends_on:
+#      mariadb:
+#        condition: service_healthy
+#      rabbitmq:
+#        condition: service_healthy
+#      server:
+#        condition: service_healthy
+#    networks:
+#      - area_network
+#    env_file:
+#      - server/.env
+#    restart: always
+#    profiles: [ "server", "web", "mobile", "full" ]
+#
+#  server-reaction-consumer:
+#    build:
+#      context: ./server
+#      dockerfile: Dockerfile_reaction_consumer
+#    volumes:
+#      - ./server:/app:rw
+#      - ./ssl:/app/ssl:ro
+#    environment:
+#      DB_HOST: ${DB_HOST}
+#      DB_PORT: ${DB_PORT}
+#      DB_USER: ${DB_USER}
+#      DB_NAME: ${DB_NAME}
+#      DB_PASSWORD: ${DB_PASSWORD}
+#    depends_on:
+#      mariadb:
+#        condition: service_healthy
+#      rabbitmq:
+#        condition: service_healthy
+#      server:
+#        condition: service_healthy
+#    networks:
+#      - area_network
+#    env_file:
+#      - server/.env
+#    restart: always
+#    profiles: [ "server", "web", "mobile", "full" ]
 
   client_mobile:
     build:

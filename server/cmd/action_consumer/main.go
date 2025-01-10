@@ -4,7 +4,10 @@ import (
 	"AREA/cmd/action_consumer/trigger"
 	"AREA/internal/amqp"
 	"AREA/internal/gconsts"
+	"AREA/internal/models"
 	"AREA/internal/pkg"
+	"encoding/json"
+	"fmt"
 	"log"
 	"os"
 	"os/signal"
@@ -14,20 +17,26 @@ import (
 )
 
 func handlerAction(message amqp091.Delivery, queue string) {
-        trigger.DetectWorkflowsEvent()
+        var workflow models.Workflow
+
+        err := json.Unmarshal(message.Body, &workflow)
+        if err != nil {
+                return
+        }
+        trigger.DetectWorkflowsEvent(&workflow)
+        pkg.DB.Save(workflow)
 }
 
-func declareExchanges() error {
-        err := gconsts.Connection.Channel.ExchangeDeclare("action", "topic", true, false, false, false, nil)
-        if err != nil {
-                return err
+func declareServices() {
+        var services []models.Service
+        pkg.DB.Find(&services)
+        for _, service := range services {
+                gconsts.ServiceMap[service.Name] = service.ID
         }
-        return nil
 }
 
 func declareQueues() {
-        gconsts.Connection.Channel.QueueDeclare("trigger", true, false, false, false, nil)
-        gconsts.Connection.Channel.QueueBind("trigger", "trigger", "action", false, nil)
+        gconsts.Connection.Channel.QueueDeclare("action", true, false, false, false, nil)
 }
 
 func initRMQConnection() {
@@ -44,8 +53,9 @@ func main() {
         pkg.InitDB()
         initRMQConnection()
 
-        declareExchanges()
+        declareServices()
         declareQueues()
+        fmt.Println(gconsts.ServiceMap)
 
         consumer := amqp.EventConsumer{Connection: gconsts.Connection}
         go func() {
@@ -56,5 +66,5 @@ func main() {
                 gconsts.Connection.Fini()
                 os.Exit(0)
         }()
-        consumer.StartConsuming([]string{"trigger"}, handlerAction)
+        consumer.StartConsuming([]string{"action"}, handlerAction)
 }

@@ -27,12 +27,13 @@ type ParametersValue struct {
 
 type Workflow struct {
 	gorm.Model
-	UserID         uint            `gorm:"foreignKey:UserID" json:"user_id"`
-	Name           string          `json:"name"`
-	Description    string          `json:"description"`
-	Status         WorkflowStatus  `gorm:"type:enum('pending', 'processed', 'failed')" json:"status"`
-	IsActive       bool            `json:"is_active"`
-	WorkflowEvents []WorkflowEvent `gorm:"constraint:OnDelete:CASCADE;" json:"events"`
+	UserID          uint            `gorm:"foreignKey:UserID" json:"user_id"`
+	Name            string          `json:"name"`
+	Description     string          `json:"description"`
+	Status          WorkflowStatus  `gorm:"type:enum('pending', 'processed', 'failed')" json:"status"`
+	IsActive        bool            `json:"is_active"`
+	WorkflowEvents  []WorkflowEvent`gorm:"constraint:OnDelete:CASCADE;" json:"events"`
+        LastTrigger     int64
 }
 
 type WorkflowEvent struct {

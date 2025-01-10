@@ -1,7 +1,6 @@
 package google
 
 import (
-	"AREA/cmd/action_consumer/vars"
 	"AREA/internal/models"
 	"AREA/internal/oauth"
 	"AREA/internal/pkg"
@@ -28,7 +27,7 @@ type Message struct {
         }       `json:"payload"`
 }
 
-func browseMessages(token *models.Token, messageId string) bool {
+func browseMessages(workflow *models.Workflow, token *models.Token, messageId string) bool {
         req, err := http.NewRequest("GET", fmt.Sprintf("https://gmail.googleapis.com/v1/users/me/messages/%s", messageId), nil)
         if err != nil {
                 return false
@@ -44,14 +43,14 @@ func browseMessages(token *models.Token, messageId string) bool {
         }
         result, err := utils.ExtractBody[Message](resp)
         timestamp, _ := strconv.Atoi(result.InternalDate)
-        if int64(timestamp / 1000) > vars.LastFetch {
+        if int64(timestamp / 1000) > workflow.LastTrigger {
                 return true
         } else {
                 return false
         }
 }
 
-func EmailReceived(user *models.User, args map[string]string) bool {
+func EmailReceived(workflow *models.Workflow, user *models.User, args map[string]string) bool {
         var token models.Token
         pkg.DB.Where("user_id = ? AND service_id = ?", user.ID, 3).First(&token)
 
@@ -72,7 +71,7 @@ func EmailReceived(user *models.User, args map[string]string) bool {
 
         result, err := utils.ExtractBody[MessageList](resp)
         for _, message := range result.Messages {
-                if browseMessages(&token, message.Id) {
+                if browseMessages(workflow, &token, message.Id) {
                         return true
                 }
         }

@@ -2,7 +2,10 @@ package controllers
 
 import (
 	"AREA/internal/gconsts"
+	"AREA/internal/models"
+	"AREA/internal/pkg"
 	"encoding/json"
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -28,14 +31,24 @@ type TriggerRequest struct {
         Workflow        string  `json:"workflow"`
 }
 
-func Trigger(c *gin.Context) {
-        triggerRequest := TriggerRequest{
-                User: "*",
-                Workflow: "*",
+func sendWorkflow() {
+        rows, err := pkg.DB.Table("workflows").Rows()
+        if err != nil {
+                return
         }
-        bytes, _ := json.Marshal(triggerRequest)
-        gconsts.Connection.Channel.Publish("action", "trigger", false, false, amqp091.Publishing{
-                ContentType: "application/json",
-                Body:        bytes,
-        })
+        defer rows.Close()
+        for rows.Next() {
+                fmt.Println("Sending workflow to action")
+                var workflow models.Workflow
+                pkg.DB.ScanRows(rows, &workflow)
+                body, _ := json.Marshal(workflow)
+                gconsts.Connection.Channel.Publish("", "action", false, false, amqp091.Publishing{
+                        ContentType: "application/json",
+                        Body:        body,
+                })
+        }
+}
+
+func Trigger(c *gin.Context) {
+        sendWorkflow()
 }

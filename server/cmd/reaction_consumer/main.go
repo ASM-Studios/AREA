@@ -93,21 +93,6 @@ func declareQueues() {
         }
 }
 
-func getServices() []string {
-        var services []string
-        if len(os.Args) < 2 {
-                pkg.DB.Raw("SELECT name FROM services").Scan(&services)
-        } else {
-                for _, arg := range os.Args[1:] {
-                        services = append(services, arg)
-                }
-        }
-        for i, service := range services {
-                services[i] = fmt.Sprintf("reaction.%s", service)
-        }
-        return services
-}
-
 func initRMQConnection() {
         var connection amqp.Connection
         err := connection.Init("amqp://guest:guest@localhost:5672")
@@ -125,9 +110,6 @@ func main() {
         declareExchanges()
         declareQueues()
 
-        services := getServices()
-        fmt.Printf("Looking on %v\n", services)
-
         consumer := amqp.EventConsumer{Connection: gconsts.Connection}
         go func() {
                 c := make(chan os.Signal, 1)
@@ -137,5 +119,5 @@ func main() {
                 gconsts.Connection.Fini()
                 os.Exit(0)
         }()
-        consumer.StartConsuming(services, handlerAction)
+        consumer.StartConsuming([]string{"reaction"}, handlerAction)
 }

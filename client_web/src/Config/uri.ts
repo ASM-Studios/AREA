@@ -26,7 +26,8 @@ const uri: UriConfig = {
             redirectUri: `${window.location.origin}/auth/google/callback`,
             scope: [
                 'email profile',
-                'https://mail.google.com/'
+                'https://mail.google.com/',
+                'https://www.googleapis.com/auth/calendar',
             ]
         }
     },
