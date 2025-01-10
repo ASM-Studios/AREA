@@ -5,6 +5,8 @@ import LoadingDots from '@/Components/LoadingDots/LoadingDots';
 import { useUser } from '@/Context/ContextHooks';
 import LinkButton from "@/Components/LinkButton";
 
+const { Title } = Typography;
+
 const Download: React.FC = () => {
     const navigate = useNavigate();
     const { translations, user } = useUser();
@@ -66,16 +68,15 @@ const Download: React.FC = () => {
                 zIndex: 1000
             }}
         >
-            <Card size="small" style={{width: 300, margin: '0 auto'}}>
+            <Card size="small">
                 <Result
                     status={isDownloading ? 'success' : 'warning'}
-                    title={translations?.download?.title}
-                    subTitle={
-                        <>
-                            <LoadingDots/>
-                            <Typography>{translations?.download?.description}</Typography>
-                        </>
+                    title={
+                        <span>
+                            <Title style={{ display: 'inline' }}>{translations?.download?.title}</Title> <LoadingDots/>
+                        </span>
                     }
+                    subTitle={translations?.download?.description}
                     extra={
                         <LinkButton text={translations?.errors?.api?.backHome} goBack/>
                     }
