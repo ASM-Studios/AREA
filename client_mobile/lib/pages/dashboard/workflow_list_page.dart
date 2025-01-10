@@ -1,3 +1,4 @@
+import 'package:area/animations/loading/workflow/shimmer_workflow_loader.dart';
 import 'package:area/data/workflow.dart';
 import 'package:area/services/workflow/workflow_service.dart';
 import 'package:area/widgets/profile_button.dart';
@@ -43,7 +44,7 @@ class _WorkflowListPageState extends State<WorkflowListPage> {
             future: UpdateWorkflowService.getWorkflowList(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator());
+                return const ShimmerWorkflowLoader();
               }
               if (snapshot.hasError) {
                 return Center(
