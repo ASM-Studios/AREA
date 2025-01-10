@@ -389,8 +389,7 @@ const pirate_language: Translation = {
     },
     download: {
         title: "Preparin' yer Android Vessel",
-        description1: "Hold fast while we ready yer treasure chest",
-        description2: "Might take a few ticks of the compass",
+        description: "Hold fast while we ready yer treasure chest! Might take a few ticks of the compass",
     }
 };
 

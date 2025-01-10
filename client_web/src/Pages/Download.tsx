@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Typography  } from 'antd';
+import { Result, Card, Typography } from 'antd';
 import LoadingDots from '@/Components/LoadingDots/LoadingDots';
 import { useUser } from '@/Context/ContextHooks';
-
-const { Title, Paragraph } = Typography;
+import LinkButton from "@/Components/LinkButton";
 
 const Download: React.FC = () => {
     const navigate = useNavigate();
@@ -52,10 +51,10 @@ const Download: React.FC = () => {
                 clearInterval(intervalRef.current);
             }
         };
-    });
+    }, []);
 
     return (
-        <main 
+        <main
             role="main"
             aria-live="polite"
             style={{
@@ -67,15 +66,24 @@ const Download: React.FC = () => {
                 zIndex: 1000
             }}
         >
-            <Title level={1} style={{ color: 'white', marginBottom: 24 }}>
-                {translations?.download?.title}
-                <LoadingDots size={8} color="#FFFFFF" />
-            </Title>
-            <Paragraph style={{ color: 'white', fontSize: 18, marginBottom: 32, whiteSpace: 'pre-line' }}>
-                {`${translations?.download?.description1}\n${translations?.download?.description2}`}
-            </Paragraph>
+            <Card size="small" style={{width: 300, margin: '0 auto'}}>
+                <Result
+                    status={isDownloading ? 'success' : 'warning'}
+                    title={translations?.download?.title}
+                    subTitle={
+                        <>
+                            <LoadingDots/>
+                            <Typography>{translations?.download?.description}</Typography>
+                        </>
+                    }
+                    extra={
+                        <LinkButton text={translations?.errors?.api?.backHome} goBack/>
+                    }
+                    style={{zIndex: 1, position: 'relative'}}
+                />
+            </Card>
         </main>
-    );
+    )
 };
 
-export default Download; 
+export default Download;

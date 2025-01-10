@@ -387,7 +387,6 @@ export interface Translation {
     };
     download: {
         title: string;
-        description1: string;
-        description2: string;
+        description: string;
     };
 }

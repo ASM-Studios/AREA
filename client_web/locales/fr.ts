@@ -389,8 +389,7 @@ const fr_language: Translation = {
     },
     download: {
         title: "Préparation de l'application Android",
-        description1: "Veuillez patienter pendant que nous préparons votre téléchargement.",
-        description2: "Cela peut prendre quelques minutes.",
+        description: "Veuillez patienter pendant que nous préparons votre téléchargement. Cela peut prendre quelques minutes.",
     }
 };
 
