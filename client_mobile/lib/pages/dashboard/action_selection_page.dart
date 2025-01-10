@@ -35,9 +35,6 @@ class ActionSelectionPage extends StatelessWidget {
               Navigator.of(context).popUntil((route) {
                 return route.settings.name == "workflowCreation";
               });
-
-              // GoRouter.of(context).go("/workflow/create");
-              // Navigator.popUntil(context, (route) => route.isFirst);
             },
           );
         },

@@ -33,7 +33,6 @@ class OAuthConfigManager {
       authority: "accounts.google.com",
       path: "/o/oauth2/v2/auth",
       redirectUri: "https://maelrabot.com/oauth/callback/google",
-      // redirectUri: "https://localhost:8081/auth/google/callback",
       clientId: dotenv.env["GOOGLE_CLIENT_ID"] ?? "",
       pkce: false,
     ),

@@ -15,7 +15,7 @@ class ShimmerWorkflowTemplate extends StatelessWidget {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius:
-              BorderRadius.circular(20), // Coins arrondis de 20 pixels
+              BorderRadius.circular(20),
         ),
       ),
     );

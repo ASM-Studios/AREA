@@ -16,9 +16,6 @@ class UserService {
       Uri.parse('$baseUrl/user/me'),
       headers: {'Authorization': 'Bearer $token'},
     );
-
-    // print("this is my token: $token");
-
     if (response.statusCode == 200) {
       final jsonData = json.decode(response.body);
 

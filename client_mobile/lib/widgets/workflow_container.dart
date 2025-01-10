@@ -81,7 +81,6 @@ class WorkflowContainer extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                     maxLines: 4,
                     workflow.description.isNotEmpty ? workflow.description : "No description provided.")
-                    // "Ce workflow est absolument exceptionnel, il fait plein de trucs cool genre il envoie des mails à ma place tout ça tout ça ouais ça débite beaucoup là quand même c'est juste pour voir comment ça rend quand y'a bcp de texte"),
               )
             ],
           ),
