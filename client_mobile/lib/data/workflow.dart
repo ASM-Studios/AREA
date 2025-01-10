@@ -1,16 +1,11 @@
-import 'package:client_mobile/data/action.dart';
+import 'package:area/data/action.dart';
 
-class WorkflowEvent
-{
+class WorkflowEvent {
   final WorkflowActionReaction action;
   final String type;
 
-  WorkflowEvent({
-    required this.action,
-    required this.type
-  });
+  WorkflowEvent({required this.action, required this.type});
 }
-
 
 class Workflow {
   final String name;
@@ -24,7 +19,6 @@ class Workflow {
     required this.servicesId,
     required this.events,
   });
-
 
   Map<String, dynamic> toJson() {
     return {

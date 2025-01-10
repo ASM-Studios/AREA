@@ -32,6 +32,7 @@ import UserPage from "@/Pages/Account/UserPage";
 import GenericCallback from "@/Pages/Auth/Callback/GenericCallback";
 
 import WorkflowHandler from '@/Pages/Workflows/WorkflowHandler';
+import Download from '@/Pages/Download';
 
 const App = () => {
     const [init, setInit] = React.useState(false);
@@ -167,6 +168,7 @@ const App = () => {
                                 <Route path="/account/me" element={<UserPage backgroundColor={backgroundColor} setBackgroundColor={setBackgroundColor} />} />
                                 <Route path="/error/connection" element={<ApiError />} />
                                 <Route path="/error/:error" element={<CustomError />} />
+                                <Route path="/download" element={<Download />} />
                                 <Route path="*" element={<NotFoundError />} />
                             </Routes>
                         </Layout>

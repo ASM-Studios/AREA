@@ -1,6 +1,6 @@
-import 'package:client_mobile/services/user/user_service.dart';
-import 'package:client_mobile/widgets/bind_oauth_buttons.dart';
-import 'package:client_mobile/widgets/divider_with_text.dart';
+import 'package:area/services/user/user_service.dart';
+import 'package:area/widgets/bind_oauth_buttons.dart';
+import 'package:area/widgets/divider_with_text.dart';
 import 'package:flutter/material.dart';
 
 class ProfilePage extends StatelessWidget {

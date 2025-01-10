@@ -1,4 +1,4 @@
-import 'package:client_mobile/services/login/auth_service.dart';
+import 'package:area/services/login/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -17,10 +17,11 @@ class _HomePageState extends State<HomePage> {
   }
 
   void redirect() async {
-    if (await AuthService.isUserLogin())
+    if (await AuthService.isUserLogin()) {
       context.pushReplacement("/dashboard");
-    else
+    } else {
       context.pushReplacement("/login");
+    }
   }
 
   @override

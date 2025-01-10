@@ -123,6 +123,7 @@ const pirate_language: Translation = {
         dashboard: "Captain's Quarters",
         createWorkflow: "Chart New Course",
         accessibility: "Accessibility fer All Hands",
+        download: "Get yer vessel",
         profile: {
             title: "Sailor's Log",
             settings: "Ship Settings",
@@ -385,6 +386,10 @@ const pirate_language: Translation = {
             unauthorized: "Ye ain't got permission to board this deck",
             invalidToken: "Yer papers be invalid - no boarding allowed"
         }
+    },
+    download: {
+        title: "Preparin' yer Android Vessel",
+        description: "Hold fast while we ready yer treasure chest! Might take a few ticks of the compass",
     }
 };
 

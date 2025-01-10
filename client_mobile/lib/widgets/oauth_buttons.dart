@@ -1,9 +1,8 @@
-import 'package:client_mobile/services/oauth/oauth_service.dart';
-import 'package:client_mobile/widgets/sign_in_button.dart';
+import 'package:area/services/oauth/oauth_service.dart';
+import 'package:area/widgets/sign_in_button.dart';
 import 'package:flutter/material.dart';
 
 class OAuthButtons extends StatelessWidget {
-
   bool isLoggingViaOAuth = false;
 
   OAuthButtons();
@@ -100,7 +99,7 @@ class OAuthButtons extends StatelessWidget {
               onPressed: () {
                 if (!isLoggingViaOAuth) {
                   isLoggingViaOAuth = true;
-                  OAuthService.requestOAuth(context, "spotify",signUp: true);
+                  OAuthService.requestOAuth(context, "spotify", signUp: true);
                   isLoggingViaOAuth = false;
                 }
               },

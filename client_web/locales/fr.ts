@@ -123,6 +123,7 @@ const fr_language: Translation = {
         dashboard: "Tableau de bord",
         createWorkflow: "Créer un Workflow",
         accessibility: "Accessibilité",
+        download: "Téléchargements",
         profile: {
             title: "Profil",
             settings: "Paramètres",
@@ -386,6 +387,10 @@ const fr_language: Translation = {
             backHome: "Retour à l'Accueil"
         }
     },
+    download: {
+        title: "Préparation de l'application Android",
+        description: "Veuillez patienter pendant que nous préparons votre téléchargement. Cela peut prendre quelques minutes.",
+    }
 };
 
 export default fr_language;

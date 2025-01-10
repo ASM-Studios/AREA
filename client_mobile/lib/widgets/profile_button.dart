@@ -1,5 +1,5 @@
-import 'package:client_mobile/pages/profile/profile_page.dart';
-import 'package:client_mobile/services/login/auth_service.dart';
+import 'package:area/pages/profile/profile_page.dart';
+import 'package:area/services/login/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -10,7 +10,8 @@ class ProfileButton extends StatelessWidget {
       onSelected: (value) async {
         if (value == 'parametres') {
           print('Paramètres sélectionnés');
-          Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => ProfilePage()));
+          Navigator.of(context)
+              .push(MaterialPageRoute(builder: (ctx) => ProfilePage()));
         } else if (value == 'deconnexion') {
           bool hasLogout = await AuthService.logout();
           if (hasLogout) context.pushReplacement("/login");

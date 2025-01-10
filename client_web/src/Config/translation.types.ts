@@ -121,6 +121,7 @@ export interface Translation {
         dashboard: string;
         createWorkflow: string;
         accessibility: string;
+        download: string;
         profile: {
             title: string;
             settings: string;
@@ -383,5 +384,9 @@ export interface Translation {
             subtitle: string;
             backHome: string;
         };
+    };
+    download: {
+        title: string;
+        description: string;
     };
 }

@@ -1,4 +1,3 @@
-import 'package:client_mobile/services/oauth/oauth_service.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class OAuthServiceConfig {
@@ -24,7 +23,8 @@ class OAuthConfigManager {
       scope: "user.read Mail.Read Mail.ReadWrite Mail.Send",
       authority: "login.microsoftonline.com",
       path: "/common/oauth2/v2.0/authorize",
-      redirectUri: "msauth://my.area.app/lvGC0B4SWYU8tNPHg%2FbdMjQinZQ%3D",
+      redirectUri:
+          "msauth://com.asm_studios.area/lvGC0B4SWYU8tNPHg%2FbdMjQinZQ%3D",
       clientId: dotenv.env["MICROSOFT_CLIENT_ID"] ?? "",
       pkce: false,
     ),
@@ -42,7 +42,7 @@ class OAuthConfigManager {
       authority: "accounts.spotify.com",
       path: "/authorize",
       clientId: dotenv.env["SPOTIFY_CLIENT_ID"] ?? "",
-      redirectUri: "my.area.app://callback",
+      redirectUri: "com.asm_studios.area://callback",
       pkce: false,
     ),
     "discord": OAuthServiceConfig(
@@ -50,7 +50,7 @@ class OAuthConfigManager {
       authority: "discord.com",
       path: "/oauth2/authorize",
       clientId: dotenv.env["DISCORD_CLIENT_ID"] ?? "",
-      redirectUri: "my.area.app://callback",
+      redirectUri: "https://localhost:8081/auth/discord/callback",
       pkce: true,
     ),
     "twitch": OAuthServiceConfig(

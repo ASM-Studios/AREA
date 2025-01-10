@@ -1,7 +1,7 @@
-import 'package:client_mobile/data/action.dart';
-import 'package:client_mobile/data/service.dart';
-import 'package:client_mobile/data/service_metadata.dart';
-import 'package:client_mobile/pages/dashboard/service_selection.dart';
+import 'package:area/data/action.dart';
+import 'package:area/data/service.dart';
+import 'package:area/data/service_metadata.dart';
+import 'package:area/pages/dashboard/service_selection.dart';
 import 'package:flutter/material.dart';
 
 class ReactionButton extends StatefulWidget {
@@ -20,9 +20,10 @@ class _ReactionButtonState extends State<ReactionButton> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.reaction != null)
+    if (widget.reaction != null) {
       serviceMetadata =
           ServiceMetadata.getServiceByName(widget.reaction!.serviceName!);
+    }
 
     return Container(
       padding: const EdgeInsets.all(20),

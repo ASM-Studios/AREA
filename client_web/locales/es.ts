@@ -123,6 +123,7 @@ const es_language: Translation = {
         dashboard: "Panel de Control",
         createWorkflow: "Crear Flujo de Trabajo",
         accessibility: "Accesibilidad",
+        download: "Descargas",
         profile: {
             title: "Perfil",
             settings: "Configuración",
@@ -386,6 +387,10 @@ const es_language: Translation = {
             backHome: "Volver al Inicio"
         }
     },
+    download: {
+        title: "Preparando aplicación móvil",
+        description: "Por favor espera mientras preparamos tu descarga. Esto puede tomar unos momentos.",
+    }
 };
 
 export default es_language;

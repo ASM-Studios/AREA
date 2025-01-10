@@ -9,8 +9,8 @@ interface LayoutProps {
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
     const location = useLocation();
-    const headerIncludedPaths: (string | RegExp)[] = ['/', '/dashboard', '/accessibility', '/account/me', '/workflow/create', /^\/workflow\/update\/\d+$/];
-    const footerIncludedPaths: (string | RegExp)[] = ['/', '/dashboard', '/accessibility','/account/me', '/workflow/create', /^\/workflow\/update\/\d+$/];
+    const headerIncludedPaths: (string | RegExp)[] = ['/', '/dashboard', '/accessibility', '/account/me', '/workflow/create', /^\/workflow\/update\/\d+$/, '/download'];
+    const footerIncludedPaths: (string | RegExp)[] = ['/', '/dashboard', '/accessibility','/account/me', '/workflow/create', /^\/workflow\/update\/\d+$/, '/download'];
 
     const isHeaderIncluded = headerIncludedPaths.some(path =>
         typeof path === 'string' ? path === location.pathname : path.test(location.pathname)

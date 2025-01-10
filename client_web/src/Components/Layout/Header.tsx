@@ -37,6 +37,7 @@ const Header: React.FC = () => {
         { key: '/dashboard', label: <Link to="/dashboard">{translations?.header?.dashboard}</Link>, visibility: Visibility.AUTH },
         { key: '/workflow/create', label: <Link to="/workflow/create">{translations?.header?.createWorkflow}</Link>, visibility: Visibility.AUTH },
         { key: '/accessibility', label: <Link to="/accessibility">{translations?.header?.accessibility}</Link>, visibility: Visibility.ALWAYS },
+        { key: '/download', label: <Link to="/download">{translations?.header?.download}</Link>, visibility: Visibility.ALWAYS },
     ];
 
     const languageOptions = [
