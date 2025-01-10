@@ -82,11 +82,11 @@ class OAuthService {
     );
     if (hasExchangedCorrectly) {
       ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text("Connexion effectuée avec succès !"),
-              backgroundColor: Colors.black,
-            ),
-          );
+        const SnackBar(
+          content: Text("Connexion effectuée avec succès !"),
+          backgroundColor: Colors.black,
+        ),
+      );
       context.pushReplacement("/workflow/list");
     } else {
       ScaffoldMessenger.of(context).showSnackBar(

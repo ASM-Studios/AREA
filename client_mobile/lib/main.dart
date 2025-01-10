@@ -1,7 +1,9 @@
 import 'package:area/pages/auth/login.dart';
 import 'package:area/pages/auth/register.dart';
-import 'package:area/pages/dashboard/dashboard.dart';
+import 'package:area/pages/dashboard/workflow.dart';
+import 'package:area/pages/dashboard/workflow_list_page.dart';
 import 'package:area/pages/home/home.dart';
+import 'package:area/pages/profile/profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:go_router/go_router.dart';

@@ -45,25 +45,7 @@ class Workflow {
         events: []
       );
     } catch (e) {
-      print('Error parsing WorkflowService: $e');
-      return Workflow(
-          name: 'Unknown', status: "failed", description: "Unknown", servicesId: [], events: []);
-    }
-  }
-
-   factory Workflow.fromJson(Map<String, dynamic> json) {
-    try {
-      return Workflow(
-        id: json['ID'] ?? 0,
-        name: json['name'] ??
-            'Unknown',
-        description: json['description'],
-        status: json['status'],
-        servicesId: [],
-        events: []
-      );
-    } catch (e) {
-      print('Error parsing WorkflowService: $e');
+      print('Error parsing Workflow: $e');
       return Workflow(
           name: 'Unknown', status: "failed", description: "Unknown", servicesId: [], events: []);
     }

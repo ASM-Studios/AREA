@@ -1,5 +1,5 @@
-import 'package:client_mobile/data/workflow.dart';
-import 'package:client_mobile/services/workflow/workflow_service.dart';
+import 'package:area/data/workflow.dart';
+import 'package:area/services/workflow/workflow_service.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -54,7 +54,6 @@ class WorkflowContainer extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
-            spacing: 40,
             children: [
               Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -76,11 +75,12 @@ class WorkflowContainer extends StatelessWidget {
                   _getStatusIcon(workflow.status!),
                 ],
               ),
+              const SizedBox(height: 40),
               Center(
                 child: Text(
                     overflow: TextOverflow.ellipsis,
                     maxLines: 4,
-                    workflow.description)
+                    workflow.description.isNotEmpty ? workflow.description : "No description provided.")
                     // "Ce workflow est absolument exceptionnel, il fait plein de trucs cool genre il envoie des mails à ma place tout ça tout ça ouais ça débite beaucoup là quand même c'est juste pour voir comment ça rend quand y'a bcp de texte"),
               )
             ],

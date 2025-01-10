@@ -1,7 +1,7 @@
-import 'package:client_mobile/data/workflow.dart';
-import 'package:client_mobile/services/workflow/workflow_service.dart';
-import 'package:client_mobile/widgets/profile_button.dart';
-import 'package:client_mobile/widgets/workflow_container.dart';
+import 'package:area/data/workflow.dart';
+import 'package:area/services/workflow/workflow_service.dart';
+import 'package:area/widgets/profile_button.dart';
+import 'package:area/widgets/workflow_container.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
