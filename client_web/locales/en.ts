@@ -390,7 +390,47 @@ const en_language: Translation = {
     download: {
         title: "Preparing Android App",
         description: "Please wait while we prepare your download. This might take a few moments.",
-    }
+    },
+    accessibility: {
+        title: "Accessibility Statement",
+        introduction: {
+            title: "Introduction",
+            content: "This document provides an overview of the accessibility features implemented in the AREA Client Web project. Accessibility is a crucial aspect of web development, ensuring that all users, including those with disabilities, can access and interact with the website effectively."
+        },
+        importance: {
+            title: "Importance of Accessibility",
+            content: "Web accessibility is essential for creating an inclusive digital environment. It ensures that people with disabilities can perceive, understand, navigate, and interact with the web. By making the website accessible, we not only comply with legal requirements but also enhance the user experience for everyone."
+        },
+        features: {
+            title: "Accessibility Features and Considerations",
+            items: {
+                semantic: "The use of semantic HTML elements helps screen readers and other assistive technologies understand the structure and content of the web pages.",
+                keyboard: "All interactive elements are accessible via keyboard navigation, allowing users who cannot use a mouse to navigate the site.",
+                contrast: "The website ensures sufficient color contrast between text and background, making it easier for users with visual impairments to read the content.",
+                aria: "ARIA (Accessible Rich Internet Applications) attributes are used to enhance the accessibility of dynamic content and complex UI components.",
+                responsive: "The site is designed to be responsive, ensuring accessibility across various devices and screen sizes."
+            }
+        },
+        compliance: {
+            title: "Compliance with Accessibility Norms",
+            intro: "The AREA Client Web project complies with several accessibility standards, including:",
+            standards: {
+                wcag: "The project adheres to the guidelines set by WCAG 2.1, ensuring that the content is perceivable, operable, understandable, and robust.",
+                rgaa: "This is the French accessibility standard that aligns with WCAG 2.1 but includes additional requirements specific to France.",
+                en301: "This is the European standard for accessibility requirements for ICT products and services, which also aligns with WCAG 2.1."
+            }
+        },
+        scores: {
+            title: "Accessibility Scores",
+            intro: "The following are the accessibility scores for each page, as measured by Google Chrome Lighthouse:",
+            mean: "The mean accessibility score across all pages is 97, indicating a high level of accessibility compliance."
+        },
+        conclusion: {
+            title: "Conclusion",
+            content: "The AREA Client Web project is committed to providing an accessible experience for all users. By adhering to established accessibility standards and continuously evaluating our practices, we ensure that our website is inclusive and user-friendly.",
+            learnMore: "For more information on accessibility practices and guidelines, please refer to the"
+        }
+    },
 };
 
 export default en_language;
