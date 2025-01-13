@@ -1,7 +1,6 @@
 package twitch
 
 import (
-	"AREA/cmd/action_consumer/vars"
 	"AREA/internal/models"
 	"AREA/internal/oauth"
 	"AREA/internal/pkg"
@@ -16,20 +15,20 @@ type StreamInfo struct {
         }       `json:"data"`
 }
 
-func fetchStreamInfo(streamInfo StreamInfo) bool {
+func fetchStreamInfo(workflow *models.Workflow, streamInfo StreamInfo) bool {
         if len(streamInfo.Data) == 0 {
                 return false
         }
 
         timeParsed, _ := time.Parse(time.RFC3339, streamInfo.Data[0].StartedAt)
-        if timeParsed.Unix() > vars.LastFetch {
+        if timeParsed.Unix() > workflow.LastTrigger {
                 return true
         } else {
                 return false
         }
 }
 
-func StreamStart(user *models.User, args map[string]string) bool {
+func StreamStart(workflow *models.Workflow, user *models.User, args map[string]string) bool {
         var token models.Token
         pkg.DB.Where("user_id = ? AND service_id = ?", user.ID, 6).First(&token)
 
@@ -51,5 +50,5 @@ func StreamStart(user *models.User, args map[string]string) bool {
         }
 
         result, err := utils.ExtractBody[StreamInfo](resp)
-        return fetchStreamInfo(*result)
+        return fetchStreamInfo(workflow, *result)
 }

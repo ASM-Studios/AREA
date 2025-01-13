@@ -9,14 +9,12 @@
         {
           "name": "owner",
           "description": "Owner of the repository",
-          "type": "string",
-          "is_required": true
+          "type": "string"
         },
         {
           "name": "repo",
           "description": "Name of the repository",
-          "type": "string",
-          "is_required": true
+          "type": "string"
         }
       ]
     },
@@ -28,8 +26,7 @@
         {
           "name": "user",
           "description": "User who creates the repository",
-          "type": "string",
-          "is_required": true
+          "type": "string"
         }
       ]
     },
@@ -44,8 +41,7 @@
         {
           "name": "name",
           "description": "Name of the repo",
-          "type": "string",
-          "is_required": true
+          "type": "string"
         },
         {
           "name": "description",
@@ -56,8 +52,7 @@
         {
           "name": "public",
           "description": "Visibility of the repo",
-          "type": "boolean",
-          "is_required": true
+          "type": "boolean"
         },
         {
           "name": "gitignore_template",

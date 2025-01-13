@@ -31,8 +31,8 @@ func GetEnvVar(name string) string {
 }
 
 func SendRequest(request *http.Request) (*http.Response, error) {
-        client := http.Client{}
-        resp, err := client.Do(request)
+        resp, err := http.DefaultClient.Do(request)
+
         if err != nil {
                 return nil, err
         }

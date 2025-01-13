@@ -43,14 +43,12 @@
         {
           "name": "track_id",
           "description": "The ID of the track to add.",
-          "type": "string",
-          "is_required": true
+          "type": "string"
         },
         {
           "name": "playlist_name",
           "description": "The name of the playlist to which the track should be added.",
-          "type": "string",
-          "is_required": true
+          "type": "string"
         },
         {
           "name": "position",

@@ -11,7 +11,7 @@ type MicrosoftResponse struct {
         DisplayName string `json:"displayName"`
 }
 
-func GetMicrosoftResponse(serviceRawResponse *http.Response) (*ServiceResponse, error) {
+func GetMicrosoftResponse(serviceRawResponse *http.Response, token string) (*ServiceResponse, error) {
         var microsoftResponse MicrosoftResponse
 
         body, err := io.ReadAll(serviceRawResponse.Body)

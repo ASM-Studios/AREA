@@ -1,7 +1,6 @@
 package spotify
 
 import (
-	"AREA/cmd/action_consumer/vars"
 	"AREA/internal/models"
 	"AREA/internal/oauth"
 	"AREA/internal/pkg"
@@ -16,7 +15,7 @@ type TrackInfo struct {
         }       `json:"item"`
 }
 
-func StartPlaying(user *models.User, args map[string]string) bool {
+func StartPlaying(workflow *models.Workflow, user *models.User, args map[string]string) bool {
         var token models.Token
         pkg.DB.Where("user_id = ? AND service_id = ?", user.ID, 5).First(&token)
 
@@ -31,12 +30,12 @@ func StartPlaying(user *models.User, args map[string]string) bool {
                 return false
         }
         defer resp.Body.Close()
-        if  resp.StatusCode != 200 {
+        if resp.StatusCode != 200 {
                 return false
         }
 
         result, err := utils.ExtractBody[TrackInfo](resp)
-        if (result.Timestamp / 1000) > vars.LastFetch {
+        if (result.Timestamp / 1000) > workflow.LastTrigger {
                 if len(args["track_id"]) > 0 {
                         return result.Item.Id == args["track_id"]
                 }

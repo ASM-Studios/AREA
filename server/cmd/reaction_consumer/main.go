@@ -1,11 +1,12 @@
 package main
 
 import (
-	"AREA/cmd/reaction_consumer/consts"
 	"AREA/cmd/reaction_consumer/github"
+	"AREA/cmd/reaction_consumer/google"
 	"AREA/cmd/reaction_consumer/spotify"
 	"AREA/cmd/reaction_consumer/twitch"
 	"AREA/internal/amqp"
+	"AREA/internal/gconsts"
 	"AREA/internal/models"
 	"AREA/internal/pkg"
 	"AREA/internal/utils"
@@ -19,31 +20,22 @@ import (
 	"github.com/rabbitmq/amqp091-go"
 )
 
-var service string
-
 var actionCallbacks = map[uint]func(*models.User, map[string]string) {
         9: github.CreateUserRepo,
 
-        31: spotify.PlayPauseTrack,
-        32: spotify.SkipPrev,
-        33: spotify.SkipNext,
-        34: spotify.AddTrack,
+        11: google.AddEvent,
 
-        36: twitch.SendMessage,
-        37: twitch.WhisperMessage,
+        28: spotify.PlayPauseTrack,
+        29: spotify.SkipPrev,
+        30: spotify.SkipNext,
+        31: spotify.AddTrack,
+
+        33: twitch.SendMessage,
+        34: twitch.WhisperMessage,
 }
 
-
-func handlerAction(message amqp091.Delivery) {
-        var workflowEvent models.WorkflowEvent
-        err := json.Unmarshal(message.Body, &workflowEvent)
-        if err != nil {
-                return
-        }
-
-        var workflow models.Workflow
-        pkg.DB.Where("id = ?", workflowEvent.WorkflowID).First(&workflow)
-
+func executeWorkflowEvent(workflow *models.Workflow, workflowEvent *models.WorkflowEvent) {
+        fmt.Printf("Executing workflow event id: %d\n", workflowEvent.ID)
         var user models.User
         pkg.DB.Where("id = ?", workflow.UserID).First(&user)
 
@@ -72,36 +64,68 @@ func handlerAction(message amqp091.Delivery) {
         }
 }
 
-func declareQueues() {
-        var services []models.Service
-        pkg.DB.Find(&services)
-        for _, service := range services {
-                amqp.DeclareQueue(utils.GetEnvVar("RMQ_URL"), consts.MessageQueue, service.Name)
+func executeWorkflow(workflow *models.Workflow) {
+        rows, err := pkg.DB.Table("workflow_events").Joins("join events on events.id = workflow_events.event_id").Select("workflow_events.*").Where("workflow_events.workflow_id = ? AND events.type = 'reaction'", workflow.ID).Rows()
+        if err != nil {
+                return
+        }
+        defer rows.Close()
+        for rows.Next() {
+                var workflowEvent models.WorkflowEvent
+                pkg.DB.ScanRows(rows, &workflowEvent)
+                executeWorkflowEvent(workflow, &workflowEvent)
         }
 }
 
-func main() {
-        if len(os.Args) < 2 {
-                fmt.Println("Generic service")
-                service  = "reaction_queue" //TODO CHANGE WITH DOCKER
-        } else {
-                service = os.Args[1]
-        }
-        rabbitMQConnection := utils.GetEnvVar("RMQ_URL")
-        pkg.InitDB()
-        declareQueues()
-        err := amqp.Consumer.Init(rabbitMQConnection, consts.MessageQueue, service)
+
+
+func handlerAction(message amqp091.Delivery, queue string) {
+        var workflow models.Workflow
+
+        err := json.Unmarshal(message.Body, &workflow)
         if err != nil {
-                log.Fatalf("Failed to initialize consumer: %v", err)
+                return
         }
+        executeWorkflow(&workflow)
+}
+
+func declareServices() {
+        var services []models.Service
+        pkg.DB.Find(&services)
+        for _, service := range services {
+                gconsts.ServiceMap[service.Name] = service.ID
+        }
+}
+
+func declareQueues() {
+        gconsts.Connection.Channel.QueueDeclare("reaction", true, false, false, false, nil)
+}
+
+func initRMQConnection() {
+        var connection amqp.Connection
+        err := connection.Init(utils.GetEnvVar("RMQ_URL"))
+        if err != nil {
+                log.Fatalf("Failed to initialize connection: %v\n", err)
+                return
+        }
+        gconsts.Connection = &connection
+}
+
+func main() {
+        pkg.InitDB()
+        initRMQConnection()
+
+        declareServices()
+        declareQueues()
+
+        consumer := amqp.EventConsumer{Connection: gconsts.Connection}
         go func() {
                 c := make(chan os.Signal, 1)
                 signal.Notify(c, os.Interrupt, syscall.SIGTERM)
                 <-c
                 log.Println("Shutting down consumer...")
-                amqp.Consumer.Close()
+                gconsts.Connection.Fini()
                 os.Exit(0)
         }()
-
-        amqp.Consumer.StartConsuming(consts.MessageQueue, handlerAction)
+        consumer.StartConsuming([]string{"reaction"}, handlerAction)
 }

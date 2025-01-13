@@ -1,7 +1,6 @@
 package github
 
 import (
-	"AREA/cmd/action_consumer/vars"
 	"AREA/internal/models"
 	"AREA/internal/oauth"
 	"AREA/internal/pkg"
@@ -18,17 +17,17 @@ type PullRequest struct {
 }
 
 
-func DetectPR(pr []PullRequest) bool {
+func DetectPR(workflow *models.Workflow, pr []PullRequest) bool {
         for _, pr := range pr {
                 timestamp, _ := time.Parse(time.RFC3339, pr.CreatedAt)
-                if timestamp.Unix() > vars.LastFetch {
+                if timestamp.Unix() > workflow.LastTrigger {
                         return true
                 }
         }
         return false
 }
 
-func PRCreated(user *models.User, args map[string]string) bool {
+func PRCreated(workflow *models.Workflow, user *models.User, args map[string]string) bool {
         var token models.Token
         pkg.DB.Where("user_id = ? AND service_id = ?", user.ID, 2).First(&token)
 
@@ -49,5 +48,5 @@ func PRCreated(user *models.User, args map[string]string) bool {
         }
 
         result, err := utils.ExtractBody[[]PullRequest](resp)
-        return DetectPR(*result)
+        return DetectPR(workflow, *result)
 }
