@@ -96,8 +96,8 @@ func DetectWorkflowsEvent(workflow *models.Workflow) {
         var user models.User
 
         pkg.DB.Where("id = ?", workflow.UserID).First(&user)
-        sendWorkflow(workflow) //RESTORE IN IF
         if detectWorkflowEvent(workflow, &user) {
+                sendWorkflow(workflow)
         }
         workflow.LastTrigger = time.Now().Unix()
 }
