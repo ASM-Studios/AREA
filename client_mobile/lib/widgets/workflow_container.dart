@@ -60,7 +60,7 @@ class WorkflowContainer extends StatelessWidget {
                 children: [
                   Expanded(
                     child: Text(
-                      workflow.name,
+                      workflow.name.isNotEmpty ? workflow.name : "No name provided.",
                       textAlign: TextAlign.center,
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1,
