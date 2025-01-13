@@ -100,7 +100,10 @@ test_client_mobile:
 
 ## Run tests for server
 test_server:
-	@echo "test_server::not implemented yet"
+	cd server && go test ./... && cd ..
+
+coverage_server:
+	cd server && mkdir coverage | go test -coverprofile=coverage/coverage.out ./... && go tool cover -html=coverage/coverage.out && cd ..
 
 ## Start server only
 start-server:
