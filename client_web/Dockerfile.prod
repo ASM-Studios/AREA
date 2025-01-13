@@ -1,0 +1,49 @@
+###----------------------- Certificate generation stage -----------------------###
+FROM alpine:3.20.3 AS cert-builder
+
+RUN apk add --no-cache openssl
+RUN mkdir -p /etc/nginx/ssl && \
+    openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
+    -keyout /etc/nginx/ssl/private.key \
+    -out /etc/nginx/ssl/certificate.crt \
+    -subj "/C=FR/ST=Paris/L=Paris/O=Area/OU=IT/CN=localhost" \
+    -addext "subjectAltName = DNS:localhost" && \
+    chmod 644 /etc/nginx/ssl/certificate.crt /etc/nginx/ssl/private.key
+
+###----------------------- Build stage -----------------------###
+FROM node:20-alpine AS builder
+
+WORKDIR /app
+
+# Copy package files
+COPY package*.json ./
+
+# Install dependencies
+RUN npm install
+
+# Copy the rest of the application including public directory
+COPY . .
+
+# Build the application
+RUN npm run build
+
+###----------------------- Production stage -----------------------###
+FROM node:20-alpine
+
+WORKDIR /app
+
+# Copy built files and necessary runtime files
+COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/package*.json ./
+COPY --from=builder /app/vite.config.ts ./
+
+# Install only production dependencies
+RUN npm ci --only=production
+
+# Environment variables
+ENV NODE_ENV=production
+EXPOSE ${VITE_PORT}
+
+# Start production server
+CMD ["npm", "run", "preview", "--", "--host"] 
