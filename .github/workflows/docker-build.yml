@@ -56,20 +56,23 @@ jobs:
           cache: true
 
       - name: Install dependencies
+        working-directory: ./server
         run: go mod tidy
 
       - name: Run tests
+        working-directory: ./server
         run: go test ./... -v -coverprofile=coverage.out
 
       - name: Display test coverage
+        working-directory: ./server
         run: go tool cover -func=coverage.out
 
       - name: Upload test coverage report
         if: always()
         uses: actions/upload-artifact@v3
         with:
-          name: coverage-report
-          path: coverage.out
+          name: server-coverage-report
+          path: ./server/coverage.out
 
 
   build:
