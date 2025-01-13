@@ -50,7 +50,7 @@ class _ReactionButtonState extends State<ReactionButton> {
                 : "Then ${widget.reaction!.name}",
             style: TextStyle(
               fontSize: widget.reaction == null ? 40 : 16,
-              color: Colors.white,
+              color: serviceMetadata != null ? (serviceMetadata!.color == Colors.white ? Colors.black : Colors.white) : Colors.white
             ),
           ),
           if (widget.reaction == null) const Spacer(),

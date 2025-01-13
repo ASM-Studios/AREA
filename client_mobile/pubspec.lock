@@ -316,10 +316,18 @@ packages:
     dependency: "direct main"
     description:
       name: go_router
-      sha256: "2fd11229f59e23e967b0775df8d5948a519cd7e1e8b6e849729e010587b46539"
+      sha256: "7c2d40b59890a929824f30d442e810116caf5088482629c894b9e4478c67472d"
       url: "https://pub.dev"
     source: hosted
-    version: "14.6.2"
+    version: "14.6.3"
+  google_fonts:
+    dependency: "direct main"
+    description:
+      name: google_fonts
+      sha256: b1ac0fe2832c9cc95e5e88b57d627c5e68c223b9657f4b96e1487aa9098c7b82
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.2.1"
   google_identity_services_web:
     dependency: transitive
     description:
@@ -632,6 +640,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.4.1"
+  shimmer:
+    dependency: "direct main"
+    description:
+      name: shimmer
+      sha256: "5f88c883a22e9f9f299e5ba0e4f7e6054857224976a5d9f839d4ebdc94a14ac9"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.0"
+  simple_animations:
+    dependency: "direct main"
+    description:
+      name: simple_animations
+      sha256: "6c0f1d53d351a2187da979cc6883322eb9e76f1147c1aecc1937c498eaa9abff"
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.1.0"
   sky_engine:
     dependency: transitive
     description: flutter
@@ -782,5 +806,5 @@ packages:
     source: hosted
     version: "3.1.3"
 sdks:
-  dart: ">=3.5.3 <4.0.0"
+  dart: ">=3.5.4 <4.0.0"
   flutter: ">=3.24.0"

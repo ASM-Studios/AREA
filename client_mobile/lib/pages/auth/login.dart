@@ -82,7 +82,7 @@ class _LoginPageState extends State<LoginPage> {
                                   password: passwordController.text)
                               .toJson());
                       if (isLogin) {
-                        context.pushReplacement("/dashboard");
+                        context.pushReplacement("/workflow/list");
                       }
                     }
                   },
@@ -106,7 +106,8 @@ class _LoginPageState extends State<LoginPage> {
             ),
           ),
         ),
-      )),
+      )
+      ),
     );
   }
 }

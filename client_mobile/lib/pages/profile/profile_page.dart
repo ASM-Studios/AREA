@@ -1,3 +1,4 @@
+import 'package:area/animations/loading/profile/shimmer_profile_loader.dart';
 import 'package:area/services/user/user_service.dart';
 import 'package:area/widgets/bind_oauth_buttons.dart';
 import 'package:area/widgets/divider_with_text.dart';
@@ -12,9 +13,9 @@ class ProfilePage extends StatelessWidget {
       body: FutureBuilder(
           future: UserService.getUserInfos(),
           builder: (ctx, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting)
-              return const Center(child: CircularProgressIndicator());
-
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const ShimmerProfileLoader();
+            }
             if (snapshot.hasError) {
               return Center(
                 child: Text('Erreur : ${snapshot.error}'),

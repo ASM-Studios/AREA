@@ -18,7 +18,7 @@ class _HomePageState extends State<HomePage> {
 
   void redirect() async {
     if (await AuthService.isUserLogin()) {
-      context.pushReplacement("/dashboard");
+      context.pushReplacement("/workflow/list");
     } else {
       context.pushReplacement("/login");
     }

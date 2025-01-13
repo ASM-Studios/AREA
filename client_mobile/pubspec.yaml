@@ -23,8 +23,11 @@ dependencies:
   google_sign_in: ^6.2.2
   aad_oauth: ^1.0.1
   flutter_inappwebview: ^6.1.5
+  google_fonts: ^6.2.1
   crypto: ^3.0.6
   flutter_launcher_icons: ^0.14.2
+  simple_animations: ^5.1.0
+  shimmer: ^3.0.0
 
 dev_dependencies:
   flutter_test:

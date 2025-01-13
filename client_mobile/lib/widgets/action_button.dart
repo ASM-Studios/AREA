@@ -46,7 +46,7 @@ class _ActionButtonState extends State<ActionButton> {
             widget.action == null ? "If  This" : "If ${widget.action!.name}",
             style: TextStyle(
               fontSize: widget.action == null ? 48 : 16,
-              color: Colors.white,
+              color: serviceMetadata != null ? (serviceMetadata!.color == Colors.white ? Colors.black : Colors.white) : Colors.white
             ),
           ),
           if (widget.action == null) const Spacer(),

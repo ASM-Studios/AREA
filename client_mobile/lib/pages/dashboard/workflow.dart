@@ -3,9 +3,9 @@ import 'package:area/data/service.dart';
 import 'package:area/data/workflow.dart';
 import 'package:area/services/workflow/workflow_service.dart';
 import 'package:area/widgets/action_button.dart';
-import 'package:area/widgets/profile_button.dart';
 import 'package:area/widgets/reaction_button.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class WorkflowPage extends StatefulWidget {
   const WorkflowPage({super.key});
@@ -89,12 +89,17 @@ class _WorkflowPageState extends State<WorkflowPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+      leading: IconButton(
+        icon: const Icon(Icons.close),
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
+        tooltip: "Close",
+      ),
+    ),
       body: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(0, 30, 20, 0),
-            child: Align(alignment: Alignment.topRight, child: ProfileButton()),
-          ),
           const SizedBox(height: 50),
           ActionButton(onActionSelected: onActionSelected, action: action),
           const SizedBox(height: 30),
@@ -126,7 +131,7 @@ class _WorkflowPageState extends State<WorkflowPage> {
                     }
 
                     bool hasCreatedWorkflow =
-                        await CreateWorkflowService.createWorkflow(
+                        await UpdateWorkflowService.createWorkflow(
                       Workflow(
                         name: name!,
                         description: description!,
@@ -145,6 +150,7 @@ class _WorkflowPageState extends State<WorkflowPage> {
                           backgroundColor: Colors.black,
                         ),
                       );
+                      GoRouter.of(context).pushReplacement("/workflow/list");
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
