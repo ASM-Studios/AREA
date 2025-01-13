@@ -22,7 +22,7 @@ class WebViewPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Connexion"),
+        title: const Text("Connection"),
       ),
       body: InAppWebView(
         initialSettings: InAppWebViewSettings(

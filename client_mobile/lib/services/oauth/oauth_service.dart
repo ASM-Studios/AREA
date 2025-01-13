@@ -83,7 +83,7 @@ class OAuthService {
     if (hasExchangedCorrectly) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text("Connexion effectuée avec succès !"),
+          content: Text("Connected successfully !"),
           backgroundColor: Colors.black,
         ),
       );
@@ -91,7 +91,7 @@ class OAuthService {
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text("Erreur lors de la connexion "),
+          content: Text("Error during connection"),
           backgroundColor: Colors.red,
         ),
       );

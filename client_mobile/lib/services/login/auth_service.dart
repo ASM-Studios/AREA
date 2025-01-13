@@ -104,7 +104,7 @@ class AuthService {
         print("Connexion réussie et token sauvegardé !");
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text("Login effectué avec succès !"),
+            content: Text("Login successfully !"),
             backgroundColor: Colors.black,
           ),
         );
@@ -124,7 +124,7 @@ class AuthService {
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text("Erreur de login : $e"),
+          content: Text("Login error : $e"),
           backgroundColor: Colors.red,
         ),
       );
@@ -153,7 +153,7 @@ class AuthService {
 
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text("Register avec succès !"),
+            content: Text("Register successfully !"),
             backgroundColor: Colors.black,
           ),
         );
@@ -170,7 +170,7 @@ class AuthService {
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text("Erreur de register : $e"),
+          content: Text("Register error: $e"),
           backgroundColor: Colors.red,
         ),
       );
