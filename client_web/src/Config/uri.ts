@@ -98,7 +98,6 @@ const uri: UriConfig = {
                 'identify',
                 'email',
                 'guilds',
-                'dm_channels.read'
             ]
         }
     },
