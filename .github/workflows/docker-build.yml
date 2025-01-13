@@ -1,14 +1,13 @@
 name: Docker Build
 
 on:
-  push:
-    branches:
-      - '**'
-    tags:
-      - 'v*'
-    paths-ignore:
-      - 'docs/**'
-      - '**.md'
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+    paths:
+      - 'client_web/**'
+      - 'client_mobile/**'
+      - 'server/**'
+      - 'docker-compose.yml'
 
 env:
   REGISTRY: ghcr.io

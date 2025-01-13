@@ -1,0 +1,146 @@
+name: Kubernetes Deploy
+
+on:
+  push:
+    branches:
+      - 'master'
+      - 'cma/k8s-deployment'
+    paths:
+      - 'client_web/**'
+      - 'client_mobile/**'
+      - 'server/**'
+      - 'config/**'
+      - 'docker-compose.yml'
+      - '.github/workflows/k8s-deploy.yml'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install doctl
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+      
+      # Build server images
+      - name: Build server image
+        run: |
+          echo "Building server image..."
+          docker build -t registry.digitalocean.com/area/server:$(echo $GITHUB_SHA | head -c7) -f ./server/Dockerfile ./server
+          docker tag registry.digitalocean.com/area/server:$(echo $GITHUB_SHA | head -c7) registry.digitalocean.com/area/server:latest
+          echo "Server image built successfully"
+      
+      - name: Build server action consumer image
+        run: |
+          echo "Building server action consumer image..."
+          docker build -t registry.digitalocean.com/area/server-action-consumer:$(echo $GITHUB_SHA | head -c7) -f ./server/Dockerfile_action_consumer ./server
+          docker tag registry.digitalocean.com/area/server-action-consumer:$(echo $GITHUB_SHA | head -c7) registry.digitalocean.com/area/server-action-consumer:latest
+          echo "Server action consumer image built successfully"
+      
+      - name: Build server reaction consumer image
+        run: |
+          echo "Building server reaction consumer image..."
+          docker build -t registry.digitalocean.com/area/server-reaction-consumer:$(echo $GITHUB_SHA | head -c7) -f ./server/Dockerfile_reaction_consumer ./server
+          docker tag registry.digitalocean.com/area/server-reaction-consumer:$(echo $GITHUB_SHA | head -c7) registry.digitalocean.com/area/server-reaction-consumer:latest
+          echo "Server reaction consumer image built successfully"
+
+      # Build client images
+      - name: Build client web image
+        run: |
+          echo "Building client web image..."
+          docker build -t registry.digitalocean.com/area/client-web:$(echo $GITHUB_SHA | head -c7) ./client_web
+          docker tag registry.digitalocean.com/area/client-web:$(echo $GITHUB_SHA | head -c7) registry.digitalocean.com/area/client-web:latest
+          echo "Client web image built successfully"
+      
+      - name: Build client mobile builder image
+        run: |
+          echo "Building client mobile builder image..."
+          docker build -t registry.digitalocean.com/area/client-mobile-builder:$(echo $GITHUB_SHA | head -c7) ./client_mobile
+          docker tag registry.digitalocean.com/area/client-mobile-builder:$(echo $GITHUB_SHA | head -c7) registry.digitalocean.com/area/client-mobile-builder:latest
+          echo "Client mobile builder image built successfully"
+
+      # Log in to DigitalOcean Container Registry
+      - name: Log in to DigitalOcean Container Registry
+        run: doctl registry login --expiry-seconds 1200
+      
+      # Push all images
+      - name: Push images to registry
+        run: |
+          echo "Pushing images to registry..."
+          
+          echo "Pushing server images..."
+          docker push registry.digitalocean.com/area/server:$(echo $GITHUB_SHA | head -c7)
+          docker push registry.digitalocean.com/area/server:latest
+          
+          echo "Pushing server action consumer image..."
+          docker push registry.digitalocean.com/area/server-action-consumer:$(echo $GITHUB_SHA | head -c7)
+          docker push registry.digitalocean.com/area/server-action-consumer:latest
+          
+          echo "Pushing server reaction consumer image..."
+          docker push registry.digitalocean.com/area/server-reaction-consumer:$(echo $GITHUB_SHA | head -c7)
+          docker push registry.digitalocean.com/area/server-reaction-consumer:latest
+          
+          echo "Pushing client web image..."
+          docker push registry.digitalocean.com/area/client-web:$(echo $GITHUB_SHA | head -c7)
+          docker push registry.digitalocean.com/area/client-web:latest
+          
+          echo "Pushing client mobile builder image..."
+          docker push registry.digitalocean.com/area/client-mobile-builder:$(echo $GITHUB_SHA | head -c7)
+          docker push registry.digitalocean.com/area/client-mobile-builder:latest
+          
+          echo "All images pushed successfully"
+
+      - name: Save DigitalOcean kubeconfig
+        run: |
+          echo "Saving DigitalOcean kubeconfig..."
+          doctl kubernetes cluster kubeconfig save --expiry-seconds 600 area-k8s
+          echo "Kubeconfig saved successfully"
+
+      - name: Deploy to DigitalOcean Kubernetes
+        run: |
+          echo "Deploying to Kubernetes cluster..."
+          
+          # Delete the existing job if it exists
+          echo "Cleaning up previous mobile builder job..."
+          kubectl delete job client-mobile-builder --ignore-not-found=true
+          
+          # Wait a moment to ensure cleanup
+          sleep 5
+          
+          # Apply the new configuration
+          echo "Applying new configuration..."
+          kubectl apply -f $GITHUB_WORKSPACE/config/deployment.yml
+          echo "Deployment initiated successfully"
+
+      - name: Verify deployments
+        run: |
+          echo "Starting deployment verification..."
+          
+          echo "Checking pod status..."
+          kubectl get pods
+          
+          echo "Verifying server deployment..."
+          kubectl describe deployment/server
+          kubectl rollout status deployment/server --timeout=600s
+          
+          echo "Checking server logs..."
+          SERVER_POD=$(kubectl get pods -l app=server -o jsonpath="{.items[0].metadata.name}")
+          kubectl logs $SERVER_POD
+          
+          echo "Verifying server action consumer deployment..."
+          kubectl rollout status deployment/server-action-consumer
+          
+          echo "Verifying server reaction consumer deployment..."
+          kubectl rollout status deployment/server-reaction-consumer
+          
+          echo "Verifying client web deployment..."
+          kubectl rollout status deployment/client-web
+          
+          echo "Verifying client mobile builder job..."
+          kubectl wait --for=condition=complete job/client-mobile-builder --timeout=500s
+          
+          echo "All deployments verified successfully"
+
