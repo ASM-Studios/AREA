@@ -51,8 +51,8 @@ jobs:
       - name: Build client web image
         run: |
           echo "Building client web image..."
-          docker build -t registry.digitalocean.com/area/client-web:$(echo $GITHUB_SHA | head -c7) ./client_web
-          docker tag registry.digitalocean.com/area/client-web:$(echo $GITHUB_SHA | head -c7) registry.digitalocean.com/area/client-web:latest
+          docker build -t registry.digitalocean.com/area/client-web:$SHA_TAG -f ./client_web/Dockerfile.prod ./client_web
+          docker tag registry.digitalocean.com/area/client-web:$SHA_TAG registry.digitalocean.com/area/client-web:latest
           echo "Client web image built successfully"
       
       - name: Build client mobile builder image
