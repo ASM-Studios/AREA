@@ -15,14 +15,11 @@ FROM node:20-alpine
 
 WORKDIR /app
 
-# Copy package files and public directory with assets
 COPY package*.json ./
 COPY public/ ./public/
 
-# Install dependencies for development
 RUN npm install
 
-# Install mkcert for development SSL
 RUN apk add --no-cache \
     nss-tools \
     curl \
@@ -35,9 +32,7 @@ RUN apk add --no-cache \
     && chmod +x mkcert-v*-linux-amd64 \
     && cp mkcert-v*-linux-amd64 /usr/local/bin/mkcert
 
-# Environment variables
 ENV NODE_ENV=development
 EXPOSE ${VITE_PORT}
 
-# Start development server with hot reload and SSL
 CMD ["sh", "-c", "if [ ! -f localhost-key.pem ]; then mkcert -install && mkcert localhost; fi && mv localhost*.pem /app/ && npm run dev -- --host"]

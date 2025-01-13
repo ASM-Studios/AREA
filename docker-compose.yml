@@ -163,8 +163,6 @@ services:
       - mobile_builds:/app/public:ro
     ports:
       - "${VITE_PORT}:${VITE_PORT}"
-    environment:
-      - NODE_ENV=development
     depends_on:
       server:
         condition: service_healthy

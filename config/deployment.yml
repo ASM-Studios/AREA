@@ -202,23 +202,33 @@ spec:
       - name: client-web
         image: registry.digitalocean.com/area/client-web:latest
         ports:
-        - containerPort: 8081
+        - containerPort: 80
+        - containerPort: 443
         volumeMounts:
         - name: mobile-builds
-          mountPath: /app/public
+          mountPath: /usr/share/nginx/html/public
           readOnly: true
-        envFrom:
-        - configMapRef:
-            name: area-config
-        - secretRef:
-            name: area-secrets
         resources:
           requests:
-            memory: "128Mi"
+            memory: "64Mi"
             cpu: "100m"
           limits:
-            memory: "256Mi"
+            memory: "128Mi"
             cpu: "200m"
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 443
+            scheme: HTTPS
+          initialDelaySeconds: 10
+          periodSeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 443
+            scheme: HTTPS
+          initialDelaySeconds: 5
+          periodSeconds: 10
       volumes:
       - name: mobile-builds
         persistentVolumeClaim:
@@ -245,8 +255,12 @@ spec:
   selector:
     app: client-web
   ports:
-  - port: 8081
-    targetPort: 8081
+  - name: http
+    port: 80
+    targetPort: 80
+  - name: https
+    port: 443
+    targetPort: 443
   type: LoadBalancer
 ---
 apiVersion: v1

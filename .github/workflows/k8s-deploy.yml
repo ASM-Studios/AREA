@@ -29,37 +29,37 @@ jobs:
       - name: Build server image
         run: |
           echo "Building server image..."
-          docker build -t registry.digitalocean.com/area/server:$(echo $GITHUB_SHA | head -c7) -f ./server/Dockerfile ./server
-          docker tag registry.digitalocean.com/area/server:$(echo $GITHUB_SHA | head -c7) registry.digitalocean.com/area/server:latest
+          docker build -t server:latest -f ./server/Dockerfile ./server
+          docker tag server:latest registry.digitalocean.com/area/server
           echo "Server image built successfully"
       
       - name: Build server action consumer image
         run: |
           echo "Building server action consumer image..."
-          docker build -t registry.digitalocean.com/area/server-action-consumer:$(echo $GITHUB_SHA | head -c7) -f ./server/Dockerfile_action_consumer ./server
-          docker tag registry.digitalocean.com/area/server-action-consumer:$(echo $GITHUB_SHA | head -c7) registry.digitalocean.com/area/server-action-consumer:latest
+          docker build -t server-action-consumer:latest -f ./server/Dockerfile_action_consumer ./server
+          docker tag server-action-consumer:latest registry.digitalocean.com/area/server-action-consumer
           echo "Server action consumer image built successfully"
       
       - name: Build server reaction consumer image
         run: |
           echo "Building server reaction consumer image..."
-          docker build -t registry.digitalocean.com/area/server-reaction-consumer:$(echo $GITHUB_SHA | head -c7) -f ./server/Dockerfile_reaction_consumer ./server
-          docker tag registry.digitalocean.com/area/server-reaction-consumer:$(echo $GITHUB_SHA | head -c7) registry.digitalocean.com/area/server-reaction-consumer:latest
+          docker build -t server-reaction-consumer:latest -f ./server/Dockerfile_reaction_consumer ./server
+          docker tag server-reaction-consumer:latest registry.digitalocean.com/area/server-reaction-consumer
           echo "Server reaction consumer image built successfully"
 
       # Build client images
       - name: Build client web image
         run: |
           echo "Building client web image..."
-          docker build -t registry.digitalocean.com/area/client-web:$SHA_TAG -f ./client_web/Dockerfile.prod ./client_web
-          docker tag registry.digitalocean.com/area/client-web:$SHA_TAG registry.digitalocean.com/area/client-web:latest
+          docker build -t client-web:latest -f ./client_web/Dockerfile.prod ./client_web
+          docker tag client-web:latest registry.digitalocean.com/area/client-web
           echo "Client web image built successfully"
       
       - name: Build client mobile builder image
         run: |
           echo "Building client mobile builder image..."
-          docker build -t registry.digitalocean.com/area/client-mobile-builder:$(echo $GITHUB_SHA | head -c7) ./client_mobile
-          docker tag registry.digitalocean.com/area/client-mobile-builder:$(echo $GITHUB_SHA | head -c7) registry.digitalocean.com/area/client-mobile-builder:latest
+          docker build -t client-mobile-builder:latest ./client_mobile
+          docker tag client-mobile-builder:latest registry.digitalocean.com/area/client-mobile-builder
           echo "Client mobile builder image built successfully"
 
       # Log in to DigitalOcean Container Registry
@@ -72,24 +72,19 @@ jobs:
           echo "Pushing images to registry..."
           
           echo "Pushing server images..."
-          docker push registry.digitalocean.com/area/server:$(echo $GITHUB_SHA | head -c7)
-          docker push registry.digitalocean.com/area/server:latest
+          docker push registry.digitalocean.com/area/server
           
           echo "Pushing server action consumer image..."
-          docker push registry.digitalocean.com/area/server-action-consumer:$(echo $GITHUB_SHA | head -c7)
-          docker push registry.digitalocean.com/area/server-action-consumer:latest
+          docker push registry.digitalocean.com/area/server-action-consumer
           
           echo "Pushing server reaction consumer image..."
-          docker push registry.digitalocean.com/area/server-reaction-consumer:$(echo $GITHUB_SHA | head -c7)
-          docker push registry.digitalocean.com/area/server-reaction-consumer:latest
+          docker push registry.digitalocean.com/area/server-reaction-consumer
           
           echo "Pushing client web image..."
-          docker push registry.digitalocean.com/area/client-web:$(echo $GITHUB_SHA | head -c7)
-          docker push registry.digitalocean.com/area/client-web:latest
+          docker push registry.digitalocean.com/area/client-web
           
           echo "Pushing client mobile builder image..."
-          docker push registry.digitalocean.com/area/client-mobile-builder:$(echo $GITHUB_SHA | head -c7)
-          docker push registry.digitalocean.com/area/client-mobile-builder:latest
+          docker push registry.digitalocean.com/area/client-mobile-builder
           
           echo "All images pushed successfully"
 
