@@ -10,7 +10,7 @@ on:
       - 'client_mobile/**'
       - 'server/**'
       - 'config/**'
-      - 'docker-compose.yml'
+      - 'docker-compose.prod.yml'
       - '.github/workflows/k8s-deploy.yml'
 
 jobs:
@@ -29,21 +29,21 @@ jobs:
       - name: Build server image
         run: |
           echo "Building server image..."
-          docker build -t server:latest -f ./server/Dockerfile ./server
+          docker build -t server:latest -f ./server/Dockerfile.prod ./server
           docker tag server:latest registry.digitalocean.com/area/server
           echo "Server image built successfully"
       
       - name: Build server action consumer image
         run: |
           echo "Building server action consumer image..."
-          docker build -t server-action-consumer:latest -f ./server/Dockerfile_action_consumer ./server
+          docker build -t server-action-consumer:latest -f ./server/Dockerfile_action_consumer.prod ./server
           docker tag server-action-consumer:latest registry.digitalocean.com/area/server-action-consumer
           echo "Server action consumer image built successfully"
       
       - name: Build server reaction consumer image
         run: |
           echo "Building server reaction consumer image..."
-          docker build -t server-reaction-consumer:latest -f ./server/Dockerfile_reaction_consumer ./server
+          docker build -t server-reaction-consumer:latest -f ./server/Dockerfile_reaction_consumer.prod ./server
           docker tag server-reaction-consumer:latest registry.digitalocean.com/area/server-reaction-consumer
           echo "Server reaction consumer image built successfully"
 
@@ -58,7 +58,7 @@ jobs:
       - name: Build client mobile builder image
         run: |
           echo "Building client mobile builder image..."
-          docker build -t client-mobile-builder:latest ./client_mobile
+          docker build -t client-mobile-builder:latest -f ./client_mobile/Dockerfile.prod ./client_mobile
           docker tag client-mobile-builder:latest registry.digitalocean.com/area/client-mobile-builder
           echo "Client mobile builder image built successfully"
 

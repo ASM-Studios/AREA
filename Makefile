@@ -27,7 +27,7 @@ define check_health_and_report
 	fi
 endef
 
-.PHONY: start build stop restart reset logs clean fclean tests test_client_web test_client_mobile test_server test_client_web_watch coverage_client_web help start-server start-web start-mobile start-full build-server build-web build-mobile build-full restart-server restart-web restart-mobile restart-full reset-server reset-web reset-mobile reset-full
+.PHONY: start build stop restart reset logs clean fclean tests test_client_web test_client_mobile test_server test_client_web_watch coverage_client_web help start-server start-web start-mobile start-full build-server build-web build-mobile build-full restart-server restart-web restart-mobile restart-full reset-server reset-web reset-mobile reset-full prod-build prod-up prod-down prod-logs prod-ps prod-clean prod-deploy prod-restart prod-restart-service
 
 ## Show help
 help:
@@ -173,3 +173,51 @@ reset-mobile: stop clean build-mobile start-mobile
 
 ## Reset and rebuild all services (full mode)
 reset-full: stop clean build-full start-full
+
+# Production rules
+.PHONY: prod-build prod-up prod-down prod-logs prod-ps prod-clean
+
+# Build production images
+prod-build:
+	docker compose -f docker-compose.prod.yml build
+
+# Start production environment
+prod-up:
+	docker compose -f docker-compose.prod.yml up -d
+
+# Stop production environment
+prod-down:
+	docker compose -f docker-compose.prod.yml down
+
+# Show production logs
+prod-logs:
+	docker compose -f docker-compose.prod.yml logs -f
+
+# Show running production containers
+prod-ps:
+	docker compose -f docker-compose.prod.yml ps
+
+# Clean production environment (remove containers, volumes, and images)
+prod-clean:
+	docker compose -f docker-compose.prod.yml down -v --rmi all
+
+# Full production deployment (build and start)
+prod-deploy: prod-build prod-up
+	@echo "Production environment deployed"
+	@echo "Use 'make prod-logs' to view logs"
+	@echo "Use 'make prod-ps' to view running containers"
+
+# Restart production services
+prod-restart:
+	docker compose -f docker-compose.prod.yml restart
+
+# Restart specific service in production
+# Usage: make prod-restart-service service=<service_name>
+prod-restart-service:
+	docker compose -f docker-compose.prod.yml restart $(service)
+
+
+
+
+
+
