@@ -59,18 +59,18 @@ class WorkflowContainer extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Expanded(
-                    child: Text(
-                      workflow.name.isNotEmpty ? workflow.name : "No name provided.",
-                      textAlign: TextAlign.center,
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
-                      style: GoogleFonts.fjallaOne(
-                        textStyle: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
-                            fontSize: 14),
+                      child: Text(
+                        workflow.name.isNotEmpty ? workflow.name : "No name provided.",
+                        textAlign: TextAlign.center,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                        style: GoogleFonts.fjallaOne(
+                          textStyle: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                              fontSize: 14),
+                        ),
                       ),
-                    ),
                   ),
                   _getStatusIcon(workflow.status!),
                 ],

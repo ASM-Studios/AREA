@@ -46,17 +46,55 @@ class ActionSelectionPage extends StatelessWidget {
       BuildContext context, Parameter parameter) async {
     TextEditingController controller = TextEditingController();
 
+    String? selectedValue;
+    Widget contentWidget;
+
+    if (parameter.type == "string") {
+      contentWidget = TextField(
+        controller: controller,
+        decoration: InputDecoration(
+          hintText: 'Enter value for ${parameter.name}',
+        ),
+      );
+    } else if (parameter.type == "bool") {
+      selectedValue = "true";
+      contentWidget = DropdownButton<String>(
+        value: selectedValue,
+        items: ["true", "false"].map((String value) {
+          return DropdownMenuItem<String>(
+            value: value,
+            child: Text(value),
+          );
+        }).toList(),
+        onChanged: (String? newValue) {
+          selectedValue = newValue;
+        },
+      );
+    } else if (parameter.type == "datetime") {
+      contentWidget = TextButton(
+        child: Text(selectedValue ?? 'Select a date'),
+        onPressed: () async {
+          DateTime? pickedDate = await showDatePicker(
+            context: context,
+            initialDate: DateTime.now(),
+            firstDate: DateTime(2000),
+            lastDate: DateTime(2100),
+          );
+          if (pickedDate != null) {
+            selectedValue = pickedDate.toIso8601String();
+          }
+        },
+      );
+    } else {
+      contentWidget = const Text("Unsupported parameter type");
+    }
+
     return showDialog<String>(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text('Enter value for ${parameter.name}'),
-          content: TextField(
-            controller: controller,
-            decoration: InputDecoration(
-              hintText: 'Enter value for ${parameter.name}',
-            ),
-          ),
+          content: contentWidget,
           actions: <Widget>[
             TextButton(
               onPressed: () {

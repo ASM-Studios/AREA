@@ -6,6 +6,7 @@ import 'package:area/widgets/action_button.dart';
 import 'package:area/widgets/reaction_button.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class WorkflowPage extends StatefulWidget {
   const WorkflowPage({super.key});
@@ -90,14 +91,19 @@ class _WorkflowPageState extends State<WorkflowPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-      leading: IconButton(
-        icon: const Icon(Icons.close),
-        onPressed: () {
-          Navigator.of(context).pop();
-        },
-        tooltip: "Close",
-      ),
-    ),
+          leading: IconButton(
+            icon: const Icon(Icons.close),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            tooltip: "Close",
+          ),
+          title: Text(
+            "Create workflow",
+            style: GoogleFonts.fjallaOne(
+              textStyle: const TextStyle(color: Colors.black, fontSize: 24),
+            ),
+          )),
       body: Column(
         children: [
           const SizedBox(height: 50),
