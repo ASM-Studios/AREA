@@ -2,9 +2,11 @@
   "name": "github",
   "events": [
     {
+      "short_name": "pr_created",
       "name": "A pull request is created",
       "description": "Triggered when a pull request is created",
       "type": "action",
+      "variables": ["url", "title", "created_at"],
       "parameters": [
         {
           "name": "owner",
@@ -19,9 +21,11 @@
       ]
     },
     {
+      "short_name": "repo_created",
       "name": "An user repo is created",
       "description": "Triggered when an user create a repo",
       "type": "action",
+      "variables": ["name", "full_name", "html_url", "created_at"],
       "parameters": [
         {
           "name": "user",
@@ -34,9 +38,11 @@
 
 
     {
+      "short_name": "create_repo",
       "name": "Create a repo",
       "description": "Create a repo on user profile",
       "type": "reaction",
+      "variables": ["name", "full_name", "html_url", "created_at"],
       "parameters": [
         {
           "name": "name",

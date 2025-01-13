@@ -15,29 +15,30 @@ import (
 	"log"
 	"os"
 	"os/signal"
+	"strings"
 	"syscall"
 
 	"github.com/rabbitmq/amqp091-go"
 )
 
 var actionCallbacks = map[uint]func(*models.User, map[string]string) {
-        9: github.CreateUserRepo,
+        3: github.CreateUserRepo,
 
-        11: google.AddEvent,
+        5: google.AddEvent,
 
-        28: spotify.PlayPauseTrack,
-        29: spotify.SkipPrev,
-        30: spotify.SkipNext,
-        31: spotify.AddTrack,
+        22: spotify.PlayPauseTrack,
+        23: spotify.SkipPrev,
+        24: spotify.SkipNext,
+        25: spotify.AddTrack,
 
-        33: twitch.SendMessage,
-        34: twitch.WhisperMessage,
+        27: twitch.SendMessage,
+        28: twitch.WhisperMessage,
 }
 
-func executeWorkflowEvent(workflow *models.Workflow, workflowEvent *models.WorkflowEvent) {
+func executeWorkflowEvent(payload Payload, workflowEvent *models.WorkflowEvent) {
         fmt.Printf("Executing workflow event id: %d\n", workflowEvent.ID)
         var user models.User
-        pkg.DB.Where("id = ?", workflow.UserID).First(&user)
+        pkg.DB.Where("id = ?", payload.Workflow.UserID).First(&user)
 
         var parameters []struct {
                 Name    string
@@ -55,6 +56,9 @@ func executeWorkflowEvent(workflow *models.Workflow, workflowEvent *models.Workf
 
         parametersMap := make(map[string]string)
         for _, parameter := range parameters {
+                for key, value := range payload.Args {
+                        parameter.Value = strings.ReplaceAll(parameter.Value, fmt.Sprintf("$%s", key), fmt.Sprintf("%v", value))
+                }
                 parametersMap[parameter.Name] = parameter.Value
         }
         if callback, ok := actionCallbacks[workflowEvent.EventID]; ok {
@@ -64,8 +68,8 @@ func executeWorkflowEvent(workflow *models.Workflow, workflowEvent *models.Workf
         }
 }
 
-func executeWorkflow(workflow *models.Workflow) {
-        rows, err := pkg.DB.Table("workflow_events").Joins("join events on events.id = workflow_events.event_id").Select("workflow_events.*").Where("workflow_events.workflow_id = ? AND events.type = 'reaction'", workflow.ID).Rows()
+func executeWorkflow(payload Payload) {
+        rows, err := pkg.DB.Table("workflow_events").Joins("join events on events.id = workflow_events.event_id").Select("workflow_events.*").Where("workflow_events.workflow_id = ? AND events.type = 'reaction'", payload.Workflow.ID).Rows()
         if err != nil {
                 return
         }
@@ -73,20 +77,25 @@ func executeWorkflow(workflow *models.Workflow) {
         for rows.Next() {
                 var workflowEvent models.WorkflowEvent
                 pkg.DB.ScanRows(rows, &workflowEvent)
-                executeWorkflowEvent(workflow, &workflowEvent)
+                executeWorkflowEvent(payload, &workflowEvent)
         }
 }
 
 
 
-func handlerAction(message amqp091.Delivery, queue string) {
-        var workflow models.Workflow
+type Payload struct {
+        Workflow        *models.Workflow        `json:"workflow"`
+        Args            map[string]interface{}  `json:"args"`
+}
 
-        err := json.Unmarshal(message.Body, &workflow)
+func handlerAction(message amqp091.Delivery, queue string) {
+        var payload Payload
+
+        err := json.Unmarshal(message.Body, &payload)
         if err != nil {
                 return
         }
-        executeWorkflow(&workflow)
+        executeWorkflow(payload)
 }
 
 func declareServices() {
