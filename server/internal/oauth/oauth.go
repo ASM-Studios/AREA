@@ -20,7 +20,7 @@ type ServiceApp struct {
 }
 
 var OAuthApps = map[string]ServiceApp {
-        "microsoft": {ServiceName: "microsoft", ClientId: "MICROSOFT_CLIENT_ID", ClientSecret: "",
+        "microsoft": {ServiceName: "microsoft", ClientId: "MICROSOFT_CLIENT_ID", ClientSecret: "MICROSOFT_CLIENT_SECRET_VALUE",
                 TokenURL: "https://login.microsoftonline.com/common/oauth2/v2.0/token", MeURL: "https://graph.microsoft.com/v1.0/me"},
         "github": {ServiceName: "github", ClientId: "GITHUB_CLIENT_ID", ClientSecret: "GITHUB_CLIENT_SECRET",
                 TokenURL: "https://github.com/login/oauth/access_token", MeURL: "https://api.github.com/user"},
@@ -81,7 +81,6 @@ func getServiceBearer(serviceApp ServiceApp, serviceCode ServiceCode) (*ServiceB
                 return nil, errors.New("Failed to create request")
         }
         req.Header.Set("Accept", "application/json")
-        req.Header.Set("Origin", "http://localhost")
         req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 
         resp, err := utils.SendRequest(req)
