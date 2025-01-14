@@ -102,8 +102,16 @@ test_client_mobile:
 test_server:
 	cd server && go test ./... && cd ..
 
+PACKAGES=AREA/internal/utils AREA/internal/services AREA/internal/config
+
 coverage_server:
-	cd server && mkdir coverage | go test -coverprofile=coverage/coverage.out ./... && go tool cover -html=coverage/coverage.out && cd ..
+	cd server && mkdir -p coverage && go test -coverprofile=coverage/coverage.out $(PACKAGES) && go tool cover -html=coverage/coverage.out && cd ..
+
+test_packages:
+	cd server && go test $(PACKAGES) && cd ..
+
+coverage_packages:
+
 
 ## Start server only
 start-server:
