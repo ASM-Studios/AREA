@@ -55,7 +55,7 @@ func getServiceFromType(serviceType string, service models.Service) models.Servi
 	}
 }
 
-func getServices() []models.ServiceList {
+func GetServices() []models.ServiceList {
 	var services []models.Service
 	var serviceList []models.ServiceList
 
@@ -87,19 +87,21 @@ func getServices() []models.ServiceList {
 // @Produce json
 // @Success 200 {object} map[string]interface{}
 // @Router /about.json [get]
-func About(c *gin.Context) {
-	var msg struct {
-		Client struct {
-			Host string `json:"host"`
-		} `json:"client"`
-		Server struct {
-			CurrentTime string               `json:"current_time"`
-			Services    []models.ServiceList `json:"services"`
-		} `json:"server"`
-	}
+func About(getServices func() []models.ServiceList) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		var msg struct {
+			Client struct {
+				Host string `json:"host"`
+			} `json:"client"`
+			Server struct {
+				CurrentTime string               `json:"current_time"`
+				Services    []models.ServiceList `json:"services"`
+			} `json:"server"`
+		}
 
-	msg.Client.Host = c.ClientIP()
-	msg.Server.CurrentTime = strconv.FormatInt(time.Now().Unix(), 10)
-	msg.Server.Services = getServices()
-	c.JSON(http.StatusOK, msg)
+		msg.Client.Host = c.ClientIP()
+		msg.Server.CurrentTime = strconv.FormatInt(time.Now().Unix(), 10)
+		msg.Server.Services = getServices()
+		c.JSON(http.StatusOK, msg)
+	}
 }
