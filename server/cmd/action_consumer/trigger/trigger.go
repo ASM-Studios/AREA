@@ -2,41 +2,29 @@ package trigger
 
 import (
 	"AREA/cmd/action_consumer/github"
-	"AREA/cmd/action_consumer/google"
-	"AREA/cmd/action_consumer/spotify"
+	_ "AREA/cmd/action_consumer/google"
+	_ "AREA/cmd/action_consumer/spotify"
 	"AREA/cmd/action_consumer/twitch"
-	"AREA/internal/gconsts"
 	"AREA/internal/models"
 	"AREA/internal/pkg"
-	"encoding/json"
+	"errors"
 	"fmt"
+	"reflect"
 	"time"
-
-	"github.com/rabbitmq/amqp091-go"
 )
 
-func sendWorkflow(workflow *models.Workflow) { 
-        body, err := json.Marshal(workflow)
-        if err != nil {
-                return
-        }
-        gconsts.Connection.Channel.Publish("", "reaction", false, false, amqp091.Publishing{
-                ContentType: "application/json",
-                Body:        body,
-        })
+var triggerCallbacks = map[uint]func(*models.Workflow, *models.User, map[string]string) (bool, []interface{}, error) {
+        1: github.PRCreated,
+        2: github.UserRepoCreated,
+
+        /*4: google.EmailReceived,
+
+        21: spotify.StartPlaying,*/
+
+        26: twitch.StreamStart,
 }
 
-var triggerCallbacks = map[uint]func(*models.Workflow, *models.User, map[string]string) bool {
-        7: github.PRCreated,
-        8: github.UserRepoCreated,
-
-        10: google.EmailReceived,
-
-        27: spotify.StartPlaying,
-        32: twitch.StreamStart,
-}
-
-func triggerCallback(workflow *models.Workflow, workflowEventId uint, refEventId uint, user *models.User) bool {
+func callCallback(workflow *models.Workflow, workflowEventId uint, refEventId uint, user *models.User) (bool, []interface{}, error) {
         var parameters []struct {
                 Name    string
                 Value   string
@@ -60,44 +48,74 @@ func triggerCallback(workflow *models.Workflow, workflowEventId uint, refEventId
                 return callback(workflow, user, parametersMap)
         } else {
                 fmt.Printf("Callback not found for workflow event id: %d\n", refEventId)
+                return false, nil, errors.New("Callback not implemented")
         }
-        return false
 }
 
-func detectWorkflowEvent(workflow *models.Workflow, user *models.User) bool {
-        var event struct {
-                ID              uint
-                RefEventID      uint
+type Event struct {
+        ID              uint
+        RefEventID      uint
+        RefEventName    string
+        ServiceName     string
+}
+
+func uploadPayload(event Event, index int, result interface{}) map[string]interface{} {
+        reactionArgs := make(map[string]interface{})
+        t := reflect.TypeOf(result)
+        v := reflect.ValueOf(result)
+
+        for i := 0; i < t.NumField(); i++ {
+                field := t.Field(i)
+                value := v.Field(i)
+                reactionArgs[fmt.Sprintf("%s.%s.%d", event.RefEventName, field.Tag.Get("json"), index)] = fmt.Sprintf("%v", value)
         }
+        return reactionArgs
+}
+
+func detectWorkflowEvent(workflow *models.Workflow, user *models.User) {
+        var event Event
 
         query := `SELECT
                         workflow_events.id AS id,
-                        events.id AS ref_event_id
+                        events.id AS ref_event_id,
+                        events.short_name as ref_event_name,
+                        services.name AS service_name
                 FROM workflow_events
                 JOIN events ON events.id = workflow_events.event_id
                 JOIN services ON services.id = events.service_id
                 WHERE workflow_events.workflow_id = ? AND events.type = 'action'`
 
-        rows, err := pkg.DB.Raw(query, workflow.ID) .Rows()
+        rows, err := pkg.DB.Raw(query, workflow.ID).Rows()
         if err != nil {
-                return false
+                return
         }
         defer rows.Close()
+        var i int = 0
         for rows.Next() {
                 pkg.DB.ScanRows(rows, &event)
-                if triggerCallback(workflow, event.ID, event.RefEventID, user) {
-                        return true
+                result, body, err := callCallback(workflow, event.ID, event.RefEventID, user)
+                if err != nil {
+                        continue
                 }
+                if result == false {
+                        continue
+                }
+                for _, payload := range body {
+                        reactionArgs := uploadPayload(event, i, payload)
+                        sendWorkflow(workflow, reactionArgs)
+                }
+                i += 1
         }
-        return false
+        return
 }
 
 func DetectWorkflowsEvent(workflow *models.Workflow) {
         var user models.User
-
-        pkg.DB.Where("id = ?", workflow.UserID).First(&user)
-        if detectWorkflowEvent(workflow, &user) {
-                sendWorkflow(workflow)
+        err := pkg.DB.Where("id = ?", workflow.UserID).First(&user).Error
+        if err != nil {
+                return
         }
+
+        detectWorkflowEvent(workflow, &user) 
         workflow.LastTrigger = time.Now().Unix()
 }

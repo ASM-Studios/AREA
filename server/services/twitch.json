@@ -2,9 +2,11 @@
   "name": "twitch",
   "events": [
     {
+      "short_name": "stream_started",
       "name": "Stream start",
       "description": "Detect stream start",
       "type": "action",
+      "variables": ["user_login", "user_name", "game_name", "title", "started_at"],
       "parameters": [
         {
           "name": "streamer",
@@ -17,6 +19,7 @@
 
 
     {
+      "short_name": "send_message",
       "name": "Send message",
       "description": "Send a message on a tchat",
       "type": "reaction",
@@ -34,6 +37,7 @@
       ]
     },
     {
+      "short_name": "whisper_message",
       "name": "Whisper message",
       "description": "Whisper a message",
       "type": "reaction",
