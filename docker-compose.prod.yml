@@ -14,7 +14,6 @@ services:
       timeout: 15s
       retries: 5
     restart: always
-    profiles: [ "server", "web", "mobile", "full" ]
 
   mariadb:
     image: mariadb:11.4.4
@@ -37,16 +36,14 @@ services:
     env_file:
       - .env
     restart: always
-    profiles: [ "server", "web", "mobile", "full" ]
 
   server:
     build:
       context: ./server
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.prod
     ports:
       - "8080:8080"
     volumes:
-      - ./server:/app:rw
       - ./ssl:/app/ssl:ro
     environment:
       DB_HOST: ${DB_HOST}
@@ -71,14 +68,12 @@ services:
       timeout: 10s
       retries: 5
       start_period: 40s
-    profiles: [ "server", "web", "mobile", "full" ]
 
   server_action_consumer:
     build:
       context: ./server
-      dockerfile: Dockerfile_action_consumer
+      dockerfile: Dockerfile_action_consumer.prod
     volumes:
-      - ./server:/app:rw
       - ./ssl:/app/ssl:ro
     environment:
       DB_HOST: ${DB_HOST}
@@ -98,14 +93,12 @@ services:
     env_file:
       - server/.env
     restart: always
-    profiles: [ "server", "web", "mobile", "full" ]
 
   server_reaction_consumer:
     build:
       context: ./server
-      dockerfile: Dockerfile_reaction_consumer
+      dockerfile: Dockerfile_reaction_consumer.prod
     volumes:
-      - ./server:/app:rw
       - ./ssl:/app/ssl:ro
     environment:
       DB_HOST: ${DB_HOST}
@@ -125,23 +118,15 @@ services:
     env_file:
       - server/.env
     restart: always
-    profiles: [ "server", "web", "mobile", "full" ]
 
   client_mobile:
     build:
       context: ./client_mobile
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.prod
     volumes:
       - mobile_builds:/app/build/app/outputs/flutter-apk
-      - ./client_mobile:/app
-      - ./client_mobile/.dart_tool:/app/.dart_tool
-    ports:
-      - "8082:8082"
-    networks:
-      - area_network
     env_file:
       - ./client_mobile/.env
-    profiles: [ "mobile", "full" ]
     depends_on:
       server:
         condition: service_healthy
@@ -156,75 +141,32 @@ services:
   client_web:
     build:
       context: ./client_web
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.prod
     volumes:
       - ./client_web:/app:rw
       - /app/node_modules
       - mobile_builds:/app/public:ro
     ports:
-      - "${VITE_PORT}:${VITE_PORT}"
+      - "${VITE_PORT}:8081"
     depends_on:
       server:
         condition: service_healthy
       client_mobile:
         condition: service_started
-        required: false # TODO: remove before final defense
     networks:
       - area_network
     env_file:
       - ./client_web/.env
     restart: unless-stopped
     healthcheck:
-      test: [ "CMD-SHELL", "wget --no-verbose --tries=1 --spider --no-check-certificate https://localhost:${VITE_PORT} || exit 1" ]
+      test: |
+        curl --insecure --silent --fail https://localhost:8081/ || exit 1
       interval: 30s
       timeout: 10s
       retries: 5
       start_period: 60s
-    profiles: [ "web", "full" ]
 
-  server_healthcheck:
-    image: alpine:3.20.3
-    depends_on:
-      mariadb:
-        condition: service_healthy
-      rabbitmq:
-        condition: service_healthy
-      server:
-        condition: service_healthy
-    profiles: [ "server" ]
-    restart: "no"
-
-  web_healthcheck:
-    image: alpine:3.20.3
-    depends_on:
-      mariadb:
-        condition: service_healthy
-      rabbitmq:
-        condition: service_healthy
-      server:
-        condition: service_healthy
-      client_web:
-        condition: service_healthy
-    environment:
-      - VITE_PORT=${VITE_PORT}
-    profiles: [ "web" ]
-    restart: "no"
-
-  mobile_healthcheck:
-    image: alpine:3.20.3
-    depends_on:
-      mariadb:
-        condition: service_healthy
-      rabbitmq:
-        condition: service_healthy
-      server:
-        condition: service_healthy
-      client_mobile:
-        condition: service_healthy
-    profiles: [ "mobile" ]
-    restart: "no"
-
-  full_healthcheck:
+  healthcheck:
     image: alpine:3.20.3
     depends_on:
       mariadb:
@@ -236,10 +178,9 @@ services:
       client_web:
         condition: service_healthy
       client_mobile:
-        condition: service_healthy
+        condition: service_started
     environment:
       - VITE_PORT=${VITE_PORT}
-    profiles: [ "full" ]
     restart: "no"
 
 volumes:

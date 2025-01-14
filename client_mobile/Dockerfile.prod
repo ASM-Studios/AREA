@@ -1,0 +1,17 @@
+FROM ghcr.io/cirruslabs/flutter:3.27.1 AS base
+
+WORKDIR /app
+
+COPY . .
+
+RUN git config --global --add safe.directory /sdks/flutter
+
+RUN yes | sdkmanager --licenses
+
+RUN flutter pub run flutter_launcher_icons
+
+RUN flutter pub get
+
+RUN mkdir -p /app/build/app/outputs/flutter-apk
+RUN flutter build apk --release
+RUN mv /app/build/app/outputs/flutter-apk/app-release.apk /app/build/app/outputs/flutter-apk/client.apk
