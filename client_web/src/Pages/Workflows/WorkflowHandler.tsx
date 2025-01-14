@@ -1,14 +1,31 @@
 import React from 'react';
-import { useNavigate, useLocation, useParams } from "react-router-dom";
-import { PlusOutlined, DeleteOutlined } from '@ant-design/icons';
-import { Card, Layout, Typography, Space, Spin, Result, Input, Form, Steps, Row, Col, Collapse, Button, DatePicker } from 'antd';
+import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
+import {
+    AutoComplete,
+    Button,
+    Card,
+    Col,
+    Collapse,
+    DatePicker,
+    Form,
+    Input,
+    Layout,
+    List,
+    Result,
+    Row,
+    Space,
+    Spin,
+    Steps,
+    Typography
+} from 'antd';
 import { toast } from 'react-toastify';
-import { About, Action, filteredEvents, Reaction, Parameter, Workflow, GetWorkflow } from '@/types';
+import { About, Action, filteredEvents, GetWorkflow, Parameter, Reaction, Workflow } from '@/types';
 import { instanceWithAuth, root, workflow as workflowRoute } from "@Config/backend.routes";
 import Security from "@/Components/Security";
-import { useError, useUser } from "@/Context/ContextHooks";
+import { useError, useUser} from "@/Context/ContextHooks";
 import LinkButton from "@/Components/LinkButton";
-import { setDefaultData, isWorkflowValid } from './WorkflowHandler.utils';
+import { isWorkflowValid, setDefaultData } from './WorkflowHandler.utils';
 
 const { Text } = Typography;
 const { Step } = Steps;
@@ -33,6 +50,7 @@ const WorkflowHandler: React.FC = () => {
         reaction: Reaction,
         parameters: Record<string, string>
     }>>([]);
+    const [availableVariables, setAvailableVariables] = React.useState<string[]>([]);
 
     const navigate = useNavigate();
     const location = useLocation();
@@ -41,12 +59,12 @@ const WorkflowHandler: React.FC = () => {
     const {user, translations} = useUser();
     const userHasNoServices = !user?.services || user.services.length === 0;
 
-    const MAX_ACTION = 1; // TODO: Remove when limitless events are implemented
-    const MAX_REACTION = 1;
+    const MAX_ACTION = 1;
+    const MAX_REACTION = 10;
 
     const isWorkflowValidMemo = React.useMemo(() =>
-            isWorkflowValid(formData, workflowActions, workflowReactions),
-        [formData, workflowActions, workflowReactions]);
+            isWorkflowValid(availableVariables, formData, workflowActions, workflowReactions),
+        [availableVariables, formData, workflowActions, workflowReactions]);
 
     const memoizedRenderParameterInput = React.useMemo(() =>
         (parameter: Parameter, value: string, onChange: (value: string) => void) => {
@@ -126,6 +144,13 @@ const WorkflowHandler: React.FC = () => {
                     } : null;
                 }).filter((item): item is NonNullable<typeof item> => item !== null);
 
+                const variables = validActions.flatMap((item, index) => 
+                    item.action.variables?.map(variable => 
+                        `$${item.action.shortname}.${variable}.${index}`
+                    ) || []
+                );
+                setAvailableVariables(variables);
+
                 const validReactions = reactions.map(event => {
                     const reaction = about.server.services
                         .flatMap(s => s.reactions || [])
@@ -153,15 +178,21 @@ const WorkflowHandler: React.FC = () => {
 
     const handleAddAction = (action: Action) => {
         if (workflowActions.length >= MAX_ACTION) {
-            toast.error(`You can only add up to ${MAX_ACTION} actions`);
+            toast.error(`You can only add up to ${MAX_ACTION} actions, please upgrade your plan`);
             return;
         }
+
+        const newVariables = action?.variables?.map(variable => `$${action.shortname}.${variable}.${workflowActions.length}`) || [];
+        setAvailableVariables(prevVariables => {
+            return [...prevVariables, ...newVariables];
+        });
+
         setWorkflowActions([...workflowActions, {action, parameters: {}}]);
     };
 
     const handleAddReaction = (reaction: Reaction) => {
         if (workflowReactions.length >= MAX_REACTION) {
-            toast.error(`You can only add up to ${MAX_REACTION} reactions`);
+            toast.error(`You can only add up to ${MAX_REACTION} reactions, please upgrade your plan`);
             return;
         }
         setWorkflowReactions([...workflowReactions, {reaction, parameters: {}}]);
@@ -248,46 +279,50 @@ const WorkflowHandler: React.FC = () => {
             });
     };
 
+    const renderActionCard = (action: Action) => (
+        <Card
+            key={action.id}
+            size="small"
+            className="event-item"
+            extra={<Button type="link" onClick={() => handleAddAction(action)}><PlusOutlined/></Button>}
+            style={{
+                borderRadius: '8px',
+                marginBottom: '12px',
+                backgroundColor: '#f8f9fa'
+            }}
+        >
+            <Text strong>{action.name}</Text>
+            <Text type="secondary" style={{ display: 'block' }}>{action.description}</Text>
+        </Card>
+    );
+
+    const renderReactionCard = (reaction: Reaction) => (
+        <Card
+            key={reaction.id}
+            size="small"
+            className="event-item"
+            extra={<Button type="link" onClick={() => handleAddReaction(reaction)}><PlusOutlined/></Button>}
+            style={{
+                borderRadius: '8px',
+                marginBottom: '12px',
+                backgroundColor: '#f8f9fa'
+            }}
+        >
+            <Text strong>{reaction.name}</Text>
+            <Text type="secondary" style={{ display: 'block' }}>{reaction.description}</Text>
+        </Card>
+    );
+
     const collapseActionItems = filteredActions.map((service) => ({
         key: service.service + '-actions',
         label: service.service,
-        children: service.events.map((action: Action) => (
-            <Card
-                key={action.id}
-                size="small"
-                className="event-item"
-                extra={<Button type="link" onClick={() => handleAddAction(action)}><PlusOutlined/></Button>}
-                style={{
-                    borderRadius: '8px',
-                    marginBottom: '12px',
-                    backgroundColor: '#f8f9fa'
-                }}
-            >
-                <Text strong>{action.name}</Text>
-                <Text type="secondary" style={{display: 'block'}}>{action.description}</Text>
-            </Card>
-        ))
+        children: service.events.map((event) => renderActionCard(event as Action))
     }));
 
     const collapseReactionItems = filteredReactions.map((service) => ({
         key: service.service + '-reactions',
         label: service.service,
-        children: service.events.map((reaction: Reaction) => (
-            <Card
-                key={reaction.id}
-                size="small"
-                className="event-item"
-                extra={<Button type="link" onClick={() => handleAddReaction(reaction)}><PlusOutlined/></Button>}
-                style={{
-                    borderRadius: '8px',
-                    marginBottom: '12px',
-                    backgroundColor: '#f8f9fa'
-                }}
-            >
-                <Text strong>{reaction.name}</Text>
-                <Text type="secondary" style={{display: 'block'}}>{reaction.description}</Text>
-            </Card>
-        ))
+        children: service.events.map((event) => renderReactionCard(event as Reaction))
     }));
 
     const renderNoServicesResult = () => (
@@ -379,26 +414,45 @@ const WorkflowHandler: React.FC = () => {
                                                         </Button>
                                                     }
                                                 >
-                                                    <Text strong>{item.action.name}</Text>
+                                                    <Text strong>{item?.action?.name}</Text>
                                                     {item?.action?.parameters?.map((param) => (
                                                         <Form.Item key={param.name} label={param.name}>
                                                             {(() => {
                                                                 switch (param.type) {
                                                                     case 'datetime':
                                                                         return <DatePicker
-                                                                            onChange={(date) => handleParameterChange(index, param.name, date?.toISOString() || '', true)}/>;
+                                                                            onChange={(date) => handleParameterChange(index, param.name, date?.toISOString() || '', true)} allowClear/>;
                                                                     case 'number':
                                                                         return <Input type="number"
                                                                                       value={item.parameters[param.name] || ''}
-                                                                                      onChange={(e) => handleParameterChange(index, param.name, e.target.value, true)}/>;
+                                                                                      onChange={(e) => handleParameterChange(index, param.name, e.target.value, true)}
+                                                                                      allowClear
+                                                                        />;
                                                                     default:
                                                                         return <Input
                                                                             value={item.parameters[param.name] || ''}
-                                                                            onChange={(e) => handleParameterChange(index, param.name, e.target.value, true)}/>;
+                                                                            onChange={(e) => handleParameterChange(index, param.name, e.target.value, true)}
+                                                                            allowClear
+                                                                        />;
                                                                 }
                                                             })()}
                                                         </Form.Item>
                                                     ))}
+                                                    {item?.action?.variables && (
+                                                        <Collapse>
+                                                            <Collapse.Panel header={translations?.workflow?.handler?.sections?.availableVariables} key="1">
+                                                                <List
+                                                                    size="small"
+                                                                    dataSource={item.action.variables}
+                                                                    renderItem={(variable: string) => (
+                                                                        <List.Item>
+                                                                            <Text type="secondary">{`$${item.action.shortname}.${variable}.${index}`}</Text>
+                                                                        </List.Item>
+                                                                    )}
+                                                                />
+                                                            </Collapse.Panel>
+                                                        </Collapse>
+                                                    )}
                                                 </Card>
                                             ))}
                                         </Card>
@@ -436,22 +490,34 @@ const WorkflowHandler: React.FC = () => {
                                                         </Button>
                                                     }
                                                 >
-                                                    <Text strong>{item.reaction.name}</Text>
+                                                    <Text strong>{item?.reaction?.name}</Text>
                                                     {item?.reaction?.parameters?.map((param) => (
                                                         <Form.Item key={param.name} label={param.name}>
                                                             {(() => {
                                                                 switch (param.type) {
                                                                     case 'datetime':
                                                                         return <DatePicker
-                                                                            onChange={(date) => handleParameterChange(index, param.name, date?.toISOString() || '', false)}/>;
+                                                                            onChange={(date) => handleParameterChange(index, param.name, date?.toISOString() || '', false)} allowClear/>;
                                                                     case 'number':
                                                                         return <Input type="number"
                                                                                       value={item.parameters[param.name] || ''}
-                                                                                      onChange={(e) => handleParameterChange(index, param.name, e.target.value, false)}/>;
+                                                                                      onChange={(e) => handleParameterChange(index, param.name, e.target.value, false)}
+                                                                                      allowClear
+                                                                        />;
                                                                     default:
-                                                                        return <Input
-                                                                            value={item.parameters[param.name] || ''}
-                                                                            onChange={(e) => handleParameterChange(index, param.name, e.target.value, false)}/>;
+                                                                        return (
+                                                                            <AutoComplete
+                                                                                allowClear
+                                                                                value={item.parameters[param.name] || ''}
+                                                                                onChange={(value) => {
+                                                                                    handleParameterChange(index, param.name, value, false);
+                                                                                }}
+                                                                                options={availableVariables.map(variable => ({ value: variable }))}
+                                                                                filterOption={(inputValue, option) => {
+                                                                                    return option?.value.toLowerCase().includes(inputValue.toLowerCase()) ?? false;
+                                                                                }}
+                                                                            />
+                                                                        );
                                                                 }
                                                             })()}
                                                         </Form.Item>

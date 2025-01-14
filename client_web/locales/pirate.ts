@@ -272,8 +272,9 @@ const pirate_language: Translation = {
                 }
             },
             sections: {
-                availableActions: "Available Orders",
-                availableReactions: "Available Responses",
+                availableActions: "Orders to Give",
+                availableReactions: "Responses to Expect",
+                availableVariables: "Variables to Use",
                 selectedItems: "Chosen Items",
                 when: "When",
                 then: "Then"

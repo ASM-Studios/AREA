@@ -255,6 +255,7 @@ export interface Translation {
             sections: {
                 availableActions: string;
                 availableReactions: string;
+                availableVariables: string;
                 selectedItems: string;
                 when: string;
                 then: string;

@@ -257,6 +257,7 @@ const fr_language: Translation = {
             sections: {
                 availableActions: "Actions Disponibles",
                 availableReactions: "Réactions Disponibles",
+                availableVariables: "Variables Disponibles",
                 selectedItems: "Éléments Sélectionnés",
                 when: "Quand",
                 then: "Alors"
