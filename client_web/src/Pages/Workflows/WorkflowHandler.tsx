@@ -386,15 +386,15 @@ const WorkflowHandler: React.FC = () => {
                                                                 switch (param.type) {
                                                                     case 'datetime':
                                                                         return <DatePicker
-                                                                            onChange={(date) => handleParameterChange(index, param.name, date?.toISOString() || '', false)}/>;
+                                                                            onChange={(date) => handleParameterChange(index, param.name, date?.toISOString() || '', true)}/>;
                                                                     case 'number':
                                                                         return <Input type="number"
                                                                                       value={item.parameters[param.name] || ''}
-                                                                                      onChange={(e) => handleParameterChange(index, param.name, e.target.value, false)}/>;
+                                                                                      onChange={(e) => handleParameterChange(index, param.name, e.target.value, true)}/>;
                                                                     default:
                                                                         return <Input
                                                                             value={item.parameters[param.name] || ''}
-                                                                            onChange={(e) => handleParameterChange(index, param.name, e.target.value, false)}/>;
+                                                                            onChange={(e) => handleParameterChange(index, param.name, e.target.value, true)}/>;
                                                                 }
                                                             })()}
                                                         </Form.Item>
