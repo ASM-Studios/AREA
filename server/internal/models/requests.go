@@ -1,5 +1,13 @@
 package models
 
+type A2FMethod struct {
+        Method  string  `json:"method" binding:"required"`
+}
+
+type A2FRequest struct {
+        Code    string  `json:"code" binding:"required"`
+}
+
 // LoginRequest represents the payload for user login.
 // @Description Request payload for user login.
 // @Param email body string true "User's email address"

@@ -1,12 +1,44 @@
 package middleware
 
 import (
-        "AREA/internal/models"
-        db "AREA/internal/pkg"
-        "AREA/internal/utils"
-        "github.com/gin-gonic/gin"
-        "net/http"
+	"AREA/internal/models"
+	"AREA/internal/pkg"
+	db "AREA/internal/pkg"
+	"AREA/internal/utils"
+	"net/http"
+
+	"github.com/gin-gonic/gin"
 )
+
+func A2FMiddleware() gin.HandlerFunc {
+        return func(c* gin.Context) {
+                if isA2FAuthenticated(c) {
+                        c.Next()
+                        return
+                }
+        }
+}
+
+func isA2FAuthenticated(c *gin.Context) bool {
+        user, err := pkg.GetUserFromToken(c)
+        if err != nil {
+                c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+                return false
+        }
+        if user.F2aMethod == "none" {
+                return true
+        }
+        status, err := utils.VerifyTokenA2F(c)
+        if err != nil {
+                return false
+        }
+        if status == "full" {
+                return true
+        } else {
+                c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+                return false
+        }
+}
 
 func AuthMiddleware() gin.HandlerFunc {
         return func(c *gin.Context) {

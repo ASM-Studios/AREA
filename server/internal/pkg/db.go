@@ -15,6 +15,7 @@ var DB *gorm.DB
 func migrateDB() error {
 	err := DB.AutoMigrate(
 		&models.User{},
+                &models.MailCode{},
 		&models.Workflow{},
 		&models.Service{},
 		&models.Event{},

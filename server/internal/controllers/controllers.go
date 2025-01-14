@@ -30,7 +30,7 @@ type TriggerRequest struct {
         Workflow        string  `json:"workflow"`
 }
 
-func sendWorkflow() {
+func sendWorkflows() {
         rows, err := pkg.DB.Table("workflows").Rows()
         if err != nil {
                 return
@@ -48,5 +48,5 @@ func sendWorkflow() {
 }
 
 func Trigger(c *gin.Context) {
-        sendWorkflow()
+        sendWorkflows()
 }

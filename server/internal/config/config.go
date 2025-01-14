@@ -10,12 +10,13 @@ import (
 var AppConfig *Config
 
 type Config struct {
-	AppName     string   `mapstructure:"app_name"`
-	Port        int      `mapstructure:"port"`
-	GinMode     string   `mapstructure:"gin_mode"`
-	Cors        bool     `mapstructure:"cors"`
-	CorsOrigins []string `mapstructure:"cors_origins"`
-	Swagger     bool     `mapstructure:"swagger"`
+	AppName         string          `mapstructure:"app_name"`
+	Port            int             `mapstructure:"port"`
+	GinMode         string          `mapstructure:"gin_mode"`
+        TriggerInterval int             `mapstructure:"trigger_interval"`
+	Cors            bool            `mapstructure:"cors"`
+	CorsOrigins     []string        `mapstructure:"cors_origins"`
+	Swagger         bool            `mapstructure:"swagger"`
 }
 
 func LoadConfig() {

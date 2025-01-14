@@ -2,7 +2,7 @@
   "name": "google",
   "events": [
     {
-      "short_name": "email_received",
+      "short_name": "email_received_google",
       "name": "Email Received",
       "description": "Triggered when a new email is received in your Gmail inbox.",
       "type": "action",
@@ -12,7 +12,7 @@
 
 
     {
-      "short_name": "create_event",
+      "short_name": "create_event_google",
       "name": "Add event to calendar",
       "description": "Add an event in your calendar.",
       "type": "reaction",

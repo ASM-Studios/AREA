@@ -2,7 +2,7 @@
   "name": "github",
   "events": [
     {
-      "short_name": "pr_created",
+      "short_name": "pr_created_github",
       "name": "A pull request is created",
       "description": "Triggered when a pull request is created",
       "type": "action",
@@ -21,7 +21,7 @@
       ]
     },
     {
-      "short_name": "repo_created",
+      "short_name": "repo_created_github",
       "name": "An user repo is created",
       "description": "Triggered when an user create a repo",
       "type": "action",
@@ -38,7 +38,7 @@
 
 
     {
-      "short_name": "create_repo",
+      "short_name": "create_repo_github",
       "name": "Create a repo",
       "description": "Create a repo on user profile",
       "type": "reaction",

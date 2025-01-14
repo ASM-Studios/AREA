@@ -2,7 +2,7 @@
   "name": "twitch",
   "events": [
     {
-      "short_name": "stream_started",
+      "short_name": "stream_started_twitch",
       "name": "Stream start",
       "description": "Detect stream start",
       "type": "action",
@@ -19,7 +19,7 @@
 
 
     {
-      "short_name": "send_message",
+      "short_name": "send_message_twitch",
       "name": "Send message",
       "description": "Send a message on a tchat",
       "type": "reaction",
@@ -37,7 +37,7 @@
       ]
     },
     {
-      "short_name": "whisper_message",
+      "short_name": "whisper_message_twitch",
       "name": "Whisper message",
       "description": "Whisper a message",
       "type": "reaction",

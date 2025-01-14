@@ -2,9 +2,9 @@ package trigger
 
 import (
 	"AREA/cmd/action_consumer/github"
-	_ "AREA/cmd/action_consumer/google"
+	"AREA/cmd/action_consumer/google"
 	"AREA/cmd/action_consumer/microsoft"
-	_ "AREA/cmd/action_consumer/spotify"
+	"AREA/cmd/action_consumer/spotify"
 	"AREA/cmd/action_consumer/twitch"
 	"AREA/internal/models"
 	"AREA/internal/pkg"
@@ -18,14 +18,16 @@ var triggerCallbacks = map[uint]func(*models.Workflow, *models.User, map[string]
 	1: github.PRCreated,
 	2: github.UserRepoCreated,
 
-	/*4: google.EmailReceived,*/
+	4: google.EmailReceived,
+
 	6:  microsoft.MailReceived,
 	7:  microsoft.NewChannelCreated,
 	8:  microsoft.DriveFileAdded,
 	9:  microsoft.DriveFileModified,
 	10: microsoft.CalendarEventStarted,
 	11: microsoft.CalendarEventCreated,
-	/* 21: spotify.StartPlaying,*/
+
+        21: spotify.StartPlaying,
 
 	26: twitch.StreamStart,
 }
