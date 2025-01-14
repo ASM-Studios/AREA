@@ -146,7 +146,7 @@ const WorkflowHandler: React.FC = () => {
 
                 const variables = validActions.flatMap((item, index) => 
                     item.action.variables?.map(variable => 
-                        `$${item.action.shortname}.${variable}.${index}`
+                        `$${item.action.shortname}_${variable}_${index}`
                     ) || []
                 );
                 setAvailableVariables(variables);
@@ -182,7 +182,7 @@ const WorkflowHandler: React.FC = () => {
             return;
         }
 
-        const newVariables = action?.variables?.map(variable => `$${action.shortname}.${variable}.${workflowActions.length}`) || [];
+        const newVariables = action?.variables?.map(variable => `$${action.shortname}_${variable}_${workflowActions.length}`) || [];
         setAvailableVariables(prevVariables => {
             return [...prevVariables, ...newVariables];
         });
@@ -446,7 +446,7 @@ const WorkflowHandler: React.FC = () => {
                                                                     dataSource={item.action.variables}
                                                                     renderItem={(variable: string) => (
                                                                         <List.Item>
-                                                                            <Text type="secondary">{`$${item.action.shortname}.${variable}.${index}`}</Text>
+                                                                            <Text type="secondary">{`$${item.action.shortname}_${variable}_${index}`}</Text>
                                                                         </List.Item>
                                                                     )}
                                                                 />
