@@ -6,16 +6,40 @@ import (
 	"time"
 )
 
+type DBInterface interface {
+	Ping() error
+}
+
+type RabbitMQInterface interface {
+	IsClosed() bool
+}
+
 type HealthService struct {
-	db  *sql.DB
-	rmq *amqp.Connection
+	db  DBInterface
+	rmq RabbitMQInterface
+}
+
+type SQLDBWrapper struct {
+	DB *sql.DB
+}
+
+func (s *SQLDBWrapper) Ping() error {
+	return s.DB.Ping()
+}
+
+type AMQPWrapper struct {
+	Connection *amqp.Connection
+}
+
+func (a *AMQPWrapper) IsClosed() bool {
+	return a.Connection.IsClosed()
 }
 
 type HealthStatus struct {
 	Status    string         `json:"status"`
 	Database  ComponentCheck `json:"database"`
 	RabbitMQ  ComponentCheck `json:"rabbitmq"`
-	Timestamp string        `json:"timestamp"`
+	Timestamp string         `json:"timestamp"`
 }
 
 type ComponentCheck struct {
@@ -25,14 +49,14 @@ type ComponentCheck struct {
 
 var healthService *HealthService
 
-func NewHealthService(db *sql.DB, rmq *amqp.Connection) *HealthService {
+func NewHealthService(db DBInterface, rmq RabbitMQInterface) *HealthService {
 	return &HealthService{
 		db:  db,
 		rmq: rmq,
 	}
 }
 
-func InitHealthService(db *sql.DB, rmq *amqp.Connection) {
+func InitHealthService(db DBInterface, rmq RabbitMQInterface) {
 	healthService = NewHealthService(db, rmq)
 }
 
@@ -73,4 +97,4 @@ func (h *HealthService) checkRabbitMQ() ComponentCheck {
 		}
 	}
 	return ComponentCheck{Status: "ok"}
-} 
+}

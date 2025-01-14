@@ -2,7 +2,6 @@ package utils
 
 import (
 	"AREA/internal/gconsts"
-
 	amqp "github.com/rabbitmq/amqp091-go"
 	"github.com/rs/zerolog/log"
 )
@@ -21,10 +20,16 @@ func (x RMQProducer) OnError(err error, msg string) {
 func (x RMQProducer) PublishMessage(contentType string, body []byte) {
 	conn, err := amqp.Dial(x.ConnectionString)
 	x.OnError(err, "Failed to connect to RabbitMQ")
+	if err != nil {
+		return
+	}
 	defer conn.Close()
 
 	ch, err := conn.Channel()
 	x.OnError(err, "Failed to open a channel")
+	if err != nil {
+		return
+	}
 	defer ch.Close()
 
 	q, err := ch.QueueDeclare(
@@ -38,10 +43,10 @@ func (x RMQProducer) PublishMessage(contentType string, body []byte) {
 	x.OnError(err, "Failed to declare a queue")
 
 	err = ch.Publish(
-		gconsts.ExchangeName,     // exchange
-		q.Name, // routing key
-		false,  // mandatory
-		false,  // immediate
+		gconsts.ExchangeName, // exchange
+		q.Name,               // routing key
+		false,                // mandatory
+		false,                // immediate
 		amqp.Publishing{
 			ContentType: contentType,
 			Body:        body,
