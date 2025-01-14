@@ -13,7 +13,7 @@ import (
 	"time"
 )
 
-func mockGetServices() []models.ServiceList {
+func mockGetServices(_ models.User) []models.ServiceList {
 	return []models.ServiceList{
 		{
 			Id:   1,
