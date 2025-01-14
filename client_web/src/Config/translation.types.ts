@@ -360,6 +360,7 @@ export interface Translation {
             triggerDesc: string;
             triggerAsc: string;
             cancelSort: string;
+            previous: string;
         }
     };
     security: {

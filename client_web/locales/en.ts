@@ -361,7 +361,8 @@ const en_language: Translation = {
             close: "Close",
             triggerDesc: "Descending",
             triggerAsc: "Ascending",
-            cancelSort: "Cancel Sort"
+            cancelSort: "Cancel Sort",
+            previous: "Previous",
         }
     },
     security: {

@@ -469,7 +469,7 @@ const WorkflowHandler: React.FC = () => {
                         <div>
                             {currentStep > 0 && (
                                 <Button style={{margin: '0 8px'}} onClick={() => setCurrentStep(currentStep - 1)}>
-                                    {translations?.common.table.cancel}
+                                    {translations?.common.table.previous}
                                 </Button>
                             )}
                             {currentStep < 2 && (

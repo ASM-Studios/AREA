@@ -94,6 +94,9 @@ test_client_web_watch:
 coverage_client_web:
 	cd client_web && npm run test:coverage && cd ..
 
+lint_client_web:
+	cd client_web && npm run lint && cd ..
+
 ## Run tests for client_mobile
 test_client_mobile:
 	@echo "test_client_mobile::not implemented yet"
@@ -159,9 +162,3 @@ reset-mobile: stop clean build-mobile start-mobile
 
 ## Reset and rebuild all services (full mode)
 reset-full: stop clean build-full start-full
-
-
-
-
-
-

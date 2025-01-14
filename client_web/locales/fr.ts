@@ -361,7 +361,8 @@ const fr_language: Translation = {
             triggerDesc: "Décroissant",
             triggerAsc: "Croissant",
             cancelSort: "Annuler le tri",
-            next: "Suivant"
+            next: "Suivant",
+            previous: "Précédent",
         }
     },
     security: {

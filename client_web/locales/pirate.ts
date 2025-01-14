@@ -378,7 +378,8 @@ const pirate_language: Translation = {
             triggerDesc: "Bottom to Top",
             triggerAsc: "Top to Bottom",
             cancelSort: "Stop Sortin'",
-            next: "Next Port"
+            next: "Next Port",
+            previous: "Previous Port",
         }
     },
     security: {

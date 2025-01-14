@@ -362,6 +362,7 @@ const es_language: Translation = {
             triggerAsc: "Ascendente",
             cancelSort: "Cancelar Ordenamiento",
             next: "Siguiente",
+            previous: "Anterior",
         }
     },
     security: {
