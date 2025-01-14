@@ -14,44 +14,54 @@ const setDefaultData = (
     const userServices: string[] = user?.services.map((service: any) => service.name) ?? [];
     const services =
         about?.server?.services
-          ?.map((service: Service) => service.name)
-          ?.filter((service: string) => userServices.includes(service)) ?? [];
+            ?.map((service: Service) => service.name)
+            ?.filter((service: string) => userServices.includes(service)) ?? [];
 
     if (services.length === 0) {
-      setError({ error: "API Error", errorDescription: "No services found" });
-      navigate('/error/fetch');
+        setError({ error: "API Error", errorDescription: "No services found" });
+        navigate('/error/fetch');
     }
 
     const actions: filteredEvents[] = [];
     const reactions: filteredEvents[] = [];
 
     about?.server?.services?.forEach((service: Service) => {
-      if (services.includes(service.name)) {
-        if (service.actions && service.actions.length > 0) {
-          actions.push({
-            service: service.name,
-            events: service.actions
-          });
+        if (services.includes(service.name)) {
+            if (service.actions && service.actions.length > 0) {
+                actions.push({
+                    service: service.name,
+                    events: service.actions
+                });
+            }
+            if (service.reactions && service.reactions.length > 0) {
+                reactions.push({
+                    service: service.name,
+                    events: service.reactions
+                });
+            }
         }
-        if (service.reactions && service.reactions.length > 0) {
-          reactions.push({
-            service: service.name,
-            events: service.reactions
-          });
-        }
-      }
     });
 
     if (!actions || !reactions) {
-      setError({ error: "API Error", errorDescription: "No actions or reactions found" });
-      navigate('/error/fetch');
+        setError({ error: "API Error", errorDescription: "No actions or reactions found" });
+        navigate('/error/fetch');
     }
 
     setFilteredActions(actions);
     setFilteredReactions(reactions);
 };
 
+const validateVariableInput = (input: string, availableVariables: string[]): boolean => {
+    if (input === '$') return true;
+    if (!input.startsWith('$')) return true;
+
+    return availableVariables.some(variable =>
+        variable.toLowerCase().includes(input.toLowerCase())
+    );
+};
+
 const isWorkflowValid = (
+    availableVariables: string[],
     formData: { name: string, description: string },
     workflowActions: Array<{action: Action, parameters: Record<string, string>}>,
     workflowReactions: Array<{reaction: Reaction, parameters: Record<string, string>}>
@@ -67,9 +77,11 @@ const isWorkflowValid = (
     );
 
     const reactionParamsValid = workflowReactions.every(item =>
-        !item?.reaction?.parameters?.length || item.reaction.parameters.every(param =>
-            item.parameters[param.name] && item.parameters[param.name].trim() !== ''
-        )
+            !item?.reaction?.parameters?.length || item.reaction.parameters.every(param =>
+                item.parameters[param.name] &&
+                item.parameters[param.name].trim() !== '' &&
+                item.parameters[param.name].split(' ').every(part => validateVariableInput(part, availableVariables))
+            )
     );
 
     return actionParamsValid && reactionParamsValid;
@@ -78,4 +90,5 @@ const isWorkflowValid = (
 export {
     setDefaultData,
     isWorkflowValid,
+    validateVariableInput,
 };
