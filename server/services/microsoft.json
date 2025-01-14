@@ -2,9 +2,11 @@
   "name": "microsoft",
   "events": [
     {
+      "short_name": "email_received",
       "name": "New Email Received",
       "description": "Triggered when a new email is received in your mailbox.",
       "type": "action",
+      "variables": ["sender", "subject", "body"],
       "parameters": []
     },
     {
@@ -19,8 +21,14 @@
       "type": "action",
       "parameters": [
         {
-          "name": "channel_id",
-          "description": "ID of the Teams channel.",
+          "name": "team_name",
+          "description": "Name of the teams.",
+          "type": "string",
+          "is_required": false
+        },
+        {
+          "name": "channel_name",
+          "description": "Name of the Teams channel.",
           "type": "string"
         }
       ]
@@ -31,8 +39,8 @@
       "type": "action",
       "parameters": [
         {
-          "name": "team_id",
-          "description": "ID of the Teams team.",
+          "name": "team_name",
+          "description": "Name of the teams.",
           "type": "string"
         }
       ]
@@ -55,28 +63,24 @@
       "type": "action",
       "parameters": [
         {
-          "name": "file_id",
-          "description": "ID of the updated file.",
+          "name": "folder_path",
+          "description": "Path of the folder where the file is updated.",
           "type": "string"
         }
       ]
     },
     {
-      "name": "File deleted",
-      "description": "Triggered when a file is deleted from OneDrive.",
+      "name": "Event has started",
+      "description": "Triggered when an event has started in your calendar.",
       "type": "action",
-      "parameters": [
-        {
-          "name": "file_id",
-          "description": "ID of the deleted file.",
-          "type": "string"
-        }
-      ]
+      "parameters": []
     },
     {
+      "short_name": "email_send",
       "name": "Send an Email",
       "description": "Send an email from your mailbox.",
       "type": "reaction",
+      "variables": ["sender", "subject", "body"],
       "parameters": [
         {
           "name": "recipient",
@@ -118,8 +122,13 @@
       "type": "reaction",
       "parameters": [
         {
-          "name": "channel_id",
-          "description": "ID of the Teams channel.",
+          "name": "team_name",
+          "description": "Name of the teams.",
+          "type": "string"
+        },
+        {
+          "name": "channel_name",
+          "description": "Name of the Teams channel.",
           "type": "string"
         },
         {
