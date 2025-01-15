@@ -1,37 +1,26 @@
 package microsoft
 
-import (
-    "AREA/cmd/action_consumer/vars"
-    "AREA/internal/models"
-    "AREA/internal/oauth"
-    "AREA/internal/pkg"
-    "encoding/json"
-    "fmt"
-    "io"
-    "net/http"
-    "time"
-)
-
 type TeamsMessage struct {
-    ID               string `json:"id"`
-    CreatedDateTime  string `json:"createdDateTime"`
-    FriendlyFromName string `json:"from"`
-    Body             struct {
-        Content string `json:"content"`
-    } `json:"body"`
+	ID               string `json:"id"`
+	CreatedDateTime  string `json:"createdDateTime"`
+	FriendlyFromName string `json:"from"`
+	Body             struct {
+		Content string `json:"content"`
+	} `json:"body"`
 }
 
 type TeamsMessagesResponse struct {
-    Value []TeamsMessage `json:"value"`
+	Value []TeamsMessage `json:"value"`
 }
 
+/*
 func hasNewMessagesInChannel(body []byte) bool {
     var resp TeamsMessagesResponse
     if err := json.Unmarshal(body, &resp); err != nil {
         fmt.Println("Error unmarshalling Teams messages response:", err)
         return false
     }
-    
+
     if len(resp.Value) == 0 {
         return false
     }
@@ -54,7 +43,7 @@ func getTeamsForUser(token models.Token) ([]map[string]string, error) {
     if err != nil {
         return nil, fmt.Errorf("error creating request for teams: %v", err)
     }
-    
+
     req.Header.Set("Authorization", "Bearer "+token.Token)
     req.Header.Set("Content-Type", "application/json")
     resp, err := oauth.SendRequest(&token, req)
@@ -89,7 +78,7 @@ func getChannelsForTeam(token models.Token, teamID string) ([]map[string]string,
     if err != nil {
         return nil, fmt.Errorf("error creating request for channels: %v", err)
     }
-    
+
     req.Header.Set("Authorization", "Bearer "+token.Token)
     req.Header.Set("Content-Type", "application/json")
     resp, err := oauth.SendRequest(&token, req)
@@ -122,7 +111,7 @@ func GetTeamAndChannelIDs(token models.Token, teamName, channelName string) (str
     if err != nil {
         return "", "", fmt.Errorf("error fetching teams: %v", err)
     }
-    
+
     var teamID string
     for _, team := range teams {
         fmt.Println("team:", team)
@@ -181,7 +170,7 @@ func NewMessageInChannel(user *models.User, args map[string]string) bool {
         fmt.Println("Error creating Teams message request:", err)
         return false
     }
-    
+
     req.Header.Set("Authorization", "Bearer "+token.Token)
     req.Header.Set("Content-Type", "application/json")
     resp, err := oauth.SendRequest(&token, req)
@@ -198,3 +187,4 @@ func NewMessageInChannel(user *models.User, args map[string]string) bool {
     fmt.Println("body:", string(body))
     return hasNewMessagesInChannel(body)
 }
+*/
