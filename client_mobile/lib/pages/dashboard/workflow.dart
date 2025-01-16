@@ -1,5 +1,4 @@
 import 'package:area/data/action.dart';
-import 'package:area/data/service.dart';
 import 'package:area/data/service_metadata.dart';
 import 'package:area/data/workflow.dart';
 import 'package:area/services/workflow/workflow_service.dart';
@@ -7,6 +6,9 @@ import 'package:area/widgets/action_button.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+
+const int actionLimit = 1;
+const int reactionLimit = 10;
 
 class WorkflowPage extends StatefulWidget {
   const WorkflowPage({super.key});
@@ -19,15 +21,13 @@ class _WorkflowPageState extends State<WorkflowPage> {
   List<WorkflowActionReaction> actions = [];
   List<WorkflowActionReaction> reactions = [];
 
-  void onActionSelected(
-      WorkflowActionReaction selected) {
+  void onActionSelected(WorkflowActionReaction selected) {
     setState(() {
       actions.add(selected);
     });
   }
 
-  void onReactionSelected(
-      WorkflowActionReaction selected) {
+  void onReactionSelected(WorkflowActionReaction selected) {
     setState(() {
       reactions.add(selected);
     });
@@ -104,7 +104,9 @@ class _WorkflowPageState extends State<WorkflowPage> {
         child: Column(
           children: [
             const SizedBox(height: 50),
-            for (int index = 0; index < actions.length; index++) ...[
+            for (int index = 0;
+                index < actions.length && index < actionLimit;
+                index++) ...[
               ActionButton(
                 onActionSelected: onActionSelected,
                 action: actions[index],
@@ -114,19 +116,22 @@ class _WorkflowPageState extends State<WorkflowPage> {
               ),
               const SizedBox(height: 15)
             ],
-            ActionButton(
-              onActionSelected: onActionSelected,
-              action: null,
-              serviceMetadata: null,
-              first: actions.isEmpty,
-            ),
+            if (actions.length < actionLimit)
+              ActionButton(
+                onActionSelected: onActionSelected,
+                action: null,
+                serviceMetadata: null,
+                first: actions.isEmpty,
+              ),
             const SizedBox(height: 30),
             Divider(
               color: Colors.black,
               thickness: 1,
             ),
             const SizedBox(height: 30),
-            for (int index = 0; index < reactions.length; index++) ...[
+            for (int index = 0;
+                index < reactions.length && index < reactionLimit;
+                index++) ...[
               ActionButton(
                 onActionSelected: onReactionSelected,
                 action: reactions[index],
@@ -137,13 +142,14 @@ class _WorkflowPageState extends State<WorkflowPage> {
               ),
               const SizedBox(height: 15)
             ],
-            ActionButton(
-              onActionSelected: onReactionSelected,
-              action: null,
-              serviceMetadata: null,
-              first: reactions.isEmpty,
-              isAction: false,
-            ),
+            if (reactions.length < reactionLimit)
+              ActionButton(
+                onActionSelected: onReactionSelected,
+                action: null,
+                serviceMetadata: null,
+                first: reactions.isEmpty,
+                isAction: false,
+              ),
             const SizedBox(height: 50),
             ElevatedButton(
                 onPressed: () async {

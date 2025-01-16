@@ -1,4 +1,3 @@
-import 'package:area/animations/loading/workflow/services/shimmer_services_loader.dart';
 import 'package:area/animations/loading/workflow/shimmer_workflow_loader.dart';
 import 'package:area/data/workflow.dart';
 import 'package:area/services/workflow/workflow_service.dart';
@@ -17,7 +16,7 @@ class WorkflowListPage extends StatefulWidget {
 
 class _WorkflowListPageState extends State<WorkflowListPage> {
   List<Workflow> workflows = [];
-  
+
    void removeWorkflow(int id) {
     setState(() {
       workflows.removeWhere((workflow) => workflow.id == id);

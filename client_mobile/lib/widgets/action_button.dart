@@ -23,7 +23,7 @@ class ActionButton extends StatelessWidget {
     String prefix;
 
     if (isAction) {
-      prefix = first ? "If" : "And";
+      prefix = first ? "If" : "Or";
     } else {
       prefix = first ? "Then" : "And";
     }
