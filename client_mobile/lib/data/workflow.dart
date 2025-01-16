@@ -13,6 +13,7 @@ class Workflow {
   final List<int> servicesId;
   final List<WorkflowEvent> events;
   final String? status;
+  final String? created;
   int id;
 
   Workflow({
@@ -21,6 +22,7 @@ class Workflow {
     required this.servicesId,
     required this.events,
     this.status,
+    this.created,
     this.id = 0
   });
 
@@ -41,6 +43,7 @@ class Workflow {
             'Unknown',
         description: json['description'],
         status: json['status'],
+        created: json['CreatedAt'],
         servicesId: [],
         events: []
       );

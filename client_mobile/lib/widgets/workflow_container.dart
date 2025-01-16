@@ -1,5 +1,6 @@
 import 'package:area/data/workflow.dart';
 import 'package:area/services/workflow/workflow_service.dart';
+import 'package:area/tools/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -83,7 +84,7 @@ class WorkflowContainer extends StatelessWidget {
                     workflow.description.isNotEmpty ? workflow.description : "No description provided.")
               ),
               Spacer(),
-              Align(alignment: Alignment.centerRight, child: Text("Created : January 15 2025"))
+              Align(alignment: Alignment.centerRight, child: Text("Created : ${Utils.formatDate(workflow.created!)}"))
             ],
           ),
         ),
