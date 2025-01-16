@@ -41,7 +41,7 @@ class OAuthConfigManager {
       authority: "accounts.spotify.com",
       path: "/authorize",
       clientId: dotenv.env["SPOTIFY_CLIENT_ID"] ?? "",
-      redirectUri: "com.asm_studios.area://callback",
+      redirectUri: "https://localhost:8081/auth/spotify/callback",
       pkce: false,
     ),
     "discord": OAuthServiceConfig(
