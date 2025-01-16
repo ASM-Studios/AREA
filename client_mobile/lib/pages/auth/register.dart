@@ -18,12 +18,7 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  final String callbackUrlScheme = 'com.asm_studios.area';
-  String get spotifyRedirectUrlMobile => '$callbackUrlScheme://callback';
   bool isLoggingViaOauth = false;
-
-  final String clientId = dotenv.env["VITE_SPOTIFY_CLIENT_ID"] ?? "";
-  final appAuth = const FlutterAppAuth();
 
   final _formKey = GlobalKey<FormState>();
 

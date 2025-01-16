@@ -1,3 +1,5 @@
+import 'package:area/animations/loading/workflow/services/shimmer_services_loader.dart';
+import 'package:area/animations/loading/workflow/shimmer_workflow_loader.dart';
 import 'package:area/data/action.dart';
 import 'package:area/data/service.dart';
 import 'package:area/data/service_metadata.dart';
@@ -26,7 +28,7 @@ class ServiceSelectionPage extends StatelessWidget {
         future: AboutService.getAbout(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(child: ShimmerServicesLoader());
           }
           if (snapshot.hasError) {
             return Center(

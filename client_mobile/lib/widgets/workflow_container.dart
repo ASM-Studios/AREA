@@ -81,7 +81,9 @@ class WorkflowContainer extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                     maxLines: 4,
                     workflow.description.isNotEmpty ? workflow.description : "No description provided.")
-              )
+              ),
+              Spacer(),
+              Align(alignment: Alignment.centerRight, child: Text("Created : January 15 2025"))
             ],
           ),
         ),

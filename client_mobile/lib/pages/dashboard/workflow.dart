@@ -128,8 +128,8 @@ class _WorkflowPageState extends State<WorkflowPage> {
             ),
             const SizedBox(height: 30),
             Divider(
-              color: Colors.black, // Couleur de la ligne
-              thickness: 1, // Épaisseur de la ligne
+              color: Colors.black,
+              thickness: 1,
             ),
             const SizedBox(height: 30),
             for (int index = 0; index < reactions.length; index++) ...[

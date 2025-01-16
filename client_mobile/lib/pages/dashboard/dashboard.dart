@@ -1,4 +1,3 @@
-import 'package:area/pages/dashboard/service_connection.dart';
 import 'package:area/pages/dashboard/workflow_list_page.dart';
 import 'package:flutter/material.dart';
 
@@ -14,7 +13,7 @@ class _DashboardPageState extends State<DashboardPage> {
 
   final List<Widget> _pages = [
     const WorkflowListPage(),
-    const ServiceConnectionPage(),
+    const Placeholder(),
   ];
 
   void _onTabTapped(int index) {

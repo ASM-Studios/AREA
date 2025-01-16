@@ -23,8 +23,7 @@ class OAuthConfigManager {
       scope: "user.read Mail.Read Mail.ReadWrite Mail.Send",
       authority: "login.microsoftonline.com",
       path: "/common/oauth2/v2.0/authorize",
-      redirectUri:
-          "msauth://com.asm_studios.area/lvGC0B4SWYU8tNPHg%2FbdMjQinZQ%3D",
+      redirectUri: "https://localhost:8081/auth/microsoft/callback",
       clientId: dotenv.env["MICROSOFT_CLIENT_ID"] ?? "",
       pkce: false,
     ),
