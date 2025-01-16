@@ -257,6 +257,7 @@ const fr_language: Translation = {
             sections: {
                 availableActions: "Actions Disponibles",
                 availableReactions: "Réactions Disponibles",
+                availableVariables: "Variables Disponibles",
                 selectedItems: "Éléments Sélectionnés",
                 when: "Quand",
                 then: "Alors"
@@ -361,7 +362,8 @@ const fr_language: Translation = {
             triggerDesc: "Décroissant",
             triggerAsc: "Croissant",
             cancelSort: "Annuler le tri",
-            next: "Suivant"
+            next: "Suivant",
+            previous: "Précédent",
         }
     },
     security: {

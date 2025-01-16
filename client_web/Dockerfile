@@ -10,19 +10,15 @@ RUN mkdir -p /etc/nginx/ssl && \
     -addext "subjectAltName = DNS:localhost" && \
     chmod 644 /etc/nginx/ssl/certificate.crt /etc/nginx/ssl/private.key
 
-###----------------------- Build stage -----------------------###
-FROM node:20-alpine AS builder
+###----------------------- Development stage -----------------------###
+FROM node:20-alpine
 
 WORKDIR /app
 
 COPY package*.json ./
+COPY public/ ./public/
 
 RUN npm install
-
-COPY . .
-
-###----------------------- Development stage -----------------------###
-FROM builder AS development
 
 RUN apk add --no-cache \
     nss-tools \

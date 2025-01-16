@@ -10,7 +10,7 @@
     "dev": "vite --host",
     "production": "vite --mode production",
     "build": "tsc -b && vite build",
-    "lint": "eslint .",
+    "lint": "tsc --noEmit -p tsconfig.json",
     "preview": "vite preview",
     "electron": "electron .",
     "dist": "electron-builder",

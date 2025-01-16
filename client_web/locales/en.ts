@@ -257,6 +257,7 @@ const en_language: Translation = {
             sections: {
                 availableActions: "Available Actions",
                 availableReactions: "Available Reactions",
+                availableVariables: "Available Variables",
                 selectedItems: "Selected Items",
                 when: "When",
                 then: "Then"
@@ -361,7 +362,8 @@ const en_language: Translation = {
             close: "Close",
             triggerDesc: "Descending",
             triggerAsc: "Ascending",
-            cancelSort: "Cancel Sort"
+            cancelSort: "Cancel Sort",
+            previous: "Previous",
         }
     },
     security: {

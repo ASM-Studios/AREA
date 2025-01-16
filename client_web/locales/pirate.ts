@@ -272,8 +272,9 @@ const pirate_language: Translation = {
                 }
             },
             sections: {
-                availableActions: "Available Orders",
-                availableReactions: "Available Responses",
+                availableActions: "Orders to Give",
+                availableReactions: "Responses to Expect",
+                availableVariables: "Variables to Use",
                 selectedItems: "Chosen Items",
                 when: "When",
                 then: "Then"
@@ -378,7 +379,8 @@ const pirate_language: Translation = {
             triggerDesc: "Bottom to Top",
             triggerAsc: "Top to Bottom",
             cancelSort: "Stop Sortin'",
-            next: "Next Port"
+            next: "Next Port",
+            previous: "Previous Port",
         }
     },
     security: {

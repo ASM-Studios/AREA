@@ -255,6 +255,7 @@ export interface Translation {
             sections: {
                 availableActions: string;
                 availableReactions: string;
+                availableVariables: string;
                 selectedItems: string;
                 when: string;
                 then: string;
@@ -360,6 +361,7 @@ export interface Translation {
             triggerDesc: string;
             triggerAsc: string;
             cancelSort: string;
+            previous: string;
         }
     };
     security: {

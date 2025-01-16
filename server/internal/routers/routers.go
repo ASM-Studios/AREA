@@ -15,10 +15,10 @@ import (
 )
 
 func setUpOauthGroup(router *gin.Engine) {
-        router.POST("/oauth/:service", controllers.OAuth)
-        protected := router.Group("/", middleware.AuthMiddleware())
-        protected.POST("/oauth/bind/:service", controllers.OAuthBind)
-        protected.POST("/oauth/refresh/:service", controllers.OAuthRefresh)
+	router.POST("/oauth/:service", controllers.OAuth)
+	protected := router.Group("/", middleware.AuthMiddleware())
+	protected.POST("/oauth/bind/:service", controllers.OAuthBind)
+	protected.POST("/oauth/refresh/:service", controllers.OAuthRefresh)
 }
 
 func setUpAuthGroup(router *gin.Engine) {
@@ -68,13 +68,12 @@ func SetupRouter(db *sql.DB, rmq *amqp.Connection) *gin.Engine {
 	}
 
 	router.GET("/health", controllers.SystemHealth)
-        router.GET("/trigger", controllers.Trigger)
+	router.GET("/trigger", controllers.Trigger)
 	router.HEAD("/health", controllers.SystemHealth)
 
 	public := router.Group("/")
 	{
 		public.GET("/ping", controllers.Ping)
-		public.POST("/publish/message", controllers.Message)
 	}
 	setUpAuthGroup(router)
 	setUpOauthGroup(router)
@@ -83,8 +82,7 @@ func SetupRouter(db *sql.DB, rmq *amqp.Connection) *gin.Engine {
 	protected := router.Group("/")
 	protected.Use(middleware.AuthMiddleware())
 	{
-		protected.GET("/about.json", controllers.About)
-		//protected.GET("/user", controllers.GetUser)
+		protected.GET("/about.json", controllers.About(controllers.GetServices))
 	}
 	return router
 }

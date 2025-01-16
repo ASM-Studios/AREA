@@ -157,25 +157,12 @@ services:
     build:
       context: ./client_web
       dockerfile: Dockerfile
-      args:
-        - VITE_PORT
-        - VITE_ENDPOINT
-        - VITE_GOOGLE_CLIENT_ID
-        - VITE_GOOGLE_CLIENT_SECRET
-        - VITE_MICROSOFT_CLIENT_ID
-        - VITE_LINKEDIN_CLIENT_ID
-        - VITE_LINKEDIN_CLIENT_SECRET
-        - VITE_SPOTIFY_CLIENT_ID
-        - VITE_SPOTIFY_CLIENT_SECRET
-        - API_URL
-        - WEB_CLIENT_URL
-        - MOBILE_CLIENT_URL
-        - GITHUB_CLIENT_ID
-        - GITHUB_CLIENT_SECRET
+    volumes:
+      - ./client_web:/app:rw
+      - /app/node_modules
+      - mobile_builds:/app/public:ro
     ports:
       - "${VITE_PORT}:${VITE_PORT}"
-    volumes:
-      - mobile_builds:/app/public:ro
     depends_on:
       server:
         condition: service_healthy

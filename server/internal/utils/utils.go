@@ -21,7 +21,7 @@ func init() {
 	viper.AutomaticEnv()
 }
 
-func GetEnvVar(name string) string {
+var GetEnvVar = func(name string) string {
 	if !viper.IsSet(name) {
 		log.Debug().Msgf("Environment variable %s is not set", name)
 		return ""
@@ -31,43 +31,43 @@ func GetEnvVar(name string) string {
 }
 
 func SendRequest(request *http.Request) (*http.Response, error) {
-        resp, err := http.DefaultClient.Do(request)
+	resp, err := http.DefaultClient.Do(request)
 
-        if err != nil {
-                return nil, err
-        }
-        return resp, nil
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
 }
 
 func ExtractBody[T any](response *http.Response) (*T, error) {
-        b, err := io.ReadAll(response.Body)
-        if err != nil {
-                return nil, err
-        }
-        var body T
-        err = json.Unmarshal([]byte(b), &body)
-        if err != nil {
-                return nil, err
-        }
-        return &body, err
+	b, err := io.ReadAll(response.Body)
+	if err != nil {
+		return nil, err
+	}
+	var body T
+	err = json.Unmarshal([]byte(b), &body)
+	if err != nil {
+		return nil, err
+	}
+	return &body, err
 }
 
 // Deprecated: Use oauth.SendRequest and utils.ExtractBody instead
 func SendRequestBody[T any](request *http.Request) (*http.Response, *T, error) {
-        var client http.Client
-        var body T
+	var client http.Client
+	var body T
 
-        resp, err := client.Do(request)
-        if err != nil {
-                return nil, nil, err
-        }
+	resp, err := client.Do(request)
+	if err != nil {
+		return nil, nil, err
+	}
 
-        b, err := io.ReadAll(resp.Body)
-        if err != nil {
-                return nil, nil, err
-        }
+	b, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return nil, nil, err
+	}
 
-        defer resp.Body.Close()
-        err = json.Unmarshal([]byte(b), &body)
-        return resp, &body, err
+	defer resp.Body.Close()
+	err = json.Unmarshal([]byte(b), &body)
+	return resp, &body, err
 }

@@ -257,6 +257,7 @@ const es_language: Translation = {
             sections: {
                 availableActions: "Acciones Disponibles",
                 availableReactions: "Reacciones Disponibles",
+                availableVariables: "Variables Disponibles",
                 selectedItems: "Elementos Seleccionados",
                 when: "Cuando",
                 then: "Entonces"
@@ -362,6 +363,7 @@ const es_language: Translation = {
             triggerAsc: "Ascendente",
             cancelSort: "Cancelar Ordenamiento",
             next: "Siguiente",
+            previous: "Anterior",
         }
     },
     security: {

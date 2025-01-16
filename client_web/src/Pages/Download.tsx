@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Result, Card, Typography } from 'antd';
+import { Result, Card, Typography, Progress } from 'antd';
 import LoadingDots from '@/Components/LoadingDots/LoadingDots';
 import { useUser } from '@/Context/ContextHooks';
 import LinkButton from "@/Components/LinkButton";
@@ -11,7 +11,10 @@ const Download: React.FC = () => {
     const navigate = useNavigate();
     const { translations, user } = useUser();
     const [isDownloading, setIsDownloading] = useState(false);
+    const [progress, setProgress] = useState(0);
     const intervalRef = React.useRef<NodeJS.Timeout>();
+    const progressRef = React.useRef<NodeJS.Timeout>();
+    const [stoppingPoint] = useState(Math.round(78 + Math.random() * 4));
 
     const checkAndDownloadApk = () => {
         if (isDownloading) {
@@ -22,8 +25,12 @@ const Download: React.FC = () => {
             .then(response => {
                 if (response.ok) {
                     setIsDownloading(true);
+                    setProgress(100);
                     if (intervalRef.current) {
                         clearInterval(intervalRef.current);
+                    }
+                    if (progressRef.current) {
+                        clearInterval(progressRef.current);
                     }
 
                     const link = document.createElement('a');
@@ -33,10 +40,10 @@ const Download: React.FC = () => {
                     document.body.appendChild(link);
                     link.click();
                     document.body.removeChild(link);
-                    
+
                     setTimeout(() => {
                         navigate(user ? '/dashboard' : '/');
-                    }, 1000);
+                    }, 2000);
                 }
             })
             .catch(error => {
@@ -46,14 +53,24 @@ const Download: React.FC = () => {
 
     useEffect(() => {
         intervalRef.current = setInterval(checkAndDownloadApk, 5000);
-        checkAndDownloadApk();
+        
+        progressRef.current = setInterval(() => {
+            setProgress(prev => {
+                if (prev < stoppingPoint) {
+                    const baseIncrement = (stoppingPoint - prev) / 20;
+                    const randomFactor = 0.5 + Math.random() * 1.5;
+                    const increment = Math.max(0.2, baseIncrement * randomFactor);
+                    return Math.round(Math.min(stoppingPoint, prev + increment));
+                }
+                return prev;
+            });
+        }, 100);
 
         return () => {
-            if (intervalRef.current) {
-                clearInterval(intervalRef.current);
-            }
+            if (intervalRef.current) clearInterval(intervalRef.current);
+            if (progressRef.current) clearInterval(progressRef.current);
         };
-    }, []);
+    }, [stoppingPoint]);
 
     return (
         <main
@@ -78,7 +95,12 @@ const Download: React.FC = () => {
                     }
                     subTitle={translations?.download?.description}
                     extra={
-                        <LinkButton text={translations?.errors?.api?.backHome} goBack/>
+                        <>
+                            <Progress type={"circle"} percent={progress} status={isDownloading ? 'success' : 'active'} />
+                            <div style={{ marginTop: '16px' }}>
+                                <LinkButton text={translations?.errors?.api?.backHome} goBack/>
+                            </div>
+                        </>
                     }
                     style={{zIndex: 1, position: 'relative'}}
                 />

@@ -1,14 +1,13 @@
 name: Docker Build
 
 on:
-  push:
-    branches:
-      - '**'
-    tags:
-      - 'v*'
-    paths-ignore:
-      - 'docs/**'
-      - '**.md'
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+    paths:
+      - 'client_web/**'
+      - 'client_mobile/**'
+      - 'server/**'
+      - 'docker-compose.yml'
 
 env:
   REGISTRY: ghcr.io
@@ -42,8 +41,43 @@ jobs:
         working-directory: ./client_web
         run: npm run test
 
+  test-server:
+    if: ${{ !contains(github.event.head_commit.message, 'WIP') && !contains(github.event.head_commit.message, 'wip') }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.23'
+          cache: true
+
+      - name: Install dependencies
+        working-directory: ./server
+        run: go mod tidy
+
+      - name: Run tests
+        working-directory: ./server
+        env:
+          TARGET_PACKAGES: "AREA/internal/utils AREA/internal/services AREA/internal/config"
+        run: go test -v -coverprofile=coverage.out $TARGET_PACKAGES
+
+      - name: Display test coverage
+        working-directory: ./server
+        run: go tool cover -func=coverage.out
+
+      - name: Upload test coverage report
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: server-coverage-report
+          path: ./server/coverage.out
+
+
   build:
-    needs: test-client-web
+    needs: [ test-client-web, test-server ]
     if: ${{ !contains(github.event.head_commit.message, 'WIP') && !contains(github.event.head_commit.message, 'wip') }}
     runs-on: ubuntu-latest
     environment: docker-build

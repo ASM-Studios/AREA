@@ -7,8 +7,10 @@ export type Parameter = {
 export type Action = {
     id: number;
     name: string;
+    shortname: string;
     description: string;
     parameters: Parameter[];
+    variables: string[];
 };
 
 export type Reaction = {

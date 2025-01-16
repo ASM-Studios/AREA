@@ -55,11 +55,18 @@ func getServiceFromType(serviceType string, service models.Service) models.Servi
 	}
 }
 
-func getServices() []models.ServiceList {
-	var services []models.Service
+func GetServices(user models.User) []models.ServiceList {
 	var serviceList []models.ServiceList
 
-	if err := pkg.DB.Preload("Events").Find(&services).Error; err != nil {
+	var services []models.Service
+	if err := pkg.DB.
+		Preload("Events").
+		Where("id IN (?)",
+			pkg.DB.Model(&models.Token{}).
+				Select("service_id").
+				Where("user_id = ?", user.ID),
+		).
+		Find(&services).Error; err != nil {
 		log.Error().Err(err).Msg("Failed to load services")
 		return nil
 	}
@@ -87,19 +94,26 @@ func getServices() []models.ServiceList {
 // @Produce json
 // @Success 200 {object} map[string]interface{}
 // @Router /about.json [get]
-func About(c *gin.Context) {
-	var msg struct {
-		Client struct {
-			Host string `json:"host"`
-		} `json:"client"`
-		Server struct {
-			CurrentTime string               `json:"current_time"`
-			Services    []models.ServiceList `json:"services"`
-		} `json:"server"`
-	}
+func About(getServices func(models.User) []models.ServiceList) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		user, err := pkg.GetUserFromToken(c)
+		if err != nil {
+			c.JSON(401, gin.H{"error": "Unauthorized"})
+			return
+		}
+		var msg struct {
+			Client struct {
+				Host string `json:"host"`
+			} `json:"client"`
+			Server struct {
+				CurrentTime string               `json:"current_time"`
+				Services    []models.ServiceList `json:"services"`
+			} `json:"server"`
+		}
 
-	msg.Client.Host = c.ClientIP()
-	msg.Server.CurrentTime = strconv.FormatInt(time.Now().Unix(), 10)
-	msg.Server.Services = getServices()
-	c.JSON(http.StatusOK, msg)
+		msg.Client.Host = c.ClientIP()
+		msg.Server.CurrentTime = strconv.FormatInt(time.Now().Unix(), 10)
+		msg.Server.Services = getServices(user)
+		c.JSON(http.StatusOK, msg)
+	}
 }

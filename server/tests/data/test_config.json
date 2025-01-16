@@ -1,0 +1,8 @@
+{
+  "app_name": "TestApp",
+  "port": 9000,
+  "gin_mode": "release",
+  "cors": false,
+  "cors_origins": ["http://example.com"],
+  "swagger": false
+}

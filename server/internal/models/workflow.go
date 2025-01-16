@@ -32,7 +32,7 @@ type Workflow struct {
 	Description     string          `json:"description"`
 	Status          WorkflowStatus  `gorm:"type:enum('pending', 'processed', 'failed')" json:"status"`
 	IsActive        bool            `json:"is_active"`
-	WorkflowEvents  []WorkflowEvent`gorm:"constraint:OnDelete:CASCADE;" json:"events"`
+	WorkflowEvents  []WorkflowEvent `gorm:"constraint:OnDelete:CASCADE;" json:"events"`
         LastTrigger     int64
 }
 
