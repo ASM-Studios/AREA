@@ -17,7 +17,7 @@ class WorkflowListPage extends StatefulWidget {
 
 class _WorkflowListPageState extends State<WorkflowListPage> {
   List<Workflow> workflows = [];
-
+  
    void removeWorkflow(int id) {
     setState(() {
       workflows.removeWhere((workflow) => workflow.id == id);

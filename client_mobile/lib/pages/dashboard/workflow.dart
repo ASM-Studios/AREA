@@ -20,22 +20,16 @@ class _WorkflowPageState extends State<WorkflowPage> {
   List<WorkflowActionReaction> reactions = [];
 
   void onActionSelected(
-      WorkflowActionReaction selected, WorkflowService service) {
+      WorkflowActionReaction selected) {
     setState(() {
-      int idxSelected = actions.length;
       actions.add(selected);
-      actions[idxSelected].serviceName = service.name;
-      actions[idxSelected].serviceId = service.id;
     });
   }
 
   void onReactionSelected(
-      WorkflowActionReaction selected, WorkflowService service) {
+      WorkflowActionReaction selected) {
     setState(() {
-      int idxSelected = reactions.length;
       reactions.add(selected);
-      reactions[idxSelected].serviceName = service.name;
-      reactions[idxSelected].serviceId = service.id;
     });
   }
 

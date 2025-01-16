@@ -13,7 +13,7 @@ class ActionButton extends StatelessWidget {
       this.first = true,
       this.isAction = true});
 
-  final Function(WorkflowActionReaction, WorkflowService) onActionSelected;
+  final Function(WorkflowActionReaction) onActionSelected;
   final ServiceMetadata? serviceMetadata;
   final WorkflowActionReaction? action;
   final bool first;

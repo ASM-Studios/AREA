@@ -1,5 +1,4 @@
 import 'package:area/animations/loading/workflow/services/shimmer_services_loader.dart';
-import 'package:area/animations/loading/workflow/shimmer_workflow_loader.dart';
 import 'package:area/data/action.dart';
 import 'package:area/data/service.dart';
 import 'package:area/data/service_metadata.dart';
@@ -9,7 +8,7 @@ import 'package:area/services/user/user_service.dart';
 import 'package:flutter/material.dart';
 
 class ServiceSelectionPage extends StatelessWidget {
-  final Function(WorkflowActionReaction, WorkflowService) onActionSelected;
+  final Function(WorkflowActionReaction) onActionSelected;
   final bool isAction;
 
   const ServiceSelectionPage({

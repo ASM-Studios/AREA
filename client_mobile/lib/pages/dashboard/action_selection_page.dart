@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 
 class ActionSelectionPage extends StatelessWidget {
   final WorkflowService service;
-  final Function(WorkflowActionReaction, WorkflowService) onActionSelected;
+  final Function(WorkflowActionReaction) onActionSelected;
   final List<WorkflowActionReaction> actions;
 
   const ActionSelectionPage(
@@ -31,7 +31,7 @@ class ActionSelectionPage extends StatelessWidget {
                     await _showParameterDialog(context, param);
                 param.value = updatedValue;
               }
-              onActionSelected(actions[index], service);
+              onActionSelected(actions[index]);
               Navigator.of(context).popUntil((route) {
                 return route.settings.name == "workflowCreation";
               });
