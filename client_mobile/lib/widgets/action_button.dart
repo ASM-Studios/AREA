@@ -4,30 +4,42 @@ import 'package:area/data/service_metadata.dart';
 import 'package:area/pages/dashboard/service_selection.dart';
 import 'package:flutter/material.dart';
 
-class ActionButton extends StatefulWidget {
-  const ActionButton({super.key, required this.onActionSelected, this.action});
+class ActionButton extends StatelessWidget {
+  const ActionButton(
+      {super.key,
+      required this.onActionSelected,
+      this.serviceMetadata,
+      this.action,
+      this.first = true,
+      this.isAction = true});
 
   final Function(WorkflowActionReaction, WorkflowService) onActionSelected;
+  final ServiceMetadata? serviceMetadata;
   final WorkflowActionReaction? action;
+  final bool first;
+  final bool isAction;
 
-  @override
-  State<ActionButton> createState() => _ActionButtonState();
-}
+  String getButtonText() {
+    String prefix;
 
-class _ActionButtonState extends State<ActionButton> {
-  ServiceMetadata? serviceMetadata;
+    if (isAction) {
+      prefix = first ? "If" : "And";
+    } else {
+      prefix = first ? "Then" : "And";
+    }
+
+    return action == null
+        ? "$prefix ${first ? 'This' : '...'}"
+        : "$prefix ${action!.name}";
+  }
 
   @override
   Widget build(BuildContext context) {
-    if (widget.action != null) {
-      serviceMetadata =
-          ServiceMetadata.getServiceByName(widget.action!.serviceName!);
-    }
     return Container(
       padding: const EdgeInsets.all(20),
       margin: const EdgeInsets.fromLTRB(20, 0, 20, 0),
       width: MediaQuery.of(context).size.width,
-      height: 110,
+      height: 90,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
         boxShadow: const [
@@ -43,20 +55,23 @@ class _ActionButtonState extends State<ActionButton> {
         children: [
           const SizedBox(width: 10),
           Text(
-            widget.action == null ? "If  This" : "If ${widget.action!.name}",
+            getButtonText(),
             style: TextStyle(
-              fontSize: widget.action == null ? 48 : 16,
-              color: serviceMetadata != null ? (serviceMetadata!.color == Colors.white ? Colors.black : Colors.white) : Colors.white
-            ),
+                fontSize: action == null ? 36 : 16,
+                color: serviceMetadata != null
+                    ? (serviceMetadata!.color == Colors.white
+                        ? Colors.black
+                        : Colors.white)
+                    : Colors.white),
           ),
-          if (widget.action == null) const Spacer(),
-          if (widget.action == null)
+          if (action == null) const Spacer(),
+          if (action == null)
             ElevatedButton(
               onPressed: () {
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (ctx) => ServiceSelectionPage(
-                        isAction: true,
-                        onActionSelected: widget.onActionSelected)));
+                        isAction: isAction,
+                        onActionSelected: onActionSelected)));
               },
               child: const Text(
                 "Add",
@@ -65,8 +80,8 @@ class _ActionButtonState extends State<ActionButton> {
                 ),
               ),
             ),
-          if (widget.action != null) const Spacer(),
-          if (widget.action != null)
+          if (action != null) const Spacer(),
+          if (action != null)
             Image.asset(serviceMetadata!.imagePath, width: 50, height: 50)
         ],
       ),

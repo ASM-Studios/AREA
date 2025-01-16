@@ -80,10 +80,8 @@ class ActionSelectionPage extends StatelessWidget {
             firstDate: DateTime(2000),
             lastDate: DateTime(2100),
           );
-          if (pickedDate != null) {
-            selectedValue = pickedDate.toIso8601String();
-          }
-        },
+          selectedValue = pickedDate!.toIso8601String();
+                },
       );
     } else {
       contentWidget = const Text("Unsupported parameter type");
