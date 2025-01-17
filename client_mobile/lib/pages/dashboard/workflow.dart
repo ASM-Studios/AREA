@@ -166,9 +166,6 @@ class _WorkflowPageState extends State<WorkflowPage> {
                     if (workflowDetails != null) {
                       final name = workflowDetails["name"];
                       final description = workflowDetails["description"];
-                      print("Creating workflow with:");
-                      print("Name: $name");
-                      print("Description: $description");
                       List<int> servicesId = [];
                       for (WorkflowActionReaction action in actions) {
                         servicesId.add(action.serviceId!);

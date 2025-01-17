@@ -8,12 +8,10 @@ class ProfileButton extends StatelessWidget {
     return PopupMenuButton<String>(
       onSelected: (value) async {
         if (value == 'parametres') {
-          print('Paramètres sélectionnés');
           context.push("/profile");
         } else if (value == 'deconnexion') {
           bool hasLogout = await AuthService.logout();
           if (hasLogout) context.pushReplacement("/login");
-          print('User logging out');
         }
       },
       itemBuilder: (BuildContext context) {

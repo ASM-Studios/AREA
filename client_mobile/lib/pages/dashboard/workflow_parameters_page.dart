@@ -84,7 +84,15 @@ class _WorkflowParametersPageState extends State<WorkflowParametersPage> {
           },
         );
       default:
-        return const Text("Unsupported parameter type");
+        return TextField(
+          decoration: InputDecoration(
+            labelText: parameter.name,
+            border: const OutlineInputBorder(),
+          ),
+          onChanged: (value) {
+            _parameterValues[parameter.name] = value;
+          },
+        );
     }
   }
 

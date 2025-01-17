@@ -45,10 +45,6 @@ class _ActionSelectionPageState extends State<ActionSelectionPage> {
                         builder: (ctx) => WorkflowParametersPage(
                             action: widget.actions[index])));
               }
-              for (Parameter parameter in widget.actions[index].parameters) {
-                print(
-                    "paramètre : ${parameter.name} avec valeur : ${parameter.value}");
-              }
               widget.onActionSelected(widget.actions[index]);
               Navigator.of(context).popUntil((route) {
                 return route.settings.name == "workflowCreation";
