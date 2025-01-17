@@ -6,6 +6,7 @@ import 'package:area/pages/dashboard/action_selection_page.dart';
 import 'package:area/services/about/about_service.dart';
 import 'package:area/services/user/user_service.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class ServiceSelectionPage extends StatelessWidget {
   final Function(WorkflowActionReaction) onActionSelected;
@@ -21,7 +22,12 @@ class ServiceSelectionPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Select a Service'),
+        title: Text(
+          'Select a Service',
+          style: GoogleFonts.fjallaOne(
+            textStyle: const TextStyle(color: Colors.black, fontSize: 24),
+          ),
+        ),
       ),
       body: FutureBuilder<List<WorkflowService>>(
         future: AboutService.getAbout(),

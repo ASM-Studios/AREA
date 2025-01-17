@@ -1,37 +1,55 @@
 import 'package:area/data/action.dart';
 import 'package:area/data/parameter.dart';
 import 'package:area/data/service.dart';
+import 'package:area/pages/dashboard/workflow_parameters_page.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
-class ActionSelectionPage extends StatelessWidget {
+class ActionSelectionPage extends StatefulWidget {
   final WorkflowService service;
   final Function(WorkflowActionReaction) onActionSelected;
   final List<WorkflowActionReaction> actions;
 
-  const ActionSelectionPage(
-      {super.key,
-      required this.service,
-      required this.onActionSelected,
-      required this.actions});
+  const ActionSelectionPage({
+    super.key,
+    required this.service,
+    required this.onActionSelected,
+    required this.actions,
+  });
 
+  @override
+  State<ActionSelectionPage> createState() => _ActionSelectionPageState();
+}
+
+class _ActionSelectionPageState extends State<ActionSelectionPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Select Action/Reaction'),
+        title: Text(
+          'Select Action/Reaction',
+          style: GoogleFonts.fjallaOne(
+            textStyle: const TextStyle(color: Colors.black, fontSize: 24),
+          ),
+        ),
       ),
       body: ListView.builder(
-        itemCount: actions.length,
+        itemCount: widget.actions.length,
         itemBuilder: (context, index) {
           return ListTile(
-            title: Text(actions[index].name),
+            title: Text(widget.actions[index].name),
             onTap: () async {
-              for (var param in actions[index].parameters) {
-                String? updatedValue =
-                    await _showParameterDialog(context, param);
-                param.value = updatedValue;
+              if (widget.actions[index].parameters.isNotEmpty) {
+                widget.actions[index] = await Navigator.of(context).push(
+                    MaterialPageRoute(
+                        builder: (ctx) => WorkflowParametersPage(
+                            action: widget.actions[index])));
               }
-              onActionSelected(actions[index]);
+              for (Parameter parameter in widget.actions[index].parameters) {
+                print(
+                    "paramètre : ${parameter.name} avec valeur : ${parameter.value}");
+              }
+              widget.onActionSelected(widget.actions[index]);
               Navigator.of(context).popUntil((route) {
                 return route.settings.name == "workflowCreation";
               });
@@ -39,70 +57,6 @@ class ActionSelectionPage extends StatelessWidget {
           );
         },
       ),
-    );
-  }
-
-  Future<String?> _showParameterDialog(
-      BuildContext context, Parameter parameter) async {
-    TextEditingController controller = TextEditingController();
-
-    String? selectedValue;
-    Widget contentWidget;
-
-    if (parameter.type == "string") {
-      contentWidget = TextField(
-        controller: controller,
-        decoration: InputDecoration(
-          hintText: 'Enter value for ${parameter.name}',
-        ),
-      );
-    } else if (parameter.type == "bool") {
-      selectedValue = "true";
-      contentWidget = DropdownButton<String>(
-        value: selectedValue,
-        items: ["true", "false"].map((String value) {
-          return DropdownMenuItem<String>(
-            value: value,
-            child: Text(value),
-          );
-        }).toList(),
-        onChanged: (String? newValue) {
-          selectedValue = newValue;
-        },
-      );
-    } else if (parameter.type == "datetime") {
-      contentWidget = TextButton(
-        child: Text(selectedValue ?? 'Select a date'),
-        onPressed: () async {
-          DateTime? pickedDate = await showDatePicker(
-            context: context,
-            initialDate: DateTime.now(),
-            firstDate: DateTime(2000),
-            lastDate: DateTime(2100),
-          );
-          selectedValue = pickedDate!.toIso8601String();
-                },
-      );
-    } else {
-      contentWidget = const Text("Unsupported parameter type");
-    }
-
-    return showDialog<String>(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Enter value for ${parameter.name}'),
-          content: contentWidget,
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context, controller.text);
-              },
-              child: const Text('OK'),
-            ),
-          ],
-        );
-      },
     );
   }
 }
