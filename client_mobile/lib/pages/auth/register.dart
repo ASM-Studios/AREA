@@ -8,9 +8,7 @@ import 'package:area/widgets/oauth_buttons.dart';
 import 'package:area/widgets/password_form_field.dart';
 import 'package:area/widgets/simple_text.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_appauth/flutter_appauth.dart';
 import 'package:go_router/go_router.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class RegisterPage extends StatefulWidget {
   @override

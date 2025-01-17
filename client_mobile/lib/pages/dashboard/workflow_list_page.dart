@@ -64,7 +64,7 @@ class _WorkflowListPageState extends State<WorkflowListPage> {
                             crossAxisCount: 1,
                             crossAxisSpacing: 8.0,
                             mainAxisSpacing: 8.0,
-                            childAspectRatio: 2.0,
+                            childAspectRatio: 3.5,
                           ),
                           itemBuilder: (ctx, index) => WorkflowContainer(
                             workflow: workflows[index],
