@@ -61,7 +61,7 @@ func createMailRequest(args map[string]string) []byte {
 func SendEmail(user *models.User, args map[string]string) {
 	var token models.Token
 	pkg.DB.Where("user_id = ? AND service_id = ?", user.ID, serviceId).First(&token)
-
+	log.Print("args: ", args)
 	body := createMailRequest(args)
 
 	reqURL := "https://graph.microsoft.com/v1.0/me/sendMail"

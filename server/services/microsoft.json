@@ -80,7 +80,6 @@
       "name": "Send an Email",
       "description": "Send an email from your mailbox.",
       "type": "reaction",
-      "variables": ["sender", "subject", "body"],
       "parameters": [
         {
           "name": "recipient",

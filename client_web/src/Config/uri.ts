@@ -38,14 +38,13 @@ const uri: UriConfig = {
             clientSecret: "", // Not expected to be provided
             redirectUri: `${window.location.origin}/auth/microsoft/callback`,
             scope: [
-                'user.read',
+                'User.read',
                 'Mail.Read',
                 'Mail.ReadWrite',
                 'Mail.Send',
                 'Calendars.ReadWrite',
                 'Team.ReadBasic.All',
                 'Channel.ReadBasic.All',
-                'ChannelMessage.Read.All',
                 'ChannelMessage.Send',
                 'Chat.ReadWrite',
             ]
