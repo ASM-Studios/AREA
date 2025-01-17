@@ -1,3 +1,4 @@
+import 'package:area/pages/settings/settings_page.dart';
 import 'package:area/services/login/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -7,9 +8,12 @@ class ProfileButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return PopupMenuButton<String>(
       onSelected: (value) async {
-        if (value == 'parametres') {
+        if (value == 'profile') {
           context.push("/profile");
-        } else if (value == 'deconnexion') {
+        } else if (value == 'settings') {
+          Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => SettingsPage()));
+        } 
+        else if (value == 'disconnect') {
           bool hasLogout = await AuthService.logout();
           if (hasLogout) context.pushReplacement("/login");
         }
@@ -17,17 +21,20 @@ class ProfileButton extends StatelessWidget {
       itemBuilder: (BuildContext context) {
         return [
           PopupMenuItem<String>(
-            value: 'parametres',
-            child: Text('Paramètres'),
+            value: 'profile',
+            child: Text('Profile'),
           ),
           PopupMenuItem<String>(
-            value: 'deconnexion',
-            child: Text('Déconnexion', style: TextStyle(color: Colors.red)),
+            value: 'settings',
+            child: Text('Settings'),
+          ),
+          PopupMenuItem<String>(
+            value: 'disconnect',
+            child: Text('Disconnect', style: TextStyle(color: Colors.red)),
           ),
         ];
       },
-      style: ButtonStyle(),
-      icon: Icon(Icons.person, size: 32),
+      icon: const Icon(Icons.person, size: 32, color: Colors.black),
     );
   }
 }

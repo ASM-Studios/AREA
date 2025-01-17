@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:area/config/settings_config.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -57,9 +57,8 @@ class RegisterObject {
 class AuthService {
   static const FlutterSecureStorage secureStorage = FlutterSecureStorage();
 
-  static String baseUrl = dotenv.env["BACKEND_BASE_URL"] ?? "http://127.0.0.1:8080";
-
   static Future<bool> validateBearerToken(String token) async {
+    String baseUrl = SettingsConfig.serverIp;
     try {
       final response = await http.get(
         Uri.parse('$baseUrl/auth/health'),
@@ -84,6 +83,7 @@ class AuthService {
 
   static Future<bool> login(
       BuildContext context, Map<String, dynamic> jsonInfos) async {
+    String baseUrl = SettingsConfig.serverIp;
     try {
       final url = Uri.parse('$baseUrl/auth/login');
 
@@ -131,6 +131,7 @@ class AuthService {
 
   static Future<bool> register(
       BuildContext context, Map<String, dynamic> jsonInfos) async {
+    String baseUrl = SettingsConfig.serverIp;
     try {
       final url = Uri.parse('$baseUrl/auth/register');
 
