@@ -27,7 +27,6 @@ class WorkflowService {
             _parseActionsOrReactions(json['reactions'], serviceId, serviceName),
       );
     } catch (e) {
-      print('Error parsing WorkflowService: $e');
       return WorkflowService(
           id: 0, name: 'Unknown', actions: [], reactions: []);
     }
@@ -43,7 +42,6 @@ class WorkflowService {
               WorkflowActionReaction.fromJson(item, serviceId: serviceId, serviceName: serviceName))
           .toList();
     } else {
-      print('Expected a list for actions or reactions, but got: $data');
       return [];
     }
   }

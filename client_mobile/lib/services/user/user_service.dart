@@ -9,7 +9,6 @@ class UserService {
 
   static Future<UserInfos> getUserInfos() async {
     String baseUrl = SettingsConfig.serverIp;
-    print("adresse utilisée : $baseUrl");
     final String? token = await secureStorage.read(key: 'bearer_token');
     final response = await http.get(
       Uri.parse('$baseUrl/user/me'),

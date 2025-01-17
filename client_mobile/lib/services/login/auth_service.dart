@@ -66,7 +66,6 @@ class AuthService {
       );
       return response.statusCode == 200;
     } catch (e) {
-      print('Erreur lors de la validation du token: $e');
       return false;
     }
   }
@@ -114,8 +113,6 @@ class AuthService {
             backgroundColor: Colors.red,
           ),
         );
-        print(
-            "Erreur de connexion : Code ${response.statusCode} - ${response.body}");
         return (false);
       }
     } catch (e) {
