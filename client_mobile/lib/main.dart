@@ -30,11 +30,6 @@ Future<void> main() async {
         name: 'register',
         builder: (context, state) => RegisterPage(),
       ),
-      // GoRoute(
-      //   path: '/dashboard',
-      //   name: 'dashboard',
-      //   builder: (context, state) => DashboardPage(),
-      // ), // TODO a voir ce que je fais de cette page mais si on a plus de navigation bar en bas elle ne sert plus à rien
       GoRoute(
         path: '/workflow/list',
         name: 'workflowList',
