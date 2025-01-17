@@ -2,7 +2,7 @@
   "name": "microsoft",
   "events": [
     {
-      "short_name": "email_received",
+      "short_name": "email_received_ms",
       "name": "New Email Received",
       "description": "Triggered when a new email is received in your mailbox.",
       "type": "action",
@@ -76,11 +76,10 @@
       "parameters": []
     },
     {
-      "short_name": "email_send",
+      "short_name": "email_send_ms",
       "name": "Send an Email",
       "description": "Send an email from your mailbox.",
       "type": "reaction",
-      "variables": ["sender", "subject", "body"],
       "parameters": [
         {
           "name": "recipient",

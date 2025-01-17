@@ -7,6 +7,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/rs/zerolog/log"
 	"io"
 	"net/http"
 	"time"
@@ -41,7 +42,7 @@ func fetchNewMails(workflow *models.Workflow, body []byte) (bool, []interface{},
 		fmt.Println("Error unmarshalling mail response:", err)
 		return false, nil, err
 	}
-
+	log.Print("mailResp: ", mailResp)
 	if len(mailResp.Value) == 0 {
 		return false, nil, errors.New("no mail found")
 	}
@@ -72,7 +73,8 @@ func MailReceived(workflow *models.Workflow, user *models.User, args map[string]
 		fmt.Println("Error fetching token from DB:", err)
 		return false, nil, err
 	}
-	reqURL := "https://graph.microsoft.com/v1.0/me/mailFolders/inbox/messages?$top=5&$orderby=receivedDateTime%20desc"
+	log.Print("args: ", args)
+	reqURL := "https://graph.microsoft.com/v1.0/me/mailFolders/inbox/messages?$top=10&$orderby=receivedDateTime%20desc"
 	req, err := http.NewRequest("GET", reqURL, nil)
 	if err != nil {
 		fmt.Println("Error creating request:", err)
@@ -83,12 +85,15 @@ func MailReceived(workflow *models.Workflow, user *models.User, args map[string]
 	req.Header.Set("Content-Type", "application/json")
 
 	resp, err := oauth.SendRequest(&token, req)
+	log.Print("resp: ", resp)
 	if err != nil {
 		fmt.Println("Error sending mail request:", err)
 		return false, nil, err
 	}
 	defer resp.Body.Close()
 	body, err := io.ReadAll(resp.Body)
+	log.Print("response body: ", string(body))
+
 	if err != nil {
 		fmt.Println("Error reading mail response body:", err)
 		return false, nil, err
