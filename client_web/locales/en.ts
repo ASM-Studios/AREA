@@ -114,6 +114,28 @@ const en_language: Translation = {
             success: {
                 registered: "Successfully registered!"
             }
+        },
+        twoFactor: {
+            title: "Two-Factor Authentication",
+            description: "Please enter the 6-digit code from your authenticator app",
+            form: {
+                code: {
+                    label: "verification code",
+                    placeholder: "Enter code",
+                    validation: {
+                        required: "Please enter the verification code",
+                        length: "Code must be 6 digits",
+                        numeric: "Code must contain only numbers"
+                    }
+                },
+                submitButton: "Verify"
+            },
+            errors: {
+                verificationFailed: "Invalid verification code"
+            },
+            success: {
+                verified: "Successfully verified!"
+            }
         }
     },
     header: {
@@ -141,6 +163,10 @@ const en_language: Translation = {
             description: "This is your user page",
             logoutDescription: "Logout from your account",
             logoutButton: "Logout",
+            enable2FAButton: "Enable 2FA",
+            disable2FAButton: "Disable 2FA",
+            setup2FATitle: "Setup Two-Factor Authentication",
+            scan2FAQRCode: "Scan the QR code with your authenticator app",
         },
         themeSettings: {
             title: "Theme Settings",
@@ -364,6 +390,7 @@ const en_language: Translation = {
             triggerAsc: "Ascending",
             cancelSort: "Cancel Sort",
             previous: "Previous",
+            continue: "Continue",
         }
     },
     security: {

@@ -114,6 +114,28 @@ const pirate_language: Translation = {
             success: {
                 registered: "Welcome aboard, ye new scalawag!"
             }
+        },
+        twoFactor: {
+            title: "Double Check Yer Identity",
+            description: "Enter the 6-digit secret code from yer authenticator map",
+            form: {
+                code: {
+                    label: "secret code",
+                    placeholder: "Enter yer code",
+                    validation: {
+                        required: "We be needin' that secret code, matey!",
+                        length: "The code must be 6 numbers, no more, no less!",
+                        numeric: "Numbers only, ye scallywag!"
+                    }
+                },
+                submitButton: "Verify Identity"
+            },
+            errors: {
+                verificationFailed: "That code be wrong, try again ye must!"
+            },
+            success: {
+                verified: "Ye've proven yer identity, welcome aboard!"
+            }
         }
     },
     header: {
@@ -140,7 +162,11 @@ const pirate_language: Translation = {
             welcomeMessage: "Welcome back, {name}, ye old sea dog!",
             description: "This be yer personal quarters",
             logoutDescription: "Ready to jump ship?",
-            logoutButton: "Abandon Ship"
+            logoutButton: "Abandon Ship",
+            enable2FAButton: "Hoist the Jolly Roger",
+            disable2FAButton: "Strike the Jolly Roger",
+            setup2FATitle: "Hoist the Jolly Roger",
+            scan2FAQRCode: "Set up 2FA to protect yer treasure chest",
         },
         themeSettings: {
             title: "Ship's Colors",
@@ -381,6 +407,7 @@ const pirate_language: Translation = {
             cancelSort: "Stop Sortin'",
             next: "Next Port",
             previous: "Previous Port",
+            continue: "Continue",
         }
     },
     security: {

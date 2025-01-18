@@ -3,17 +3,20 @@ import { Link } from 'react-router-dom';
 import { Form, Input, Button, Card } from 'antd';
 import { toast } from "react-toastify";
 import OAuthButtons from '../../../Components/Auth/OAuthButtons';
-import { instance, auth } from "@Config/backend.routes";
+import { instance, auth, instanceWithAuth, user as userRoute } from "@Config/backend.routes";
 import { useAuth, useUser } from "@/Context/ContextHooks";
 import { useNavigate } from 'react-router-dom';
 import Globe from '../../../Components/eldora/globe';
+import { useMediaQuery } from 'react-responsive';
+import { UserPayload } from "@/Context/Scopes/UserContext";
 
 const Login = () => {
     const [form] = Form.useForm();
     const { setJsonWebToken, setIsAuthenticated } = useAuth();
-    const { translations } = useUser();
+    const { translations, user, setUser } = useUser();
     const navigate = useNavigate();
     const [isFormValid, setIsFormValid] = useState(false);
+    const isMobile = useMediaQuery({ query: '(max-width: 768px)' });
 
     React.useEffect(() => {
         onFieldsChange();
@@ -28,6 +31,19 @@ const Login = () => {
                 }
                 setJsonWebToken(response?.data?.jwt);
                 setIsAuthenticated(true);
+
+                instanceWithAuth.get(userRoute.me)
+                    .then((response: { data: UserPayload }) => {
+                        setUser(response?.data?.user);
+                    })
+                    .catch(() => {
+                        setUser(null);
+                    });
+
+                if (user?.is2faEnabled) {
+                    navigate('/2fa');
+                    return;
+                }
                 navigate('/dashboard');
             })
             .catch((error) => {
@@ -62,20 +78,22 @@ const Login = () => {
             left: 0,
             overflow: 'hidden'
         }} role="main">
-            <div style={{
-                position: 'relative',
-                width: '50%',
-                height: '100%',
-                opacity: 0.8,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center'
-            }}>
-                <Globe />
-            </div>
+            {!isMobile && 
+                <div style={{
+                    position: 'relative',
+                    width: '50%',
+                    height: '100%',
+                    opacity: 0.8,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                }}>
+                    <Globe />
+                </div>
+            }
 
             <div style={{
-                width: '50%',
+                width: isMobile ? '100%' : '50%',
                 display: 'flex',
                 justifyContent: 'center',
                 alignItems: 'center'
@@ -90,14 +108,16 @@ const Login = () => {
                         backdropFilter: 'blur(8px)',
                         position: 'relative'
                     }}
-                    headStyle={{
-                        fontSize: '24px',
-                        textAlign: 'center',
-                        borderBottom: 'none',
-                        padding: '24px 24px 0',
-                    }}
-                    bodyStyle={{
-                        padding: '24px',
+                    styles={{
+                        header: {
+                            fontSize: '24px',
+                            textAlign: 'center',
+                            borderBottom: 'none',
+                            padding: '24px 24px 0',
+                        },
+                        body: {
+                            padding: '24px',
+                        }
                     }}
                 >
                     <Form

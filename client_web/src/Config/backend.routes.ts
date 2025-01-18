@@ -40,6 +40,10 @@ const auth = {
     login: `${endpoint}/auth/login`,
     register: `${endpoint}/auth/register`,
     health: `${endpoint}/auth/health`,
+    twoFactorAuth: {
+        generate: `${endpoint}/totp/generate`,
+        validate: `${endpoint}/totp/validate`,
+    },
 };
 
 const user = {

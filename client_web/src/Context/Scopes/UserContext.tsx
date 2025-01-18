@@ -18,6 +18,7 @@ export interface User {
     username: string;
     email: string;
     services: ServicesDescription[];
+    is2faEnabled: boolean;
 }
 
 export interface UserPayload {
@@ -57,16 +58,16 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
             .then((response: { data: UserPayload }) => {
                 setUser(response?.data?.user);
             })
-            .catch((error) => {
+            .catch(() => {
                 setUser(null);
             });
     }, []);
 
     return (
-        <UserContext.Provider value={{ 
-            user, 
-            setUser, 
-            language, 
+        <UserContext.Provider value={{
+            user,
+            setUser,
+            language,
             setLanguage,
             translations,
             setTranslations
