@@ -10,44 +10,18 @@
       "parameters": []
     },
     {
-      "name": "Email Sent",
-      "description": "Triggered when an email is sent from your mailbox.",
+      "short_name": "teams_channel_created_ms",
+      "name": "New channel in Teams",
+      "description": "Triggered when a new channel is created in Teams channel.",
       "type": "action",
+      "variables": ["teams_name", "channel_name", "channel_id", "created_time"],
       "parameters": []
     },
     {
-      "name": "New message in channel",
-      "description": "Triggered when a new message is posted in a Teams channel.",
-      "type": "action",
-      "parameters": [
-        {
-          "name": "team_name",
-          "description": "Name of the teams.",
-          "type": "string",
-          "is_required": false
-        },
-        {
-          "name": "channel_name",
-          "description": "Name of the Teams channel.",
-          "type": "string"
-        }
-      ]
-    },
-    {
-      "name": "New channel created",
-      "description": "Triggered when a new channel is created in Teams.",
-      "type": "action",
-      "parameters": [
-        {
-          "name": "team_name",
-          "description": "Name of the teams.",
-          "type": "string"
-        }
-      ]
-    },
-    {
+      "short_name": "file_uploaded_ms",
       "name": "File uploaded",
       "description": "Triggered when a new file is uploaded to OneDrive.",
+      "variables": ["file_name", "file_path", "uploaded_by"],
       "type": "action",
       "parameters": [
         {
@@ -58,9 +32,11 @@
       ]
     },
     {
-      "name": "File updated",
-      "description": "Triggered when a file is updated in OneDrive.",
+      "short_name": "file_modified_ms",
+      "name": "File modified",
+      "description": "Triggered when a file is modified in OneDrive.",
       "type": "action",
+      "variables": ["file_name", "file_path", "modified_by"],
       "parameters": [
         {
           "name": "folder_path",
@@ -70,10 +46,20 @@
       ]
     },
     {
+      "short_name": "event_started_ms",
       "name": "Event has started",
       "description": "Triggered when an event has started in your calendar.",
       "type": "action",
-      "parameters": []
+      "parameters": [],
+      "variables": ["subject", "organizer", "location"]
+    },
+    {
+      "short_name": "event_created_ms",
+      "name": "Event created",
+      "description": "Triggered when a new event is created in your calendar.",
+      "type": "action",
+      "parameters": [],
+      "variables": ["subject", "organizer", "location"]
     },
     {
       "short_name": "email_send_ms",

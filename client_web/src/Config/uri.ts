@@ -47,6 +47,7 @@ const uri: UriConfig = {
                 'Channel.ReadBasic.All',
                 'ChannelMessage.Send',
                 'Chat.ReadWrite',
+                'Files.ReadWrite.All',
             ]
         }
     },
