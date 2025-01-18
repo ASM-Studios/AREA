@@ -20,7 +20,10 @@ func getServiceFromType(serviceType string, service models.Service) models.Servi
 	var actions []models.Action
 	var reactions []models.Reaction
 	for _, event := range service.Events {
-		pkg.DB.Preload("Parameters").Find(&event)
+		if err := pkg.DB.Preload("Parameters").Preload("Variables").Find(&event).Error; err != nil {
+			log.Error().Err(err).Msg("Failed to preload event data")
+			continue
+		}
 		var parameters []models.Parameter
 		for _, param := range event.Parameters {
 			parameters = append(parameters, models.Parameter{
@@ -35,6 +38,8 @@ func getServiceFromType(serviceType string, service models.Service) models.Servi
 				Id:          event.ID,
 				Name:        event.Name,
 				Description: event.Description,
+				ShortName:   event.ShortName,
+				Variables:   event.Variables.GetVariables(),
 				Parameters:  parameters,
 			})
 		} else if serviceType == "reaction" {
