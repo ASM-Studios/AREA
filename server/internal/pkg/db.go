@@ -18,6 +18,7 @@ func migrateDB() error {
 		&models.Workflow{},
 		&models.Service{},
 		&models.Event{},
+		&models.Variables{},
 		&models.Parameters{},
 		&models.Token{},
 		&models.WorkflowEvent{},

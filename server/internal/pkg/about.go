@@ -69,7 +69,6 @@ func updateService(newService *models.Service, existingService *models.Service) 
 
 func processEvent(newEvent models.Event, serviceID uint) error {
 	var existingEvent models.Event
-
 	err := DB.Where("name = ? AND service_id = ?", newEvent.Name, serviceID).First(&existingEvent).Error
 	if err == nil {
 		return updateEvent(newEvent, &existingEvent)
