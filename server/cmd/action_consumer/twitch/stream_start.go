@@ -1,12 +1,12 @@
 package twitch
 
 import (
+	"AREA/internal/gconsts"
 	"AREA/internal/models"
 	"AREA/internal/oauth"
 	"AREA/internal/pkg"
 	"AREA/internal/utils"
 	"errors"
-	"fmt"
 	"net/http"
 	"time"
 )
@@ -38,7 +38,7 @@ func fetchStreamInfo(workflow *models.Workflow, streamInfo Streams) (bool, []int
 
 func StreamStart(workflow *models.Workflow, user *models.User, args map[string]string) (bool, []interface{}, error) {
         var token models.Token
-        pkg.DB.Where("user_id = ? AND service_id = ?", user.ID, 6).First(&token)
+        pkg.DB.Where("user_id = ? AND service_id = ?", user.ID, gconsts.ServiceMap["twitch"]).First(&token)
 
         req, err := http.NewRequest("GET", "https://api.twitch.tv/helix/streams?user_login=" + args["streamer"], nil)
         if err != nil {

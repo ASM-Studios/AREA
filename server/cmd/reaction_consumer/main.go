@@ -1,6 +1,7 @@
 package main
 
 import (
+	"AREA/cmd/reaction_consumer/discord"
 	"AREA/cmd/reaction_consumer/github"
 	"AREA/cmd/reaction_consumer/google"
 	"AREA/cmd/reaction_consumer/microsoft"
@@ -23,36 +24,59 @@ import (
 )
 
 var actionCallbacks = map[uint]func(*models.User, map[string]string){
-	3: github.CreateUserRepo,
+        1: discord.SendMessage,
 
-	5: google.AddEvent,
+	5: github.CreateUserRepo,
 
-	14: microsoft.SendEmail,
-	15: microsoft.ForwardEmail,
-	16: microsoft.SendMessageInChannel,
-	17: microsoft.CreateFile,
-	18: microsoft.WriteFile,
-	19: microsoft.CreateFolder,
-	20: microsoft.CreateEvent,
-	21: microsoft.SetCustomStatus,
+	7:  google.AddEvent,
 
-	23: spotify.PlayPauseTrack,
-	24: spotify.SkipPrev,
-	25: spotify.SkipNext,
-	26: spotify.AddTrack,
+	16: microsoft.SendEmail,
+	17: microsoft.ForwardEmail,
+	18: microsoft.SendMessageInChannel,
+	19: microsoft.CreateFile,
+	20: microsoft.WriteFile,
+	21: microsoft.CreateFolder,
+	22: microsoft.CreateEvent,
+	23: microsoft.SetCustomStatus,
 
-	26: twitch.SendMessage,
-	27: twitch.WhisperMessage,
+	25: spotify.PlayPauseTrack,
+	26: spotify.SkipPrev,
+	27: spotify.SkipNext,
+	28: spotify.AddTrack,
+
+	30: twitch.SendMessage,
+	31: twitch.WhisperMessage,
+}
+
+type Parameter struct {
+        Name string
+        Value string
+}
+
+func setupParameters(user *models.User, parameters []Parameter, variables map[string]interface{}) map[string]string {
+        parameterMap := make(map[string]string)
+        var secrets []models.Secret
+        pkg.DB.Table("secrets").Where("user_id = ?", user.ID).Find(&secrets)
+
+        for _, parameter := range parameters {
+                tmpValue := parameter.Value
+                for _, secret := range secrets {
+                        tmpValue = strings.ReplaceAll(tmpValue, fmt.Sprintf("$%s", secret.Key), fmt.Sprintf("%v", secret.Value))
+                }
+                for key, value := range variables {
+			tmpValue = strings.ReplaceAll(tmpValue, fmt.Sprintf("$%s", key), fmt.Sprintf("%v", value))
+		}
+                parameterMap[parameter.Name] = tmpValue
+        }
+
+        return parameterMap
 }
 
 func executeWorkflowEvent(payload Payload, workflowEvent *models.WorkflowEvent) {
 	var user models.User
 	pkg.DB.Where("id = ?", payload.Workflow.UserID).First(&user)
 
-	var parameters []struct {
-		Name  string
-		Value string
-	}
+	var parameters []Parameter
 	pkg.DB.Raw(`
                 SELECT
                         parameters.name as name,
@@ -63,13 +87,13 @@ func executeWorkflowEvent(payload Payload, workflowEvent *models.WorkflowEvent) 
                 WHERE workflow_events.id = ?`,
 		workflowEvent.ID).Scan(&parameters)
 
-	parametersMap := make(map[string]string)
-	for _, parameter := range parameters {
+	parametersMap := setupParameters(&user, parameters, payload.Args)
+        /*for _, parameter := range parameters {
 		for key, value := range payload.Args {
 			parameter.Value = strings.ReplaceAll(parameter.Value, fmt.Sprintf("$%s", key), fmt.Sprintf("%v", value))
 		}
 		parametersMap[parameter.Name] = parameter.Value
-	}
+	}*/
 	if callback, ok := actionCallbacks[workflowEvent.EventID]; ok {
 		callback(&user, parametersMap)
 	} else {

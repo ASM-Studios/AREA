@@ -2,9 +2,9 @@
   "name": "spotify",
   "events": [
     {
-      "short_name": "track_paused_spotify",
-      "name": "A track is paused/stopped",
-      "description": "Triggered when a track is paused or stopped on Spotify.",
+      "short_name": "track_played_spotify",
+      "name": "A track is played",
+      "description": "Triggered when a track is played on Spotify.",
       "type": "action",
       "variables": ["timestamp", "is_playing", "album_name", "name", "id"],
       "parameters": []

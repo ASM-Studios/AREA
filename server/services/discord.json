@@ -1,5 +1,23 @@
 {
   "name": "discord",
   "events": [
+    {
+      "short_name": "send_message_discord",
+      "name": "Send message",
+      "description": "Send message via the AREA webhook",
+      "type": "reaction",
+      "parameters": [
+        {
+          "name": "url",
+          "description": "Url of the webhook",
+          "type": "string"
+        },
+        {
+          "name": "content",
+          "description": "Content of the message",
+          "type": "string"
+        }
+      ]
+    }
   ]
 }

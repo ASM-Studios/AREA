@@ -6,9 +6,9 @@ import (
 
 type MailCode struct {
         gorm.Model
-        Code            uint    `gorm:"foreignKey:UserID;not null" json:"code"`
-        UserID          uint     `json:"user_id"`
-        ExpiresAt       uint    `json:"expires_at"`
+        Code            uint    `gorm:"not null" json:"code"`
+        UserID          uint    `gorm:"foreignKey:UserID;not null" json:"user_id"`
+        ExpiresAt       uint    `gorm:"not null" json:"expires_at"`
 }
 
 type User struct {
@@ -22,6 +22,7 @@ type User struct {
         TwoFactorMethod string          `gorm:"type:enum('none', 'mail', 'totp');not null" binding:"required" json:"two_factor_method"`
         TOTP            string          `json:"totp"`
         ValidTOTP       bool            `json:"valid_totp"`
+        Secrets         []Secret        `gorm:"constraint:OnDelete:CASCADE;"`
         Workflows       []Workflow      `gorm:"constraint:OnDelete:CASCADE;"`
         Tokens          []Token         `gorm:"constraint:OnDelete:CASCADE;"`
         MailCodes       []MailCode      `gorm:"constraint:OnDelete:CASCADE;"`

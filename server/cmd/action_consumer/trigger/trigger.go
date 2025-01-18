@@ -11,33 +11,53 @@ import (
 	"errors"
 	"fmt"
 	"reflect"
+	"strings"
 	"time"
 )
 
 var triggerCallbacks = map[uint]func(*models.Workflow, *models.User, map[string]string) (bool, []interface{}, error){
-	1: github.PRCreated,
-	2: github.UserRepoCreated,
+        2: github.CommitCreated,
+        3: github.PRCreated,
+	4: github.UserRepoCreated,
 
-	4: google.EmailReceived,
+	6: google.EmailReceived,
 
-	6:  microsoft.MailReceived,
-	7:  microsoft.NewChannelCreated,
-	8:  microsoft.MeetingJoined,
-	9:  microsoft.DriveFileAdded,
-	10: microsoft.DriveFileModified,
-	11: microsoft.CalendarEventStarted,
-	12: microsoft.CalendarEventCreated,
-	13: microsoft.ChangePresence,
-	/* 21: spotify.StartPlaying,*/
+	8: microsoft.MailReceived,
+	9: microsoft.NewChannelCreated,
+	10: microsoft.MeetingJoined,
+	11: microsoft.DriveFileAdded,
+	12: microsoft.DriveFileModified,
+	13: microsoft.CalendarEventStarted,
+	14: microsoft.CalendarEventCreated,
+	15: microsoft.ChangePresence,
 
-	26: twitch.StreamStart,
+        24: spotify.StartPlaying,
+
+	27: twitch.StreamStart,
+}
+
+type Parameter struct {
+        Name string
+        Value string
+}
+
+func setupParameters(user *models.User, parameters []Parameter) map[string]string {
+        parameterMap := make(map[string]string)
+        var secrets []models.Secret
+        pkg.DB.Table("secrets").Where("user_id = ?", user.ID).Find(&secrets)
+
+        for _, parameter := range parameters {
+                tmpValue := parameter.Value
+                for _, secret := range secrets {
+                        tmpValue = strings.ReplaceAll(tmpValue, secret.Key, secret.Value)
+                }
+                parameterMap[parameter.Name] = tmpValue
+        }
+        return parameterMap
 }
 
 func callCallback(workflow *models.Workflow, workflowEventId uint, refEventId uint, user *models.User) (bool, []interface{}, error) {
-	var parameters []struct {
-		Name  string
-		Value string
-	}
+	var parameters []Parameter
 	pkg.DB.Raw(`
                 SELECT
                         parameters.name AS name,
@@ -48,11 +68,7 @@ func callCallback(workflow *models.Workflow, workflowEventId uint, refEventId ui
                 WHERE workflow_events.id = ?`,
 		workflowEventId).Scan(&parameters)
 
-	parametersMap := make(map[string]string)
-	for _, parameter := range parameters {
-		parametersMap[parameter.Name] = parameter.Value
-	}
-
+	parametersMap := setupParameters(user, parameters)
 	if callback, ok := triggerCallbacks[refEventId]; ok {
 		return callback(workflow, user, parametersMap)
 	} else {
