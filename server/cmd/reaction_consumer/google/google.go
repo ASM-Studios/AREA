@@ -1,6 +1,7 @@
 package google
 
 import (
+	"AREA/internal/gconsts"
 	"AREA/internal/models"
 	"AREA/internal/oauth"
 	"AREA/internal/pkg"
@@ -75,7 +76,7 @@ func createBody(args map[string]string) []byte {
 
 func AddEvent(user *models.User, args map[string]string) {
         var token models.Token
-        pkg.DB.Where("user_id = ? AND service_id = ?", user.ID, 3).First(&token)
+        pkg.DB.Where("user_id = ? AND service_id = ?", user.ID, gconsts.ServiceMap["google"]).First(&token)
 
         id := getCalendarId(&token, args)
         if id == "" {

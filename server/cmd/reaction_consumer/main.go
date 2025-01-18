@@ -1,6 +1,7 @@
 package main
 
 import (
+	"AREA/cmd/reaction_consumer/discord"
 	"AREA/cmd/reaction_consumer/github"
 	"AREA/cmd/reaction_consumer/google"
 	"AREA/cmd/reaction_consumer/microsoft"
@@ -23,17 +24,18 @@ import (
 )
 
 var actionCallbacks = map[uint]func(*models.User, map[string]string){
-	3: github.CreateUserRepo,
+        1: discord.SendMessage,
+	4: github.CreateUserRepo,
 
-	5:  google.AddEvent,
-	13: microsoft.SendEmail,
-	22: spotify.PlayPauseTrack,
-	23: spotify.SkipPrev,
-	24: spotify.SkipNext,
-	25: spotify.AddTrack,
+	6:  google.AddEvent,
+	14: microsoft.SendEmail,
+	23: spotify.PlayPauseTrack,
+	24: spotify.SkipPrev,
+	25: spotify.SkipNext,
+	26: spotify.AddTrack,
 
-	26: twitch.SendMessage,
-	27: twitch.WhisperMessage,
+	27: twitch.SendMessage,
+	28: twitch.WhisperMessage,
 }
 
 func executeWorkflowEvent(payload Payload, workflowEvent *models.WorkflowEvent) {

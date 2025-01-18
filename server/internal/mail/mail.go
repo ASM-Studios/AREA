@@ -23,12 +23,11 @@ func InitSMTPClient() error {
                 return errors.New("SMTP environment variables not set")
         }
         SMTPClient.Host = utils.GetEnvVar("SMTP_HOST")
-        _, err := strconv.Atoi(utils.GetEnvVar("SMTP_PORT"))
+        port, err := strconv.Atoi(utils.GetEnvVar("SMTP_PORT"))
         if err != nil {
                 return errors.New("Invalid SMTP port")
         }
-        SMTPClient.Port = 1026
-        SMTPClient.Host = "host.docker.internal"
+        SMTPClient.Port = port
         SMTPClient.User = utils.GetEnvVar("SMTP_USER")
         SMTPClient.Password = utils.GetEnvVar("SMTP_PASSWORD")
         SMTPClient.Dialer = gomail.NewDialer(SMTPClient.Host, SMTPClient.Port, SMTPClient.User, SMTPClient.Password)

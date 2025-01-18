@@ -1,6 +1,7 @@
 package spotify
 
 import (
+	"AREA/internal/gconsts"
 	"AREA/internal/models"
 	"AREA/internal/oauth"
 	"AREA/internal/pkg"
@@ -61,7 +62,7 @@ func addPlaylistItem(args map[string]string) []byte {
 
 func AddTrack(user *models.User, args map[string]string) {
         var token models.Token
-        pkg.DB.Where("user_id = ? AND service_id = ?", user.ID, 5).First(&token)
+        pkg.DB.Where("user_id = ? AND service_id = ?", user.ID, gconsts.ServiceMap["spotify"]).First(&token)
 
         playlistID := getPlaylistID(&token, args)
         if len(playlistID) == 0 {

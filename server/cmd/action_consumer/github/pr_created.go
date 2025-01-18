@@ -19,7 +19,6 @@ type PullRequest struct {
         CreatedAt       string  `json:"created_at"`
 }
 
-
 func DetectPR(workflow *models.Workflow, pr []PullRequest) (bool, []interface{}, error) {
         callReaction := false
         var interfaces []interface{}

@@ -56,6 +56,12 @@ func setUpWorkflowGroup(router *gin.Engine) {
 	}
 }
 
+func setUpTriggerGroup(router *gin.Engine) {
+        /*trigger := router.Group("/trigger", middleware.AuthMiddleware(), middleware.A2FMiddleware())
+        {
+        }*/
+}
+
 func setUpUserGroup(router *gin.Engine) {
 	user := router.Group("/user")
 	user.Use(middleware.AuthMiddleware(), middleware.A2FMiddleware())

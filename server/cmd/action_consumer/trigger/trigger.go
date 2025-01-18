@@ -15,21 +15,21 @@ import (
 )
 
 var triggerCallbacks = map[uint]func(*models.Workflow, *models.User, map[string]string) (bool, []interface{}, error){
-	1: github.PRCreated,
-	2: github.UserRepoCreated,
+	2: github.PRCreated,
+	3: github.UserRepoCreated,
 
-	4: google.EmailReceived,
+	5: google.EmailReceived,
 
-	6:  microsoft.MailReceived,
-	7:  microsoft.NewChannelCreated,
-	8:  microsoft.DriveFileAdded,
-	9:  microsoft.DriveFileModified,
-	10: microsoft.CalendarEventStarted,
-	11: microsoft.CalendarEventCreated,
+	7:  microsoft.MailReceived,
+	8:  microsoft.NewChannelCreated,
+	9:  microsoft.DriveFileAdded,
+	10:  microsoft.DriveFileModified,
+	11: microsoft.CalendarEventStarted,
+	12: microsoft.CalendarEventCreated,
 
-        20: spotify.StartPlaying,
+        21: spotify.StartPlaying,
 
-	26: twitch.StreamStart,
+	27: twitch.StreamStart,
 }
 
 func callCallback(workflow *models.Workflow, workflowEventId uint, refEventId uint, user *models.User) (bool, []interface{}, error) {

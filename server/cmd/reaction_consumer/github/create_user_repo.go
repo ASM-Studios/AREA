@@ -1,6 +1,7 @@
 package github
 
 import (
+	"AREA/internal/gconsts"
 	"AREA/internal/models"
 	"AREA/internal/oauth"
 	"AREA/internal/pkg"
@@ -34,7 +35,7 @@ func createUserRepoRequest(args map[string]string) []byte {
 
 func CreateUserRepo(user *models.User, args map[string]string) {
         var token models.Token
-        pkg.DB.Where("user_id = ? AND service_id = ?", user.ID, 2).First(&token)
+        pkg.DB.Where("user_id = ? AND service_id = ?", user.ID, gconsts.ServiceMap["github"]).First(&token)
 
         body := createUserRepoRequest(args)
         req, err := http.NewRequest("POST", "https://api.github.com/user/repos", bytes.NewBuffer(body))

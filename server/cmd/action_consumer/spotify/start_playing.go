@@ -1,6 +1,7 @@
 package spotify
 
 import (
+	"AREA/internal/gconsts"
 	"AREA/internal/models"
 	"AREA/internal/oauth"
 	"AREA/internal/pkg"
@@ -31,7 +32,7 @@ type TrackInfoReturn struct {
 
 func StartPlaying(workflow *models.Workflow, user *models.User, args map[string]string) (bool, []interface{}, error) {
         var token models.Token
-        pkg.DB.Where("user_id = ? AND service_id = ?", user.ID, 5).First(&token)
+        pkg.DB.Where("user_id = ? AND service_id = ?", user.ID, gconsts.ServiceMap["spotify"]).First(&token)
 
         req, err := http.NewRequest("GET", "https://api.spotify.com/v1/me/player", nil)
         if err != nil {
