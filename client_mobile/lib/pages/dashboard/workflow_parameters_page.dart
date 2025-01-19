@@ -100,9 +100,6 @@ class _WorkflowParametersPageState extends State<WorkflowParametersPage> {
     for (var param in widget.action.parameters) {
       param.value = _parameterValues[param.name];
     }
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text("Parameters submitted !"),),
-    );
     Navigator.of(context).pop(widget.action);
   }
 }
