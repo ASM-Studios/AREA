@@ -51,7 +51,10 @@ Future<void> main() async {
   runApp(
     MaterialApp.router(
       title: 'Area',
-      theme: ThemeData(primarySwatch: Colors.green),
+      theme: ThemeData(
+          primarySwatch: Colors.green,
+          scrollbarTheme: ScrollbarThemeData(
+              thumbColor: WidgetStateProperty.all(Colors.black))),
       routerConfig: router,
     ),
   );

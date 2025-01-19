@@ -1,4 +1,5 @@
 import 'package:area/data/parameter.dart';
+import 'package:area/widgets/button.dart';
 import 'package:area/widgets/datetime_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:area/data/action.dart';
@@ -26,23 +27,39 @@ class _WorkflowParametersPageState extends State<WorkflowParametersPage> {
           textStyle: const TextStyle(color: Colors.black, fontSize: 24),
         ),
       )),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            ...widget.action.parameters.map(
-              (parameter) => Padding(
-                padding: const EdgeInsets.symmetric(vertical: 15.0),
-                child: _buildParameterWidget(parameter),
+      body: Column(
+        children: [
+          Expanded(
+            child: Scrollbar(
+              thickness: 6,
+              radius: const Radius.circular(10),
+              thumbVisibility: true,
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  children: [
+                    ...widget.action.parameters.map(
+                      (parameter) => Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 10.0),
+                        child: _buildParameterWidget(parameter),
+                      ),
+                    ),
+                    const SizedBox(height: 40),
+                  ],
+                ),
               ),
             ),
-            const SizedBox(height: 20),
-            ElevatedButton(
+          ),
+          Padding(
+            padding: EdgeInsets.all(20),
+            // padding: EdgeInsets.fromLTRB(50, 20, 50, 20),
+            child: AreaButton(
+              label: "Submit",
               onPressed: _submitParameters,
-              child: const Text("Submit"),
+              color: const Color(0XFF035a63),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
