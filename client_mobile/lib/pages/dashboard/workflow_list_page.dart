@@ -50,12 +50,11 @@ class _WorkflowListPageState extends State<WorkflowListPage> {
                 return Center(
                   child: Column(children: [
                     Text('${snapshot.error}'),
-                    IconButton(onPressed: () {
-                      setState(() {
-                        
-                      });
-                    },
-                    icon: const Icon(Icons.refresh), 
+                    IconButton(
+                      onPressed: () {
+                        setState(() {});
+                      },
+                      icon: const Icon(Icons.refresh),
                     )
                   ]),
                 );
@@ -101,7 +100,14 @@ class _WorkflowListPageState extends State<WorkflowListPage> {
           context.push("/workflow/create");
         },
         tooltip: 'Ajouter',
-        child: Icon(Icons.add),
+        backgroundColor: Colors.black,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(50),
+        ),
+        child: Icon(
+          Icons.add,
+          color: Colors.white,
+        ),
       ),
     );
   }
