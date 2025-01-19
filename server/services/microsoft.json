@@ -18,6 +18,14 @@
       "parameters": []
     },
     {
+      "short_name": "teams_meeting_joined",
+      "name": "Teams Meeting Joined",
+      "description": "Triggered when the user joins a Teams meeting.",
+      "type": "action",
+      "parameters": [],
+      "variables": [ "meeting_id", "meeting_subject", "start_time", "join_web_url"]
+    },
+    {
       "short_name": "file_uploaded_ms",
       "name": "File uploaded",
       "description": "Triggered when a new file is uploaded to OneDrive.",
@@ -62,7 +70,14 @@
       "variables": ["subject", "organizer", "location"]
     },
     {
-      "short_name": "email_send_ms",
+      "short_name": "presence_changed_ms",
+      "name": "Presence changed",
+      "description": "Triggered when the user's presence status changes.",
+      "type": "action",
+      "parameters": [],
+      "variables": ["availability", "activity"]
+    },
+    {
       "name": "Send an Email",
       "description": "Send an email from your mailbox.",
       "type": "reaction",
@@ -129,8 +144,8 @@
       "type": "reaction",
       "parameters": [
         {
-          "name": "team_id",
-          "description": "ID of the Teams team.",
+          "name": "team_name",
+          "description": "Name of the teams.",
           "type": "string"
         },
         {
@@ -146,8 +161,8 @@
       "type": "reaction",
       "parameters": [
         {
-          "name": "team_id",
-          "description": "ID of the Teams team.",
+          "name": "team_name",
+          "description": "Name of the teams.",
           "type": "string"
         },
         {
@@ -158,41 +173,41 @@
       ]
     },
     {
-      "name": "Upload a file",
-      "description": "Upload a file to OneDrive.",
+      "name": "Create a File in OneDrive",
+      "description": "Create a new file in OneDrive with specific content.",
       "type": "reaction",
       "parameters": [
         {
           "name": "folder_path",
-          "description": "Path to the folder where the file will be uploaded.",
+          "description": "Path to the folder in OneDrive where the file will be created.",
           "type": "string"
         },
         {
           "name": "file_name",
-          "description": "Name of the file to upload.",
+          "description": "Name of the file to create.",
           "type": "string"
         },
         {
           "name": "file_content",
-          "description": "Content of the file.",
+          "description": "Content to write into the newly created file.",
           "type": "string"
         }
       ]
     },
     {
-      "name": "Update file metadata",
-      "description": "Update the metadata of a file in OneDrive.",
+      "name": "Write to a File in OneDrive",
+      "description": "Write content to a specific file in OneDrive.",
       "type": "reaction",
       "parameters": [
         {
-          "name": "file_id",
-          "description": "ID of the file to update.",
+          "name": "file_path",
+          "description": "Path of the file in OneDrive to write to (including the file name).",
           "type": "string"
         },
         {
-          "name": "metadata",
-          "description": "New metadata for the file.",
-          "type": "map[string]string"
+          "name": "file_content",
+          "description": "Content to write into the file.",
+          "type": "string"
         }
       ]
     },
@@ -209,6 +224,38 @@
         {
           "name": "folder_name",
           "description": "Name of the new folder.",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "Create a Calendar Event",
+      "description": "Create a new event in your calendar.",
+      "type": "reaction",
+      "parameters": [
+        {
+          "name": "subject",
+          "description": "The subject of the event.",
+          "type": "string"
+        },
+        {
+          "name": "start_time",
+          "description": "Start time of the event (ISO 8601 format).",
+          "type": "string"
+        },
+        {
+          "name": "end_time",
+          "description": "End time of the event (ISO 8601 format).",
+          "type": "string"
+        },
+        {
+          "name": "attendees",
+          "description": "Comma-separated email addresses of attendees.",
+          "type": "string"
+        },
+        {
+          "name": "location",
+          "description": "The location of the event.",
           "type": "string"
         }
       ]

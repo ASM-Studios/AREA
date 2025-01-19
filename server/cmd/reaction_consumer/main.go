@@ -26,7 +26,7 @@ var actionCallbacks = map[uint]func(*models.User, map[string]string){
 	3: github.CreateUserRepo,
 
 	5:  google.AddEvent,
-	13: microsoft.SendEmail,
+	14: microsoft.SendEmail,
 	22: spotify.PlayPauseTrack,
 	23: spotify.SkipPrev,
 	24: spotify.SkipNext,

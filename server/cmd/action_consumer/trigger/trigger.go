@@ -21,10 +21,12 @@ var triggerCallbacks = map[uint]func(*models.Workflow, *models.User, map[string]
 	/*4: google.EmailReceived,*/
 	6:  microsoft.MailReceived,
 	7:  microsoft.NewChannelCreated,
-	8:  microsoft.DriveFileAdded,
-	9:  microsoft.DriveFileModified,
-	10: microsoft.CalendarEventStarted,
-	11: microsoft.CalendarEventCreated,
+	8:  microsoft.MeetingJoined,
+	9:  microsoft.DriveFileAdded,
+	10: microsoft.DriveFileModified,
+	11: microsoft.CalendarEventStarted,
+	12: microsoft.CalendarEventCreated,
+	13: microsoft.ChangePresence,
 	/* 21: spotify.StartPlaying,*/
 
 	26: twitch.StreamStart,
