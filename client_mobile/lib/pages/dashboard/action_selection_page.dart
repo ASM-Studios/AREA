@@ -2,7 +2,6 @@ import 'package:area/data/action.dart';
 import 'package:area/data/service.dart';
 import 'package:area/pages/dashboard/workflow_parameters_page.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class ActionSelectionPage extends StatefulWidget {
   final WorkflowService service;
@@ -27,9 +26,7 @@ class _ActionSelectionPageState extends State<ActionSelectionPage> {
       appBar: AppBar(
         title: Text(
           'Select Action/Reaction',
-          style: GoogleFonts.fjallaOne(
-            textStyle: const TextStyle(color: Colors.black, fontSize: 24),
-          ),
+            style: const TextStyle(color: Colors.black, fontSize: 24, fontWeight: FontWeight.bold),
         ),
       ),
       body: ListView.separated(

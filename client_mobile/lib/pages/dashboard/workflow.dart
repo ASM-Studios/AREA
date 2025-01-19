@@ -6,7 +6,6 @@ import 'package:area/widgets/action_button.dart';
 import 'package:area/widgets/button.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 const int actionLimit = 1;
 const int reactionLimit = 10;
@@ -153,9 +152,8 @@ class _WorkflowPageState extends State<WorkflowPage> {
           ),
           title: Text(
             "Create workflow",
-            style: GoogleFonts.fjallaOne(
-              textStyle: const TextStyle(color: Colors.black, fontSize: 24),
-            ),
+            style: const TextStyle(
+                color: Colors.black, fontSize: 24, fontWeight: FontWeight.bold),
           )),
       body: SingleChildScrollView(
         child: Column(
@@ -212,8 +210,7 @@ class _WorkflowPageState extends State<WorkflowPage> {
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: 
-      Padding(
+      floatingActionButton: Padding(
         padding: EdgeInsets.all(20),
         child: AreaButton(
           label: "Create",

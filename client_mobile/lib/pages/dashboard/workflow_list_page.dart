@@ -5,7 +5,6 @@ import 'package:area/widgets/profile_button.dart';
 import 'package:area/widgets/workflow_container.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class WorkflowListPage extends StatefulWidget {
   const WorkflowListPage({super.key});
@@ -33,12 +32,11 @@ class _WorkflowListPageState extends State<WorkflowListPage> {
             child: Align(alignment: Alignment.topRight, child: ProfileButton()),
           ),
           Center(
-            child: Text(
-              'YOUR WORKFLOWS',
-              style: GoogleFonts.fjallaOne(
-                textStyle: const TextStyle(color: Colors.black, fontSize: 24),
-              ),
-            ),
+            child: Text('YOUR WORKFLOWS',
+                style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold)),
           ),
           FutureBuilder(
             future: UpdateWorkflowService.getWorkflowList(),
@@ -82,10 +80,8 @@ class _WorkflowListPageState extends State<WorkflowListPage> {
                       : Center(
                           child: Text(
                             "No workflow available.",
-                            style: GoogleFonts.fjallaOne(
-                              textStyle: const TextStyle(
-                                  color: Colors.black, fontSize: 24),
-                            ),
+                            style: const TextStyle(
+                                color: Colors.black, fontSize: 24),
                           ),
                         ),
                 );

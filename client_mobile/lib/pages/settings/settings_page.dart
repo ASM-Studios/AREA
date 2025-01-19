@@ -13,10 +13,9 @@ class SettingsPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
           title: Text(
+        style: const TextStyle(
+            color: Colors.black, fontSize: 24, fontWeight: FontWeight.bold),
         "Settings",
-        style: GoogleFonts.fjallaOne(
-          textStyle: const TextStyle(color: Colors.black, fontSize: 24),
-        ),
       )),
       body: SingleChildScrollView(
         child: Padding(
@@ -33,9 +32,10 @@ class SettingsPage extends StatelessWidget {
                 initialValue: SettingsConfig.serverIp,
                 onChanged: (value) {
                   if (value.isEmpty) {
-                    SettingsConfig.setServerIp(dotenv.env["BACKEND_BASE_URL"] ?? "http://127.0.0.1:8080");
+                    SettingsConfig.setServerIp(dotenv.env["BACKEND_BASE_URL"] ??
+                        "http://127.0.0.1:8080");
                   } else {
-                  SettingsConfig.setServerIp(value);
+                    SettingsConfig.setServerIp(value);
                   }
                 },
               )

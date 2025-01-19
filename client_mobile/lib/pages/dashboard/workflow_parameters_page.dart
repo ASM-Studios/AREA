@@ -23,9 +23,8 @@ class _WorkflowParametersPageState extends State<WorkflowParametersPage> {
       appBar: AppBar(
           title: Text(
         "Configure Parameters",
-        style: GoogleFonts.fjallaOne(
-          textStyle: const TextStyle(color: Colors.black, fontSize: 24),
-        ),
+        style: const TextStyle(
+            color: Colors.black, fontSize: 24, fontWeight: FontWeight.bold),
       )),
       body: Column(
         children: [
