@@ -32,11 +32,24 @@ class _ActionSelectionPageState extends State<ActionSelectionPage> {
           ),
         ),
       ),
-      body: ListView.builder(
+      body: ListView.separated(
+        padding: const EdgeInsets.all(16),
         itemCount: widget.actions.length,
+        separatorBuilder: (context, index) => const Divider(
+          color: Colors.black12, // Ligne de séparation discrète
+          thickness: 0.5,
+        ),
         itemBuilder: (context, index) {
           return ListTile(
-            title: Text(widget.actions[index].name),
+            title: Text(
+              widget.actions[index].name,
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            trailing: const Icon(Icons.arrow_forward_ios,
+                color: Colors.black, size: 18),
             onTap: () async {
               if (widget.actions[index].parameters.isNotEmpty) {
                 widget.actions[index] = await Navigator.of(context).push(

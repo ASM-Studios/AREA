@@ -130,10 +130,64 @@ class ParticlePainter extends CustomPainter {
   bool shouldRepaint(CustomPainter oldDelegate) => true;
 }
 
+class ActionSelectionPage extends StatelessWidget {
+  const ActionSelectionPage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final List<String> actions = [
+      "Play/Pause a track",
+      "Skip to the previous track",
+      "Skip to the next track",
+      "Add track to a playlist",
+    ];
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          'Select Action/Reaction',
+          style: TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        backgroundColor: Colors.white,
+        elevation: 0,
+        iconTheme: const IconThemeData(color: Colors.black),
+      ),
+      body: ListView.separated(
+        padding: const EdgeInsets.all(16),
+        itemCount: actions.length,
+        separatorBuilder: (context, index) => const Divider(
+          color: Colors.black12,
+          thickness: 0.5,
+        ),
+        itemBuilder: (context, index) {
+          return ListTile(
+            title: Text(
+              actions[index],
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            trailing: const Icon(Icons.arrow_forward_ios, color: Colors.black, size: 18),
+            onTap: () {
+              // Ajouter une action ici
+              print("Selected: ${actions[index]}");
+            },
+          );
+        },
+      ),
+    );
+  }
+}
+
 class _TestPageState extends State<TestPage> {
   @override
   Widget build(BuildContext context) {
-    return ParticleBackgroundScreen();
+    // return ParticleBackgroundScreen();
+    return ActionSelectionPage();
     // return Scaffold(
     //   body: Center(
     //     child: ElevatedButton(
