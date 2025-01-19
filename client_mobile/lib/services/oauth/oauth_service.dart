@@ -34,9 +34,6 @@ class OAuthService {
           if (codeVerifier != null) "code_verifier": codeVerifier
         }));
 
-    print(
-        "réponse recu après echange du code avec le back : ${jsonDecode(response.body)}");
-
     if (signUp) {
       final responseData = jsonDecode(response.body);
       await secureStorage.write(
@@ -66,8 +63,6 @@ class OAuthService {
         "code_challenge": Utils.generateCodeChallenge(codeVerifier),
       if (serviceConfig.pkce) "code_challenge_method": "S256"
     }).toString();
-
-    print("url oauth : $authUrl");
 
     final hasExchangedCorrectly = await Navigator.of(context).push(
       MaterialPageRoute(

@@ -10,19 +10,6 @@ class WorkflowContainer extends StatelessWidget {
   const WorkflowContainer(
       {super.key, required this.workflow, required this.onRemove});
 
-  Icon _getStatusIcon(String status) {
-    switch (status) {
-      case "pending":
-        return const Icon(Icons.access_time, color: Colors.orange);
-      case "failed":
-        return const Icon(Icons.close, color: Colors.red);
-      case "processed":
-        return const Icon(Icons.check_circle, color: Colors.green);
-      default:
-        return const Icon(Icons.close, color: Colors.red);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Dismissible(
@@ -46,21 +33,18 @@ class WorkflowContainer extends StatelessWidget {
         shadowColor: Colors.black,
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(20)),
-          side: BorderSide(
-            color: Colors.black,
-            width: 2,
-          ),
         ),
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.fromLTRB(16, 8.0, 16.0, 8.0),
           child: Column(
             children: [
               Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Expanded(
                     child: Text(
-                      workflow.name,
+                      workflow.name.isNotEmpty
+                          ? workflow.name
+                          : "No name provided.",
                       textAlign: TextAlign.center,
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1,
@@ -68,19 +52,25 @@ class WorkflowContainer extends StatelessWidget {
                         textStyle: const TextStyle(
                             fontWeight: FontWeight.bold,
                             color: Colors.black,
-                            fontSize: 14),
+                            fontSize: 24),
                       ),
                     ),
                   ),
-                  _getStatusIcon(workflow.status!),
                 ],
               ),
-              const SizedBox(height: 40),
-              Center(
-                child: Text(
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 4,
-                    workflow.description.isNotEmpty ? workflow.description : "No description provided.")
+              const SizedBox(height: 10),
+              Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                        workflow.description.isNotEmpty
+                            ? workflow.description
+                            : "No description provided."),
+                  ),
+                  const Icon(Icons.edit)
+                ],
               )
             ],
           ),

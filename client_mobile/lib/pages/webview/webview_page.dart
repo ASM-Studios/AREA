@@ -35,7 +35,6 @@ class WebViewPage extends StatelessWidget {
           if (url.startsWith(serviceConfigRedirectUri)) {
             final code = Uri.parse(url).queryParameters['code'];
             if (code != null) {
-              print("Code d'autorisation reçu : $code");
               Navigator.pop(
                 context,
                 await OAuthService.exchangeCode(

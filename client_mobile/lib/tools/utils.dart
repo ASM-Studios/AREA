@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:math';
 import 'package:crypto/crypto.dart';
+import 'package:intl/intl.dart';
 
 class Utils {
   static bool isValidEmail(String email) {
@@ -48,5 +49,11 @@ class Utils {
         .replaceAll("+", "-")
         .replaceAll("/", "_");
     return codeChallenge;
+  }
+
+  static String formatDate(String date, {String? format = 'dd/MM/yyyy'}) {
+    DateTime dateTime = DateTime.parse(date);
+    String formattedDate = DateFormat(format).format(dateTime);
+    return formattedDate;
   }
 }

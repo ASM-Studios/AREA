@@ -13,7 +13,6 @@ class UpdateWorkflowService {
   static Future<bool> createWorkflow(Workflow workflow) async {
     final String? token = await secureStorage.read(key: 'bearer_token');
 
-    print("bearer token : $token");
     final response = await http.post(Uri.parse('$baseUrl/workflow/create'),
         headers: {
           'Authorization': 'Bearer $token',
@@ -26,7 +25,6 @@ class UpdateWorkflowService {
 
   static Future<List<Workflow>> getWorkflowList() async {
     final String? token = await secureStorage.read(key: 'bearer_token');
-    print("voici ton bearer : $token");
 
     final response = await http.get(
       Uri.parse('$baseUrl/workflow/list'),

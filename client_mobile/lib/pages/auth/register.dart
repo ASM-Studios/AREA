@@ -8,9 +8,7 @@ import 'package:area/widgets/oauth_buttons.dart';
 import 'package:area/widgets/password_form_field.dart';
 import 'package:area/widgets/simple_text.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_appauth/flutter_appauth.dart';
 import 'package:go_router/go_router.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class RegisterPage extends StatefulWidget {
   @override
@@ -18,12 +16,7 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  final String callbackUrlScheme = 'com.asm_studios.area';
-  String get spotifyRedirectUrlMobile => '$callbackUrlScheme://callback';
   bool isLoggingViaOauth = false;
-
-  final String clientId = dotenv.env["VITE_SPOTIFY_CLIENT_ID"] ?? "";
-  final appAuth = const FlutterAppAuth();
 
   final _formKey = GlobalKey<FormState>();
 

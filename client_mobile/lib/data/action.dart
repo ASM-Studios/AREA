@@ -16,7 +16,7 @@ class WorkflowActionReaction {
       this.serviceName,
       this.serviceId});
 
-  factory WorkflowActionReaction.fromJson(Map<String, dynamic> json) {
+  factory WorkflowActionReaction.fromJson(Map<String, dynamic> json, { String serviceName = "", int serviceId = 0 }) {
     return WorkflowActionReaction(
       id: json['id'],
       name: json['name'],
@@ -26,6 +26,8 @@ class WorkflowActionReaction {
               .map((param) => Parameter.fromJson(param))
               .toList()
           : [],
+        serviceName: serviceName,
+        serviceId: serviceId
     );
   }
 

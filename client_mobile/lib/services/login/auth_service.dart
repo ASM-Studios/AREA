@@ -85,8 +85,6 @@ class AuthService {
   static Future<bool> login(
       BuildContext context, Map<String, dynamic> jsonInfos) async {
     try {
-      print("Tentative de login...");
-
       final url = Uri.parse('$baseUrl/auth/login');
 
       final response = await http.post(
@@ -101,7 +99,6 @@ class AuthService {
 
         await secureStorage.write(key: 'bearer_token', value: token);
 
-        print("Connexion réussie et token sauvegardé !");
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text("Login successfully !"),
@@ -135,8 +132,6 @@ class AuthService {
   static Future<bool> register(
       BuildContext context, Map<String, dynamic> jsonInfos) async {
     try {
-      print("Tentative de connexion...");
-
       final url = Uri.parse('$baseUrl/auth/register');
 
       final response = await http.post(
