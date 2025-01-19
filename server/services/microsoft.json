@@ -2,44 +2,26 @@
   "name": "microsoft",
   "events": [
     {
+      "short_name": "email_received_ms",
       "name": "New Email Received",
       "description": "Triggered when a new email is received in your mailbox.",
       "type": "action",
+      "variables": ["sender", "subject", "body"],
       "parameters": []
     },
     {
-      "name": "Email Sent",
-      "description": "Triggered when an email is sent from your mailbox.",
+      "short_name": "teams_channel_created_ms",
+      "name": "New channel in Teams",
+      "description": "Triggered when a new channel is created in Teams channel.",
       "type": "action",
+      "variables": ["teams_name", "channel_name", "channel_id", "created_time"],
       "parameters": []
     },
     {
-      "name": "New message in channel",
-      "description": "Triggered when a new message is posted in a Teams channel.",
-      "type": "action",
-      "parameters": [
-        {
-          "name": "channel_id",
-          "description": "ID of the Teams channel.",
-          "type": "string"
-        }
-      ]
-    },
-    {
-      "name": "New channel created",
-      "description": "Triggered when a new channel is created in Teams.",
-      "type": "action",
-      "parameters": [
-        {
-          "name": "team_id",
-          "description": "ID of the Teams team.",
-          "type": "string"
-        }
-      ]
-    },
-    {
+      "short_name": "file_uploaded_ms",
       "name": "File uploaded",
       "description": "Triggered when a new file is uploaded to OneDrive.",
+      "variables": ["file_name", "file_path", "uploaded_by"],
       "type": "action",
       "parameters": [
         {
@@ -50,30 +32,37 @@
       ]
     },
     {
-      "name": "File updated",
-      "description": "Triggered when a file is updated in OneDrive.",
+      "short_name": "file_modified_ms",
+      "name": "File modified",
+      "description": "Triggered when a file is modified in OneDrive.",
       "type": "action",
+      "variables": ["file_name", "file_path", "modified_by"],
       "parameters": [
         {
-          "name": "file_id",
-          "description": "ID of the updated file.",
+          "name": "folder_path",
+          "description": "Path of the folder where the file is updated.",
           "type": "string"
         }
       ]
     },
     {
-      "name": "File deleted",
-      "description": "Triggered when a file is deleted from OneDrive.",
+      "short_name": "event_started_ms",
+      "name": "Event has started",
+      "description": "Triggered when an event has started in your calendar.",
       "type": "action",
-      "parameters": [
-        {
-          "name": "file_id",
-          "description": "ID of the deleted file.",
-          "type": "string"
-        }
-      ]
+      "parameters": [],
+      "variables": ["subject", "organizer", "location"]
     },
     {
+      "short_name": "event_created_ms",
+      "name": "Event created",
+      "description": "Triggered when a new event is created in your calendar.",
+      "type": "action",
+      "parameters": [],
+      "variables": ["subject", "organizer", "location"]
+    },
+    {
+      "short_name": "email_send_ms",
       "name": "Send an Email",
       "description": "Send an email from your mailbox.",
       "type": "reaction",
@@ -118,8 +107,13 @@
       "type": "reaction",
       "parameters": [
         {
-          "name": "channel_id",
-          "description": "ID of the Teams channel.",
+          "name": "team_name",
+          "description": "Name of the teams.",
+          "type": "string"
+        },
+        {
+          "name": "channel_name",
+          "description": "Name of the Teams channel.",
           "type": "string"
         },
         {

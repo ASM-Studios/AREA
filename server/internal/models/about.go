@@ -10,6 +10,8 @@ type Action struct {
 	Id          uint        `json:"id"`
 	Name        string      `json:"name"`
 	Description string      `json:"description"`
+	ShortName   string      `json:"shortname"`
+	Variables   []string    `json:"variables"`
 	Parameters  []Parameter `json:"parameters"`
 }
 
