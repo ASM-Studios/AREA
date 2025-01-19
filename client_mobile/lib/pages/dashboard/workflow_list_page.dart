@@ -17,7 +17,7 @@ class WorkflowListPage extends StatefulWidget {
 class _WorkflowListPageState extends State<WorkflowListPage> {
   List<Workflow> workflows = [];
 
-   void removeWorkflow(int id) {
+  void removeWorkflow(int id) {
     setState(() {
       workflows.removeWhere((workflow) => workflow.id == id);
     });
@@ -29,7 +29,7 @@ class _WorkflowListPageState extends State<WorkflowListPage> {
       body: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.fromLTRB(0, 30, 20, 0),
+            padding: const EdgeInsets.fromLTRB(0, 30, 5, 0),
             child: Align(alignment: Alignment.topRight, child: ProfileButton()),
           ),
           Center(
@@ -48,7 +48,16 @@ class _WorkflowListPageState extends State<WorkflowListPage> {
               }
               if (snapshot.hasError) {
                 return Center(
-                  child: Text('Erreur : ${snapshot.error}'),
+                  child: Column(children: [
+                    Text('Erreur : ${snapshot.error}'),
+                    IconButton(onPressed: () {
+                      setState(() {
+                        
+                      });
+                    },
+                    icon: const Icon(Icons.refresh), 
+                    )
+                  ]),
                 );
               }
 

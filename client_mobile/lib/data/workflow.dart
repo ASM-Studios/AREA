@@ -48,7 +48,6 @@ class Workflow {
         events: []
       );
     } catch (e) {
-      print('Error parsing Workflow: $e');
       return Workflow(
           name: 'Unknown', status: "failed", description: "Unknown", servicesId: [], events: []);
     }
