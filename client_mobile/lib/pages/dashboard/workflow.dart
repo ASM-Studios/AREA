@@ -3,6 +3,7 @@ import 'package:area/data/service_metadata.dart';
 import 'package:area/data/workflow.dart';
 import 'package:area/services/workflow/workflow_service.dart';
 import 'package:area/widgets/action_button.dart';
+import 'package:area/widgets/button.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -31,6 +32,62 @@ class _WorkflowPageState extends State<WorkflowPage> {
     setState(() {
       reactions.add(selected);
     });
+  }
+
+  void createWorkflow() async {
+    if (actions.isEmpty || reactions.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Please refer an action and a reaction"),
+          backgroundColor: Colors.red,
+        ),
+      );
+    } else {
+      final workflowDetails = await _showWorkflowDetailsDialog(context);
+      if (workflowDetails != null) {
+        final name = workflowDetails["name"];
+        final description = workflowDetails["description"];
+        List<int> servicesId = [];
+        for (WorkflowActionReaction action in actions) {
+          servicesId.add(action.serviceId!);
+        }
+        for (WorkflowActionReaction reaction in reactions) {
+          if (!servicesId.contains(reaction.serviceId!)) {
+            servicesId.add(reaction.serviceId!);
+          }
+        }
+        bool hasCreatedWorkflow = await UpdateWorkflowService.createWorkflow(
+          Workflow(
+            name: name!,
+            description: description!,
+            servicesId: servicesId,
+            events: [
+              ...actions.map(
+                  (action) => WorkflowEvent(action: action, type: "action")),
+              ...reactions.map((reaction) =>
+                  WorkflowEvent(action: reaction, type: "reaction")),
+            ],
+          ),
+        );
+
+        if (hasCreatedWorkflow) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text("Workflow successfully created !"),
+              backgroundColor: Colors.black,
+            ),
+          );
+          GoRouter.of(context).pushReplacement("/workflow/list");
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text("Workflow failed to be created."),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+      }
+    }
   }
 
   Future<Map<String, String>?> _showWorkflowDetailsDialog(
@@ -150,67 +207,18 @@ class _WorkflowPageState extends State<WorkflowPage> {
                 first: reactions.isEmpty,
                 isAction: false,
               ),
-            const SizedBox(height: 50),
-            ElevatedButton(
-                onPressed: () async {
-                  if (actions.isEmpty || reactions.isEmpty) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text("Please refer an action and a reaction"),
-                        backgroundColor: Colors.red,
-                      ),
-                    );
-                  } else {
-                    final workflowDetails =
-                        await _showWorkflowDetailsDialog(context);
-                    if (workflowDetails != null) {
-                      final name = workflowDetails["name"];
-                      final description = workflowDetails["description"];
-                      List<int> servicesId = [];
-                      for (WorkflowActionReaction action in actions) {
-                        servicesId.add(action.serviceId!);
-                      }
-                      for (WorkflowActionReaction reaction in reactions) {
-                        if (!servicesId.contains(reaction.serviceId!)) {
-                          servicesId.add(reaction.serviceId!);
-                        }
-                      }
-                      bool hasCreatedWorkflow =
-                          await UpdateWorkflowService.createWorkflow(
-                        Workflow(
-                          name: name!,
-                          description: description!,
-                          servicesId: servicesId,
-                          events: [
-                            ...actions.map((action) =>
-                                WorkflowEvent(action: action, type: "action")),
-                            ...reactions.map((reaction) => WorkflowEvent(
-                                action: reaction, type: "reaction")),
-                          ],
-                        ),
-                      );
-
-                      if (hasCreatedWorkflow) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text("Workflow successfully created !"),
-                            backgroundColor: Colors.black,
-                          ),
-                        );
-                        GoRouter.of(context).pushReplacement("/workflow/list");
-                      } else {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text("Workflow failed to be created."),
-                            backgroundColor: Colors.red,
-                          ),
-                        );
-                      }
-                    }
-                  }
-                },
-                child: const Text("Create"))
+            const SizedBox(height: 100),
           ],
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButton: 
+      Padding(
+        padding: EdgeInsets.all(20),
+        child: AreaButton(
+          label: "Create",
+          onPressed: createWorkflow,
+          color: const Color(0XFF035a63),
         ),
       ),
     );

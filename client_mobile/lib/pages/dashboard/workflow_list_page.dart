@@ -49,7 +49,7 @@ class _WorkflowListPageState extends State<WorkflowListPage> {
               if (snapshot.hasError) {
                 return Center(
                   child: Column(children: [
-                    Text('Erreur : ${snapshot.error}'),
+                    Text('${snapshot.error}'),
                     IconButton(onPressed: () {
                       setState(() {
                         
@@ -82,10 +82,10 @@ class _WorkflowListPageState extends State<WorkflowListPage> {
                         )
                       : Center(
                           child: Text(
-                            "No workflow available",
+                            "No workflow available.",
                             style: GoogleFonts.fjallaOne(
                               textStyle: const TextStyle(
-                                  color: Colors.black, fontSize: 14),
+                                  color: Colors.black, fontSize: 24),
                             ),
                           ),
                         ),
