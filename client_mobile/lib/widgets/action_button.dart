@@ -53,17 +53,20 @@ class ActionButton extends StatelessWidget {
       child: Row(
         children: [
           const SizedBox(width: 10),
-          Text(
-            getButtonText(),
-            style: TextStyle(
-                fontSize: action == null ? 36 : 16,
-                color: serviceMetadata != null
-                    ? (serviceMetadata!.color == Colors.white
-                        ? Colors.black
-                        : Colors.white)
-                    : Colors.white),
+          Expanded(
+            child: Text(
+              getButtonText(),
+              style: TextStyle(
+                  overflow: TextOverflow.ellipsis,
+                  fontSize: action == null ? 36 : 16,
+                  color: serviceMetadata != null
+                      ? (serviceMetadata!.color == Colors.white
+                          ? Colors.black
+                          : Colors.white)
+                      : Colors.white),
+              maxLines: 2,
+            ),
           ),
-          if (action == null) const Spacer(),
           if (action == null)
             ElevatedButton(
               onPressed: () {
@@ -79,7 +82,6 @@ class ActionButton extends StatelessWidget {
                 ),
               ),
             ),
-          if (action != null) const Spacer(),
           if (action != null)
             Image.asset(serviceMetadata!.imagePath, width: 50, height: 50)
         ],
