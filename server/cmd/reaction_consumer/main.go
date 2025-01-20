@@ -72,6 +72,30 @@ func setupParameters(user *models.User, parameters []Parameter, variables map[st
         return parameterMap
 }
 
+type Parameter struct {
+        Name string
+        Value string
+}
+
+func setupParameters(user *models.User, parameters []Parameter, variables map[string]interface{}) map[string]string {
+        parameterMap := make(map[string]string)
+        var secrets []models.Secret
+        pkg.DB.Table("secrets").Where("user_id = ?", user.ID).Find(&secrets)
+
+        for _, parameter := range parameters {
+                tmpValue := parameter.Value
+                for _, secret := range secrets {
+                        tmpValue = strings.ReplaceAll(tmpValue, fmt.Sprintf("$%s", secret.Key), fmt.Sprintf("%v", secret.Value))
+                }
+                for key, value := range variables {
+			tmpValue = strings.ReplaceAll(tmpValue, fmt.Sprintf("$%s", key), fmt.Sprintf("%v", value))
+		}
+                parameterMap[parameter.Name] = tmpValue
+        }
+
+        return parameterMap
+}
+
 func executeWorkflowEvent(payload Payload, workflowEvent *models.WorkflowEvent) {
 	var user models.User
 	pkg.DB.Where("id = ?", payload.Workflow.UserID).First(&user)
