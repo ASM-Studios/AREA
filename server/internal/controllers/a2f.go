@@ -81,6 +81,7 @@ func GenerateTOTP(c *gin.Context) {
         pkg.DB.Save(&user)
         c.JSON(200, gin.H {
                 "url": fmt.Sprintf("otpauth://totp/AREA:%s?secret=%s&issuer=AREA", user.Email, key.Secret()),
+                "secret": key.Secret(),
         })
 }
 
@@ -106,6 +107,7 @@ func ValidateTOTP(c *gin.Context) {
         }
         if totp.Validate(code.Code, user.TOTP) {
                 user.ValidTOTP = true
+                user.TwoFactorMethod = "totp"
                 pkg.DB.Save(&user)
                 c.JSON(200, gin.H {
                         "message": "TOTP valid",

@@ -113,6 +113,28 @@ export interface Translation {
                 registered: string;
             };
         };
+        twoFactor: {
+            title: string;
+            description: string;
+            form: {
+                code: {
+                    label: string;
+                    placeholder: string;
+                    validation: {
+                        required: string;
+                        length: string;
+                        numeric: string;
+                    };
+                };
+                submitButton: string;
+            };
+            errors: {
+                verificationFailed: string;
+            };
+            success: {
+                verified: string;
+            };
+        };
     };
     header: {
         home: string;
@@ -139,6 +161,13 @@ export interface Translation {
             description: string;
             logoutDescription: string;
             logoutButton: string;
+            securitySettings: string;
+            enableTOTP: string;
+            verifyEmail: string;
+            enableEmailAuth: string;
+            disable2FA: string;
+            setup2FATitle: string;
+            scan2FAQRCode: string;
         };
         themeSettings: {
             title: string;
@@ -362,6 +391,7 @@ export interface Translation {
             triggerAsc: string;
             cancelSort: string;
             previous: string;
+            continue: string;
         }
     };
     security: {

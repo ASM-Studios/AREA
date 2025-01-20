@@ -2,16 +2,14 @@ package controllers
 
 import (
 	"AREA/internal/a2f"
+	"AREA/internal/gconsts"
 	"AREA/internal/mail"
 	"AREA/internal/models"
 	"AREA/internal/pkg"
 	db "AREA/internal/pkg"
 	"AREA/internal/utils"
-	"fmt"
 	"log"
-	"math/rand"
 	"net/http"
-	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/pquerna/otp/totp"
@@ -104,9 +102,23 @@ func Login(c *gin.Context) {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid credentials"})
 		return
 	}
-	tokenString := utils.NewToken(c, LoginData.Email, "mid")
+
+        var tokenString string
+        if user.TwoFactorMethod == "none" {
+                tokenString = utils.NewToken(c, LoginData.Email, "full")
+                c.JSON(http.StatusOK, gin.H{"jwt": tokenString})
+        } else {
+                tokenString = utils.NewToken(c, LoginData.Email, "mid")
+                if user.TwoFactorMethod == "mail" {
+                        a2f.Generate2FAMailCode(&user)
+                }
+                c.JSON(http.StatusTeapot, gin.H{
+                        "jwt": tokenString,
+                        "method": user.TwoFactorMethod,
+                })
+        }
+
 	db.DB.Model(&user).Update("token", tokenString)
-        c.JSON(http.StatusOK, gin.H{"jwt": tokenString})
 }
 
 // Register godoc
@@ -152,13 +164,7 @@ func Register(c *gin.Context) {
 	}
 	db.DB.Create(&newUser)
 
-        code := models.MailCode {
-                Code: uint(rand.Int() % 1000000),
-                ExpiresAt: uint(time.Now().Unix() + 300),
-                UserID: newUser.ID,
-        }
-        db.DB.Create(&code)
-        mail.SendMail(RegisterData.Email, "Welcome to AREA", fmt.Sprintf("Welcome to AREA, your verification code is %d\nIt is valid for 5 minutes", code.Code))
+        mail.SendHTMLMail(RegisterData.Email, "Welcome to AREA", gconsts.RegisterMail)
 
 	c.JSON(http.StatusOK, gin.H{"username": RegisterData.Username, "email": RegisterData.Email, "jwt": tokenString})
 }

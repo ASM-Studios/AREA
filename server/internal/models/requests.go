@@ -75,9 +75,11 @@ type ServiceRequest struct {
 // @Param email body string true "Email address of the user"
 // @Param services body []ServiceRequest false "List of services associated with the user"
 type UserRequest struct {
-	Username string           `json:"username"`
-	Email    string           `json:"email"`
-	Services []ServiceRequest `json:"services"`
+        Username        string                  `json:"username"`
+        Email           string                  `json:"email"`
+        ValidEmail      bool                    `json:"valid_email"`
+        TwoFactorMethod string                  `gorm:"type:enum('none', 'mail', 'totp');not null" binding:"required" json:"two_factor_method"`
+        Services        []ServiceRequest        `json:"services"`
 }
 
 // ParametersRequest represents a parameter associated with an event.

@@ -7,13 +7,15 @@ import { instance, auth } from "@Config/backend.routes";
 import { useAuth, useUser } from "@/Context/ContextHooks";
 import { useNavigate } from 'react-router-dom';
 import Globe from '../../../Components/eldora/globe';
+import { useMediaQuery } from 'react-responsive';
 
 const Login = () => {
     const [form] = Form.useForm();
     const { setJsonWebToken, setIsAuthenticated } = useAuth();
-    const { translations } = useUser();
+    const { translations, setTotpLoggingIn } = useUser();
     const navigate = useNavigate();
     const [isFormValid, setIsFormValid] = useState(false);
+    const isMobile = useMediaQuery({ query: '(max-width: 768px)' });
 
     React.useEffect(() => {
         onFieldsChange();
@@ -31,6 +33,13 @@ const Login = () => {
                 navigate('/dashboard');
             })
             .catch((error) => {
+                if (error?.response?.status === 418) {
+                    setJsonWebToken(error?.response?.data?.jwt);
+                    setIsAuthenticated(true);
+                    setTotpLoggingIn(true);
+                    navigate('/2fa');
+                    return;
+                }
                 console.error('Failed:', error);
                 toast.error(`${translations?.authForm.login.errors.loginFailed}: ${error?.response?.data?.error}`);
             });
@@ -62,20 +71,22 @@ const Login = () => {
             left: 0,
             overflow: 'hidden'
         }} role="main">
-            <div style={{
-                position: 'relative',
-                width: '50%',
-                height: '100%',
-                opacity: 0.8,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center'
-            }}>
-                <Globe />
-            </div>
+            {!isMobile && 
+                <div style={{
+                    position: 'relative',
+                    width: '50%',
+                    height: '100%',
+                    opacity: 0.8,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                }}>
+                    <Globe />
+                </div>
+            }
 
             <div style={{
-                width: '50%',
+                width: isMobile ? '100%' : '50%',
                 display: 'flex',
                 justifyContent: 'center',
                 alignItems: 'center'
@@ -90,14 +101,16 @@ const Login = () => {
                         backdropFilter: 'blur(8px)',
                         position: 'relative'
                     }}
-                    headStyle={{
-                        fontSize: '24px',
-                        textAlign: 'center',
-                        borderBottom: 'none',
-                        padding: '24px 24px 0',
-                    }}
-                    bodyStyle={{
-                        padding: '24px',
+                    styles={{
+                        header: {
+                            fontSize: '24px',
+                            textAlign: 'center',
+                            borderBottom: 'none',
+                            padding: '24px 24px 0',
+                        },
+                        body: {
+                            padding: '24px',
+                        }
                     }}
                 >
                     <Form

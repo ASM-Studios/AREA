@@ -140,9 +140,10 @@ const Accessibility: React.FC = () => {
                     }}>
                         <li><strong>Home (/)</strong>: 95%</li>
                         <li><strong>Login (/login)</strong>: 100%</li>
+                        <li><strong>Register (/register)</strong>: 100%</li>
+                        <li><strong>2FA (/2fa)</strong>: 100%</li>
                         <li><strong>Accessibility (/accessibility)</strong>: 100%</li>
                         <li><strong>Download (/download)</strong>: 100%</li>
-                        <li><strong>Register (/register)</strong>: 100%</li>
                         <li><strong>Dashboard (/dashboard)</strong>: 96%</li>
                         <li><strong>Workflow Create/Update (/workflow/create & /workflow/update/{'{id}'})</strong>: 96%</li>
                         <li><strong>Account (/account/me)</strong>: 93%</li>
