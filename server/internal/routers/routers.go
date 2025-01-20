@@ -53,6 +53,9 @@ func setUpWorkflowGroup(router *gin.Engine) {
 		workflow.DELETE("/delete/:id", controllers.WorkflowDelete)
 		workflow.GET("/:id", controllers.WorkflowGet)
 		workflow.PUT("/:id", controllers.WorkflowUpdate)
+
+                workflow.GET("/trigger/:id", controllers.TriggerWorkflow)
+                workflow.GET("/trigger", controllers.TriggerWorkflows)
 	}
 }
 
@@ -65,12 +68,6 @@ func setUpSecretGroup(router *gin.Engine) {
                 secret.DELETE("/delete/:id", controllers.SecretDelete)
                 //secret.PUT("/update", controllers.l
         }
-}
-
-func setUpTriggerGroup(router *gin.Engine) {
-        /*trigger := router.Group("/trigger", middleware.AuthMiddleware(), middleware.A2FMiddleware())
-        {
-        }*/
 }
 
 func setUpUserGroup(router *gin.Engine) {
