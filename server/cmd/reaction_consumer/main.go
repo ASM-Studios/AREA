@@ -25,12 +25,21 @@ import (
 var actionCallbacks = map[uint]func(*models.User, map[string]string){
 	3: github.CreateUserRepo,
 
-	5:  google.AddEvent,
-	13: microsoft.SendEmail,
-	22: spotify.PlayPauseTrack,
-	23: spotify.SkipPrev,
-	24: spotify.SkipNext,
-	25: spotify.AddTrack,
+	5: google.AddEvent,
+
+	14: microsoft.SendEmail,
+	15: microsoft.ForwardEmail,
+	16: microsoft.SendMessageInChannel,
+	17: microsoft.CreateFile,
+	18: microsoft.WriteFile,
+	19: microsoft.CreateFolder,
+	20: microsoft.CreateEvent,
+	21: microsoft.SetCustomStatus,
+
+	23: spotify.PlayPauseTrack,
+	24: spotify.SkipPrev,
+	25: spotify.SkipNext,
+	26: spotify.AddTrack,
 
 	26: twitch.SendMessage,
 	27: twitch.WhisperMessage,
