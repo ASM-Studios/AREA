@@ -19,7 +19,7 @@ type User struct {
 	Password        string          `gorm:"not null" json:"password" binding:"required"`
 	Salt            string          `gorm:"not null" json:"salt"`
         Token           string          `gorm:"not null" json:"token"`
-        F2aMethod       string          `gorm:"type:enum('none', 'mail', 'totp');not null" binding:"required" json:"f2a_method"`
+        TwoFactorMethod string          `gorm:"type:enum('none', 'mail', 'totp');not null" binding:"required" json:"f2a_method"`
         TOTP            string          `json:"totp"`
         ValidTOTP       bool            `json:"valid_totp"`
         Workflows       []Workflow      `gorm:"constraint:OnDelete:CASCADE;"`

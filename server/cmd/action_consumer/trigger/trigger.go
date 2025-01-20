@@ -27,7 +27,7 @@ var triggerCallbacks = map[uint]func(*models.Workflow, *models.User, map[string]
 	10: microsoft.CalendarEventStarted,
 	11: microsoft.CalendarEventCreated,
 
-        21: spotify.StartPlaying,
+        20: spotify.StartPlaying,
 
 	26: twitch.StreamStart,
 }

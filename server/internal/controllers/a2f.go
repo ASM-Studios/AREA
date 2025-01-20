@@ -11,12 +11,40 @@ import (
 	"github.com/pquerna/otp/totp"
 )
 
+var selectMethods = map[string]func(*gin.Context, *models.User) {
+        "none": func(c *gin.Context, user *models.User) {
+                user.TwoFactorMethod = "none"
+                c.JSON(http.StatusNoContent, gin.H{})
+        },
+        "mail": func(c *gin.Context, user *models.User) {
+                if user.ValidEmail {
+                        user.TwoFactorMethod = "mail"
+                        c.JSON(http.StatusNoContent, gin.H{})
+                } else {
+                        c.JSON(http.StatusBadRequest, gin.H {
+                                "error": "You must verify your email",
+                        })
+                }
+        },
+        "totp": func(c *gin.Context, user *models.User) {
+                if user.ValidTOTP {
+                        user.TwoFactorMethod = "totp"
+                        c.JSON(http.StatusNoContent, gin.H{})
+                } else {
+                        c.JSON(http.StatusBadRequest, gin.H {
+                                "error": "You must have a totp",
+                        })
+                }
+        },
+}
+
 func SelectMethod(c *gin.Context) {
         user, err := pkg.GetUserFromToken(c)
         if err != nil {
                 c.JSON(500, gin.H {
                         "error": "Failed to fetch user",
                 })
+                return
         }
 
         var method models.A2FMethod
@@ -26,8 +54,15 @@ func SelectMethod(c *gin.Context) {
                         "error": "Invalid request",
                 })
         }
-        user.F2aMethod = method.Method
-        pkg.DB.Save(&user)
+        callback, ok := selectMethods[method.Method]
+        if !ok {
+                c.JSON(http.StatusBadRequest, gin.H {
+                        "error": "Invalid method",
+                })
+        } else {
+                callback(c, &user)
+                pkg.DB.Save(&user)
+        }
 }
 
 func GenerateTOTP(c *gin.Context) {

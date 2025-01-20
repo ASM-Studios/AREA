@@ -23,7 +23,7 @@ func setUpA2FGroup(router *gin.Engine) {
         mail.GET("/generate", controllers.GenerateMailCode)
         mail.POST("/validate", controllers.ValidateMailCode)
 
-        router.POST("/2fa/method", controllers.SelectMethod)
+        router.POST("/2fa/method", middleware.AuthMiddleware(), middleware.A2FMiddleware(), controllers.SelectMethod)
 }
 
 func setUpOauthGroup(router *gin.Engine) {

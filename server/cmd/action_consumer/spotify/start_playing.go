@@ -6,9 +6,7 @@ import (
 	"AREA/internal/pkg"
 	"AREA/internal/utils"
 	"errors"
-	"fmt"
 	"net/http"
-	"unsafe"
 )
 
 type TrackInfo struct {
@@ -32,8 +30,6 @@ type TrackInfoReturn struct {
 }
 
 func StartPlaying(workflow *models.Workflow, user *models.User, args map[string]string) (bool, []interface{}, error) {
-        fmt.Println(unsafe.Sizeof(TrackInfo{}))
-        fmt.Println(unsafe.Sizeof(TrackInfoReturn{}))
         var token models.Token
         pkg.DB.Where("user_id = ? AND service_id = ?", user.ID, 5).First(&token)
 

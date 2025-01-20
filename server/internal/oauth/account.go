@@ -20,6 +20,7 @@ func createAccount(c *gin.Context, dbToken *models.Token) (*models.User) {
         user.Email = dbToken.Email
         user.Username = dbToken.DisplayName
         user.Token = utils.NewToken(c, user.Email, "full")
+        user.TwoFactorMethod = "none"
 
         pkg.DB.Create(&user)
 

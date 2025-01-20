@@ -17,34 +17,26 @@ import (
 	"github.com/pquerna/otp/totp"
 )
 
-func loginA2FNone(user *models.User, a2fRequest *models.A2FRequest) bool {
-        return true
-}
-
-func loginA2FTotp(user *models.User, a2fRequest *models.A2FRequest) bool {
-        result := totp.Validate(a2fRequest.Code, user.TOTP)
-        if result {
+var a2fMethods = map[string]func(*models.User, *models.A2FRequest) bool {
+        "none": func(user *models.User, a2fRequest *models.A2FRequest) bool {
                 return true
-        } else {
-                return false
-        }
-}
-
-func loginA2FMail(user *models.User, a2fRequest *models.A2FRequest) bool {
-        res := a2f.ValidateMailCode(user, a2fRequest)
-        if res {
-                 return true
-        } else {
-                return false
-        }
-}
-
-type a2fMethod func(*models.User, *models.A2FRequest) bool
-
-var a2fMethods = map[string]a2fMethod {
-        "none": loginA2FNone,
-        "totp": loginA2FTotp,
-        "mail": loginA2FMail,
+        },
+        "totp": func(user *models.User, a2fRequest *models.A2FRequest) bool {
+                result := totp.Validate(a2fRequest.Code, user.TOTP)
+                if result {
+                        return true
+                } else {
+                        return false
+                }
+        },
+        "mail": func(user *models.User, a2fRequest *models.A2FRequest) bool {
+                res := a2f.ValidateMailCode(user, a2fRequest)
+                if res {
+                         return true
+                } else {
+                        return false
+                }
+        },
 }
 
 func LoginA2F(c *gin.Context) {
@@ -64,7 +56,14 @@ func LoginA2F(c *gin.Context) {
                 })
                 return
         }
-        var result bool = a2fMethods[user.F2aMethod](&user, &a2fRequest)
+        callback, ok := a2fMethods[user.TwoFactorMethod]
+        if !ok {
+                c.JSON(http.StatusBadRequest, gin.H {
+                        "error": "Invalid method",
+                })
+                return
+        }
+        result := callback(&user, &a2fRequest)
         if result {
                 tokenString := utils.NewToken(c, user.Email, "full")
 	        db.DB.Model(&user).Update("token", tokenString)
@@ -142,14 +141,14 @@ func Register(c *gin.Context) {
 	}
 	password, salt := utils.HashPassword(RegisterData.Password)
         newUser := models.User{
-		Email:          RegisterData.Email,
-                ValidEmail:     false,
-		Username:       RegisterData.Username,
-		Password:       password,
-		Salt:           salt,
-		Token:          tokenString,
-                F2aMethod:      "none",
-                ValidTOTP:      false,
+		Email:                  RegisterData.Email,
+                ValidEmail:             false,
+		Username:               RegisterData.Username,
+		Password:               password,
+		Salt:                   salt,
+		Token:                  tokenString,
+                TwoFactorMethod:        "none",
+                ValidTOTP:              false,
 	}
 	db.DB.Create(&newUser)
 

@@ -25,7 +25,7 @@ func isA2FAuthenticated(c *gin.Context) bool {
                 c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
                 return false
         }
-        if user.F2aMethod == "none" {
+        if user.TwoFactorMethod == "none" {
                 return true
         }
         status, err := utils.VerifyTokenA2F(c)
