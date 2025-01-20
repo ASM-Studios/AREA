@@ -139,45 +139,6 @@
       ]
     },
     {
-      "name": "Create a new channel",
-      "description": "Create a new channel in a Teams team.",
-      "type": "reaction",
-      "parameters": [
-        {
-          "name": "team_name",
-          "description": "Name of the teams.",
-          "type": "string"
-        },
-        {
-          "name": "channel_name",
-          "description": "Name of the new channel.",
-          "type": "string"
-        },
-        {
-            "name": "channel_description",
-            "description": "Description of the new channel.",
-            "type": "string"
-        }
-      ]
-    },
-    {
-      "name": "Add a team member",
-      "description": "Add a member to a Teams team.",
-      "type": "reaction",
-      "parameters": [
-        {
-          "name": "team_name",
-          "description": "Name of the teams.",
-          "type": "string"
-        },
-        {
-          "name": "user_email",
-          "description": "Email of the user to add.",
-          "type": "string"
-        }
-      ]
-    },
-    {
       "name": "Create a File in OneDrive",
       "description": "Create a new file in OneDrive with specific content.",
       "type": "reaction",
@@ -195,7 +156,8 @@
         {
           "name": "file_content",
           "description": "Content to write into the newly created file.",
-          "type": "string"
+          "type": "string",
+          "is_required": false
         }
       ]
     },
@@ -256,12 +218,14 @@
         {
           "name": "attendees",
           "description": "Comma-separated email addresses of attendees.",
-          "type": "string"
+          "type": "string",
+          "is_required": false
         },
         {
           "name": "location",
           "description": "The location of the event.",
-          "type": "string"
+          "type": "string",
+          "is_required": false
         }
       ]
     }
