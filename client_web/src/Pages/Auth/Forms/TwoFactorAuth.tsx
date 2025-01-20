@@ -11,7 +11,7 @@ import Security from "@/Components/Security";
 const TwoFactorAuth = () => {
     const [form] = Form.useForm();
     const { setIsAuthenticated } = useAuth();
-    const { translations, user, setUser } = useUser();
+    const { translations, user, setUser, totpLoggingIn } = useUser();
     const navigate = useNavigate();
 
     const isMobile = useMediaQuery({ query: '(max-width: 768px)' });
@@ -43,7 +43,7 @@ const TwoFactorAuth = () => {
     const onFinish = (values: Record<string, string>) => {
         const code = Object.values(values).join('');
 
-        instanceWithAuth.post(auth.twoFactorAuth.validate, { code })
+        instanceWithAuth.post(totpLoggingIn ? auth.twoFactorAuth.login : auth.twoFactorAuth.validate, { code })
             .then(() => {
                 setIsAuthenticated(true);
                 toast.success(translations?.authForm.twoFactor.success.verified);
@@ -77,109 +77,107 @@ const TwoFactorAuth = () => {
     };
 
     return (
-        <Security>
+        <div style={{
+            minHeight: '100vh',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            position: 'fixed',
+            width: '100%',
+            top: 0,
+            left: 0,
+            overflow: 'hidden'
+        }} role="main">
+            {!isMobile &&
+                <>
+                    <div style={{
+                        position: 'relative',
+                        width: '50%',
+                        height: '100%',
+                        opacity: 0.8,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center'
+                    }}>
+                        <Globe />
+                    </div>
+                </>
+            }
+
             <div style={{
-                minHeight: '100vh',
+                width: '50%',
                 display: 'flex',
-                alignItems: 'center',
                 justifyContent: 'center',
-                position: 'fixed',
-                width: '100%',
-                top: 0,
-                left: 0,
-                overflow: 'hidden'
-            }} role="main">
-                {!isMobile &&
-                    <>
-                        <div style={{
-                            position: 'relative',
-                            width: '50%',
-                            height: '100%',
-                            opacity: 0.8,
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center'
-                        }}>
-                            <Globe />
-                        </div>
-                    </>
-                }
+                alignItems: 'center'
+            }}>
+                <Card
+                    title={translations?.authForm.twoFactor.title}
+                    style={{
+                        width: 400,
+                        boxShadow: '0 8px 32px rgba(0,0,0,0.2)',
+                        borderRadius: '12px',
+                        background: 'rgba(255, 255, 255, 0.9)',
+                        backdropFilter: 'blur(8px)',
+                        position: 'relative'
+                    }}
+                    styles={{
+                        header: {
+                            fontSize: '24px',
+                            textAlign: 'center',
+                            borderBottom: 'none',
+                            padding: '24px 24px 0',
+                        },
+                        body: {
+                            padding: '24px',
+                        }
+                    }}
+                >
+                    <p style={{ textAlign: 'center', marginBottom: '24px' }}>
+                        {translations?.authForm.twoFactor.description}
+                    </p>
 
-                <div style={{
-                    width: '50%',
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center'
-                }}>
-                    <Card
-                        title={translations?.authForm.twoFactor.title}
-                        style={{
-                            width: 400,
-                            boxShadow: '0 8px 32px rgba(0,0,0,0.2)',
-                            borderRadius: '12px',
-                            background: 'rgba(255, 255, 255, 0.9)',
-                            backdropFilter: 'blur(8px)',
-                            position: 'relative'
-                        }}
-                        styles={{
-                            header: {
-                                fontSize: '24px',
-                                textAlign: 'center',
-                                borderBottom: 'none',
-                                padding: '24px 24px 0',
-                            },
-                            body: {
-                                padding: '24px',
-                            }
-                        }}
+                    <Form
+                        form={form}
+                        name="2fa"
+                        onFinish={onFinish}
+                        onFieldsChange={onFieldsChange}
                     >
-                        <p style={{ textAlign: 'center', marginBottom: '24px' }}>
-                            {translations?.authForm.twoFactor.description}
-                        </p>
-
-                        <Form
-                            form={form}
-                            name="2fa"
-                            onFinish={onFinish}
-                            onFieldsChange={onFieldsChange}
-                        >
-                            <div style={{
-                                display: 'flex',
-                                gap: '8px',
-                                justifyContent: 'center',
-                                marginBottom: '24px'
-                            }}>
-                                {[0, 1, 2, 3, 4, 5].map((index) => (
-                                    <React.Fragment key={index}>
-                                        <Form.Item
-                                            name={`digit${index}`}
-                                            style={{marginBottom: 0}}
-                                        >
-                                            <Input
-                                                ref={inputRefs[index]}
-                                                maxLength={1}
-                                                style={{
-                                                    width: '46px',
-                                                    height: '46px',
-                                                    textAlign: 'center',
-                                                    fontSize: '20px',
-                                                    borderRadius: '8px',
-                                                }}
-                                                onChange={(e) => handleInput(index, e.target.value)}
-                                                onKeyDown={(e) => handleKeyDown(index, e)}
-                                                aria-label={`Digit ${index + 1} of verification code`}
-                                            />
-                                        </Form.Item>
-                                        {index === 2 && <span
-                                            style={{alignSelf: 'center', fontSize: '24px', margin: '0 16px'}}>-</span>}
-                                    </React.Fragment>
-                                ))}
-                            </div>
-                        </Form>
-                    </Card>
-                </div>
+                        <div style={{
+                            display: 'flex',
+                            gap: '8px',
+                            justifyContent: 'center',
+                            marginBottom: '24px'
+                        }}>
+                            {[0, 1, 2, 3, 4, 5].map((index) => (
+                                <React.Fragment key={index}>
+                                    <Form.Item
+                                        name={`digit${index}`}
+                                        style={{marginBottom: 0}}
+                                    >
+                                        <Input
+                                            ref={inputRefs[index]}
+                                            maxLength={1}
+                                            style={{
+                                                width: '46px',
+                                                height: '46px',
+                                                textAlign: 'center',
+                                                fontSize: '20px',
+                                                borderRadius: '8px',
+                                            }}
+                                            onChange={(e) => handleInput(index, e.target.value)}
+                                            onKeyDown={(e) => handleKeyDown(index, e)}
+                                            aria-label={`Digit ${index + 1} of verification code`}
+                                        />
+                                    </Form.Item>
+                                    {index === 2 && <span
+                                        style={{alignSelf: 'center', fontSize: '24px', margin: '0 16px'}}>-</span>}
+                                </React.Fragment>
+                            ))}
+                        </div>
+                    </Form>
+                </Card>
             </div>
-        </Security>
+        </div>
     );
 };
 

@@ -3,17 +3,16 @@ import { Link } from 'react-router-dom';
 import { Form, Input, Button, Card } from 'antd';
 import { toast } from "react-toastify";
 import OAuthButtons from '../../../Components/Auth/OAuthButtons';
-import { instance, auth, instanceWithAuth, user as userRoute } from "@Config/backend.routes";
+import { instance, auth } from "@Config/backend.routes";
 import { useAuth, useUser } from "@/Context/ContextHooks";
 import { useNavigate } from 'react-router-dom';
 import Globe from '../../../Components/eldora/globe';
 import { useMediaQuery } from 'react-responsive';
-import { UserPayload } from "@/Context/Scopes/UserContext";
 
 const Login = () => {
     const [form] = Form.useForm();
     const { setJsonWebToken, setIsAuthenticated } = useAuth();
-    const { translations, user, setUser } = useUser();
+    const { translations, setTotpLoggingIn } = useUser();
     const navigate = useNavigate();
     const [isFormValid, setIsFormValid] = useState(false);
     const isMobile = useMediaQuery({ query: '(max-width: 768px)' });
@@ -31,22 +30,16 @@ const Login = () => {
                 }
                 setJsonWebToken(response?.data?.jwt);
                 setIsAuthenticated(true);
-
-                instanceWithAuth.get(userRoute.me)
-                    .then((response: { data: UserPayload }) => {
-                        setUser(response?.data?.user);
-                    })
-                    .catch(() => {
-                        setUser(null);
-                    });
-
-                if (user?.is2faEnabled) {
-                    navigate('/2fa');
-                    return;
-                }
                 navigate('/dashboard');
             })
             .catch((error) => {
+                if (error?.response?.status === 418) {
+                    setJsonWebToken(error?.response?.data?.jwt);
+                    setIsAuthenticated(true);
+                    setTotpLoggingIn(true);
+                    navigate('/2fa');
+                    return;
+                }
                 console.error('Failed:', error);
                 toast.error(`${translations?.authForm.login.errors.loginFailed}: ${error?.response?.data?.error}`);
             });

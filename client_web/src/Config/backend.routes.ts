@@ -43,6 +43,7 @@ const auth = {
     twoFactorAuth: {
         generate: `${endpoint}/totp/generate`,
         validate: `${endpoint}/totp/validate`,
+        login: `${endpoint}/auth/login/2fa`,
     },
 };
 

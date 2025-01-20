@@ -32,6 +32,8 @@ export interface UserContextType {
     setLanguage: (lang: string) => void;
     translations: Translation;
     setTranslations: (translations: Translation) => void;
+    totpLoggingIn: boolean;
+    setTotpLoggingIn: (value: boolean) => void;
 }
 
 export const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -47,6 +49,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     const [user, setUser] = useState<User | null>(null);
     const [language, setLanguage] = useState<string>(Cookies.get('language') ?? 'en');
     const [translations, setTranslations] = useState<Translation>(en_language);
+    const [totpLoggingIn, setTotpLoggingIn] = useState<boolean>(false);
 
     React.useEffect(() => {
         Cookies.set('language', language, { expires: 365 });
@@ -70,7 +73,9 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
             language,
             setLanguage,
             translations,
-            setTranslations
+            setTranslations,
+            totpLoggingIn,
+            setTotpLoggingIn
         }}>
             {children}
         </UserContext.Provider>

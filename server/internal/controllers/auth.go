@@ -104,15 +104,20 @@ func Login(c *gin.Context) {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid credentials"})
 		return
 	}
-    var tokenString string
-    if user.TwoFactorMethod == "none" {
-        tokenString = utils.NewToken(c, LoginData.Email, "mid")
-    } else {
-        tokenString = utils.NewToken(c, LoginData.Email, "full")
-    }
+
+        var tokenString string
+        if user.TwoFactorMethod == "none" {
+                tokenString = utils.NewToken(c, LoginData.Email, "full")
+                c.JSON(http.StatusOK, gin.H{"jwt": tokenString})
+        } else {
+                tokenString = utils.NewToken(c, LoginData.Email, "mid")
+                c.JSON(http.StatusTeapot, gin.H{
+                        "jwt": tokenString,
+                        "method": user.TwoFactorMethod,
+                })
+        }
 
 	db.DB.Model(&user).Update("token", tokenString)
-        c.JSON(http.StatusOK, gin.H{"jwt": tokenString})
 }
 
 // Register godoc
