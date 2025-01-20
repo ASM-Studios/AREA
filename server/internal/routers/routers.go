@@ -56,6 +56,17 @@ func setUpWorkflowGroup(router *gin.Engine) {
 	}
 }
 
+func setUpSecretGroup(router *gin.Engine) {
+        secret := router.Group("/secret")
+        secret.Use(middleware.AuthMiddleware(), middleware.A2FMiddleware())
+        {
+                secret.POST("/create", controllers.SecretCreate)
+                secret.GET("/list", controllers.SecretList)
+                secret.DELETE("/delete/:id", controllers.SecretDelete)
+                //secret.PUT("/update", controllers.l
+        }
+}
+
 func setUpTriggerGroup(router *gin.Engine) {
         /*trigger := router.Group("/trigger", middleware.AuthMiddleware(), middleware.A2FMiddleware())
         {
@@ -99,6 +110,7 @@ func SetupRouter(db *sql.DB, rmq *amqp.Connection) *gin.Engine {
 	setUpOauthGroup(router)
 	setUpUserGroup(router)
 	setUpWorkflowGroup(router)
+        setUpSecretGroup(router)
         setUpA2FGroup(router)
 	protected := router.Group("/")
 	protected.Use(middleware.AuthMiddleware(), middleware.A2FMiddleware())
