@@ -33,8 +33,21 @@ func InitSMTPClient() error {
         SMTPClient.Password = utils.GetEnvVar("SMTP_PASSWORD")
         SMTPClient.Dialer = gomail.NewDialer(SMTPClient.Host, SMTPClient.Port, SMTPClient.User, SMTPClient.Password)
         SMTPClient.Dialer.TLSConfig = &tls.Config{InsecureSkipVerify: true}
-        fmt.Printf("%v\n", SMTPClient)
         return nil
+}
+
+func SendHTMLMail(to string, object string, content string) error {
+        message := gomail.NewMessage()
+        message.SetHeader("From", SMTPClient.User)
+        message.SetHeader("To", to)
+        message.SetHeader("Subject", "AREA")
+        message.SetBody("text/html", content)
+        err := SMTPClient.Dialer.DialAndSend(message)
+        if err != nil {
+                return errors.New("Failed to send email")
+        } else {
+                return nil
+        }
 }
 
 func SendMail(to string, object string, content string) error {
