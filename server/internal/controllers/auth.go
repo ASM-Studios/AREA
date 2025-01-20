@@ -1,13 +1,79 @@
 package controllers
 
 import (
+	"AREA/internal/a2f"
+	"AREA/internal/mail"
 	"AREA/internal/models"
+	"AREA/internal/pkg"
 	db "AREA/internal/pkg"
 	"AREA/internal/utils"
-	"github.com/gin-gonic/gin"
+	"fmt"
 	"log"
+	"math/rand"
 	"net/http"
+	"time"
+
+	"github.com/gin-gonic/gin"
+	"github.com/pquerna/otp/totp"
 )
+
+var a2fMethods = map[string]func(*models.User, *models.A2FRequest) bool {
+        "none": func(user *models.User, a2fRequest *models.A2FRequest) bool {
+                return true
+        },
+        "totp": func(user *models.User, a2fRequest *models.A2FRequest) bool {
+                result := totp.Validate(a2fRequest.Code, user.TOTP)
+                if result {
+                        return true
+                } else {
+                        return false
+                }
+        },
+        "mail": func(user *models.User, a2fRequest *models.A2FRequest) bool {
+                res := a2f.ValidateMailCode(user, a2fRequest)
+                if res {
+                         return true
+                } else {
+                        return false
+                }
+        },
+}
+
+func LoginA2F(c *gin.Context) {
+        var a2fRequest models.A2FRequest
+        err := c.ShouldBindJSON(&a2fRequest)
+        if err != nil {
+                c.AbortWithStatusJSON(400, gin.H {
+                        "error": "Invalid request",
+                })
+                return
+        }
+
+        user, err := pkg.GetUserFromToken(c)
+        if err != nil {
+                c.AbortWithStatusJSON(500, gin.H {
+                        "error": "Failed to fetch user",
+                })
+                return
+        }
+        callback, ok := a2fMethods[user.TwoFactorMethod]
+        if !ok {
+                c.JSON(http.StatusBadRequest, gin.H {
+                        "error": "Invalid method",
+                })
+                return
+        }
+        result := callback(&user, &a2fRequest)
+        if result {
+                tokenString := utils.NewToken(c, user.Email, "full")
+	        db.DB.Model(&user).Update("token", tokenString)
+                c.JSON(http.StatusOK, gin.H{"jwt": tokenString})
+        } else  {
+                c.JSON(400, gin.H {
+                        "error": "Invalid code",
+                })
+        }
+}
 
 // Login godoc
 // @Summary      Login a user
@@ -38,7 +104,7 @@ func Login(c *gin.Context) {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid credentials"})
 		return
 	}
-	tokenString := utils.NewToken(c, LoginData.Email)
+	tokenString := utils.NewToken(c, LoginData.Email, "mid")
 	db.DB.Model(&user).Update("token", tokenString)
         c.JSON(http.StatusOK, gin.H{"jwt": tokenString})
 }
@@ -61,7 +127,7 @@ func Register(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	tokenString := utils.NewToken(c, RegisterData.Email)
+	tokenString := utils.NewToken(c, RegisterData.Email, "full")
 	var user models.User
 	db.DB.Where("email = ?", RegisterData.Email).First(&user)
 	if user.ID != 0 {
@@ -74,12 +140,25 @@ func Register(c *gin.Context) {
 		return
 	}
 	password, salt := utils.HashPassword(RegisterData.Password)
-	db.DB.Create(&models.User{
-		Email:    RegisterData.Email,
-		Username: RegisterData.Username,
-		Password: password,
-		Salt:     salt,
-		Token:    tokenString,
-	})
+        newUser := models.User{
+		Email:                  RegisterData.Email,
+                ValidEmail:             false,
+		Username:               RegisterData.Username,
+		Password:               password,
+		Salt:                   salt,
+		Token:                  tokenString,
+                TwoFactorMethod:        "none",
+                ValidTOTP:              false,
+	}
+	db.DB.Create(&newUser)
+
+        code := models.MailCode {
+                Code: uint(rand.Int() % 1000000),
+                ExpiresAt: uint(time.Now().Unix() + 300),
+                UserID: newUser.ID,
+        }
+        db.DB.Create(&code)
+        mail.SendMail(RegisterData.Email, "Welcome to AREA", fmt.Sprintf("Welcome to AREA, your verification code is %d\nIt is valid for 5 minutes", code.Code))
+
 	c.JSON(http.StatusOK, gin.H{"username": RegisterData.Username, "email": RegisterData.Email, "jwt": tokenString})
 }

@@ -27,7 +27,7 @@ func TestNewToken(t *testing.T) {
 	c, _ := gin.CreateTestContext(w)
 	email := "test@example.com"
 
-	tokenString := NewToken(c, email)
+	tokenString := NewToken(c, email, "full")
 	assert.NotEmpty(t, tokenString, "expected a non-empty token string")
 	assert.Equal(t, http.StatusOK, w.Code, "Expected 200 OK for a successful token generation")
 }

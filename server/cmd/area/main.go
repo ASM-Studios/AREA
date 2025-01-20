@@ -1,19 +1,25 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
 	"strconv"
+	"time"
+        "math/rand"
 
 	"AREA/internal/amqp"
 	"AREA/internal/config"
 	"AREA/internal/gconsts"
+	"AREA/internal/mail"
+	"AREA/internal/models"
 	"AREA/internal/pkg"
 	"AREA/internal/routers"
 	"AREA/internal/utils"
 
 	"github.com/gin-gonic/gin"
+	"github.com/rabbitmq/amqp091-go"
 )
 
 func initRMQConnection() {
@@ -24,6 +30,40 @@ func initRMQConnection() {
                 return
         }
         gconsts.Connection = &connection
+}
+
+func sendWorkflows() {
+        rows, err := pkg.DB.Table("workflows").Rows()
+        if err != nil {
+                return
+        }
+        defer rows.Close()
+        for rows.Next() {
+                var workflow models.Workflow
+                pkg.DB.ScanRows(rows, &workflow)
+                body, _ := json.Marshal(workflow)
+                gconsts.Connection.Channel.Publish("", "action", false, false, amqp091.Publishing{
+                        ContentType: "application/json",
+                        Body:        body,
+                })
+        }
+}
+
+func autoTrigger() {
+        ticker := time.NewTicker(time.Duration(config.AppConfig.TriggerInterval) * time.Second)
+        quit := make(chan struct{})
+        go func() {
+                for {
+                        select {
+                        case <-ticker.C:
+                                fmt.Println("Auto trigger")
+                                sendWorkflows()
+                        case <-quit:
+                                ticker.Stop()
+                                return
+                        }
+                }
+        }()
 }
 
 // @title           AREA API
@@ -45,6 +85,7 @@ func initRMQConnection() {
 // @in header
 // @name Authorization
 func main() {
+        rand.Seed(time.Now().UnixNano())
         config.LoadConfig()
 
         sqlDB := pkg.InitDB()
@@ -53,6 +94,7 @@ func main() {
         }
         defer sqlDB.Close()
 
+        mail.InitSMTPClient()
         pkg.InitServiceList()
 
         rmq, err := pkg.InitRabbitMQ()
@@ -63,6 +105,7 @@ func main() {
 
         initRMQConnection()
 
+        autoTrigger()
         gin.SetMode(config.AppConfig.GinMode)
         router := routers.SetupRouter(sqlDB, rmq)
         port := strconv.Itoa(config.AppConfig.Port)
