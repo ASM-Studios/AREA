@@ -10,7 +10,7 @@ import Security from "@/Components/Security";
 
 const TwoFactorAuth = () => {
     const [form] = Form.useForm();
-    const { setIsAuthenticated } = useAuth();
+    const { setIsAuthenticated, setJsonWebToken } = useAuth();
     const { translations, user, setUser, totpLoggingIn } = useUser();
     const navigate = useNavigate();
 
@@ -44,9 +44,15 @@ const TwoFactorAuth = () => {
         const code = Object.values(values).join('');
 
         instanceWithAuth.post(totpLoggingIn ? auth.twoFactorAuth.login : auth.twoFactorAuth.validate, { code })
-            .then(() => {
+            .then((response) => {
                 setIsAuthenticated(true);
                 toast.success(translations?.authForm.twoFactor.success.verified);
+
+                if (totpLoggingIn && response.data?.jwt) {
+                    setJsonWebToken(response?.data?.jwt);
+                    setIsAuthenticated(true);
+                }
+
                 if (user) {
                     setUser({
                         ...user,
