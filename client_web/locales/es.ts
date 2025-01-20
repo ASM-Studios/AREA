@@ -170,6 +170,7 @@ const es_language: Translation = {
             disable2FA: "Desactivar 2FA",
             setup2FATitle: "Configurar Autenticación de Dos Factores",
             scan2FAQRCode: "Escanea el código QR con tu aplicación de autenticación",
+            secretsManagement: "Gestión de Secretos",
         },
         themeSettings: {
             title: "Configuración del Tema",

@@ -20,8 +20,8 @@ import {
     Typography
 } from 'antd';
 import { toast } from 'react-toastify';
-import { About, Action, filteredEvents, GetWorkflow, Parameter, Reaction, Workflow } from '@/types';
-import { instanceWithAuth, root, workflow as workflowRoute } from "@Config/backend.routes";
+import { About, Action, filteredEvents, GetWorkflow, Parameter, Reaction, Secret, Workflow } from '@/types';
+import { instanceWithAuth, root, workflow as workflowRoute, secret as secretRoute } from "@Config/backend.routes";
 import Security from "@/Components/Security";
 import { useError, useUser} from "@/Context/ContextHooks";
 import LinkButton from "@/Components/LinkButton";
@@ -92,6 +92,18 @@ const WorkflowHandler: React.FC = () => {
                     setFilteredActions,
                     setFilteredReactions
                 );
+
+                instanceWithAuth.get(secretRoute.list)
+                    .then((response) => {
+                        const secrets: Secret[] = response?.data?.secrets;
+                        const availableVariables = secrets?.map(secret => `$${secret.name}`) || [];
+                        setAvailableVariables(availableVariables);
+                    })
+                    .catch((error) => {
+                        console.error(error);
+                        setError({error: "API Error", errorDescription: "Could not fetch server information"});
+                        navigate('/error/fetch');
+                    });
             })
             .catch((error) => {
                 console.error(error);

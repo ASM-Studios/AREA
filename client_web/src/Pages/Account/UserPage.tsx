@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Layout, Button, Typography, Space, Card, Row, Col, Avatar, List } from "antd";
+import { Layout, Button, Typography, Space, Card, Row, Col, Avatar, List, Input, Table } from "antd";
 import { useNavigate } from "react-router-dom";
 // @ts-expect-error
 import { BlockPicker } from "react-color";
@@ -7,9 +7,9 @@ import { useAuth, useUser } from "@/Context/ContextHooks";
 import OAuthButtons from "@/Components/Auth/OAuthButtons";
 import { toast } from "react-toastify";
 import Security from "@/Components/Security";
-import { instanceWithAuth, user as userRoute } from "@Config/backend.routes";
+import { instanceWithAuth, user as userRoute, secret } from "@Config/backend.routes";
 import { UserPayload } from "@/Context/Scopes/UserContext";
-import { UserOutlined, BgColorsOutlined } from "@ant-design/icons";
+import { UserOutlined, BgColorsOutlined, DeleteOutlined } from "@ant-design/icons";
 import ProfileCard from "@/Components/User/ProfileCard";
 
 const { Content } = Layout;
@@ -27,6 +27,9 @@ const UserPage: React.FC<UserPageProps> = ({ backgroundColor, setBackgroundColor
     const [tempColor, setTempColor] = useState<string>(backgroundColor);
     const [hoverCount, setHoverCount] = useState<number>(0);
     const [needReload, setNeedReload] = useState<boolean>(false);
+    const [secrets, setSecrets] = useState<Array<{ id: string, name: string }>>([]);
+    const [newSecretName, setNewSecretName] = useState<string>("");
+    const [isLoadingSecrets, setIsLoadingSecrets] = useState<boolean>(false);
 
     const { setJsonWebToken, setIsAuthenticated } = useAuth();
     const { user, setUser, translations } = useUser();
@@ -64,6 +67,50 @@ const UserPage: React.FC<UserPageProps> = ({ backgroundColor, setBackgroundColor
         setTempColor(defaultColor);
         sessionStorage.setItem('backgroundColor', defaultColor);
         setBackgroundColor(defaultColor);
+    };
+
+    const fetchSecrets = () => {
+        setIsLoadingSecrets(true);
+        instanceWithAuth.get(secret.list)
+            .then((response) => {
+                setSecrets(response.data);
+                setIsLoadingSecrets(false);
+            })
+            .catch((error) => {
+                console.error('Failed to fetch secrets:', error);
+                setIsLoadingSecrets(false);
+                toast.error("Failed to fetch secrets");
+            });
+    };
+
+    const handleCreateSecret = () => {
+        if (!newSecretName.trim()) {
+            toast.error("Secret name cannot be empty");
+            return;
+        }
+
+        instanceWithAuth.post(secret.create, { name: newSecretName })
+            .then(() => {
+                toast.success("Secret created successfully");
+                setNewSecretName("");
+                fetchSecrets();
+            })
+            .catch((error) => {
+                console.error('Failed to create secret:', error);
+                toast.error("Failed to create secret");
+            });
+    };
+
+    const handleDeleteSecret = (id: string) => {
+        instanceWithAuth.delete(`${secret.delete}/${id}`)
+            .then(() => {
+                toast.success("Secret deleted successfully");
+                fetchSecrets();
+            })
+            .catch((error) => {
+                console.error('Failed to delete secret:', error);
+                toast.error("Failed to delete secret");
+            });
     };
 
     return (
@@ -128,6 +175,49 @@ const UserPage: React.FC<UserPageProps> = ({ backgroundColor, setBackgroundColor
                                                 </Space>
                                             </Col>
                                         </Row>
+                                    </Space>
+                                </Card>
+                            </Col>
+
+                            <Col xs={24}>
+                                <Card title={translations?.userPage?.profileCard?.secretsManagement} style={{ padding: '16px' }}>
+                                    <Space direction="vertical" style={{ width: '100%' }}>
+                                        <Space.Compact style={{ width: '100%' }}>
+                                            <Input
+                                                placeholder="Enter secret name"
+                                                value={newSecretName}
+                                                onChange={(e) => setNewSecretName(e.target.value)}
+                                            />
+                                            <Button type="primary" onClick={handleCreateSecret}>
+                                                Create Secret
+                                            </Button>
+                                        </Space.Compact>
+                                        
+                                        <Table
+                                            loading={isLoadingSecrets}
+                                            dataSource={secrets}
+                                            columns={[
+                                                {
+                                                    title: 'Name',
+                                                    dataIndex: 'name',
+                                                    key: 'name',
+                                                },
+                                                {
+                                                    title: 'Actions',
+                                                    key: 'actions',
+                                                    render: (_, record) => (
+                                                        <Button
+                                                            type="text"
+                                                            danger
+                                                            icon={<DeleteOutlined />}
+                                                            onClick={() => handleDeleteSecret(record.id)}
+                                                        />
+                                                    ),
+                                                },
+                                            ]}
+                                            pagination={false}
+                                            rowKey="id"
+                                        />
                                     </Space>
                                 </Card>
                             </Col>
