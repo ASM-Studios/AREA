@@ -36,7 +36,10 @@ class OAuthConfigManager {
       pkce: false,
     ),
     "spotify": OAuthServiceConfig(
-      scope: "user-read-private user-read-email",
+      scope: "user-read-private user-read-email"
+             "user-modify-playback-state user-read-playback-state"
+             "playlist-read-private playlist-modify-public playlist-modify-private"
+
       authority: "accounts.spotify.com",
       path: "/authorize",
       clientId: dotenv.env["SPOTIFY_CLIENT_ID"] ?? "",
