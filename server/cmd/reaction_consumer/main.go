@@ -88,12 +88,6 @@ func executeWorkflowEvent(payload Payload, workflowEvent *models.WorkflowEvent) 
 		workflowEvent.ID).Scan(&parameters)
 
 	parametersMap := setupParameters(&user, parameters, payload.Args)
-        /*for _, parameter := range parameters {
-		for key, value := range payload.Args {
-			parameter.Value = strings.ReplaceAll(parameter.Value, fmt.Sprintf("$%s", key), fmt.Sprintf("%v", value))
-		}
-		parametersMap[parameter.Name] = parameter.Value
-	}*/
 	if callback, ok := actionCallbacks[workflowEvent.EventID]; ok {
 		callback(&user, parametersMap)
 	} else {
