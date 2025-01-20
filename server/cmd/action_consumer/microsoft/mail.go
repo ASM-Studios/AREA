@@ -15,6 +15,7 @@ import (
 
 type MailResponse struct {
 	Value []struct {
+		Id   string `json:"id"`
 		Body struct {
 			ContentType string `json:"contentType"`
 			Content     string `json:"content"`
@@ -33,6 +34,7 @@ type MailVariables struct {
 	Sender  string `json:"sender"`
 	Subject string `json:"subject"`
 	Body    string `json:"body"`
+	Id      string `json:"email_id"`
 }
 
 func fetchNewMails(workflow *models.Workflow, body []byte) (bool, []interface{}, error) {
@@ -66,6 +68,7 @@ func fetchNewMails(workflow *models.Workflow, body []byte) (bool, []interface{},
 				Subject: mail.Subject,
 				Body:    plainTextBody,
 				Sender:  mail.Sender.EmailAddress.Address,
+				Id:      mail.Id,
 			}
 			callReaction = true
 			interfaces = append(interfaces, mailVar)

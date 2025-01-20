@@ -6,7 +6,7 @@
       "name": "New Email Received",
       "description": "Triggered when a new email is received in your mailbox.",
       "type": "action",
-      "variables": ["sender", "subject", "body"],
+      "variables": ["sender", "subject", "body", "email_id"],
       "parameters": []
     },
     {
@@ -100,19 +100,25 @@
       ]
     },
     {
-      "name": "Mark Email as read/unread",
-      "description": "Mark an email as read or unread.",
+      "name": "Forward Email",
+      "description": "Forward an email to a specified recipient.",
       "type": "reaction",
       "parameters": [
         {
           "name": "email_id",
-          "description": "ID of the email to mark.",
+          "description": "ID of the email to forward.",
           "type": "string"
         },
         {
-          "name": "is_read",
-          "description": "Set to true to mark as read, false to mark as unread.",
-          "type": "bool"
+          "name": "recipient",
+          "description": "List of emails address coma separated of the recipient.",
+          "type": "string"
+        },
+        {
+          "name": "additional_message",
+          "description": "Optional message to include with the forwarded email.",
+          "type": "string",
+          "is_required": false
         }
       ]
     },
@@ -224,6 +230,24 @@
         {
           "name": "location",
           "description": "The location of the event.",
+          "type": "string",
+          "is_required": false
+        }
+      ]
+    },
+    {
+      "name": "Set Custom Status",
+      "description": "Set a custom Teams status message.",
+      "type": "reaction",
+      "parameters": [
+        {
+          "name": "status_message",
+          "description": "The custom status message to display.",
+          "type": "string"
+        },
+        {
+          "name": "expiry_duration",
+          "description": "Duration (in minutes) until the status expires.",
           "type": "string",
           "is_required": false
         }
