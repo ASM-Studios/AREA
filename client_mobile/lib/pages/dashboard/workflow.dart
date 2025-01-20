@@ -1,3 +1,5 @@
+import 'package:area/config/settings_config.dart';
+import 'package:area/config/translation_config.dart';
 import 'package:area/data/action.dart';
 import 'package:area/data/service_metadata.dart';
 import 'package:area/data/workflow.dart';
@@ -37,8 +39,13 @@ class _WorkflowPageState extends State<WorkflowPage> {
   void createWorkflow() async {
     if (actions.isEmpty || reactions.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Please refer an action and a reaction"),
+        SnackBar(
+          content: Text(
+            TranslationConfig.translate(
+              "action_error",
+              language: SettingsConfig.language,
+            ),
+          ),
           backgroundColor: Colors.red,
         ),
       );
@@ -72,16 +79,26 @@ class _WorkflowPageState extends State<WorkflowPage> {
 
         if (hasCreatedWorkflow) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text("Workflow successfully created !"),
+            SnackBar(
+              content: Text(
+                TranslationConfig.translate(
+                  "workflow_success",
+                  language: SettingsConfig.language,
+                ),
+              ),
               backgroundColor: Colors.black,
             ),
           );
           GoRouter.of(context).pushReplacement("/workflow/list");
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text("Workflow failed to be created."),
+            SnackBar(
+              content: Text(
+                TranslationConfig.translate(
+                  "workflow_error",
+                  language: SettingsConfig.language,
+                ),
+              ),
               backgroundColor: Colors.red,
             ),
           );
@@ -99,18 +116,29 @@ class _WorkflowPageState extends State<WorkflowPage> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text("Workflow Details"),
+          title: Text(
+            TranslationConfig.translate(
+              "workflow_details",
+              language: SettingsConfig.language,
+            ),
+          ),
           content: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 AreaFormField(
-                  label: "Name",
+                  label: TranslationConfig.translate(
+                    "name",
+                    language: SettingsConfig.language,
+                  ),
                   controller: nameController,
                 ),
                 const SizedBox(height: 20),
                 AreaFormField(
-                  label: "Description",
+                  label: TranslationConfig.translate(
+                    "description",
+                    language: SettingsConfig.language,
+                  ),
                   controller: descriptionController,
                   maxLines: 4,
                 ),
@@ -122,7 +150,13 @@ class _WorkflowPageState extends State<WorkflowPage> {
               onPressed: () {
                 Navigator.of(context).pop(null);
               },
-              child: const Text("Cancel", style: TextStyle(color: Colors.red),),
+              child: Text(
+                TranslationConfig.translate(
+                  "cancel",
+                  language: SettingsConfig.language,
+                ),
+                style: TextStyle(color: Colors.red),
+              ),
             ),
             ElevatedButton(
               onPressed: () {
@@ -131,7 +165,12 @@ class _WorkflowPageState extends State<WorkflowPage> {
                   "description": descriptionController.text,
                 });
               },
-              child: const Text("Save"),
+              child: Text(
+                TranslationConfig.translate(
+                  "save",
+                  language: SettingsConfig.language,
+                ),
+              ),
             ),
           ],
         );
@@ -148,10 +187,16 @@ class _WorkflowPageState extends State<WorkflowPage> {
             onPressed: () {
               Navigator.of(context).pop();
             },
-            tooltip: "Close",
+            tooltip: TranslationConfig.translate(
+              "close",
+              language: SettingsConfig.language,
+            ),
           ),
           title: Text(
-            "Create workflow",
+            TranslationConfig.translate(
+              "create_workflow",
+              language: SettingsConfig.language,
+            ),
             style: const TextStyle(
                 color: Colors.black, fontSize: 24, fontWeight: FontWeight.bold),
           )),
@@ -213,7 +258,10 @@ class _WorkflowPageState extends State<WorkflowPage> {
       floatingActionButton: Padding(
         padding: EdgeInsets.all(20),
         child: AreaButton(
-          label: "Create",
+          label: TranslationConfig.translate(
+            "create",
+            language: SettingsConfig.language,
+          ),
           onPressed: createWorkflow,
           color: const Color(0XFF035a63),
         ),

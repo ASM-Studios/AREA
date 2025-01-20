@@ -1,3 +1,5 @@
+import 'package:area/config/settings_config.dart';
+import 'package:area/config/translation_config.dart';
 import 'package:area/data/action.dart';
 import 'package:area/data/service.dart';
 import 'package:area/pages/dashboard/workflow_parameters_page.dart';
@@ -25,7 +27,7 @@ class _ActionSelectionPageState extends State<ActionSelectionPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Select Action/Reaction',
+          TranslationConfig.translate("select_action", language: SettingsConfig.language),
             style: const TextStyle(color: Colors.black, fontSize: 24, fontWeight: FontWeight.bold),
         ),
       ),
@@ -33,7 +35,7 @@ class _ActionSelectionPageState extends State<ActionSelectionPage> {
         padding: const EdgeInsets.all(16),
         itemCount: widget.actions.length,
         separatorBuilder: (context, index) => const Divider(
-          color: Colors.black12, // Ligne de séparation discrète
+          color: Colors.black12,
           thickness: 0.5,
         ),
         itemBuilder: (context, index) {

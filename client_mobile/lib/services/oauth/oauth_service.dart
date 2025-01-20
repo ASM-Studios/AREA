@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:area/config/oauth_config.dart';
 import 'package:area/config/settings_config.dart';
+import 'package:area/config/translation_config.dart';
 import 'package:area/pages/webview/webview_page.dart';
 import 'package:area/tools/utils.dart';
 import 'package:flutter/material.dart';
@@ -77,16 +78,22 @@ class OAuthService {
     );
     if (hasExchangedCorrectly) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Connected successfully !"),
+        SnackBar(
+          content: Text(TranslationConfig.translate(
+              "oauth_success",
+              language: SettingsConfig.language,
+            )),
           backgroundColor: Colors.black,
         ),
       );
       context.pushReplacement("/workflow/list");
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Error during connection"),
+        SnackBar(
+          content: Text(TranslationConfig.translate(
+              "oauth_error",
+              language: SettingsConfig.language,
+            )),
           backgroundColor: Colors.red,
         ),
       );

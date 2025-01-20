@@ -1,3 +1,5 @@
+import 'package:area/config/settings_config.dart';
+import 'package:area/config/translation_config.dart';
 import 'package:area/data/action.dart';
 import 'package:area/data/service_metadata.dart';
 import 'package:area/pages/dashboard/service_selection.dart';
@@ -75,8 +77,11 @@ class ActionButton extends StatelessWidget {
                         isAction: isAction,
                         onActionSelected: onActionSelected)));
               },
-              child: const Text(
-                "Add",
+              child: Text(
+                TranslationConfig.translate(
+                  "add",
+                  language: SettingsConfig.language,
+                ),
                 style: TextStyle(
                   color: Colors.black,
                 ),

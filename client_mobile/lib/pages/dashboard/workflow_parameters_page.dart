@@ -1,3 +1,5 @@
+import 'package:area/config/settings_config.dart';
+import 'package:area/config/translation_config.dart';
 import 'package:area/data/parameter.dart';
 import 'package:area/widgets/button.dart';
 import 'package:area/widgets/datetime_picker.dart';
@@ -21,7 +23,7 @@ class _WorkflowParametersPageState extends State<WorkflowParametersPage> {
     return Scaffold(
       appBar: AppBar(
           title: Text(
-        "Configure Parameters",
+        TranslationConfig.translate("parameters_config", language: SettingsConfig.language,),
         style: const TextStyle(
             color: Colors.black, fontSize: 24, fontWeight: FontWeight.bold),
       )),

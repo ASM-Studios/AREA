@@ -1,3 +1,5 @@
+import 'package:area/config/settings_config.dart';
+import 'package:area/config/translation_config.dart';
 import 'package:area/pages/settings/settings_page.dart';
 import 'package:area/services/login/auth_service.dart';
 import 'package:flutter/material.dart';
@@ -11,9 +13,9 @@ class ProfileButton extends StatelessWidget {
         if (value == 'profile') {
           context.push("/profile");
         } else if (value == 'settings') {
-          Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => SettingsPage()));
-        } 
-        else if (value == 'disconnect') {
+          Navigator.of(context)
+              .push(MaterialPageRoute(builder: (ctx) => SettingsPage()));
+        } else if (value == 'disconnect') {
           bool hasLogout = await AuthService.logout();
           if (hasLogout) context.pushReplacement("/login");
         }
@@ -22,15 +24,26 @@ class ProfileButton extends StatelessWidget {
         return [
           PopupMenuItem<String>(
             value: 'profile',
-            child: Text('Profile'),
+            child: Text(TranslationConfig.translate(
+              "profile",
+              language: SettingsConfig.language,
+            )),
           ),
           PopupMenuItem<String>(
             value: 'settings',
-            child: Text('Settings'),
+            child: Text(TranslationConfig.translate(
+              "settings",
+              language: SettingsConfig.language,
+            )),
           ),
           PopupMenuItem<String>(
             value: 'disconnect',
-            child: Text('Disconnect', style: TextStyle(color: Colors.red)),
+            child: Text(
+                TranslationConfig.translate(
+                  "disconnect",
+                  language: SettingsConfig.language,
+                ),
+                style: TextStyle(color: Colors.red)),
           ),
         ];
       },

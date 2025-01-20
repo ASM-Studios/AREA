@@ -1,4 +1,6 @@
 import 'package:area/animations/loading/workflow/services/shimmer_services_loader.dart';
+import 'package:area/config/settings_config.dart';
+import 'package:area/config/translation_config.dart';
 import 'package:area/data/action.dart';
 import 'package:area/data/service.dart';
 import 'package:area/data/service_metadata.dart';
@@ -22,7 +24,8 @@ class ServiceSelectionPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Select a Service',
+          TranslationConfig.translate("select_service",
+              language: SettingsConfig.language),
           style: const TextStyle(
               color: Colors.black, fontSize: 24, fontWeight: FontWeight.bold),
         ),
@@ -35,7 +38,7 @@ class ServiceSelectionPage extends StatelessWidget {
           }
           if (snapshot.hasError) {
             return Center(
-              child: Text('Erreur : ${snapshot.error}'),
+              child: Text('${snapshot.error}'),
             );
           }
           if (snapshot.hasData) {
@@ -63,9 +66,11 @@ class ServiceSelectionPage extends StatelessWidget {
 
                       if (!userInfos.services.contains(services[index].name)) {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
+                          SnackBar(
                             content: Text(
-                                "Your account is not linked with this service. Please refer to your profile page to link this service."),
+                              TranslationConfig.translate("link_error",
+                                  language: SettingsConfig.language),
+                            ),
                             backgroundColor: Colors.red,
                           ),
                         );
@@ -112,8 +117,8 @@ class ServiceSelectionPage extends StatelessWidget {
               },
             );
           }
-          return const Center(
-            child: Text('No service available'),
+          return Center(
+            child: Text(TranslationConfig.translate("no_service", language: SettingsConfig.language)),
           );
         },
       ),

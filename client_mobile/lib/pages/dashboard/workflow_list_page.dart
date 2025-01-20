@@ -1,4 +1,6 @@
 import 'package:area/animations/loading/workflow/shimmer_workflow_loader.dart';
+import 'package:area/config/settings_config.dart';
+import 'package:area/config/translation_config.dart';
 import 'package:area/data/workflow.dart';
 import 'package:area/services/workflow/workflow_service.dart';
 import 'package:area/widgets/profile_button.dart';
@@ -32,7 +34,11 @@ class _WorkflowListPageState extends State<WorkflowListPage> {
             child: Align(alignment: Alignment.topRight, child: ProfileButton()),
           ),
           Center(
-            child: Text('YOUR WORKFLOWS',
+            child: Text(
+                TranslationConfig.translate(
+                  "workflows",
+                  language: SettingsConfig.language,
+                ),
                 style: TextStyle(
                     color: Colors.black,
                     fontSize: 24,
@@ -79,14 +85,16 @@ class _WorkflowListPageState extends State<WorkflowListPage> {
                         )
                       : Center(
                           child: Text(
-                            "No workflow available.",
+                            TranslationConfig.translate("no_workflow", language: SettingsConfig.language,),
+                            maxLines: 2,
                             style: const TextStyle(
+                              
                                 color: Colors.black, fontSize: 24),
                           ),
                         ),
                 );
               }
-              return const Center(child: Text('No workflow available'));
+              return Center(child: Text(TranslationConfig.translate("no_workflow", language: SettingsConfig.language,)));
             },
           ),
         ],

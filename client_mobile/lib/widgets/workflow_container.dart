@@ -1,7 +1,8 @@
+import 'package:area/config/settings_config.dart';
+import 'package:area/config/translation_config.dart';
 import 'package:area/data/workflow.dart';
 import 'package:area/services/workflow/workflow_service.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class WorkflowContainer extends StatelessWidget {
   final Workflow workflow;
@@ -44,7 +45,10 @@ class WorkflowContainer extends StatelessWidget {
                     child: Text(
                       workflow.name.isNotEmpty
                           ? workflow.name
-                          : "No name provided.",
+                          : TranslationConfig.translate(
+                              "workflow_name_error",
+                              language: SettingsConfig.language,
+                            ),
                       textAlign: TextAlign.center,
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1,
@@ -65,7 +69,10 @@ class WorkflowContainer extends StatelessWidget {
                         maxLines: 1,
                         workflow.description.isNotEmpty
                             ? workflow.description
-                            : "No description provided."),
+                            : TranslationConfig.translate(
+                                "workflow_description_error",
+                                language: SettingsConfig.language,
+                              )),
                   ),
                   const Icon(Icons.edit)
                 ],

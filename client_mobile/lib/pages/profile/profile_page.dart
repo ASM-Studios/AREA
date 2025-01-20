@@ -1,4 +1,6 @@
 import 'package:area/animations/loading/profile/shimmer_profile_loader.dart';
+import 'package:area/config/settings_config.dart';
+import 'package:area/config/translation_config.dart';
 import 'package:area/services/user/user_service.dart';
 import 'package:area/widgets/bind_oauth_buttons.dart';
 import 'package:area/widgets/divider_with_text.dart';
@@ -18,7 +20,7 @@ class ProfilePage extends StatelessWidget {
             }
             if (snapshot.hasError) {
               return Center(
-                child: Text('Erreur : ${snapshot.error}'),
+                child: Text('${snapshot.error}'),
               );
             }
             if (snapshot.hasData) {
@@ -39,14 +41,22 @@ class ProfilePage extends StatelessWidget {
                             "assets/images/profile.png"),
                       ),
                       Text(
-                        "Hello ${userInfos.username}",
+                        "${TranslationConfig.translate(
+                          "hello",
+                          language: SettingsConfig.language,
+                        )} ${userInfos.username}",
                         style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       const SizedBox(height: 20),
-                      DividerWithText(label: "Services connected"),
+                      DividerWithText(
+                        label: TranslationConfig.translate(
+                          "services_connected",
+                          language: SettingsConfig.language,
+                        ),
+                      ),
                       const SizedBox(height: 20),
                       BindOAuthButtons(servicesBinded: userInfos.services)
                     ],
@@ -54,8 +64,11 @@ class ProfilePage extends StatelessWidget {
                 ),
               );
             }
-            return const Center(
-              child: Text('No informations available'),
+            return Center(
+              child: Text(TranslationConfig.translate(
+              "informations_error",
+              language: SettingsConfig.language,
+            )),
             );
           }),
     );

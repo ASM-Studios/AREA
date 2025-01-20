@@ -1,3 +1,5 @@
+import 'package:area/config/settings_config.dart';
+import 'package:area/config/translation_config.dart';
 import 'package:area/services/login/auth_service.dart';
 import 'package:area/tools/utils.dart';
 import 'package:area/widgets/button.dart';
@@ -43,7 +45,7 @@ class _LoginPageState extends State<LoginPage> {
                   child: Align(
                       alignment: Alignment.topRight, child: SettingsButton()),
                 ),
-                const SimpleText("Email"),
+                SimpleText(TranslationConfig.translate("email", language: SettingsConfig.language)),
                 AreaFormField(
                   label: "you@example.com",
                   controller: emailController,
@@ -58,7 +60,7 @@ class _LoginPageState extends State<LoginPage> {
                   },
                 ),
                 const SizedBox(height: 50),
-                const SimpleText("Password"),
+                SimpleText(TranslationConfig.translate("password", language: SettingsConfig.language)),
                 PasswordFormField(
                   controller: passwordController,
                   validator: (password) {
@@ -71,7 +73,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 const SizedBox(height: 15),
                 AreaButton(
-                  label: "Login",
+                  label: TranslationConfig.translate("login", language: SettingsConfig.language),
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {
                       bool isLogin = await AuthService.login(
@@ -88,14 +90,14 @@ class _LoginPageState extends State<LoginPage> {
                   color: const Color(0XFF035a63),
                 ),
                 const SizedBox(height: 40),
-                const DividerWithText(label: "Or Sign in with"),
+                DividerWithText(label: TranslationConfig.translate("divider_login", language: SettingsConfig.language)),
                 const SizedBox(height: 15),
                 OAuthButtons(),
                 const SizedBox(height: 5),
                 Align(
                   alignment: Alignment.center,
                   child: SmallClickableText(
-                    "I don't have an account",
+                    TranslationConfig.translate("no_account", language: SettingsConfig.language),
                     onPressed: () {
                       context.push("/register");
                     },
