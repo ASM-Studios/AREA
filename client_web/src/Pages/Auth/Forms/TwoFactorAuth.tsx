@@ -4,7 +4,7 @@ import { useMediaQuery } from 'react-responsive';
 import { toast } from "react-toastify";
 import { Form, Input, Card, InputRef } from 'antd';
 import { instanceWithAuth, auth } from "@Config/backend.routes";
-import { useAuth, useUser } from "@/Context/ContextHooks";
+import { useAuth, useUser, useError } from "@/Context/ContextHooks";
 import Globe from '@/Components/eldora/globe';
 import Security from "@/Components/Security";
 
@@ -12,6 +12,7 @@ const TwoFactorAuth = () => {
     const [form] = Form.useForm();
     const { setIsAuthenticated, setJsonWebToken } = useAuth();
     const { translations, user, setUser, totpLoggingIn } = useUser();
+    const { setError } = useError();
     const navigate = useNavigate();
 
     const isMobile = useMediaQuery({ query: '(max-width: 768px)' });
@@ -48,20 +49,15 @@ const TwoFactorAuth = () => {
                 setIsAuthenticated(true);
                 toast.success(translations?.authForm.twoFactor.success.verified);
 
-                if (totpLoggingIn && response.data?.jwt) {
+                if (totpLoggingIn) {
+                    if (!response.data?.jwt) {
+                        setError({error: 'Login Failed', errorDescription: 'JWT not found in response'});
+                        navigate('/error/login');
+                    }
                     setJsonWebToken(response?.data?.jwt);
                     setIsAuthenticated(true);
                 }
 
-                if (user) {
-                    setUser({
-                        ...user,
-                        is2faEnabled: false,
-                        username: user.username || '',
-                        email: user.email || '',
-                        services: user.services || []
-                    });
-                }
                 navigate('/dashboard');
             })
             .catch((error) => {

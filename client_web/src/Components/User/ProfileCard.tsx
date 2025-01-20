@@ -3,6 +3,7 @@ import { Col, Card, Space, Avatar, Typography, Button, Modal } from "antd";
 import { UserOutlined } from "@ant-design/icons";
 import { useUser } from "@/Context/ContextHooks";
 import { auth, instanceWithAuth } from "@Config/backend.routes";
+import { useNavigate } from "react-router-dom";
 import QRCode from "react-qr-code";
 
 const { Text } = Typography;
@@ -19,8 +20,10 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ handleLogout, hoverCount, set
     const [qrCodeUrl, setQrCodeUrl] = useState<string>("");
     const [modalSecret, setModalSecret] = useState<string>("");
     const [isQrModalVisible, setIsQrModalVisible] = useState<boolean>(false);
+    const [isSettingsModalVisible, setIsSettingsModalVisible] = useState<boolean>(false);
 
-    const { user, setUser, translations } = useUser();
+    const { user, translations } = useUser();
+    const navigate = useNavigate();
 
     const handleMouseEnter = () => {
         if (hoverCount < hoverLimit) {
@@ -33,27 +36,42 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ handleLogout, hoverCount, set
         }
     };
 
+    const handleOpenSettings = () => {
+        setIsSettingsModalVisible(true);
+    };
+
+    const handleVerifyEmail = () => {
+        // TODO: Ask server to send verification email
+        navigate('/2fa');
+    };
+
+    const handleEmailAuth = () => {
+        // TODO: Tell server to enable email auth
+    };
+
+    const handleDisable2FA = () => {
+        instanceWithAuth.put("", { method: null })
+            .then(() => {
+                // TODO: update user
+                setIsSettingsModalVisible(false);
+            })
+            .catch((error) => {
+                console.error('Failed to disable 2FA:', error);
+            });
+    };
+
     const handle2FAToggle = () => {
         if (user) {
             if (!user.is2faEnabled) {
                 instanceWithAuth.get(auth.twoFactorAuth.generate)
                     .then((response) => {
-                        console.log("2FA QR code URL:", response.data.url);
                         setQrCodeUrl(response.data.url);
                         setModalSecret(response.data.secret);
                         setIsQrModalVisible(true);
+                        setIsSettingsModalVisible(false);
                     })
                     .catch((error) => {
                         console.error('Failed to get 2FA QR code:', error);
-                    });
-            } else {
-                instanceWithAuth.put("", { method: null })
-                    .then(() => {
-                        const updatedUser = { ...user, is2faEnabled: false };
-                        setUser(updatedUser);
-                    })
-                    .catch((error) => {
-                        console.error('Failed to disable 2FA:', error);
                     });
             }
         }
@@ -75,10 +93,10 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ handleLogout, hoverCount, set
                 <Space direction="vertical" align="center" style={{ width: "100%", paddingTop: "20px" }}>
                     <Button
                         type="default"
-                        onClick={handle2FAToggle}
+                        onClick={handleOpenSettings}
                         style={{ marginTop: '10px' }}
                     >
-                        {user?.is2faEnabled ? translations?.userPage?.profileCard?.disable2FAButton : translations?.userPage?.profileCard?.enable2FAButton}
+                        {translations?.userPage?.profileCard?.securitySettings || "Security Settings"}
                     </Button>
                 </Space>
                 <Space direction="vertical" align="center" style={{ width: "100%", paddingTop: "20px" }}>
@@ -100,6 +118,55 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ handleLogout, hoverCount, set
                     </Button>
                 </Space>
             </Card>
+            <Modal
+                title={translations?.userPage?.profileCard?.securitySettings || "Security Settings"}
+                open={isSettingsModalVisible}
+                onCancel={() => setIsSettingsModalVisible(false)}
+                footer={[
+                    <Button key="close" onClick={() => setIsSettingsModalVisible(false)}>
+                        {translations?.common?.table?.close}
+                    </Button>
+                ]}
+            >
+                <Space direction="vertical" style={{ width: '100%' }}>
+                    <Button 
+                        type="primary" 
+                        onClick={handle2FAToggle}
+                        block
+                    >
+                        {translations?.userPage?.profileCard?.enableTOTP || "Enable TOTP Authentication"}
+                        {/* TODO: Update translation */}
+                    </Button>
+
+                    {user && !user.isEmailVerified && (
+                        <Button 
+                            onClick={handleVerifyEmail}
+                            block
+                        >
+                            {translations?.userPage?.profileCard?.verifyEmail || "Verify Email"}
+                        </Button>
+                    )}
+
+                    {user && user.isEmailVerified && (
+                        <Button 
+                            onClick={handleEmailAuth}
+                            block
+                        >
+                            {translations?.userPage?.profileCard?.enableEmailAuth || "Enable Email Authentication"}
+                        </Button>
+                    )}
+
+                    {user && user.is2faEnabled && (
+                        <Button 
+                            danger 
+                            onClick={handleDisable2FA}
+                            block
+                        >
+                            {translations?.userPage?.profileCard?.disable2FA || "Disable 2FA"}
+                        </Button>
+                    )}
+                </Space>
+            </Modal>
             <Modal
                 title={translations?.userPage?.profileCard?.setup2FATitle}
                 open={isQrModalVisible}

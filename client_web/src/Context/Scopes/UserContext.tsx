@@ -18,7 +18,8 @@ export interface User {
     username: string;
     email: string;
     services: ServicesDescription[];
-    is2faEnabled: boolean;
+    isEmailValid: boolean;
+    methods: string[];
 }
 
 export interface UserPayload {
