@@ -4,6 +4,7 @@ import 'package:area/data/workflow.dart';
 import 'package:area/services/workflow/workflow_service.dart';
 import 'package:area/widgets/action_button.dart';
 import 'package:area/widgets/button.dart';
+import 'package:area/widgets/form_field.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -99,30 +100,29 @@ class _WorkflowPageState extends State<WorkflowPage> {
       builder: (context) {
         return AlertDialog(
           title: const Text("Workflow Details"),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextField(
-                controller: nameController,
-                decoration: const InputDecoration(
-                  labelText: "Name",
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                AreaFormField(
+                  label: "Name",
+                  controller: nameController,
                 ),
-              ),
-              const SizedBox(height: 20),
-              TextField(
-                controller: descriptionController,
-                decoration: const InputDecoration(
-                  labelText: "Description",
+                const SizedBox(height: 20),
+                AreaFormField(
+                  label: "Description",
+                  controller: descriptionController,
+                  maxLines: 4,
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop(null);
               },
-              child: const Text("Cancel"),
+              child: const Text("Cancel", style: TextStyle(color: Colors.red),),
             ),
             ElevatedButton(
               onPressed: () {

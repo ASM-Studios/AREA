@@ -3,7 +3,6 @@ import 'package:area/widgets/form_field.dart';
 import 'package:area/widgets/simple_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class SettingsPage extends StatelessWidget {
   SettingsPage({super.key});
