@@ -29,7 +29,6 @@ func fetchStreamInfo(workflow *models.Workflow, streamInfo Streams) (bool, []int
         }
 
         timeParsed, _ := time.Parse(time.RFC3339, streamInfo.Data[0].StartedAt)
-        fmt.Printf("comparing %v and %v\n", timeParsed.Unix(), workflow.LastTrigger)
         if timeParsed.Unix() > workflow.LastTrigger {
                 return true, []interface{}{streamInfo.Data[0]}, nil
         } else {

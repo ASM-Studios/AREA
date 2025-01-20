@@ -114,6 +114,28 @@ const es_language: Translation = {
             success: {
                 registered: "¡Registro exitoso!"
             }
+        },
+        twoFactor: {
+            title: "Autenticación de Dos Factores",
+            description: "Por favor ingresa el código de 6 dígitos de tu aplicación de autenticación",
+            form: {
+                code: {
+                    label: "código de verificación",
+                    placeholder: "Ingresa el código",
+                    validation: {
+                        required: "Por favor ingresa el código de verificación",
+                        length: "El código debe tener 6 dígitos",
+                        numeric: "El código debe contener solo números"
+                    }
+                },
+                submitButton: "Verificar"
+            },
+            errors: {
+                verificationFailed: "Código de verificación inválido"
+            },
+            success: {
+                verified: "¡Verificación exitosa!"
+            }
         }
     },
     header: {
@@ -141,6 +163,13 @@ const es_language: Translation = {
             description: "Esta es tu página de usuario",
             logoutDescription: "Cerrar sesión de tu cuenta",
             logoutButton: "Cerrar Sesión",
+            securitySettings: "Configuración de Seguridad",
+            enableTOTP: "Activar Autenticación TOTP",
+            verifyEmail: "Verificar Correo",
+            enableEmailAuth: "Activar Autenticación por Correo",
+            disable2FA: "Desactivar 2FA",
+            setup2FATitle: "Configurar Autenticación de Dos Factores",
+            scan2FAQRCode: "Escanea el código QR con tu aplicación de autenticación",
         },
         themeSettings: {
             title: "Configuración del Tema",
@@ -364,6 +393,7 @@ const es_language: Translation = {
             cancelSort: "Cancelar Ordenamiento",
             next: "Siguiente",
             previous: "Anterior",
+            continue: "Continuar",
         }
     },
     security: {

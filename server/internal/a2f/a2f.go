@@ -10,6 +10,17 @@ import (
 	"time"
 )
 
+func Generate2FAMailCode(user *models.User) {
+        code := models.MailCode {
+                Code: uint(rand.Int() % 1000000),
+                ExpiresAt: uint(time.Now().Unix() + 300),
+                UserID: user.ID,
+        }
+        pkg.DB.Create(&code)
+        mail.SendMail(user.Email, "AREA", fmt.Sprintf("Your verification code is %d. It is valid for 5 minutes", code.Code))
+
+}
+
 func GenerateMailCode(user *models.User) {
         code := models.MailCode {
                 Code: uint(rand.Int() % 1000000),
