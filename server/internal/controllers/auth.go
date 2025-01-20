@@ -2,16 +2,14 @@ package controllers
 
 import (
 	"AREA/internal/a2f"
+	"AREA/internal/gconsts"
 	"AREA/internal/mail"
 	"AREA/internal/models"
 	"AREA/internal/pkg"
 	db "AREA/internal/pkg"
 	"AREA/internal/utils"
-	"fmt"
 	"log"
-	"math/rand"
 	"net/http"
-	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/pquerna/otp/totp"
@@ -166,13 +164,7 @@ func Register(c *gin.Context) {
 	}
 	db.DB.Create(&newUser)
 
-        code := models.MailCode {
-                Code: uint(rand.Int() % 1000000),
-                ExpiresAt: uint(time.Now().Unix() + 300),
-                UserID: newUser.ID,
-        }
-        db.DB.Create(&code)
-        mail.SendMail(RegisterData.Email, "Welcome to AREA", fmt.Sprintf("Welcome to AREA, your verification code is %d\nIt is valid for 5 minutes", code.Code))
+        mail.SendHTMLMail(RegisterData.Email, "Welcome to AREA", gconsts.RegisterMail)
 
 	c.JSON(http.StatusOK, gin.H{"username": RegisterData.Username, "email": RegisterData.Email, "jwt": tokenString})
 }
