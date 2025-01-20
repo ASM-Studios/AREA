@@ -53,7 +53,7 @@ class TranslationConfig {
       "france": "French",
       "england": "English",
       "spain": "Spanish",
-      "language": "Language"
+      "language": "Language",
     },
     'FR': {
       "email": "E-mail",

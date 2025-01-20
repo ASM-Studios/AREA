@@ -20,9 +20,9 @@ class UserService {
       return UserInfos(
           username: jsonData["user"]["username"],
           mail: jsonData["user"]["email"],
-          services: (jsonData['user']['services'] as List)
+          services: jsonData['user']['services'] != null ? (jsonData['user']['services'] as List)
               .map((service) => service["name"] as String)
-              .toList());
+              .toList() : []);
     } else {
       throw Exception('Failed to load services');
     }

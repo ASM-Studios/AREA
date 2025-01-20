@@ -52,9 +52,8 @@ class _WorkflowParametersPageState extends State<WorkflowParametersPage> {
           ),
           Padding(
             padding: EdgeInsets.all(20),
-            // padding: EdgeInsets.fromLTRB(50, 20, 50, 20),
             child: AreaButton(
-              label: "Submit",
+              label: TranslationConfig.translate("submit", language: SettingsConfig.language),
               onPressed: _submitParameters,
               color: const Color(0XFF035a63),
             ),

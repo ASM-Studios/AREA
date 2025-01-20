@@ -44,81 +44,92 @@ class ServiceSelectionPage extends StatelessWidget {
           if (snapshot.hasData) {
             final services = snapshot.data!;
 
-            return GridView.builder(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 8.0,
-                mainAxisSpacing: 8.0,
-                childAspectRatio: 1.0,
-              ),
-              itemCount: services.length,
-              itemBuilder: (context, index) {
-                return Card(
-                  elevation: 4.0,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  color: ServiceMetadata.getServiceByName(services[index].name)!
-                      .color,
-                  child: InkWell(
-                    onTap: () async {
-                      final userInfos = await UserService.getUserInfos();
+            return services.isNotEmpty
+                ? GridView.builder(
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 8.0,
+                      mainAxisSpacing: 8.0,
+                      childAspectRatio: 1.0,
+                    ),
+                    itemCount: services.length,
+                    itemBuilder: (context, index) {
+                      return Card(
+                        elevation: 4.0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        color: ServiceMetadata.getServiceByName(
+                                services[index].name)!
+                            .color,
+                        child: InkWell(
+                          onTap: () async {
+                            final userInfos = await UserService.getUserInfos();
 
-                      if (!userInfos.services.contains(services[index].name)) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(
-                              TranslationConfig.translate("link_error",
-                                  language: SettingsConfig.language),
-                            ),
-                            backgroundColor: Colors.red,
-                          ),
-                        );
-                        return;
-                      }
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ActionSelectionPage(
-                            service: services[index],
-                            onActionSelected: onActionSelected,
-                            actions: isAction
-                                ? services[index].actions
-                                : services[index].reactions,
+                            if (!userInfos.services
+                                .contains(services[index].name)) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    TranslationConfig.translate("link_error",
+                                        language: SettingsConfig.language),
+                                  ),
+                                  backgroundColor: Colors.red,
+                                ),
+                              );
+                              return;
+                            }
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ActionSelectionPage(
+                                  service: services[index],
+                                  onActionSelected: onActionSelected,
+                                  actions: isAction
+                                      ? services[index].actions
+                                      : services[index].reactions,
+                                ),
+                              ),
+                            );
+                          },
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Center(
+                                child: Image.asset(
+                                  ServiceMetadata.getServiceByName(
+                                          services[index].name)!
+                                      .imagePath,
+                                  width: 50,
+                                ),
+                              ),
+                              const SizedBox(height: 8.0),
+                              Text(
+                                services[index].name.toUpperCase(),
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(
+                                  fontSize: 16.0,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       );
                     },
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Center(
-                          child: Image.asset(
-                            ServiceMetadata.getServiceByName(
-                                    services[index].name)!
-                                .imagePath,
-                            width: 50,
-                          ),
-                        ),
-                        const SizedBox(height: 8.0),
-                        Text(
-                          services[index].name.toUpperCase(),
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(
-                            fontSize: 16.0,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
+                  )
+                : Center(
+                    child: Text(
+                      TranslationConfig.translate("no_service",
+                          language: SettingsConfig.language),
                     ),
-                  ),
-                );
-              },
-            );
+                  );
           }
           return Center(
-            child: Text(TranslationConfig.translate("no_service", language: SettingsConfig.language)),
+            child: Text(TranslationConfig.translate("no_service",
+                language: SettingsConfig.language)),
           );
         },
       ),
