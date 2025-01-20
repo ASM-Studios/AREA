@@ -20,10 +20,11 @@ class OAuthServiceConfig {
 class OAuthConfigManager {
   static final Map<String, OAuthServiceConfig> _configurations = {
     "microsoft": OAuthServiceConfig(
-      scope: "user.read Mail.Read Mail.ReadWrite Mail.Send",
+      scope: "User.read Mail.Read Mail.ReadWrite Mail.Send Team.ReadBasic.All Channel.ReadBasic.All ChannelMessage.Send Chat.ReadWrite Files.ReadWrite.All Presence.ReadWrite Calendars.ReadWrite",
       authority: "login.microsoftonline.com",
       path: "/common/oauth2/v2.0/authorize",
-      redirectUri: "https://localhost:8081/auth/microsoft/callback",
+      redirectUri:
+          "msauth://com.asm_studios.area/lvGC0B4SWYU8tNPHg%2FbdMjQinZQ%3D",
       clientId: dotenv.env["MICROSOFT_CLIENT_ID"] ?? "",
       pkce: false,
     ),
@@ -40,7 +41,7 @@ class OAuthConfigManager {
       authority: "accounts.spotify.com",
       path: "/authorize",
       clientId: dotenv.env["SPOTIFY_CLIENT_ID"] ?? "",
-      redirectUri: "https://localhost:8081/auth/spotify/callback",
+      redirectUri: "com.asm_studios.area://callback",
       pkce: false,
     ),
     "discord": OAuthServiceConfig(
