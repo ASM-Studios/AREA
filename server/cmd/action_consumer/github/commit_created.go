@@ -37,7 +37,7 @@ func DetectCommit(workflow *models.Workflow, commits []Commit) (bool, []interfac
 
         for _, commit := range slices.Backward(commits) {
                 timestamp, _ := time.Parse(time.RFC3339, commit.Commit.Author.Date)
-                if timestamp.Unix() > workflow.LastTrigger {
+                if (timestamp.Unix() / 1000) > workflow.LastTrigger {
                         callReaction = true
                         interfaces = append(interfaces, CommitReturn {
                                 CommitAuthorName: commit.Commit.Author.Name,
