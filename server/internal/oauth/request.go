@@ -6,6 +6,7 @@ import (
 	"AREA/internal/utils"
 	"errors"
 	"fmt"
+	"io"
 	"net/http"
 )
 
@@ -15,7 +16,9 @@ func SendRequest(token *models.Token, req *http.Request) (*http.Response, error)
                 return resp, err
         }
 
+        b, err := io.ReadAll(resp.Body)
         if resp.StatusCode == 401 {
+                fmt.Println(string(b))
                 fmt.Println("Token expired, trying to refresh")
                 err = FetchNewToken(token)
                 if err != nil {
