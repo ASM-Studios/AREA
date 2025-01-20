@@ -37,7 +37,9 @@ func DetectCommit(workflow *models.Workflow, commits []Commit) (bool, []interfac
 
         for _, commit := range slices.Backward(commits) {
                 timestamp, _ := time.Parse(time.RFC3339, commit.Commit.Author.Date)
-                if (timestamp.Unix() / 1000) > workflow.LastTrigger {
+                fmt.Printf("Comparing %d to %d\n", timestamp.Unix(), workflow.LastTrigger)
+                if timestamp.Unix() > workflow.LastTrigger {
+                        fmt.Println("HERE")
                         callReaction = true
                         interfaces = append(interfaces, CommitReturn {
                                 CommitAuthorName: commit.Commit.Author.Name,
@@ -54,8 +56,7 @@ func CommitCreated(workflow *models.Workflow, user *models.User, args map[string
         var token models.Token
         pkg.DB.Where("user_id = ? AND service_id = ?", user.ID, gconsts.ServiceMap["github"]).First(&token)
 
-        fmt.Printf("Fetching https://api.github.com/repos/%s/%s/commits", args["owner"], args["repo"])
-        req, err := http.NewRequest("GET", fmt.Sprintf("https://api.github.com/repos/%s/%s/commits", args["owner"], args["repo"]), nil)
+        req, err := http.NewRequest("GET", fmt.Sprintf("https://api.github.com/repos/%s/%s/commits?sha=%s&per_page=10", args["owner"], args["repo"], args["branch"]), nil)
         if err != nil {
                 return false, nil, errors.New("Failed to create request")
         }

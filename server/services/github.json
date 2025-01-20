@@ -17,6 +17,11 @@
           "name": "repo",
           "description": "Name of the repository",
           "type": "string"
+        },
+        {
+          "name": "branch",
+          "description": "Branch of the repository",
+          "type": "string"
         }
       ]
     },

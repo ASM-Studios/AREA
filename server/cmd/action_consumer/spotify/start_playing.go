@@ -7,7 +7,6 @@ import (
 	"AREA/internal/pkg"
 	"AREA/internal/utils"
 	"errors"
-	"fmt"
 	"net/http"
 )
 
@@ -51,7 +50,6 @@ func StartPlaying(workflow *models.Workflow, user *models.User, args map[string]
         }
 
         result, err := utils.ExtractBody[TrackInfo](resp)
-        fmt.Printf("> %v - %v\n", result, err)
         trackInfoReturn := TrackInfoReturn{result.Timestamp, result.IsPlaying, result.Item.Album.Name, result.Item.Name, result.Item.Id}
         if result.IsPlaying && (result.Timestamp / 1000) > workflow.LastTrigger {
                 return true, []interface{}{trackInfoReturn}, nil;
