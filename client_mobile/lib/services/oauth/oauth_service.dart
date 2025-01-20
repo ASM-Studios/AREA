@@ -1,10 +1,10 @@
 import 'dart:convert';
 
 import 'package:area/config/oauth_config.dart';
+import 'package:area/config/settings_config.dart';
 import 'package:area/pages/webview/webview_page.dart';
 import 'package:area/tools/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:go_router/go_router.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -17,7 +17,7 @@ class OAuthService {
   static Future<bool> exchangeCode(
       String code, String redirectUri, String serviceId,
       {String? codeVerifier, bool signUp = false}) async {
-    String baseUrl = dotenv.env["BACKEND_BASE_URL"] ?? "https://localhost:8080";
+    String baseUrl = SettingsConfig.serverIp;
     final Uri endpoint = signUp
         ? Uri.parse('$baseUrl/oauth/$serviceId')
         : Uri.parse('$baseUrl/oauth/bind/$serviceId');
@@ -33,9 +33,6 @@ class OAuthService {
           "redirect_uri": redirectUri,
           if (codeVerifier != null) "code_verifier": codeVerifier
         }));
-
-    print(
-        "réponse recu après echange du code avec le back : ${jsonDecode(response.body)}");
 
     if (signUp) {
       final responseData = jsonDecode(response.body);
@@ -66,8 +63,6 @@ class OAuthService {
         "code_challenge": Utils.generateCodeChallenge(codeVerifier),
       if (serviceConfig.pkce) "code_challenge_method": "S256"
     }).toString();
-
-    print("url oauth : $authUrl");
 
     final hasExchangedCorrectly = await Navigator.of(context).push(
       MaterialPageRoute(

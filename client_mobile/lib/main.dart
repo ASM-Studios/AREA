@@ -4,7 +4,6 @@ import 'package:area/pages/dashboard/workflow.dart';
 import 'package:area/pages/dashboard/workflow_list_page.dart';
 import 'package:area/pages/home/home.dart';
 import 'package:area/pages/profile/profile_page.dart';
-import 'package:area/pages/test_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:go_router/go_router.dart';
@@ -31,11 +30,6 @@ Future<void> main() async {
         name: 'register',
         builder: (context, state) => RegisterPage(),
       ),
-      // GoRoute(
-      //   path: '/dashboard',
-      //   name: 'dashboard',
-      //   builder: (context, state) => DashboardPage(),
-      // ), // TODO a voir ce que je fais de cette page mais si on a plus de navigation bar en bas elle ne sert plus à rien
       GoRoute(
         path: '/workflow/list',
         name: 'workflowList',

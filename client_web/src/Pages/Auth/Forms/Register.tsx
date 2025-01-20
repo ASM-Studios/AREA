@@ -7,6 +7,7 @@ import { instance, auth } from "@Config/backend.routes";
 import { useAuth, useUser } from "@/Context/ContextHooks";
 import { useNavigate } from 'react-router-dom';
 import Globe from "@/Components/eldora/globe";
+import { useMediaQuery } from 'react-responsive';
 
 const Register = () => {
     const [form] = Form.useForm();
@@ -14,6 +15,7 @@ const Register = () => {
     const { translations } = useUser();
     const navigate = useNavigate();
     const [isFormValid, setIsFormValid] = useState(false);
+    const isMobile = useMediaQuery({ query: '(max-width: 768px)' });
 
     React.useEffect(() => {
         onFieldsChange();
@@ -63,20 +65,22 @@ const Register = () => {
             left: 0,
             overflow: 'hidden'
         }} role="main">
-            <div style={{
-                position: 'relative',
-                width: '50%',
-                height: '100%',
-                opacity: 0.8,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center'
-            }}>
-                <Globe />
-            </div>
+            {!isMobile && 
+                <div style={{
+                    position: 'relative',
+                    width: '50%',
+                    height: '100%',
+                    opacity: 0.8,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                }}>
+                    <Globe />
+                </div>
+            }
 
             <div style={{
-                width: '50%',
+                width: isMobile ? '100%' : '50%',
                 display: 'flex',
                 justifyContent: 'center',
                 alignItems: 'center'
@@ -91,14 +95,16 @@ const Register = () => {
                         backdropFilter: 'blur(8px)',
                         position: 'relative'
                     }}
-                    headStyle={{
-                        fontSize: '24px',
-                        textAlign: 'center',
-                        borderBottom: 'none',
-                        padding: '24px 24px 0',
-                    }}
-                    bodyStyle={{
-                        padding: '24px',
+                    styles={{
+                        header: {
+                            fontSize: '24px',
+                            textAlign: 'center',
+                            borderBottom: 'none',
+                            padding: '24px 24px 0',
+                        },
+                        body: {
+                            padding: '24px',
+                        }
                     }}
                 >
                     <Form

@@ -1,3 +1,4 @@
+import 'package:area/animations/loading/workflow/services/shimmer_services_loader.dart';
 import 'package:area/data/action.dart';
 import 'package:area/data/service.dart';
 import 'package:area/data/service_metadata.dart';
@@ -5,9 +6,10 @@ import 'package:area/pages/dashboard/action_selection_page.dart';
 import 'package:area/services/about/about_service.dart';
 import 'package:area/services/user/user_service.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class ServiceSelectionPage extends StatelessWidget {
-  final Function(WorkflowActionReaction, WorkflowService) onActionSelected;
+  final Function(WorkflowActionReaction) onActionSelected;
   final bool isAction;
 
   const ServiceSelectionPage({
@@ -20,13 +22,18 @@ class ServiceSelectionPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Select a Service'),
+        title: Text(
+          'Select a Service',
+          style: GoogleFonts.fjallaOne(
+            textStyle: const TextStyle(color: Colors.black, fontSize: 24),
+          ),
+        ),
       ),
       body: FutureBuilder<List<WorkflowService>>(
         future: AboutService.getAbout(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(child: ShimmerServicesLoader());
           }
           if (snapshot.hasError) {
             return Center(

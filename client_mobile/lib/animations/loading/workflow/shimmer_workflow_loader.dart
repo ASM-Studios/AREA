@@ -11,7 +11,7 @@ class ShimmerWorkflowTemplate extends StatelessWidget {
       highlightColor: Colors.grey[100]!,
       child: Container(
         width: double.infinity,
-        height: 170,
+        height: 90,
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius:
@@ -28,11 +28,15 @@ class ShimmerWorkflowLoader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(15),
+      padding: const EdgeInsets.all(10),
       child: Center(
         child: Column(
           children: [
             const SizedBox(height: 20),
+            ShimmerWorkflowTemplate(),
+            const SizedBox(height: 10),
+            ShimmerWorkflowTemplate(),
+            const SizedBox(height: 10),
             ShimmerWorkflowTemplate(),
             const SizedBox(height: 10),
             ShimmerWorkflowTemplate(),

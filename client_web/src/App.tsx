@@ -24,6 +24,7 @@ import AttackError from "@/Pages/Errors/AttackError";
 
 import Login from '@/Pages/Auth/Forms/Login';
 import Register from '@/Pages/Auth/Forms/Register';
+import TwoFactorAuth from '@/Pages/Auth/Forms/TwoFactorAuth';
 
 import Layout from '@/Components/Layout/Layout';
 
@@ -160,6 +161,7 @@ const App = () => {
                                 <Route path="/" element={<Home backgroundColor={backgroundColor} />} />
                                 <Route path="/login" element={<Login />} />
                                 <Route path="/register" element={<Register />} />
+                                <Route path="/2fa" element={<TwoFactorAuth />} />
                                 <Route path="/dashboard" element={<Dashboard />} />
                                 <Route path="/accessibility" element={<Accessibility />} />
                                 <Route path="/auth/:service/callback" element={<GenericCallback />} />

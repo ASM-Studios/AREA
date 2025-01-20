@@ -7,7 +7,7 @@ import { useAuth, useUser } from "@/Context/ContextHooks";
 import OAuthButtons from "@/Components/Auth/OAuthButtons";
 import { toast } from "react-toastify";
 import Security from "@/Components/Security";
-import { instanceWithAuth, oauth, user as userRoute } from "@Config/backend.routes";
+import { instanceWithAuth, user as userRoute } from "@Config/backend.routes";
 import { UserPayload } from "@/Context/Scopes/UserContext";
 import { UserOutlined, BgColorsOutlined } from "@ant-design/icons";
 import ProfileCard from "@/Components/User/ProfileCard";
@@ -24,22 +24,27 @@ const hoverLimit = 4;
 
 const UserPage: React.FC<UserPageProps> = ({ backgroundColor, setBackgroundColor }) => {
     const navigate = useNavigate();
-    const [tempColor, setTempColor] = useState(backgroundColor);
-    const [hoverCount, setHoverCount] = useState(0);
+    const [tempColor, setTempColor] = useState<string>(backgroundColor);
+    const [hoverCount, setHoverCount] = useState<number>(0);
+    const [needReload, setNeedReload] = useState<boolean>(false);
 
     const { setJsonWebToken, setIsAuthenticated } = useAuth();
     const { user, setUser, translations } = useUser();
 
     React.useEffect(() => {
+        if (!needReload) return;
+
         instanceWithAuth.get(userRoute.me)
             .then((response: { data: UserPayload }) => {
                 setUser(response?.data?.user);
+                setNeedReload(false);
             })
             .catch((error) => {
                 console.error("error: ", error);
                 toast.error("Failed to fetch user data");
+                setNeedReload(false);
             });
-    }, []);
+    }, [needReload]);
 
     const handleLogout = () => {
         if (hoverCount < hoverLimit) { return; }
@@ -73,6 +78,7 @@ const UserPage: React.FC<UserPageProps> = ({ backgroundColor, setBackgroundColor
                                 hoverCount={hoverCount}
                                 setHoverCount={setHoverCount}
                                 hoverLimit={hoverLimit}
+                                setNeedReload={setNeedReload}
                             />
 
                             <Col xs={24} md={12}>

@@ -6,11 +6,10 @@ import 'package:area/widgets/divider_with_text.dart';
 import 'package:area/widgets/form_field.dart';
 import 'package:area/widgets/oauth_buttons.dart';
 import 'package:area/widgets/password_form_field.dart';
+import 'package:area/widgets/settings_button.dart';
 import 'package:area/widgets/simple_text.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_appauth/flutter_appauth.dart';
 import 'package:go_router/go_router.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -20,12 +19,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final String callbackUrlScheme = 'com.asm_studios.area';
-  String get spotifyRedirectUrlMobile => '$callbackUrlScheme://callback';
   bool isLoggingViaOauth = false;
-
-  final String clientId = dotenv.env["VITE_SPOTIFY_CLIENT_ID"] ?? "";
-  final appAuth = const FlutterAppAuth();
 
   final _formKey = GlobalKey<FormState>();
 
@@ -37,13 +31,18 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       body: Center(
           child: Container(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.fromLTRB(10, 0, 10, 20),
         child: Form(
           key: _formKey,
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 0, 5, 15),
+                  child: Align(
+                      alignment: Alignment.topRight, child: SettingsButton()),
+                ),
                 const SimpleText("Email"),
                 AreaFormField(
                   label: "you@example.com",
@@ -106,8 +105,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
           ),
         ),
-      )
-      ),
+      )),
     );
   }
 }
