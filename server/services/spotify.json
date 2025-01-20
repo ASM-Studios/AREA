@@ -2,45 +2,39 @@
   "name": "spotify",
   "events": [
     {
-      "short_name": "track_paused",
+      "short_name": "track_paused_spotify",
       "name": "A track is paused/stopped",
       "description": "Triggered when a track is paused or stopped on Spotify.",
       "type": "action",
-      "parameters": [
-        {
-          "name": "track_id",
-          "description": "The ID of the track that is paused or stopped.",
-          "type": "string",
-          "is_required": false
-        }
-      ]
+      "variables": ["timestamp", "is_playing", "album_name", "name", "id"],
+      "parameters": []
     },
 
 
 
     {
-      "short_name": "play_track",
+      "short_name": "play_track_spotify",
       "name": "Play/Pause a track",
       "description": "Pause the currently playing track on Spotify.",
       "type": "reaction",
       "parameters": []
     },
     {
-      "short_name": "skiprev_track",
+      "short_name": "skiprev_track_spotify",
       "name": "Skip to the previous track",
       "description": "Skip to the previous track on Spotify.",
       "type": "reaction",
       "parameters": []
     },
     {
-      "short_name": "skipnext_track",
+      "short_name": "skipnext_track_spotify",
       "name": "Skip to the next track",
       "description": "Skip to the next track on Spotify.",
       "type": "reaction",
       "parameters": []
     },
     {
-      "short_name": "add_track",
+      "short_name": "add_track_spotify",
       "name": "Add track to a playlist",
       "description": "Add a track to a specific Spotify playlist.",
       "type": "reaction",

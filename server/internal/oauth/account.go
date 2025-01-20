@@ -19,7 +19,8 @@ func createAccount(c *gin.Context, dbToken *models.Token) (*models.User) {
         var user models.User
         user.Email = dbToken.Email
         user.Username = dbToken.DisplayName
-        user.Token = utils.NewToken(c, user.Email)
+        user.Token = utils.NewToken(c, user.Email, "full")
+        user.TwoFactorMethod = "none"
 
         pkg.DB.Create(&user)
 
@@ -32,7 +33,7 @@ func updateAccount(c *gin.Context, dbToken *models.Token) (*models.User) {
         var user models.User
         pkg.DB.Where("id = ?", dbToken.UserID).First(&user)
         pkg.DB.Where("email = ?", dbToken.Email).First(dbToken).Update("token", dbToken.Token)
-        user.Token = utils.NewToken(c, user.Email)
+        user.Token = utils.NewToken(c, user.Email, "full")
         pkg.DB.UpdateColumns(&user)
         return &user
 }

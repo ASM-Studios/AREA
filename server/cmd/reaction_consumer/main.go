@@ -32,12 +32,11 @@ var actionCallbacks = map[uint]func(*models.User, map[string]string){
 	24: spotify.SkipNext,
 	25: spotify.AddTrack,
 
-	27: twitch.SendMessage,
-	28: twitch.WhisperMessage,
+	26: twitch.SendMessage,
+	27: twitch.WhisperMessage,
 }
 
 func executeWorkflowEvent(payload Payload, workflowEvent *models.WorkflowEvent) {
-	fmt.Printf("Executing workflow event id: %d\n", workflowEvent.ID)
 	var user models.User
 	pkg.DB.Where("id = ?", payload.Workflow.UserID).First(&user)
 
