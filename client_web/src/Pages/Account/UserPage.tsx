@@ -9,8 +9,9 @@ import { toast } from "react-toastify";
 import Security from "@/Components/Security";
 import { instanceWithAuth, user as userRoute, secret } from "@Config/backend.routes";
 import { UserPayload } from "@/Context/Scopes/UserContext";
-import { UserOutlined, BgColorsOutlined, DeleteOutlined } from "@ant-design/icons";
+import { UserOutlined, BgColorsOutlined, DeleteOutlined, EyeOutlined, EyeInvisibleOutlined } from "@ant-design/icons";
 import ProfileCard from "@/Components/User/ProfileCard";
+import { Secret } from "@/types";
 
 const { Content } = Layout;
 const { Text } = Typography;
@@ -27,9 +28,12 @@ const UserPage: React.FC<UserPageProps> = ({ backgroundColor, setBackgroundColor
     const [tempColor, setTempColor] = useState<string>(backgroundColor);
     const [hoverCount, setHoverCount] = useState<number>(0);
     const [needReload, setNeedReload] = useState<boolean>(false);
-    const [secrets, setSecrets] = useState<Array<{ id: string, name: string }>>([]);
-    const [newSecretName, setNewSecretName] = useState<string>("");
+    const [secrets, setSecrets] = useState<Secret[]>([]);
+    const [newSecretKey, setNewSecretKey] = useState<string>("");
+    const [newSecretValue, setNewSecretValue] = useState<string>("");
     const [isLoadingSecrets, setIsLoadingSecrets] = useState<boolean>(false);
+    const [showNewSecretValue, setShowNewSecretValue] = useState<boolean>(false);
+    const [visibleSecrets, setVisibleSecrets] = useState<Record<string, boolean>>({});
 
     const { setJsonWebToken, setIsAuthenticated } = useAuth();
     const { user, setUser, translations } = useUser();
@@ -48,6 +52,10 @@ const UserPage: React.FC<UserPageProps> = ({ backgroundColor, setBackgroundColor
                 setNeedReload(false);
             });
     }, [needReload]);
+
+    React.useEffect(() => {
+        fetchSecrets();
+    }, []);
 
     const handleLogout = () => {
         if (hoverCount < hoverLimit) { return; }
@@ -73,26 +81,31 @@ const UserPage: React.FC<UserPageProps> = ({ backgroundColor, setBackgroundColor
         setIsLoadingSecrets(true);
         instanceWithAuth.get(secret.list)
             .then((response) => {
-                setSecrets(response.data);
+                setSecrets(response?.data?.secrets ?? []);
                 setIsLoadingSecrets(false);
             })
             .catch((error) => {
                 console.error('Failed to fetch secrets:', error);
                 setIsLoadingSecrets(false);
                 toast.error("Failed to fetch secrets");
+                setSecrets([]);
             });
     };
 
     const handleCreateSecret = () => {
-        if (!newSecretName.trim()) {
-            toast.error("Secret name cannot be empty");
+        if (!newSecretKey.trim() || !newSecretValue.trim()) {
+            toast.error("Name and value cannot be empty");
             return;
         }
 
-        instanceWithAuth.post(secret.create, { name: newSecretName })
+        instanceWithAuth.post(secret.create, { 
+            key: newSecretKey,
+            value: newSecretValue 
+        })
             .then(() => {
                 toast.success("Secret created successfully");
-                setNewSecretName("");
+                setNewSecretKey("");
+                setNewSecretValue("");
                 fetchSecrets();
             })
             .catch((error) => {
@@ -111,6 +124,13 @@ const UserPage: React.FC<UserPageProps> = ({ backgroundColor, setBackgroundColor
                 console.error('Failed to delete secret:', error);
                 toast.error("Failed to delete secret");
             });
+    };
+
+    const toggleSecretVisibility = (secretId: string) => {
+        setVisibleSecrets(prev => ({
+            ...prev,
+            [secretId]: !prev[secretId]
+        }));
     };
 
     return (
@@ -133,7 +153,15 @@ const UserPage: React.FC<UserPageProps> = ({ backgroundColor, setBackgroundColor
                                     <Space direction="vertical" align="center" style={{ width: '100%' }}>
                                         <Text>{translations?.userPage?.themeSettings?.description}</Text>
                                         <div style={{ border: '1px solid #d9d9d9', padding: '8px', borderRadius: '4px' }}>
-                                            <BlockPicker color={tempColor} onChangeComplete={handleColorChange} />
+                                            <BlockPicker 
+                                                color={tempColor} 
+                                                onChangeComplete={handleColorChange}
+                                                styles={{
+                                                    default: {
+                                                        card: { boxShadow: 'none' }
+                                                    }
+                                                }}
+                                            />
                                         </div>
                                         <Button icon={<BgColorsOutlined />} onClick={handleDefaultColor}>
                                             {translations?.userPage?.themeSettings?.resetButton}
@@ -182,16 +210,29 @@ const UserPage: React.FC<UserPageProps> = ({ backgroundColor, setBackgroundColor
                             <Col xs={24}>
                                 <Card title={translations?.userPage?.profileCard?.secretsManagement} style={{ padding: '16px' }}>
                                     <Space direction="vertical" style={{ width: '100%' }}>
-                                        <Space.Compact style={{ width: '100%' }}>
+                                        <Space direction="vertical" style={{ width: '100%' }}>
                                             <Input
                                                 placeholder="Enter secret name"
-                                                value={newSecretName}
-                                                onChange={(e) => setNewSecretName(e.target.value)}
+                                                value={newSecretKey}
+                                                onChange={(e) => setNewSecretKey(e.target.value)}
+                                            />
+                                            <Input.Password
+                                                placeholder="Enter secret value"
+                                                value={newSecretValue}
+                                                onChange={(e) => setNewSecretValue(e.target.value)}
+                                                iconRender={(visible) => (
+                                                    <Button 
+                                                        type="text" 
+                                                        icon={visible ? <EyeOutlined /> : <EyeInvisibleOutlined />}
+                                                        onClick={() => setShowNewSecretValue(!showNewSecretValue)}
+                                                    />
+                                                )}
+                                                visibilityToggle={{ visible: showNewSecretValue }}
                                             />
                                             <Button type="primary" onClick={handleCreateSecret}>
                                                 Create Secret
                                             </Button>
-                                        </Space.Compact>
+                                        </Space>
                                         
                                         <Table
                                             loading={isLoadingSecrets}
@@ -199,8 +240,23 @@ const UserPage: React.FC<UserPageProps> = ({ backgroundColor, setBackgroundColor
                                             columns={[
                                                 {
                                                     title: 'Name',
-                                                    dataIndex: 'name',
-                                                    key: 'name',
+                                                    dataIndex: 'key',
+                                                    key: 'key',
+                                                },
+                                                {
+                                                    title: 'Value',
+                                                    dataIndex: 'value',
+                                                    key: 'value',
+                                                    render: (value: string, record: Secret) => (
+                                                        <Space>
+                                                            {visibleSecrets[record.ID] ? value : '••••••••'}
+                                                            <Button
+                                                                type="text"
+                                                                icon={visibleSecrets[record.ID] ? <EyeOutlined /> : <EyeInvisibleOutlined />}
+                                                                onClick={() => toggleSecretVisibility(record.ID.toString())}
+                                                            />
+                                                        </Space>
+                                                    )
                                                 },
                                                 {
                                                     title: 'Actions',
@@ -210,13 +266,13 @@ const UserPage: React.FC<UserPageProps> = ({ backgroundColor, setBackgroundColor
                                                             type="text"
                                                             danger
                                                             icon={<DeleteOutlined />}
-                                                            onClick={() => handleDeleteSecret(record.id)}
+                                                            onClick={() => handleDeleteSecret(record.ID.toString())}
                                                         />
                                                     ),
                                                 },
                                             ]}
                                             pagination={false}
-                                            rowKey="id"
+                                            rowKey="ID"
                                         />
                                     </Space>
                                 </Card>

@@ -129,7 +129,7 @@ export type WorkflowTableDetail = {
 /* --------------------------------- */
 
 export type Secret = {
-    id: number;
-    name: string;
+    ID: number;
+    key: string;
     value: string;
 }
