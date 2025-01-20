@@ -54,6 +54,7 @@ func CommitCreated(workflow *models.Workflow, user *models.User, args map[string
         var token models.Token
         pkg.DB.Where("user_id = ? AND service_id = ?", user.ID, gconsts.ServiceMap["github"]).First(&token)
 
+        fmt.Printf("Fetching https://api.github.com/repos/%s/%s/commits", args["owner"], args["repo"])
         req, err := http.NewRequest("GET", fmt.Sprintf("https://api.github.com/repos/%s/%s/commits", args["owner"], args["repo"]), nil)
         if err != nil {
                 return false, nil, errors.New("Failed to create request")
@@ -67,6 +68,7 @@ func CommitCreated(workflow *models.Workflow, user *models.User, args map[string
         }
         defer resp.Body.Close()
         if resp.StatusCode != 200 {
+                fmt.Printf("%v\n", resp.StatusCode)
                 return false, nil, errors.New("Failed to fetch PRs")
         }
 

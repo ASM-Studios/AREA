@@ -49,7 +49,7 @@ func setupParameters(user *models.User, parameters []Parameter) map[string]strin
         for _, parameter := range parameters {
                 tmpValue := parameter.Value
                 for _, secret := range secrets {
-                        tmpValue = strings.ReplaceAll(tmpValue, secret.Key, secret.Value)
+                        tmpValue = strings.ReplaceAll(tmpValue, fmt.Sprintf("$%s", secret.Key), fmt.Sprintf("%v", secret.Value))
                 }
                 parameterMap[parameter.Name] = tmpValue
         }
