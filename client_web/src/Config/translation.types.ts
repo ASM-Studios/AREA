@@ -161,8 +161,11 @@ export interface Translation {
             description: string;
             logoutDescription: string;
             logoutButton: string;
-            enable2FAButton: string;
-            disable2FAButton: string;
+            securitySettings: string;
+            enableTOTP: string;
+            verifyEmail: string;
+            enableEmailAuth: string;
+            disable2FA: string;
             setup2FATitle: string;
             scan2FAQRCode: string;
         };

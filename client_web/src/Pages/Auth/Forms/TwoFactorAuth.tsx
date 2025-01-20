@@ -6,12 +6,11 @@ import { Form, Input, Card, InputRef } from 'antd';
 import { instanceWithAuth, auth } from "@Config/backend.routes";
 import { useAuth, useUser, useError } from "@/Context/ContextHooks";
 import Globe from '@/Components/eldora/globe';
-import Security from "@/Components/Security";
 
 const TwoFactorAuth = () => {
     const [form] = Form.useForm();
     const { setIsAuthenticated, setJsonWebToken } = useAuth();
-    const { translations, user, setUser, totpLoggingIn } = useUser();
+    const { translations, validating2faMethod, totpLoggingIn } = useUser();
     const { setError } = useError();
     const navigate = useNavigate();
 
@@ -41,21 +40,33 @@ const TwoFactorAuth = () => {
         }
     };
 
+    const getUrl = () => {
+        if (!totpLoggingIn && validating2faMethod === "mail") {
+            return auth.twoFactorAuth.validate_mail;
+        }
+        if (!totpLoggingIn && validating2faMethod === "totp") {
+            return auth.twoFactorAuth.validate_totp;
+        }
+
+        return auth.twoFactorAuth.login;
+    };
+
     const onFinish = (values: Record<string, string>) => {
         const code = Object.values(values).join('');
 
-        instanceWithAuth.post(totpLoggingIn ? auth.twoFactorAuth.login : auth.twoFactorAuth.validate, { code })
+        instanceWithAuth.post(getUrl(), { code })
             .then((response) => {
-                setIsAuthenticated(true);
-                toast.success(translations?.authForm.twoFactor.success.verified);
-
                 if (totpLoggingIn) {
                     if (!response.data?.jwt) {
                         setError({error: 'Login Failed', errorDescription: 'JWT not found in response'});
                         navigate('/error/login');
+                        return;
                     }
                     setJsonWebToken(response?.data?.jwt);
                     setIsAuthenticated(true);
+                } else {
+                    setIsAuthenticated(true);
+                    toast.success(translations?.authForm.twoFactor.success.verified);
                 }
 
                 navigate('/dashboard');
@@ -63,7 +74,6 @@ const TwoFactorAuth = () => {
             .catch((error) => {
                 console.error('2FA Verification Failed:', error);
                 toast.error(translations?.authForm.twoFactor.errors.verificationFailed);
-
                 form.resetFields();
             });
     };

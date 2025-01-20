@@ -41,9 +41,12 @@ const auth = {
     register: `${endpoint}/auth/register`,
     health: `${endpoint}/auth/health`,
     twoFactorAuth: {
-        generate: `${endpoint}/totp/generate`,
-        validate: `${endpoint}/totp/validate`,
+        generate_totp: `${endpoint}/totp/generate`,
+        validate_totp: `${endpoint}/totp/validate`,
         login: `${endpoint}/auth/login/2fa`,
+        generate_email: `${endpoint}/mail/generate`,
+        validate_mail: `${endpoint}/mail/validate`,
+        select: `${endpoint}/2fa/method`,
     },
 };
 

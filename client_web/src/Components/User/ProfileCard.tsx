@@ -5,6 +5,7 @@ import { useUser } from "@/Context/ContextHooks";
 import { auth, instanceWithAuth } from "@Config/backend.routes";
 import { useNavigate } from "react-router-dom";
 import QRCode from "react-qr-code";
+import {toast} from "react-toastify";
 
 const { Text } = Typography;
 
@@ -13,16 +14,18 @@ interface ProfileCardProps {
     hoverCount: number;
     setHoverCount: (count: number) => void;
     hoverLimit: number;
+    setNeedReload: (value: boolean) => void;
 }
 
-const ProfileCard: React.FC<ProfileCardProps> = ({ handleLogout, hoverCount, setHoverCount, hoverLimit }) => {
+const ProfileCard: React.FC<ProfileCardProps> = ({ handleLogout, hoverCount, setHoverCount, hoverLimit, setNeedReload }) => {
     const [position, setPosition] = useState<{ top: number; left: number } | null>(null);
     const [qrCodeUrl, setQrCodeUrl] = useState<string>("");
     const [modalSecret, setModalSecret] = useState<string>("");
     const [isQrModalVisible, setIsQrModalVisible] = useState<boolean>(false);
     const [isSettingsModalVisible, setIsSettingsModalVisible] = useState<boolean>(false);
+    const [isEmailValidationLoading, setIsEmailValidationLoading] = useState<boolean>(false);
 
-    const { user, translations } = useUser();
+    const { user, setUser, translations, setValidating2faMethod } = useUser();
     const navigate = useNavigate();
 
     const handleMouseEnter = () => {
@@ -41,45 +44,61 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ handleLogout, hoverCount, set
     };
 
     const handleVerifyEmail = () => {
-        // TODO: Ask server to send verification email
-        navigate('/2fa');
+        setIsEmailValidationLoading(true);
+        instanceWithAuth.get(auth.twoFactorAuth.generate_email)
+            .then(() => {
+                setValidating2faMethod("mail");
+                navigate('/2fa');
+                setIsEmailValidationLoading(false);
+                setNeedReload(true);
+            })
+            .catch((error) => {
+                console.error('Failed to send verification email:', error);
+                setIsEmailValidationLoading(false);
+            });
     };
 
     const handleEmailAuth = () => {
-        // TODO: Tell server to enable email auth
+        instanceWithAuth.post(auth.twoFactorAuth.select, { method: "mail" })
+            .then(() => {
+                setNeedReload(true);
+                toast.success("Email authentication enabled");
+            })
+            .catch((error) => {
+                console.error('Failed to enable email auth:', error);
+            });
     };
 
     const handleDisable2FA = () => {
-        instanceWithAuth.put("", { method: null })
+        instanceWithAuth.post(auth.twoFactorAuth.select, { method: "none" })
             .then(() => {
-                // TODO: update user
-                setIsSettingsModalVisible(false);
+                setNeedReload(true);
+                toast.success("2FA disabled");
             })
             .catch((error) => {
                 console.error('Failed to disable 2FA:', error);
             });
     };
 
-    const handle2FAToggle = () => {
-        if (user) {
-            if (!user.is2faEnabled) {
-                instanceWithAuth.get(auth.twoFactorAuth.generate)
-                    .then((response) => {
-                        setQrCodeUrl(response.data.url);
-                        setModalSecret(response.data.secret);
-                        setIsQrModalVisible(true);
-                        setIsSettingsModalVisible(false);
-                    })
-                    .catch((error) => {
-                        console.error('Failed to get 2FA QR code:', error);
-                    });
-            }
+    const handleActivateTOTP = () => {
+        if (user?.two_factor_method === "none") {
+            instanceWithAuth.get(auth.twoFactorAuth.generate_totp)
+                .then((response) => {
+                    setValidating2faMethod("totp");
+                    setQrCodeUrl(response.data.url);
+                    setModalSecret(response.data.secret);
+                    setIsQrModalVisible(true);
+                    setIsSettingsModalVisible(false);
+                })
+                .catch((error) => {
+                    console.error('Failed to get 2FA QR code:', error);
+                });
         }
     };
 
     const handleContinue = () => {
         setIsQrModalVisible(false);
-        window.location.href = '/2fa';
+        navigate("/2fa");
     };
 
     return (
@@ -119,7 +138,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ handleLogout, hoverCount, set
                 </Space>
             </Card>
             <Modal
-                title={translations?.userPage?.profileCard?.securitySettings || "Security Settings"}
+                title={translations?.userPage?.profileCard?.securitySettings}
                 open={isSettingsModalVisible}
                 onCancel={() => setIsSettingsModalVisible(false)}
                 footer={[
@@ -129,40 +148,44 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ handleLogout, hoverCount, set
                 ]}
             >
                 <Space direction="vertical" style={{ width: '100%' }}>
-                    <Button 
-                        type="primary" 
-                        onClick={handle2FAToggle}
-                        block
-                    >
-                        {translations?.userPage?.profileCard?.enableTOTP || "Enable TOTP Authentication"}
-                        {/* TODO: Update translation */}
-                    </Button>
+                    {user && user?.two_factor_method !== "totp" && (
+                        <Button
+                            type="primary"
+                            onClick={handleActivateTOTP}
+                            block
+                            disabled={user?.two_factor_method !== "none"}
+                        >
+                            {translations?.userPage?.profileCard?.enableTOTP}
+                        </Button>
+                    )}
 
-                    {user && !user.isEmailVerified && (
+                    {user && !user.valid_email && (
                         <Button 
                             onClick={handleVerifyEmail}
                             block
+                            loading={isEmailValidationLoading}
                         >
-                            {translations?.userPage?.profileCard?.verifyEmail || "Verify Email"}
+                            {translations?.userPage?.profileCard?.verifyEmail}
                         </Button>
                     )}
 
-                    {user && user.isEmailVerified && (
+                    {user && user?.valid_email && (
                         <Button 
                             onClick={handleEmailAuth}
                             block
+                            disabled={user?.two_factor_method !== "none"}
                         >
-                            {translations?.userPage?.profileCard?.enableEmailAuth || "Enable Email Authentication"}
+                            {translations?.userPage?.profileCard?.enableEmailAuth}
                         </Button>
                     )}
 
-                    {user && user.is2faEnabled && (
+                    {user && user?.two_factor_method !== "none" && (
                         <Button 
                             danger 
                             onClick={handleDisable2FA}
                             block
                         >
-                            {translations?.userPage?.profileCard?.disable2FA || "Disable 2FA"}
+                            {translations?.userPage?.profileCard?.disable2FA}
                         </Button>
                     )}
                 </Space>
