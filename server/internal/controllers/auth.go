@@ -111,6 +111,9 @@ func Login(c *gin.Context) {
                 c.JSON(http.StatusOK, gin.H{"jwt": tokenString})
         } else {
                 tokenString = utils.NewToken(c, LoginData.Email, "mid")
+                if user.TwoFactorMethod == "mail" {
+                        a2f.Generate2FAMailCode(&user)
+                }
                 c.JSON(http.StatusTeapot, gin.H{
                         "jwt": tokenString,
                         "method": user.TwoFactorMethod,
