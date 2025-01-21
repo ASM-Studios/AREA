@@ -28,4 +28,8 @@ Contents
 .. toctree::
    :maxdepth: 2
 
+   index
    installation
+   overview
+   development
+   workflowCreation
