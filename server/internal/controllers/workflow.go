@@ -375,6 +375,9 @@ func TriggerWorkflows(c *gin.Context) {
         pkg.DB.Table("workflows").Where("user_id = ?", user.ID).Find(&workflows)
 
         for _, workflow := range workflows {
+                if workflow.IsActive == false {
+                        continue
+                }
                 body, _ := json.Marshal(workflow)
                 gconsts.Connection.Channel.Publish("", "action", false, false, amqp091.Publishing{
                         ContentType: "application/json",
