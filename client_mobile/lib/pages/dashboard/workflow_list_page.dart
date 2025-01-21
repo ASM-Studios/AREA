@@ -1,11 +1,12 @@
 import 'package:area/animations/loading/workflow/shimmer_workflow_loader.dart';
+import 'package:area/config/settings_config.dart';
+import 'package:area/config/translation_config.dart';
 import 'package:area/data/workflow.dart';
 import 'package:area/services/workflow/workflow_service.dart';
 import 'package:area/widgets/profile_button.dart';
 import 'package:area/widgets/workflow_container.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class WorkflowListPage extends StatefulWidget {
   const WorkflowListPage({super.key});
@@ -34,11 +35,14 @@ class _WorkflowListPageState extends State<WorkflowListPage> {
           ),
           Center(
             child: Text(
-              'YOUR WORKFLOWS',
-              style: GoogleFonts.fjallaOne(
-                textStyle: const TextStyle(color: Colors.black, fontSize: 24),
-              ),
-            ),
+                TranslationConfig.translate(
+                  "workflows",
+                  language: SettingsConfig.language,
+                ).toUpperCase(),
+                style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold)),
           ),
           FutureBuilder(
             future: UpdateWorkflowService.getWorkflowList(),
@@ -49,13 +53,12 @@ class _WorkflowListPageState extends State<WorkflowListPage> {
               if (snapshot.hasError) {
                 return Center(
                   child: Column(children: [
-                    Text('Erreur : ${snapshot.error}'),
-                    IconButton(onPressed: () {
-                      setState(() {
-                        
-                      });
-                    },
-                    icon: const Icon(Icons.refresh), 
+                    Text('${snapshot.error}'),
+                    IconButton(
+                      onPressed: () {
+                        setState(() {});
+                      },
+                      icon: const Icon(Icons.refresh),
                     )
                   ]),
                 );
@@ -82,16 +85,16 @@ class _WorkflowListPageState extends State<WorkflowListPage> {
                         )
                       : Center(
                           child: Text(
-                            "No workflow available",
-                            style: GoogleFonts.fjallaOne(
-                              textStyle: const TextStyle(
-                                  color: Colors.black, fontSize: 14),
-                            ),
+                            TranslationConfig.translate("no_workflow", language: SettingsConfig.language,),
+                            maxLines: 2,
+                            style: const TextStyle(
+                              
+                                color: Colors.black, fontSize: 24),
                           ),
                         ),
                 );
               }
-              return const Center(child: Text('No workflow available'));
+              return Center(child: Text(TranslationConfig.translate("no_workflow", language: SettingsConfig.language,)));
             },
           ),
         ],
@@ -101,7 +104,14 @@ class _WorkflowListPageState extends State<WorkflowListPage> {
           context.push("/workflow/create");
         },
         tooltip: 'Ajouter',
-        child: Icon(Icons.add),
+        backgroundColor: Colors.black,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(50),
+        ),
+        child: Icon(
+          Icons.add,
+          color: Colors.white,
+        ),
       ),
     );
   }

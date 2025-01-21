@@ -1,3 +1,5 @@
+import 'package:area/config/settings_config.dart';
+import 'package:area/config/translation_config.dart';
 import 'package:area/data/action.dart';
 import 'package:area/data/service_metadata.dart';
 import 'package:area/pages/dashboard/service_selection.dart';
@@ -53,17 +55,20 @@ class ActionButton extends StatelessWidget {
       child: Row(
         children: [
           const SizedBox(width: 10),
-          Text(
-            getButtonText(),
-            style: TextStyle(
-                fontSize: action == null ? 36 : 16,
-                color: serviceMetadata != null
-                    ? (serviceMetadata!.color == Colors.white
-                        ? Colors.black
-                        : Colors.white)
-                    : Colors.white),
+          Expanded(
+            child: Text(
+              getButtonText(),
+              style: TextStyle(
+                  overflow: TextOverflow.ellipsis,
+                  fontSize: action == null ? 36 : 16,
+                  color: serviceMetadata != null
+                      ? (serviceMetadata!.color == Colors.white
+                          ? Colors.black
+                          : Colors.white)
+                      : Colors.white),
+              maxLines: 2,
+            ),
           ),
-          if (action == null) const Spacer(),
           if (action == null)
             ElevatedButton(
               onPressed: () {
@@ -72,14 +77,16 @@ class ActionButton extends StatelessWidget {
                         isAction: isAction,
                         onActionSelected: onActionSelected)));
               },
-              child: const Text(
-                "Add",
+              child: Text(
+                TranslationConfig.translate(
+                  "add",
+                  language: SettingsConfig.language,
+                ),
                 style: TextStyle(
                   color: Colors.black,
                 ),
               ),
             ),
-          if (action != null) const Spacer(),
           if (action != null)
             Image.asset(serviceMetadata!.imagePath, width: 50, height: 50)
         ],

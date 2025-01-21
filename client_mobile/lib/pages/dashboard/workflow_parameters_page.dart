@@ -1,8 +1,10 @@
+import 'package:area/config/settings_config.dart';
+import 'package:area/config/translation_config.dart';
 import 'package:area/data/parameter.dart';
+import 'package:area/widgets/button.dart';
 import 'package:area/widgets/datetime_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:area/data/action.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class WorkflowParametersPage extends StatefulWidget {
   const WorkflowParametersPage({super.key, required this.action});
@@ -21,28 +23,42 @@ class _WorkflowParametersPageState extends State<WorkflowParametersPage> {
     return Scaffold(
       appBar: AppBar(
           title: Text(
-        "Configure Parameters",
-        style: GoogleFonts.fjallaOne(
-          textStyle: const TextStyle(color: Colors.black, fontSize: 24),
-        ),
+        TranslationConfig.translate("parameters_config", language: SettingsConfig.language,),
+        style: const TextStyle(
+            color: Colors.black, fontSize: 24, fontWeight: FontWeight.bold),
       )),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            ...widget.action.parameters.map(
-              (parameter) => Padding(
-                padding: const EdgeInsets.symmetric(vertical: 15.0),
-                child: _buildParameterWidget(parameter),
+      body: Column(
+        children: [
+          Expanded(
+            child: Scrollbar(
+              thickness: 6,
+              radius: const Radius.circular(10),
+              thumbVisibility: true,
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  children: [
+                    ...widget.action.parameters.map(
+                      (parameter) => Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 10.0),
+                        child: _buildParameterWidget(parameter),
+                      ),
+                    ),
+                    const SizedBox(height: 40),
+                  ],
+                ),
               ),
             ),
-            const SizedBox(height: 20),
-            ElevatedButton(
+          ),
+          Padding(
+            padding: EdgeInsets.all(20),
+            child: AreaButton(
+              label: TranslationConfig.translate("submit", language: SettingsConfig.language),
               onPressed: _submitParameters,
-              child: const Text("Submit"),
+              color: const Color(0XFF035a63),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -100,9 +116,6 @@ class _WorkflowParametersPageState extends State<WorkflowParametersPage> {
     for (var param in widget.action.parameters) {
       param.value = _parameterValues[param.name];
     }
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text("Parameters submitted !")),
-    );
     Navigator.of(context).pop(widget.action);
   }
 }

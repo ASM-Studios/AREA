@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:area/config/settings_config.dart';
+import 'package:area/config/translation_config.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -63,7 +64,7 @@ class AuthService {
       final response = await http.get(
         Uri.parse('$baseUrl/auth/health'),
         headers: {'Authorization': 'Bearer $token'},
-      );
+      ).timeout(Duration(seconds: 5));
       return response.statusCode == 200;
     } catch (e) {
       return false;
@@ -100,25 +101,24 @@ class AuthService {
 
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text("Login successfully !"),
+            content: Text(TranslationConfig.translate(
+              "login_success",
+              language: SettingsConfig.language,
+            )),
             backgroundColor: Colors.black,
           ),
         );
         return (true);
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-                "Erreur de connexion : Code ${response.statusCode} - ${response.body}"),
-            backgroundColor: Colors.red,
-          ),
-        );
         return (false);
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text("Login error : $e"),
+          content: Text("${TranslationConfig.translate(
+            "login_error",
+            language: SettingsConfig.language,
+          )} : $e"),
           backgroundColor: Colors.red,
         ),
       );
@@ -145,25 +145,25 @@ class AuthService {
         await secureStorage.write(key: 'bearer_token', value: token);
 
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text("Register successfully !"),
+          SnackBar(
+            content: Text(TranslationConfig.translate(
+              "register_success",
+              language: SettingsConfig.language,
+            )),
             backgroundColor: Colors.black,
           ),
         );
         return (true);
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text("Unauthrorized to process."),
-            backgroundColor: Colors.red,
-          ),
-        );
         return (false);
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text("Register error: $e"),
+          content: Text("${TranslationConfig.translate(
+              "register_error",
+              language: SettingsConfig.language,
+            )} : $e"),
           backgroundColor: Colors.red,
         ),
       );

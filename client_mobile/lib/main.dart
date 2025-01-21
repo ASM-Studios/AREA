@@ -1,3 +1,4 @@
+import 'package:area/config/settings_config.dart';
 import 'package:area/pages/auth/login.dart';
 import 'package:area/pages/auth/register.dart';
 import 'package:area/pages/dashboard/workflow.dart';
@@ -11,6 +12,7 @@ import 'package:go_router/go_router.dart';
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 Future<void> main() async {
   await dotenv.load(fileName: ".env");
+  SettingsConfig.initLanguage();
 
   final GoRouter router = GoRouter(
     navigatorKey: navigatorKey,
@@ -51,7 +53,10 @@ Future<void> main() async {
   runApp(
     MaterialApp.router(
       title: 'Area',
-      theme: ThemeData(primarySwatch: Colors.green),
+      theme: ThemeData(
+          primarySwatch: Colors.green,
+          scrollbarTheme: ScrollbarThemeData(
+              thumbColor: WidgetStateProperty.all(Colors.black))),
       routerConfig: router,
     ),
   );

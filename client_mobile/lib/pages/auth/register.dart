@@ -1,3 +1,5 @@
+import 'package:area/config/settings_config.dart';
+import 'package:area/config/translation_config.dart';
 import 'package:area/services/login/auth_service.dart';
 import 'package:area/tools/utils.dart';
 import 'package:area/widgets/button.dart';
@@ -45,7 +47,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   child: Align(
                       alignment: Alignment.topRight, child: SettingsButton()),
                 ),
-                SimpleText("Username"),
+                SimpleText(TranslationConfig.translate("username", language: SettingsConfig.language)),
                 AreaFormField(
                     label: "username",
                     controller: userController,
@@ -55,7 +57,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       }
                       return (null);
                     }),
-                SimpleText("Email"),
+                SimpleText(TranslationConfig.translate("email", language: SettingsConfig.language)),
                 AreaFormField(
                   label: "you@example.com",
                   controller: emailController,
@@ -70,7 +72,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   },
                 ),
                 const SizedBox(height: 50),
-                SimpleText("Password"),
+                SimpleText(TranslationConfig.translate("password", language: SettingsConfig.language)),
                 PasswordFormField(
                   label: "********",
                   controller: passwordController,
@@ -83,7 +85,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     return (null);
                   },
                 ),
-                SimpleText("Confirm password"),
+                SimpleText(TranslationConfig.translate("confirm_password", language: SettingsConfig.language)),
                 PasswordFormField(
                   label: "********",
                   controller: confirmPasswordController,
@@ -98,7 +100,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 Align(
                   alignment: Alignment.center,
                   child: AreaButton(
-                      label: "Register",
+                      label: TranslationConfig.translate("register", language: SettingsConfig.language),
                       onPressed: () async {
                         if (_formKey.currentState!.validate()) {
                           bool isRegistered = await AuthService.register(
@@ -116,14 +118,14 @@ class _RegisterPageState extends State<RegisterPage> {
                       color: const Color(0XFF035a63)),
                 ),
                 const SizedBox(height: 40),
-                const DividerWithText(label: "Or Register with"),
+                DividerWithText(label: TranslationConfig.translate("divider_register", language: SettingsConfig.language)),
                 const SizedBox(height: 15),
                 OAuthButtons(),
                 const SizedBox(height: 5),
                 Align(
                   alignment: Alignment.center,
                   child: SmallClickableText(
-                    "I already have an account",
+                    TranslationConfig.translate("have_account", language: SettingsConfig.language),
                     onPressed: () {
                       context.pop();
                     },

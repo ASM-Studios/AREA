@@ -17,9 +17,9 @@ class AboutService {
     if (response.statusCode == 200) {
       final jsonData = json.decode(response.body);
 
-      return (jsonData['server']['services'] as List)
+      return jsonData['server']['services'] != null ? (jsonData['server']['services'] as List)
           .map((service) => WorkflowService.fromJson(service))
-          .toList();
+          .toList() : [];
     } else {
       throw Exception('Failed to load services');
     }

@@ -1,11 +1,14 @@
+import 'package:area/config/settings_config.dart';
+import 'package:area/config/translation_config.dart';
 import 'package:area/data/action.dart';
 import 'package:area/data/service_metadata.dart';
 import 'package:area/data/workflow.dart';
 import 'package:area/services/workflow/workflow_service.dart';
 import 'package:area/widgets/action_button.dart';
+import 'package:area/widgets/button.dart';
+import 'package:area/widgets/form_field.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 const int actionLimit = 1;
 const int reactionLimit = 10;
@@ -33,6 +36,77 @@ class _WorkflowPageState extends State<WorkflowPage> {
     });
   }
 
+  void createWorkflow() async {
+    if (actions.isEmpty || reactions.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            TranslationConfig.translate(
+              "action_error",
+              language: SettingsConfig.language,
+            ),
+          ),
+          backgroundColor: Colors.red,
+        ),
+      );
+    } else {
+      final workflowDetails = await _showWorkflowDetailsDialog(context);
+      if (workflowDetails != null) {
+        final name = workflowDetails["name"];
+        final description = workflowDetails["description"];
+        List<int> servicesId = [];
+        for (WorkflowActionReaction action in actions) {
+          servicesId.add(action.serviceId!);
+        }
+        for (WorkflowActionReaction reaction in reactions) {
+          if (!servicesId.contains(reaction.serviceId!)) {
+            servicesId.add(reaction.serviceId!);
+          }
+        }
+        bool hasCreatedWorkflow = await UpdateWorkflowService.createWorkflow(
+          Workflow(
+            name: name!,
+            description: description!,
+            servicesId: servicesId,
+            events: [
+              ...actions.map(
+                  (action) => WorkflowEvent(action: action, type: "action")),
+              ...reactions.map((reaction) =>
+                  WorkflowEvent(action: reaction, type: "reaction")),
+            ],
+          ),
+        );
+
+        if (hasCreatedWorkflow) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                TranslationConfig.translate(
+                  "workflow_success",
+                  language: SettingsConfig.language,
+                ),
+              ),
+              backgroundColor: Colors.black,
+            ),
+          );
+          GoRouter.of(context).pushReplacement("/workflow/list");
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                TranslationConfig.translate(
+                  "workflow_error",
+                  language: SettingsConfig.language,
+                ),
+              ),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+      }
+    }
+  }
+
   Future<Map<String, String>?> _showWorkflowDetailsDialog(
       BuildContext context) async {
     final TextEditingController nameController = TextEditingController();
@@ -42,31 +116,47 @@ class _WorkflowPageState extends State<WorkflowPage> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text("Workflow Details"),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextField(
-                controller: nameController,
-                decoration: const InputDecoration(
-                  labelText: "Name",
+          title: Text(
+            TranslationConfig.translate(
+              "workflow_details",
+              language: SettingsConfig.language,
+            ),
+          ),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                AreaFormField(
+                  label: TranslationConfig.translate(
+                    "name",
+                    language: SettingsConfig.language,
+                  ),
+                  controller: nameController,
                 ),
-              ),
-              const SizedBox(height: 20),
-              TextField(
-                controller: descriptionController,
-                decoration: const InputDecoration(
-                  labelText: "Description",
+                const SizedBox(height: 20),
+                AreaFormField(
+                  label: TranslationConfig.translate(
+                    "description",
+                    language: SettingsConfig.language,
+                  ),
+                  controller: descriptionController,
+                  maxLines: 4,
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop(null);
               },
-              child: const Text("Cancel"),
+              child: Text(
+                TranslationConfig.translate(
+                  "cancel",
+                  language: SettingsConfig.language,
+                ),
+                style: TextStyle(color: Colors.red),
+              ),
             ),
             ElevatedButton(
               onPressed: () {
@@ -75,7 +165,12 @@ class _WorkflowPageState extends State<WorkflowPage> {
                   "description": descriptionController.text,
                 });
               },
-              child: const Text("Save"),
+              child: Text(
+                TranslationConfig.translate(
+                  "save",
+                  language: SettingsConfig.language,
+                ),
+              ),
             ),
           ],
         );
@@ -92,13 +187,18 @@ class _WorkflowPageState extends State<WorkflowPage> {
             onPressed: () {
               Navigator.of(context).pop();
             },
-            tooltip: "Close",
+            tooltip: TranslationConfig.translate(
+              "close",
+              language: SettingsConfig.language,
+            ),
           ),
           title: Text(
-            "Create workflow",
-            style: GoogleFonts.fjallaOne(
-              textStyle: const TextStyle(color: Colors.black, fontSize: 24),
+            TranslationConfig.translate(
+              "create_workflow",
+              language: SettingsConfig.language,
             ),
+            style: const TextStyle(
+                color: Colors.black, fontSize: 24, fontWeight: FontWeight.bold),
           )),
       body: SingleChildScrollView(
         child: Column(
@@ -150,67 +250,20 @@ class _WorkflowPageState extends State<WorkflowPage> {
                 first: reactions.isEmpty,
                 isAction: false,
               ),
-            const SizedBox(height: 50),
-            ElevatedButton(
-                onPressed: () async {
-                  if (actions.isEmpty || reactions.isEmpty) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text("Please refer an action and a reaction"),
-                        backgroundColor: Colors.red,
-                      ),
-                    );
-                  } else {
-                    final workflowDetails =
-                        await _showWorkflowDetailsDialog(context);
-                    if (workflowDetails != null) {
-                      final name = workflowDetails["name"];
-                      final description = workflowDetails["description"];
-                      List<int> servicesId = [];
-                      for (WorkflowActionReaction action in actions) {
-                        servicesId.add(action.serviceId!);
-                      }
-                      for (WorkflowActionReaction reaction in reactions) {
-                        if (!servicesId.contains(reaction.serviceId!)) {
-                          servicesId.add(reaction.serviceId!);
-                        }
-                      }
-                      bool hasCreatedWorkflow =
-                          await UpdateWorkflowService.createWorkflow(
-                        Workflow(
-                          name: name!,
-                          description: description!,
-                          servicesId: servicesId,
-                          events: [
-                            ...actions.map((action) =>
-                                WorkflowEvent(action: action, type: "action")),
-                            ...reactions.map((reaction) => WorkflowEvent(
-                                action: reaction, type: "reaction")),
-                          ],
-                        ),
-                      );
-
-                      if (hasCreatedWorkflow) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text("Workflow successfully created !"),
-                            backgroundColor: Colors.black,
-                          ),
-                        );
-                        GoRouter.of(context).pushReplacement("/workflow/list");
-                      } else {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text("Workflow failed to be created."),
-                            backgroundColor: Colors.red,
-                          ),
-                        );
-                      }
-                    }
-                  }
-                },
-                child: const Text("Create"))
+            const SizedBox(height: 100),
           ],
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButton: Padding(
+        padding: EdgeInsets.all(20),
+        child: AreaButton(
+          label: TranslationConfig.translate(
+            "create",
+            language: SettingsConfig.language,
+          ),
+          onPressed: createWorkflow,
+          color: const Color(0XFF035a63),
         ),
       ),
     );

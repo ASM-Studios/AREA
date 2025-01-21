@@ -1,3 +1,5 @@
+import 'package:area/config/settings_config.dart';
+import 'package:area/config/translation_config.dart';
 import 'package:area/services/oauth/oauth_service.dart';
 import 'package:area/widgets/sign_in_button.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +17,10 @@ class BindOAuthButtons extends StatelessWidget {
           onPressed: () {
             OAuthService.requestOAuth(context, "google", signUp: false);
           },
-          label: "Link with Google",
+          label: "${TranslationConfig.translate(
+              "bind",
+              language: SettingsConfig.language,
+            )} Google",
           image: Image.asset(
             "assets/images/google.png",
             width: 34,
@@ -27,7 +32,10 @@ class BindOAuthButtons extends StatelessWidget {
           onPressed: () {
             OAuthService.requestOAuth(context, "microsoft", signUp: false);
           },
-          label: "Link with Microsoft",
+          label: "${TranslationConfig.translate(
+              "bind",
+              language: SettingsConfig.language,
+            )} Microsoft",
           image: Image.asset(
             "assets/images/microsoft.png",
             width: 33,
@@ -39,7 +47,10 @@ class BindOAuthButtons extends StatelessWidget {
           onPressed: () {
             OAuthService.requestOAuth(context, "github", signUp: false);
           },
-          label: "Link with Github",
+          label: "${TranslationConfig.translate(
+              "bind",
+              language: SettingsConfig.language,
+            )} Github",
           image: Image.asset(
             "assets/images/github.png",
             width: 33,
@@ -51,7 +62,10 @@ class BindOAuthButtons extends StatelessWidget {
           onPressed: () {
             OAuthService.requestOAuth(context, "discord", signUp: false);
           },
-          label: "Link with Discord",
+          label: "${TranslationConfig.translate(
+              "bind",
+              language: SettingsConfig.language,
+            )} Discord",
           image: Image.asset(
             "assets/images/discord.png",
             width: 38,
@@ -63,7 +77,10 @@ class BindOAuthButtons extends StatelessWidget {
           onPressed: () {
             OAuthService.requestOAuth(context, "twitch", signUp: false);
           },
-          label: "Link with Twitch",
+          label: "${TranslationConfig.translate(
+              "bind",
+              language: SettingsConfig.language,
+            )} Twitch",
           image: Image.asset(
             "assets/images/twitch.png",
             width: 37,
@@ -75,7 +92,10 @@ class BindOAuthButtons extends StatelessWidget {
           onPressed: () {
             OAuthService.requestOAuth(context, "spotify", signUp: false);
           },
-          label: "Link with Spotify",
+          label: "${TranslationConfig.translate(
+              "bind",
+              language: SettingsConfig.language,
+            )} Spotify",
           image: Image.asset(
             "assets/images/spotify_green.png",
             width: 37,
