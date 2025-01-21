@@ -155,7 +155,6 @@ class AuthService {
         );
         return (true);
       } else {
-        print("code : ${response.statusCode} et body : ${response.body}");
         return (false);
       }
     } catch (e) {
