@@ -53,7 +53,6 @@ class AreaFormField extends StatelessWidget {
           enabledBorder: const OutlineInputBorder(
             borderSide: BorderSide(
               color: Colors.black,
-              // color: Color.fromARGB(255, 221, 228, 222),
               width: 1.0,
             ),
           ),
