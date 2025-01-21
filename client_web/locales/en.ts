@@ -251,23 +251,27 @@ const en_language: Translation = {
                 edit: "Edit workflow",
                 activate: "Activate workflow",
                 deactivate: "Deactivate workflow",
-                delete: "Delete workflow"
+                delete: "Delete workflow",
+                trigger: "Trigger workflow"
             },
             ariaLabels: {
                 edit: "Edit workflow",
                 activate: "Activate workflow",
                 deactivate: "Deactivate workflow",
-                delete: "Delete workflow"
+                delete: "Delete workflow",
+                trigger: "Trigger workflow"
             }
         },
         notifications: {
             success: {
                 updated: "Workflow updated",
-                deleted: "Workflow deleted"
+                deleted: "Workflow deleted",
+                triggered: "Workflow triggered"
             },
             error: {
                 updateFailed: "Failed to update workflow",
-                deleteFailed: "Failed to delete workflow"
+                deleteFailed: "Failed to delete workflow",
+                triggerFailed: "Failed to trigger workflow"
             }
         },
         handler: {

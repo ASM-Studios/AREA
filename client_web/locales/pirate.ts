@@ -266,25 +266,29 @@ const pirate_language: Translation = {
             },
             tooltips: {
                 edit: "Change route",
-                activate: "Set sail",
-                deactivate: "Drop anchor",
-                delete: "Send to Davy Jones"
+                activate: "Set route to sail",
+                deactivate: "Drop route's anchor",
+                delete: "Send route to Davy Jones",
+                trigger: "Fire the cannons"
             },
             ariaLabels: {
                 edit: "Change route",
-                activate: "Set sail",
-                deactivate: "Drop anchor",
-                delete: "Send to Davy Jones"
+                activate: "Set route to sail",
+                deactivate: "Drop route's anchor",
+                delete: "Send route to Davy Jones",
+                trigger: "Fire the cannons"
             }
         },
         notifications: {
             success: {
                 updated: "Route be changed",
-                deleted: "Route sent to the depths"
+                deleted: "Route sent to the depths",
+                triggered: "Route be triggered"
             },
             error: {
                 updateFailed: "Failed to change course",
-                deleteFailed: "Failed to sink route"
+                deleteFailed: "Failed to sink route",
+                triggerFailed: "Failed to fire the cannons"
             }
         },
         handler: {
