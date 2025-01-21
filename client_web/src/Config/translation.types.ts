@@ -250,22 +250,26 @@ export interface Translation {
                 activate: string;
                 deactivate: string;
                 delete: string;
+                trigger: string;
             };
             ariaLabels: {
                 edit: string;
                 activate: string;
                 deactivate: string;
                 delete: string;
+                trigger: string;
             };
         };
         notifications: {
             success: {
                 updated: string;
                 deleted: string;
+                triggered: string;
             };
             error: {
                 updateFailed: string;
                 deleteFailed: string;
+                triggerFailed: string;
             };
         };
         handler: {

@@ -1,6 +1,6 @@
 import React from "react";
 import { Table, Button, Space, Tooltip } from 'antd';
-import { EditOutlined, DeleteOutlined, PoweroffOutlined } from '@ant-design/icons';
+import { EditOutlined, DeleteOutlined, PoweroffOutlined, PlayCircleOutlined } from '@ant-design/icons';
 import type { ColumnsType } from 'antd/es/table';
 import type { WorkflowTableDetail } from '@/types';
 import dayjs from 'dayjs';
@@ -50,6 +50,20 @@ const WorkflowsTable: React.FC<WorkflowsTableProps> = ({ workflows, setNeedReloa
             .catch((error) => {
                 console.error(error)
                 toast.error(translations?.workflow.notifications.error.deleteFailed);
+            })
+            .finally(() => {
+                setNeedReload(true);
+            })
+    };
+
+    const handleTrigger = (record: WorkflowTableDetail) => {
+        instanceWithAuth.get(workflow.trigger + `/${record.ID}`)
+            .then(() => {
+                toast.success(translations?.workflow.notifications.success.triggered);
+            })
+            .catch((error) => {
+                console.error(error)
+                toast.error(translations?.workflow.notifications.error.triggerFailed);
             })
             .finally(() => {
                 setNeedReload(true);
@@ -110,7 +124,7 @@ const WorkflowsTable: React.FC<WorkflowsTableProps> = ({ workflows, setNeedReloa
             title: translations?.workflow.table.columns.actions,
             key: 'actions',
             fixed: isSmallScreen ? undefined : 'right',
-            width: 150,
+            width: 200,
             render: (_, record) => (
                 <Space>
                     <Tooltip title={translations?.workflow.table.tooltips.edit}>
@@ -128,6 +142,15 @@ const WorkflowsTable: React.FC<WorkflowsTableProps> = ({ workflows, setNeedReloa
                             size="small"
                             type={record.is_active ? 'default' : 'primary'}
                             aria-label={record.is_active ? translations?.workflow.table.ariaLabels.deactivate : translations?.workflow.table.ariaLabels.activate}
+                        />
+                    </Tooltip>
+                    <Tooltip title={translations?.workflow.table.tooltips.trigger}>
+                        <Button
+                            icon={<PlayCircleOutlined />}
+                            onClick={() => handleTrigger(record)}
+                            size="small"
+                            type="default"
+                            aria-label={translations?.workflow.table.ariaLabels.trigger}
                         />
                     </Tooltip>
                     <Tooltip title={translations?.workflow.table.tooltips.delete}>

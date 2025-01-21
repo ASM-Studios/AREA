@@ -251,23 +251,27 @@ const es_language: Translation = {
                 edit: "Editar flujo de trabajo",
                 activate: "Activar flujo de trabajo",
                 deactivate: "Desactivar flujo de trabajo",
-                delete: "Eliminar flujo de trabajo"
+                delete: "Eliminar flujo de trabajo",
+                trigger: "Activar flujo de trabajo"
             },
             ariaLabels: {
                 edit: "Editar flujo de trabajo",
                 activate: "Activar flujo de trabajo",
                 deactivate: "Desactivar flujo de trabajo",
-                delete: "Eliminar flujo de trabajo"
+                delete: "Eliminar flujo de trabajo",
+                trigger: "Activar flujo de trabajo"
             }
         },
         notifications: {
             success: {
                 updated: "Flujo de trabajo actualizado",
-                deleted: "Flujo de trabajo eliminado"
+                deleted: "Flujo de trabajo eliminado",
+                triggered: "Flujo de trabajo activado"
             },
             error: {
                 updateFailed: "Error al actualizar el flujo de trabajo",
-                deleteFailed: "Error al eliminar el flujo de trabajo"
+                deleteFailed: "Error al eliminar el flujo de trabajo",
+                triggerFailed: "Error al activar el flujo de trabajo"
             }
         },
         handler: {
