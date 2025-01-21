@@ -322,6 +322,15 @@ func WorkflowUpdate(c *gin.Context) {
     c.JSON(http.StatusOK, gin.H{"workflow": workflow})
 }
 
+// TriggerWorkflow triggers a workflow by its ID.
+// @Summary Trigger a workflow
+// @Description Trigger a workflow by its ID.
+// @Tags workflow
+// @Param id path int true "Workflow ID"
+// @Success 204
+// @Failure 404 {object} map[string]interface{} "Workflow not found"
+// @Failure 500 {object} map[string]interface{} "Internal server error"
+// @Router /workflows/trigger/:id [post]
 func TriggerWorkflow(c *gin.Context) {
         idParam := c.Param("id")
 
@@ -347,8 +356,15 @@ func TriggerWorkflow(c *gin.Context) {
                 ContentType: "application/json",
                 Body:        body,
         })
+        c.JSON(http.StatusNoContent, nil)
 }
 
+// TriggerWorkflows triggers all workflows for the current user.
+// @Summary Trigger all workflows
+// @Description Trigger all workflows for the current user.
+// @Tags workflow
+// @Success 204
+// @Failure 500 {object} map[string]interface{} "Internal server error"
 func TriggerWorkflows(c *gin.Context) {
         user, err := pkg.GetUserFromToken(c)
         if err != nil {
@@ -359,6 +375,9 @@ func TriggerWorkflows(c *gin.Context) {
         pkg.DB.Table("workflows").Where("user_id = ?", user.ID).Find(&workflows)
 
         for _, workflow := range workflows {
+                if workflow.IsActive == false {
+                        continue
+                }
                 body, _ := json.Marshal(workflow)
                 gconsts.Connection.Channel.Publish("", "action", false, false, amqp091.Publishing{
                         ContentType: "application/json",

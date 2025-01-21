@@ -248,26 +248,30 @@ const fr_language: Translation = {
                 inactive: "Inactif"
             },
             tooltips: {
-                edit: "Modifier le workflow",
-                activate: "Activer le workflow",
-                deactivate: "Désactiver le workflow",
-                delete: "Supprimer le workflow"
+                edit: "Modifier le flux de travail",
+                activate: "Activer le flux de travail",
+                deactivate: "Désactiver le flux de travail",
+                delete: "Supprimer le flux de travail",
+                trigger: "Déclencher le flux de travail"
             },
             ariaLabels: {
-                edit: "Modifier le workflow",
-                activate: "Activer le workflow",
-                deactivate: "Désactiver le workflow",
-                delete: "Supprimer le workflow"
+                edit: "Modifier le flux de travail",
+                activate: "Activer le flux de travail",
+                deactivate: "Désactiver le flux de travail",
+                delete: "Supprimer le flux de travail",
+                trigger: "Déclencher le flux de travail"
             }
         },
         notifications: {
             success: {
-                updated: "Workflow mis à jour",
-                deleted: "Workflow supprimé"
+                updated: "Flux de travail mis à jour",
+                deleted: "Flux de travail supprimé",
+                triggered: "Flux de travail déclenché"
             },
             error: {
-                updateFailed: "Échec de la mise à jour du workflow",
-                deleteFailed: "Échec de la suppression du workflow"
+                updateFailed: "Échec de la mise à jour du flux de travail",
+                deleteFailed: "Échec de la suppression du flux de travail",
+                triggerFailed: "Échec du déclenchement du flux de travail"
             }
         },
         handler: {

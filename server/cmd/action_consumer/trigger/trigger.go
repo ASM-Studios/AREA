@@ -33,7 +33,7 @@ var triggerCallbacks = map[uint]func(*models.Workflow, *models.User, map[string]
 
         24: spotify.StartPlaying,
 
-	27: twitch.StreamStart,
+	29: twitch.StreamStart,
 }
 
 type Parameter struct {

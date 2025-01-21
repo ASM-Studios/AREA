@@ -8,6 +8,7 @@ on:
       - 'client_mobile/**'
       - 'server/**'
       - 'docker-compose.yml'
+      - '.github/workflows/docker-build.yml'
 
 env:
   REGISTRY: ghcr.io
@@ -145,7 +146,3 @@ jobs:
 
       - name: Build and test
         run: docker compose --profile full build
-
-      - name: Push images if on master branch
-        if: ${{ github.ref == 'refs/heads/master' && env.ACT != 'true' }}
-        run: docker compose push

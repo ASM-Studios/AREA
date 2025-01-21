@@ -1,0 +1,76 @@
+name: Container registry deploy
+
+on:
+  push:
+    branches:
+      - 'master'
+      - 'cma/feat-project-documentation'
+    paths:
+      - 'client_web/**'
+      - 'client_mobile/**'
+      - 'server/**'
+      - 'config/**'
+      - 'docker-compose.prod.yml'
+      - '.github/workflows/registry-deploy.yml'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install doctl
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+      
+      - name: Build server image
+        run: |
+          echo "Building server image..."
+          docker build -t server:latest -f ./server/Dockerfile.prod ./server
+          docker tag server:latest registry.digitalocean.com/area/server
+          echo "Server image built successfully"
+      
+      - name: Build server action consumer image
+        run: |
+          echo "Building server action consumer image..."
+          docker build -t server-action-consumer:latest -f ./server/Dockerfile_action_consumer.prod ./server
+          docker tag server-action-consumer:latest registry.digitalocean.com/area/server-action-consumer
+          echo "Server action consumer image built successfully"
+      
+      - name: Build server reaction consumer image
+        run: |
+          echo "Building server reaction consumer image..."
+          docker build -t server-reaction-consumer:latest -f ./server/Dockerfile_reaction_consumer.prod ./server
+          docker tag server-reaction-consumer:latest registry.digitalocean.com/area/server-reaction-consumer
+          echo "Server reaction consumer image built successfully"
+
+      - name: Build client web image
+        run: |
+          echo "Building client web image..."
+          docker build -t client-web:latest -f ./client_web/Dockerfile.prod ./client_web
+          docker tag client-web:latest registry.digitalocean.com/area/client-web
+          echo "Client web image built successfully"
+
+      - name: Log in to DigitalOcean Container Registry
+        run: doctl registry login --expiry-seconds 1200
+      
+      - name: Push images to registry
+        run: |
+          echo "Pushing images to registry..."
+          
+          echo "Pushing server images..."
+          docker push registry.digitalocean.com/area/server
+          
+          echo "Pushing server action consumer image..."
+          docker push registry.digitalocean.com/area/server-action-consumer
+          
+          echo "Pushing server reaction consumer image..."
+          docker push registry.digitalocean.com/area/server-reaction-consumer
+          
+          echo "Pushing client web image..."
+          docker push registry.digitalocean.com/area/client-web
+          
+          echo "All images pushed successfully"
+

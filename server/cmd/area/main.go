@@ -41,6 +41,9 @@ func sendWorkflows() {
         for rows.Next() {
                 var workflow models.Workflow
                 pkg.DB.ScanRows(rows, &workflow)
+                if workflow.IsActive == false {
+                        continue
+                }
                 body, _ := json.Marshal(workflow)
                 gconsts.Connection.Channel.Publish("", "action", false, false, amqp091.Publishing{
                         ContentType: "application/json",

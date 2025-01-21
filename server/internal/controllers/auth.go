@@ -37,6 +37,15 @@ var a2fMethods = map[string]func(*models.User, *models.A2FRequest) bool {
         },
 }
 
+// LoginA2F godoc
+// @Summary      Login a user with 2FA
+// @Description  Authenticate a user with 2FA and return a JWT token
+// @Tags         auth
+// @Accept       json
+// @Produce      json
+// @Param        Login body models.A2FRequest true  "Login"
+// @Success      200  {object}  map[string]string
+// @Failure      400  {object}  map[string]string
 func LoginA2F(c *gin.Context) {
         var a2fRequest models.A2FRequest
         err := c.ShouldBindJSON(&a2fRequest)

@@ -51,6 +51,7 @@ const WorkflowHandler: React.FC = () => {
         parameters: Record<string, string>
     }>>([]);
     const [availableVariables, setAvailableVariables] = React.useState<string[]>([]);
+    const [availableSecrets, setAvailableSecrets] = React.useState<string[]>([]);
 
     const navigate = useNavigate();
     const location = useLocation();
@@ -84,6 +85,7 @@ const WorkflowHandler: React.FC = () => {
                 instanceWithAuth.get(secretRoute.list)
                     .then((response) => {
                         const secrets: Secret[] = response?.data?.secrets;
+                        setAvailableSecrets(secrets?.map(secret => `$${secret.key}`) || []);
                         const availableVariables = secrets?.map(secret => `$${secret.key}`) || [];
                         setAvailableVariables(availableVariables);
                     })
@@ -211,6 +213,15 @@ const WorkflowHandler: React.FC = () => {
     };
 
     const handleRemoveAction = (index: number) => {
+        const actionToRemove = workflowActions[index];
+        const variablesToRemove = actionToRemove.action.variables?.map(
+            variable => `$${actionToRemove.action.shortname}.${variable}.${index}`
+        ) || [];
+        
+        setAvailableVariables(prevVariables => 
+            prevVariables.filter(variable => !variablesToRemove.includes(variable))
+        );
+
         const newActions = workflowActions.filter((_, i) => i !== index);
         setWorkflowActions(newActions);
     };
@@ -429,11 +440,19 @@ const WorkflowHandler: React.FC = () => {
                                                                                       allowClear
                                                                         />;
                                                                     default:
-                                                                        return <Input
-                                                                            value={item.parameters[param.name] || ''}
-                                                                            onChange={(e) => handleParameterChange(index, param.name, e.target.value, true)}
-                                                                            allowClear
-                                                                        />;
+                                                                        return (
+                                                                            <AutoComplete
+                                                                                allowClear
+                                                                                value={item.parameters[param.name] || ''}
+                                                                                onChange={(value) => {
+                                                                                    handleParameterChange(index, param.name, value, true);
+                                                                                }}
+                                                                                options={availableSecrets.map(secret => ({ value: secret }))}
+                                                                                filterOption={(inputValue, option) => {
+                                                                                    return option?.value.toLowerCase().includes(inputValue.toLowerCase()) ?? false;
+                                                                                }}
+                                                                            />
+                                                                        );
                                                                 }
                                                             })()}
                                                         </Form.Item>

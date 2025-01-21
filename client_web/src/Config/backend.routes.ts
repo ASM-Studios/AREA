@@ -98,6 +98,7 @@ const workflow = {
     delete: `${endpoint}/workflow/delete`,
     update: `${endpoint}/workflow`,
     get: `${endpoint}/workflow`,
+    trigger: `${endpoint}/workflow/trigger`,
 };
 
 export {
