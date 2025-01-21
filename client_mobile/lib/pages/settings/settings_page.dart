@@ -22,6 +22,10 @@ class SettingsPage extends StatelessWidget {
       "spain",
       language: SettingsConfig.language,
     ),
+    'PI': TranslationConfig.translate(
+      "pirate",
+      language: SettingsConfig.language,
+    ),
   };
 
   @override
