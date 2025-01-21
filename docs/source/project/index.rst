@@ -44,4 +44,6 @@ Contents
    :maxdepth: 2
    :caption: Project Overview
 
+   index
+   benchmark
    devops/index
