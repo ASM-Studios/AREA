@@ -13,7 +13,7 @@ type TwitchResponse struct {
         }
 }
 
-func GetTwitchResponse(serviceRawResponse *http.Response) (*ServiceResponse, error) {
+func GetTwitchResponse(serviceRawResponse *http.Response, token string) (*ServiceResponse, error) {
         var twitchResponse TwitchResponse
 
         body, err := io.ReadAll(serviceRawResponse.Body)

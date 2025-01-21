@@ -1,63 +1,69 @@
 package main
 
 import (
-	"AREA/cmd/action_consumer/consts"
 	"AREA/cmd/action_consumer/trigger"
-	"AREA/cmd/action_consumer/vars"
 	"AREA/internal/amqp"
+	"AREA/internal/gconsts"
 	"AREA/internal/models"
 	"AREA/internal/pkg"
 	"AREA/internal/utils"
-	"bytes"
-	"errors"
-	"fmt"
+	"encoding/json"
 	"log"
 	"os"
 	"os/signal"
 	"syscall"
 
 	"github.com/rabbitmq/amqp091-go"
-	"gorm.io/gorm"
 )
 
-var service string
+func handlerAction(message amqp091.Delivery, queue string) {
+        var workflow models.Workflow
 
-func handlerAction(message amqp091.Delivery) {
-        if bytes.Equal(message.Body, []byte("trigger")) {
-                trigger.DetectWorkflowsEvent(service)
+        err := json.Unmarshal(message.Body, &workflow)
+        if err != nil {
+                return
+        }
+        trigger.DetectWorkflowsEvent(&workflow)
+        pkg.DB.Save(workflow)
+}
+
+func declareServices() {
+        var services []models.Service
+        pkg.DB.Find(&services)
+        for _, service := range services {
+                gconsts.ServiceMap[service.Name] = service.ID
         }
 }
 
-func setService() {
-        if len(os.Args) < 2 {
+func declareQueues() {
+        gconsts.Connection.Channel.QueueDeclare("action", true, false, false, false, nil)
+}
+
+func initRMQConnection() {
+        var connection amqp.Connection
+        err := connection.Init(utils.GetEnvVar("RMQ_URL"))
+        if err != nil {
+                log.Fatalf("Failed to initialize connection: %v\n", err)
                 return
         }
-        service = os.Args[1]
-        var service models.Service
-        err := pkg.DB.Where("name = ?", service).First(&service).Error
-        if errors.Is(err, gorm.ErrRecordNotFound) {
-                return
-        }
-        vars.ServiceId = fmt.Sprintf("%d", service.ID)
+        gconsts.Connection = &connection
 }
 
 func main() {
-        rabbitMQConnection := utils.GetEnvVar("RMQ_URL")
         pkg.InitDB()
-        setService()
-        fmt.Printf("Service: %s\n", vars.ServiceId)
-        err := amqp.Consumer.Init(rabbitMQConnection, consts.MessageQueue, consts.Key)
-        if err != nil {
-                log.Fatalf("Failed to initialize consumer: %v", err)
-        }
+        initRMQConnection()
+
+        declareServices()
+        declareQueues()
+
+        consumer := amqp.EventConsumer{Connection: gconsts.Connection}
         go func() {
                 c := make(chan os.Signal, 1)
                 signal.Notify(c, os.Interrupt, syscall.SIGTERM)
                 <-c
                 log.Println("Shutting down consumer...")
-                amqp.Consumer.Close()
+                gconsts.Connection.Fini()
                 os.Exit(0)
         }()
-
-        amqp.Consumer.StartConsuming(consts.MessageQueue, handlerAction)
+        consumer.StartConsuming([]string{"action"}, handlerAction)
 }

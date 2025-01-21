@@ -34,6 +34,7 @@ const LinkButton: React.FC<LinkButtonProps> = ({ text, url, type = "primary", st
             style={buttonStyle}
             onClick={handleClick}
             disabled={disabled}
+            aria-label={text}
         >
             {text}
         </Button>

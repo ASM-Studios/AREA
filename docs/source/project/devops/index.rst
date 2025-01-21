@@ -10,11 +10,13 @@ Key Components
 - GitHub Actions for CI/CD pipelines
 - Automated testing and deployment workflows
 - Documentation auto-deployment to GitHub Pages
+- Production-ready Docker configuration
 
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
    docker_setup
+   docker-production-setup
    dependencies
    ci_cd

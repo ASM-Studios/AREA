@@ -36,7 +36,9 @@ func UserMe(c *gin.Context) {
 
 	var userData = models.UserRequest{
 		Username: user.Username,
-		Email:    user.Email,
+		Email: user.Email,
+                ValidEmail: user.ValidEmail,
+                TwoFactorMethod: user.TwoFactorMethod,
 		Services: services,
 	}
 	c.JSON(200, gin.H{"user": userData})

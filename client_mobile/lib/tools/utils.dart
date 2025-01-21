@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:math';
 import 'package:crypto/crypto.dart';
+import 'package:intl/intl.dart';
 
 class Utils {
   static bool isValidEmail(String email) {
@@ -12,8 +13,9 @@ class Utils {
   static String isValidPassword(String password) {
     String error = "";
 
-    if (password.length < 8)
+    if (password.length < 8) {
       error += "Your password must be at least 8 characters.\n";
+    }
     if (!RegExp(r'[a-zA-Z]').hasMatch(password)) {
       error += "Password must contain at least one letter.\n";
     }
@@ -47,5 +49,11 @@ class Utils {
         .replaceAll("+", "-")
         .replaceAll("/", "_");
     return codeChallenge;
+  }
+
+  static String formatDate(String date, {String? format = 'dd/MM/yyyy'}) {
+    DateTime dateTime = DateTime.parse(date);
+    String formattedDate = DateFormat(format).format(dateTime);
+    return formattedDate;
   }
 }

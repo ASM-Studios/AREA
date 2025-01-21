@@ -1,4 +1,4 @@
-import 'package:client_mobile/data/parameter.dart';
+import 'package:area/data/parameter.dart';
 
 class WorkflowActionReaction {
   final int id;
@@ -8,16 +8,15 @@ class WorkflowActionReaction {
   String? serviceName;
   int? serviceId;
 
-  WorkflowActionReaction({
-    required this.id,
-    required this.name,
-    required this.description,
-    required this.parameters,
-    this.serviceName,
-    this.serviceId
-  });
+  WorkflowActionReaction(
+      {required this.id,
+      required this.name,
+      required this.description,
+      required this.parameters,
+      this.serviceName,
+      this.serviceId});
 
-  factory WorkflowActionReaction.fromJson(Map<String, dynamic> json) {
+  factory WorkflowActionReaction.fromJson(Map<String, dynamic> json, { String serviceName = "", int serviceId = 0 }) {
     return WorkflowActionReaction(
       id: json['id'],
       name: json['name'],
@@ -27,6 +26,8 @@ class WorkflowActionReaction {
               .map((param) => Parameter.fromJson(param))
               .toList()
           : [],
+        serviceName: serviceName,
+        serviceId: serviceId
     );
   }
 

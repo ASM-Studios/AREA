@@ -7,8 +7,10 @@ export type Parameter = {
 export type Action = {
     id: number;
     name: string;
+    shortname: string;
     description: string;
     parameters: Parameter[];
+    variables: string[];
 };
 
 export type Reaction = {
@@ -123,3 +125,11 @@ export type WorkflowTableDetail = {
     is_active: boolean;
     events: WorkflowEvent[];
 };
+
+/* --------------------------------- */
+
+export type Secret = {
+    ID: number;
+    key: string;
+    value: string;
+}

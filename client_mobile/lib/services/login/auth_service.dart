@@ -1,6 +1,7 @@
 import 'dart:convert';
 
-import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:area/config/settings_config.dart';
+import 'package:area/config/translation_config.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -57,17 +58,15 @@ class RegisterObject {
 class AuthService {
   static const FlutterSecureStorage secureStorage = FlutterSecureStorage();
 
-  static String baseUrl = dotenv.env["BACKEND_BASE_URL"] ?? "http://127.0.0.1:8080";
-
   static Future<bool> validateBearerToken(String token) async {
+    String baseUrl = SettingsConfig.serverIp;
     try {
       final response = await http.get(
         Uri.parse('$baseUrl/auth/health'),
         headers: {'Authorization': 'Bearer $token'},
-      );
+      ).timeout(Duration(seconds: 5));
       return response.statusCode == 200;
     } catch (e) {
-      print('Erreur lors de la validation du token: $e');
       return false;
     }
   }
@@ -84,9 +83,8 @@ class AuthService {
 
   static Future<bool> login(
       BuildContext context, Map<String, dynamic> jsonInfos) async {
+    String baseUrl = SettingsConfig.serverIp;
     try {
-      print("Tentative de login...");
-
       final url = Uri.parse('$baseUrl/auth/login');
 
       final response = await http.post(
@@ -101,30 +99,26 @@ class AuthService {
 
         await secureStorage.write(key: 'bearer_token', value: token);
 
-        print("Connexion réussie et token sauvegardé !");
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text("Login effectué avec succès !"),
+            content: Text(TranslationConfig.translate(
+              "login_success",
+              language: SettingsConfig.language,
+            )),
             backgroundColor: Colors.black,
           ),
         );
         return (true);
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-                "Erreur de connexion : Code ${response.statusCode} - ${response.body}"),
-            backgroundColor: Colors.red,
-          ),
-        );
-        print(
-            "Erreur de connexion : Code ${response.statusCode} - ${response.body}");
         return (false);
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text("Erreur de login : $e"),
+          content: Text("${TranslationConfig.translate(
+            "login_error",
+            language: SettingsConfig.language,
+          )} : $e"),
           backgroundColor: Colors.red,
         ),
       );
@@ -134,16 +128,15 @@ class AuthService {
 
   static Future<bool> register(
       BuildContext context, Map<String, dynamic> jsonInfos) async {
+    String baseUrl = SettingsConfig.serverIp;
     try {
-      print("Tentative de connexion...");
-
       final url = Uri.parse('$baseUrl/auth/register');
 
       final response = await http.post(
         url,
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode(jsonInfos),
-      );
+      ).timeout(Duration(seconds: 20));
 
       if (response.statusCode == 200) {
         final responseData = jsonDecode(response.body);
@@ -152,16 +145,22 @@ class AuthService {
         await secureStorage.write(key: 'bearer_token', value: token);
 
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text("Register avec succès !"),
+          SnackBar(
+            content: Text(TranslationConfig.translate(
+              "register_success",
+              language: SettingsConfig.language,
+            )),
             backgroundColor: Colors.black,
           ),
         );
         return (true);
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text("Unauthrorized to process."),
+         ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("${TranslationConfig.translate(
+              "register_error",
+              language: SettingsConfig.language,
+            )} : Code ${response.statusCode}"),
             backgroundColor: Colors.red,
           ),
         );
@@ -170,7 +169,10 @@ class AuthService {
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text("Erreur de register : $e"),
+          content: Text("${TranslationConfig.translate(
+              "register_error",
+              language: SettingsConfig.language,
+            )} : $e"),
           backgroundColor: Colors.red,
         ),
       );

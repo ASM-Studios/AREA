@@ -11,7 +11,7 @@ type DiscordResponse struct {
         DisplayName string `json:"username"`
 }
 
-func GetDiscordResponse(serviceRawResponse *http.Response) (*ServiceResponse, error) {
+func GetDiscordResponse(serviceRawResponse *http.Response, token string) (*ServiceResponse, error) {
         var discordResponse DiscordResponse
 
         body, err := io.ReadAll(serviceRawResponse.Body)

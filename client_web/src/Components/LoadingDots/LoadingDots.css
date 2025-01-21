@@ -6,6 +6,7 @@
 .dot {
     border-radius: 50%;
     animation: jump 1.5s ease-in-out infinite;
+    background-color: #000000;
 }
 
 .dot:nth-child(2) {

@@ -20,7 +20,8 @@ func randomSalt() string {
 	salt := make([]byte, 16)
 	_, err := rand.Read(salt)
 	if err != nil {
-		log.Fatalf("Error occurred while generating random salt: %v", err)
+		log.Print(err)
+		return ""
 	}
 	return base64.RawStdEncoding.EncodeToString(salt)
 }

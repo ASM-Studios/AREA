@@ -40,6 +40,20 @@ const auth = {
     login: `${endpoint}/auth/login`,
     register: `${endpoint}/auth/register`,
     health: `${endpoint}/auth/health`,
+    twoFactorAuth: {
+        generate_totp: `${endpoint}/totp/generate`,
+        validate_totp: `${endpoint}/totp/validate`,
+        login: `${endpoint}/auth/login/2fa`,
+        generate_email: `${endpoint}/mail/generate`,
+        validate_mail: `${endpoint}/mail/validate`,
+        select: `${endpoint}/2fa/method`,
+    },
+};
+
+const secret = {
+    create: '/secret/create',
+    list: '/secret/list',
+    delete: '/secret/delete',
 };
 
 const user = {
@@ -84,6 +98,7 @@ const workflow = {
     delete: `${endpoint}/workflow/delete`,
     update: `${endpoint}/workflow`,
     get: `${endpoint}/workflow`,
+    trigger: `${endpoint}/workflow/trigger`,
 };
 
 export {
@@ -91,6 +106,7 @@ export {
     instanceWithAuth,
     root,
     auth,
+    secret,
     user,
     oauth,
     workflow

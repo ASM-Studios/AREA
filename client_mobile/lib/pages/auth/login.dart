@@ -1,17 +1,17 @@
-import 'package:client_mobile/services/login/auth_service.dart';
-import 'package:client_mobile/services/microsoft/microsoft_auth_service.dart';
-import 'package:client_mobile/tools/utils.dart';
-import 'package:client_mobile/widgets/button.dart';
-import 'package:client_mobile/widgets/clickable_text.dart';
-import 'package:client_mobile/widgets/divider_with_text.dart';
-import 'package:client_mobile/widgets/form_field.dart';
-import 'package:client_mobile/widgets/password_form_field.dart';
-import 'package:client_mobile/widgets/sign_in_button.dart';
-import 'package:client_mobile/widgets/simple_text.dart';
+import 'package:area/config/settings_config.dart';
+import 'package:area/config/translation_config.dart';
+import 'package:area/services/login/auth_service.dart';
+import 'package:area/tools/utils.dart';
+import 'package:area/widgets/button.dart';
+import 'package:area/widgets/clickable_text.dart';
+import 'package:area/widgets/divider_with_text.dart';
+import 'package:area/widgets/form_field.dart';
+import 'package:area/widgets/oauth_buttons.dart';
+import 'package:area/widgets/password_form_field.dart';
+import 'package:area/widgets/settings_button.dart';
+import 'package:area/widgets/simple_text.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_appauth/flutter_appauth.dart';
 import 'package:go_router/go_router.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -21,49 +21,31 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final String callbackUrlScheme = 'my.area.app';
-  String get spotifyRedirectUrlMobile => '$callbackUrlScheme://callback';
   bool isLoggingViaOauth = false;
-
-  final String clientId = dotenv.env["VITE_SPOTIFY_CLIENT_ID"] ?? "";
-  final appAuth = const FlutterAppAuth();
 
   final _formKey = GlobalKey<FormState>();
 
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
-  void handleMicrosoftOAuth() async {
-    if (!isLoggingViaOauth) {
-      isLoggingViaOauth = true;
-      bool isRegistered =
-          await MicrosoftAuthService.auth(context, signUp: true);
-
-      if (!mounted) {
-        isLoggingViaOauth = false;
-        return;
-      }
-
-      if (isRegistered) {
-        context.pushReplacement("/dashboard");
-      }
-      isLoggingViaOauth = false;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
           child: Container(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.fromLTRB(10, 0, 10, 20),
         child: Form(
           key: _formKey,
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const SimpleText("Email"),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 0, 5, 15),
+                  child: Align(
+                      alignment: Alignment.topRight, child: SettingsButton()),
+                ),
+                SimpleText(TranslationConfig.translate("email", language: SettingsConfig.language)),
                 AreaFormField(
                   label: "you@example.com",
                   controller: emailController,
@@ -78,19 +60,20 @@ class _LoginPageState extends State<LoginPage> {
                   },
                 ),
                 const SizedBox(height: 50),
-                const SimpleText("Password"),
+                SimpleText(TranslationConfig.translate("password", language: SettingsConfig.language)),
                 PasswordFormField(
                   controller: passwordController,
                   validator: (password) {
-                    if (password == null || password.isEmpty)
+                    if (password == null || password.isEmpty) {
                       return "Please input your password.";
+                    }
                     return (null);
                   },
                   label: "********",
                 ),
                 const SizedBox(height: 15),
                 AreaButton(
-                  label: "Login",
+                  label: TranslationConfig.translate("login", language: SettingsConfig.language),
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {
                       bool isLogin = await AuthService.login(
@@ -100,31 +83,21 @@ class _LoginPageState extends State<LoginPage> {
                                   password: passwordController.text)
                               .toJson());
                       if (isLogin) {
-                        context.pushReplacement("/dashboard");
+                        context.pushReplacement("/workflow/list");
                       }
                     }
                   },
                   color: const Color(0XFF035a63),
                 ),
                 const SizedBox(height: 40),
-                const DividerWithText(label: "Or Sign in with"),
+                DividerWithText(label: TranslationConfig.translate("divider_login", language: SettingsConfig.language)),
                 const SizedBox(height: 15),
-                Center(
-                  child: SignInButton(
-                    onPressed: handleMicrosoftOAuth,
-                    label: "Microsoft",
-                    image: Image.asset(
-                      "assets/images/microsoft.png",
-                      width: 40,
-                      height: 20,
-                    ),
-                  ),
-                ),
+                OAuthButtons(),
                 const SizedBox(height: 5),
                 Align(
                   alignment: Alignment.center,
                   child: SmallClickableText(
-                    "I don't have an account",
+                    TranslationConfig.translate("no_account", language: SettingsConfig.language),
                     onPressed: () {
                       context.push("/register");
                     },

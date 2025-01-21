@@ -18,6 +18,8 @@ export interface User {
     username: string;
     email: string;
     services: ServicesDescription[];
+    valid_email: boolean;
+    two_factor_method: string;
 }
 
 export interface UserPayload {
@@ -31,6 +33,10 @@ export interface UserContextType {
     setLanguage: (lang: string) => void;
     translations: Translation;
     setTranslations: (translations: Translation) => void;
+    totpLoggingIn: boolean;
+    setTotpLoggingIn: (value: boolean) => void;
+    validating2faMethod: string;
+    setValidating2faMethod: (value: string) => void;
 }
 
 export const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -43,9 +49,17 @@ const languageMap: { [key: string]: Translation } = {
 }
 
 export const UserProvider = ({ children }: { children: ReactNode }) => {
-    const [user, setUser] = useState<User | null>(null);
+    const [user, setUser] = useState<User | null>({
+        username: "",
+        email: "",
+        services: [],
+        two_factor_method: "none",
+        valid_email: false,
+    });
     const [language, setLanguage] = useState<string>(Cookies.get('language') ?? 'en');
     const [translations, setTranslations] = useState<Translation>(en_language);
+    const [totpLoggingIn, setTotpLoggingIn] = useState<boolean>(false);
+    const [validating2faMethod, setValidating2faMethod] = useState<string>("");
 
     React.useEffect(() => {
         Cookies.set('language', language, { expires: 365 });
@@ -57,19 +71,29 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
             .then((response: { data: UserPayload }) => {
                 setUser(response?.data?.user);
             })
-            .catch((error) => {
-                setUser(null);
+            .catch(() => {
+                setUser({
+                    username: "",
+                    email: "",
+                    services: [],
+                    two_factor_method: "none",
+                    valid_email: false,
+                });
             });
     }, []);
 
     return (
-        <UserContext.Provider value={{ 
-            user, 
-            setUser, 
-            language, 
+        <UserContext.Provider value={{
+            user,
+            setUser,
+            language,
             setLanguage,
             translations,
-            setTranslations
+            setTranslations,
+            totpLoggingIn,
+            setTotpLoggingIn,
+            validating2faMethod,
+            setValidating2faMethod,
         }}>
             {children}
         </UserContext.Provider>

@@ -1,32 +1,46 @@
-import 'package:client_mobile/data/action.dart';
-import 'package:client_mobile/data/service.dart';
-import 'package:client_mobile/data/service_metadata.dart';
-import 'package:client_mobile/pages/dashboard/service_selection.dart';
+import 'package:area/config/settings_config.dart';
+import 'package:area/config/translation_config.dart';
+import 'package:area/data/action.dart';
+import 'package:area/data/service_metadata.dart';
+import 'package:area/pages/dashboard/service_selection.dart';
 import 'package:flutter/material.dart';
 
-class ActionButton extends StatefulWidget {
-  const ActionButton({super.key, required this.onActionSelected, this.action});
+class ActionButton extends StatelessWidget {
+  const ActionButton(
+      {super.key,
+      required this.onActionSelected,
+      this.serviceMetadata,
+      this.action,
+      this.first = true,
+      this.isAction = true});
 
-  final Function(WorkflowActionReaction, WorkflowService) onActionSelected;
+  final Function(WorkflowActionReaction) onActionSelected;
+  final ServiceMetadata? serviceMetadata;
   final WorkflowActionReaction? action;
+  final bool first;
+  final bool isAction;
 
-  @override
-  State<ActionButton> createState() => _ActionButtonState();
-}
+  String getButtonText() {
+    String prefix;
 
-class _ActionButtonState extends State<ActionButton> {
-  ServiceMetadata? serviceMetadata;
+    if (isAction) {
+      prefix = first ? "If" : "Or";
+    } else {
+      prefix = first ? "Then" : "And";
+    }
+
+    return action == null
+        ? "$prefix ${first ? 'This' : '...'}"
+        : "$prefix ${action!.name}";
+  }
 
   @override
   Widget build(BuildContext context) {
-    if (widget.action != null)
-      serviceMetadata =
-          ServiceMetadata.getServiceByName(widget.action!.serviceName!);
     return Container(
       padding: const EdgeInsets.all(20),
       margin: const EdgeInsets.fromLTRB(20, 0, 20, 0),
       width: MediaQuery.of(context).size.width,
-      height: 110,
+      height: 90,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
         boxShadow: const [
@@ -41,31 +55,39 @@ class _ActionButtonState extends State<ActionButton> {
       child: Row(
         children: [
           const SizedBox(width: 10),
-          Text(
-            widget.action == null ? "If  This" : "If ${widget.action!.name}",
-            style: TextStyle(
-              fontSize: widget.action == null ? 48 : 16,
-              color: Colors.white,
+          Expanded(
+            child: Text(
+              getButtonText(),
+              style: TextStyle(
+                  overflow: TextOverflow.ellipsis,
+                  fontSize: action == null ? 36 : 16,
+                  color: serviceMetadata != null
+                      ? (serviceMetadata!.color == Colors.white
+                          ? Colors.black
+                          : Colors.white)
+                      : Colors.white),
+              maxLines: 2,
             ),
           ),
-          if (widget.action == null) const Spacer(),
-          if (widget.action == null)
+          if (action == null)
             ElevatedButton(
               onPressed: () {
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (ctx) => ServiceSelectionPage(
-                        isAction: true,
-                        onActionSelected: widget.onActionSelected)));
+                        isAction: isAction,
+                        onActionSelected: onActionSelected)));
               },
-              child: const Text(
-                "Add",
+              child: Text(
+                TranslationConfig.translate(
+                  "add",
+                  language: SettingsConfig.language,
+                ),
                 style: TextStyle(
                   color: Colors.black,
                 ),
               ),
             ),
-          if (widget.action != null) const Spacer(),
-          if (widget.action != null)
+          if (action != null)
             Image.asset(serviceMetadata!.imagePath, width: 50, height: 50)
         ],
       ),

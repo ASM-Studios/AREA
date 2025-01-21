@@ -1,0 +1,30 @@
+{
+  "client": {
+    "host": ""
+  },
+  "server": {
+    "current_time": "",
+    "services": [
+      {
+        "id": 1,
+        "name": "Test Service",
+        "actions": [
+          {
+            "id": 1,
+            "name": "Test Action",
+            "description": "A test action",
+            "parameters": null
+          }
+        ],
+        "reactions": [
+          {
+            "id": 2,
+            "name": "Test Reaction",
+            "description": "A test reaction",
+            "parameters": null
+          }
+        ]
+      }
+    ]
+  }
+}

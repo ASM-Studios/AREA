@@ -1,37 +1,55 @@
-import 'package:client_mobile/data/action.dart';
+import 'package:area/data/action.dart';
 
-class WorkflowEvent
-{
+class WorkflowEvent {
   final WorkflowActionReaction action;
   final String type;
 
-  WorkflowEvent({
-    required this.action,
-    required this.type
-  });
+  WorkflowEvent({required this.action, required this.type});
 }
-
 
 class Workflow {
   final String name;
   final String description;
   final List<int> servicesId;
   final List<WorkflowEvent> events;
+  final String? status;
+  final String? created;
+  int id;
 
   Workflow({
     required this.name,
     required this.description,
     required this.servicesId,
     required this.events,
+    this.status,
+    this.created,
+    this.id = 0
   });
-
 
   Map<String, dynamic> toJson() {
     return {
       'name': name,
       'description': description,
       'services': servicesId,
-      'events': events.map((a) => a.action.toJson(a.type)).toList(),
+      'events': events.map((event) => event.action.toJson(event.type)).toList(),
     };
+  }
+
+   factory Workflow.fromJson(Map<String, dynamic> json) {
+    try {
+      return Workflow(
+        id: json['ID'] ?? 0,
+        name: json['name'] ??
+            'Unknown',
+        description: json['description'],
+        status: json['status'],
+        created: json['CreatedAt'],
+        servicesId: [],
+        events: []
+      );
+    } catch (e) {
+      return Workflow(
+          name: 'Unknown', status: "failed", description: "Unknown", servicesId: [], events: []);
+    }
   }
 }

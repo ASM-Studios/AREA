@@ -1,15 +1,16 @@
 CI/CD Pipeline
 =============
 
-Our project uses GitHub Actions for Continuous Integration and Continuous Deployment (CI/CD). We have two main workflows:
+Our project uses GitHub Actions for Continuous Integration and Continuous Deployment (CI/CD). We have three main workflows:
 
-1. Docker Build Pipeline
+1. Docker Build and Test Pipeline
 2. Documentation Deployment Pipeline
+3. Container Registry Deployment Pipeline
 
-Docker Build Pipeline
+Docker Build and Test Pipeline
 -------------------
 
-This pipeline handles testing and building of our Docker containers.
+This pipeline handles testing and building of our Docker containers to ensure code quality and build integrity.
 
 Workflow Triggers
 ~~~~~~~~~~~~~~~
@@ -31,7 +32,8 @@ Key Steps
    
    - Builds all service containers
    - Sets up environment variables
-   - Pushes to GitHub Container Registry on main branch
+   - Verifies build integrity
+   - Does not deploy containers
 
 Documentation Deployment
 ----------------------
@@ -59,8 +61,33 @@ Key Steps
    - Uses GitHub token for authentication
    - Forces clean deployment
 
+Container Registry Deployment
+---------------------------
+
+This pipeline handles the deployment of Docker images to our container registry.
+
+Workflow Triggers
+~~~~~~~~~~~~~~~
+
+- Push events to main branch
+- Manual workflow dispatch
+
+Key Steps
+~~~~~~~~
+
+1. **Login to Container Registry**
+   
+   - Authenticates with container registry credentials
+   - Sets up Docker buildx
+
+2. **Build and Push Images**
+   
+   - Builds optimized production images
+   - Tags images with appropriate versions
+   - Pushes images to container registry
+
 Access Points
 -----------
 
 - Documentation: ``https://asm-studios.github.io/AREA/``
-- Container Registry: ``ghcr.io/asm-studios/area``
+- Container Registry: ``registry.digitalocean.com/area``

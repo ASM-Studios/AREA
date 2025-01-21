@@ -10,54 +10,25 @@ RUN mkdir -p /etc/nginx/ssl && \
     -addext "subjectAltName = DNS:localhost" && \
     chmod 644 /etc/nginx/ssl/certificate.crt /etc/nginx/ssl/private.key
 
-###----------------------- Build stage -----------------------###
-FROM node:20-alpine AS builder
+###----------------------- Development stage -----------------------###
+FROM node:20-alpine
 
 WORKDIR /app
 
 COPY package*.json ./
+COPY public/ ./public/
 
-RUN if [ "$NODE_ENV" = "production" ] ; then npm ci ; else npm install ; fi
-
-COPY . .
-
-RUN if [ "$NODE_ENV" = "production" ] ; then npm run build ; fi
-
-###----------------------- Production stage -----------------------###
-FROM nginx:1.25.3-alpine AS production
-
-ARG VITE_PORT
-
-RUN adduser -D nginxuser && \
-    mkdir -p /usr/share/nginx/html/mobile_builds && \
-    mkdir -p /etc/nginx/ssl && \
-    chown -R nginxuser:nginxuser /usr/share/nginx/html && \
-    chown -R nginxuser:nginxuser /etc/nginx/ssl && \
-    chown -R nginxuser:nginxuser /var/cache/nginx && \
-    chown -R nginxuser:nginxuser /var/log/nginx && \
-    touch /var/run/nginx.pid && \
-    chown -R nginxuser:nginxuser /var/run/nginx.pid
-
-COPY --from=cert-builder --chown=nginxuser:nginxuser /etc/nginx/ssl /etc/nginx/ssl
-COPY --from=builder --chown=nginxuser:nginxuser /app/dist /usr/share/nginx/html
-COPY --chown=nginxuser:nginxuser ./nginx.conf /etc/nginx/conf.d/default.conf
-
-USER nginxuser
-
-EXPOSE ${VITE_PORT}
-
-HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
-    CMD wget --no-verbose --tries=1 --spider http://localhost:${VITE_PORT}/health || exit 1
-
-CMD ["nginx", "-g", "daemon off;"]
-
-###----------------------- Development stage -----------------------###
-FROM builder AS development
+RUN npm install
 
 RUN apk add --no-cache \
     nss-tools \
     curl \
-    && curl -JLO "https://dl.filippo.io/mkcert/latest?for=linux/amd64" \
+    && for i in $(seq 1 5); do \
+    curl -JLO "https://dl.filippo.io/mkcert/latest?for=linux/amd64" && break || \
+    if [ $i -eq 5 ]; then exit 1; fi && \
+    echo "Attempt $i failed! Retrying in 15 seconds..." && \
+    sleep 15; \
+    done \
     && chmod +x mkcert-v*-linux-amd64 \
     && cp mkcert-v*-linux-amd64 /usr/local/bin/mkcert
 

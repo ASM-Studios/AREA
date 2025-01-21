@@ -22,7 +22,7 @@ With AREA, you can create automated workflows that integrate various services an
 - docker
 - make
 
-### Installation & Usage
+### Installation
 
 <details>
 <summary>Click to expand</summary>
@@ -51,7 +51,7 @@ cp client_mobile/.env.mobile.example .env.mobile
 - Run the project in full mode
 
 ```sh
-make start-full
+make start
 ```
 
 - Run the project in web mode (only web client and server)
@@ -73,6 +73,13 @@ make start-server
 ```
 
 </details>
+
+### Usage
+
+- Go to the web client at <https://localhost:8081>
+- Get the mobile apk at <https://localhost:8081/client.apk>
+- Go to the mobile client at <http://localhost:8082>
+- Go to the rabbitmq management ui at <http://localhost:15672>
 
 ### Documentation
 
@@ -105,7 +112,30 @@ make docs
 
 ### Tests
 
-// TODO
+For test coverage, we use the following tools
+
+- Jest for unit tests with React:
+
+```sh
+make test_client_web
+```
+
+- or with coverage
+    
+```sh
+make coverage_client_web
+```
+
+- testify for unit tests with golang:
+```sh 
+make test_server
+```
+
+- or with coverage
+
+```sh
+make coverage_server
+```
 
 ## License
 

@@ -1,4 +1,4 @@
-import 'package:client_mobile/data/action.dart';
+import 'package:area/data/action.dart';
 
 class WorkflowService {
   final int id;
@@ -15,28 +15,33 @@ class WorkflowService {
 
   factory WorkflowService.fromJson(Map<String, dynamic> json) {
     try {
+      int serviceId = json['id'] ?? 0;
+      String serviceName = json['name'] ?? 'Unknown';
+
       return WorkflowService(
-        id: json['id'] ?? 0,
-        name: json['name'] ??
-            'Unknown',
-        actions: _parseActionsOrReactions(json['actions']),
-        reactions: _parseActionsOrReactions(json['reactions']),
+        id: serviceId,
+        name: serviceName,
+        actions:
+            _parseActionsOrReactions(json['actions'], serviceId, serviceName),
+        reactions:
+            _parseActionsOrReactions(json['reactions'], serviceId, serviceName),
       );
     } catch (e) {
-      print('Error parsing WorkflowService: $e');
       return WorkflowService(
           id: 0, name: 'Unknown', actions: [], reactions: []);
     }
   }
 
-  static List<WorkflowActionReaction> _parseActionsOrReactions(dynamic data) {
-    if (data == null) {
-      return [];
-    }
+  static List<WorkflowActionReaction> _parseActionsOrReactions(
+      dynamic data, int serviceId, String serviceName) {
+    if (data == null) return [];
+
     if (data is List) {
-      return data.map((item) => WorkflowActionReaction.fromJson(item)).toList();
+      return data
+          .map((item) =>
+              WorkflowActionReaction.fromJson(item, serviceId: serviceId, serviceName: serviceName))
+          .toList();
     } else {
-      print('Expected a list for actions or reactions, but got: $data');
       return [];
     }
   }

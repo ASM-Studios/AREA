@@ -1,17 +1,17 @@
-import 'package:client_mobile/services/login/auth_service.dart';
-import 'package:client_mobile/services/microsoft/microsoft_auth_service.dart';
-import 'package:client_mobile/tools/utils.dart';
-import 'package:client_mobile/widgets/button.dart';
-import 'package:client_mobile/widgets/clickable_text.dart';
-import 'package:client_mobile/widgets/divider_with_text.dart';
-import 'package:client_mobile/widgets/form_field.dart';
-import 'package:client_mobile/widgets/password_form_field.dart';
-import 'package:client_mobile/widgets/sign_in_button.dart';
-import 'package:client_mobile/widgets/simple_text.dart';
+import 'package:area/config/settings_config.dart';
+import 'package:area/config/translation_config.dart';
+import 'package:area/services/login/auth_service.dart';
+import 'package:area/tools/utils.dart';
+import 'package:area/widgets/button.dart';
+import 'package:area/widgets/clickable_text.dart';
+import 'package:area/widgets/divider_with_text.dart';
+import 'package:area/widgets/form_field.dart';
+import 'package:area/widgets/oauth_buttons.dart';
+import 'package:area/widgets/password_form_field.dart';
+import 'package:area/widgets/settings_button.dart';
+import 'package:area/widgets/simple_text.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_appauth/flutter_appauth.dart';
 import 'package:go_router/go_router.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class RegisterPage extends StatefulWidget {
   @override
@@ -19,12 +19,7 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  final String callbackUrlScheme = 'my.area.app';
-  String get spotifyRedirectUrlMobile => '$callbackUrlScheme://callback';
   bool isLoggingViaOauth = false;
-
-  final String clientId = dotenv.env["VITE_SPOTIFY_CLIENT_ID"] ?? "";
-  final appAuth = const FlutterAppAuth();
 
   final _formKey = GlobalKey<FormState>();
 
@@ -34,30 +29,12 @@ class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController confirmPasswordController =
       TextEditingController();
 
-  void handleMicrosoftOAuth() async {
-    if (!isLoggingViaOauth) {
-      isLoggingViaOauth = true;
-      bool isRegistered =
-          await MicrosoftAuthService.auth(context, signUp: true);
-
-      if (!mounted) {
-        isLoggingViaOauth = false;
-        return;
-      }
-
-      if (isRegistered) {
-        context.pushReplacement("/dashboard");
-      }
-      isLoggingViaOauth = false;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
           child: Container(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.fromLTRB(10, 45, 10, 20),
         child: Form(
           key: _formKey,
           child: SingleChildScrollView(
@@ -65,16 +42,22 @@ class _RegisterPageState extends State<RegisterPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SimpleText("Username"),
+                 Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 0, 5, 15),
+                  child: Align(
+                      alignment: Alignment.topRight, child: SettingsButton()),
+                ),
+                SimpleText(TranslationConfig.translate("username", language: SettingsConfig.language)),
                 AreaFormField(
                     label: "username",
                     controller: userController,
                     validator: (user) {
-                      if (user == null || user.isEmpty)
+                      if (user == null || user.isEmpty) {
                         return "Please input your username.";
+                      }
                       return (null);
                     }),
-                SimpleText("Email"),
+                SimpleText(TranslationConfig.translate("email", language: SettingsConfig.language)),
                 AreaFormField(
                   label: "you@example.com",
                   controller: emailController,
@@ -89,7 +72,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   },
                 ),
                 const SizedBox(height: 50),
-                SimpleText("Password"),
+                SimpleText(TranslationConfig.translate("password", language: SettingsConfig.language)),
                 PasswordFormField(
                   label: "********",
                   controller: passwordController,
@@ -102,13 +85,14 @@ class _RegisterPageState extends State<RegisterPage> {
                     return (null);
                   },
                 ),
-                SimpleText("Confirm password"),
+                SimpleText(TranslationConfig.translate("confirm_password", language: SettingsConfig.language)),
                 PasswordFormField(
                   label: "********",
                   controller: confirmPasswordController,
                   validator: (password) {
-                    if (password != passwordController.text)
+                    if (password != passwordController.text) {
                       return "Your password doesn't match.";
+                    }
                     return (null);
                   },
                 ),
@@ -116,7 +100,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 Align(
                   alignment: Alignment.center,
                   child: AreaButton(
-                      label: "Register",
+                      label: TranslationConfig.translate("register", language: SettingsConfig.language),
                       onPressed: () async {
                         if (_formKey.currentState!.validate()) {
                           bool isRegistered = await AuthService.register(
@@ -127,32 +111,21 @@ class _RegisterPageState extends State<RegisterPage> {
                                       username: userController.text)
                                   .toJson());
                           if (isRegistered) {
-                            context.pushReplacement("/dashboard");
+                            context.pushReplacement("/workflow/list");
                           }
                         }
                       },
                       color: const Color(0XFF035a63)),
                 ),
                 const SizedBox(height: 40),
-                const DividerWithText(label: "Or Register with"),
+                DividerWithText(label: TranslationConfig.translate("divider_register", language: SettingsConfig.language)),
                 const SizedBox(height: 15),
-                Align(
-                  alignment: Alignment.center,
-                  child: SignInButton(
-                    onPressed: handleMicrosoftOAuth,
-                    label: "Microsoft",
-                    image: Image.asset(
-                      "assets/images/microsoft.png",
-                      width: 40,
-                      height: 20,
-                    ),
-                  ),
-                ),
+                OAuthButtons(),
                 const SizedBox(height: 5),
                 Align(
                   alignment: Alignment.center,
                   child: SmallClickableText(
-                    "I already have an account",
+                    TranslationConfig.translate("have_account", language: SettingsConfig.language),
                     onPressed: () {
                       context.pop();
                     },

@@ -1,4 +1,4 @@
-import 'package:client_mobile/widgets/form_field.dart';
+import 'package:area/widgets/form_field.dart';
 import 'package:flutter/material.dart';
 
 class PasswordFormField extends StatefulWidget {
@@ -23,27 +23,26 @@ class _PasswordFormFieldState extends State<PasswordFormField> {
   @override
   Widget build(BuildContext context) {
     return AreaFormField(
-      label: widget.label,
-      controller: widget.controller,
-      isTextShown: viewPwd,
-      enableSuggestions: false,
-      autocorrect: false,
-      suffixIcon: IconButton(
-          icon: Icon(viewPwd ? Icons.visibility : Icons.visibility_off),
-          onPressed: () {
-            setState(() {
-              viewPwd = !viewPwd;
-            });
-          }),
-      validator: (value) {
-        if (value == null || value.isEmpty) {
-          return 'Please input your password.';
-        }
-        if (widget.validator != null) {
-          return widget.validator!.call(value);
-        }
-        return null;
-      }
-    );
+        label: widget.label,
+        controller: widget.controller,
+        isTextShown: viewPwd,
+        enableSuggestions: false,
+        autocorrect: false,
+        suffixIcon: IconButton(
+            icon: Icon(viewPwd ? Icons.visibility : Icons.visibility_off),
+            onPressed: () {
+              setState(() {
+                viewPwd = !viewPwd;
+              });
+            }),
+        validator: (value) {
+          if (value == null || value.isEmpty) {
+            return 'Please input your password.';
+          }
+          if (widget.validator != null) {
+            return widget.validator!.call(value);
+          }
+          return null;
+        });
   }
 }

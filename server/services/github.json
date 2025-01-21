@@ -2,34 +2,59 @@
   "name": "github",
   "events": [
     {
-      "name": "A pull request is created",
-      "description": "Triggered when a pull request is created",
+      "short_name": "commit_created_github",
+      "name": "A commit is created",
+      "description": "Triggered when a commit is created",
       "type": "action",
+      "variables": ["author_name", "author_email", "author_date", "message"],
       "parameters": [
         {
           "name": "owner",
           "description": "Owner of the repository",
-          "type": "string",
-          "is_required": true
+          "type": "string"
         },
         {
           "name": "repo",
           "description": "Name of the repository",
-          "type": "string",
-          "is_required": true
+          "type": "string"
+        },
+        {
+          "name": "branch",
+          "description": "Branch of the repository",
+          "type": "string"
         }
       ]
     },
     {
+      "short_name": "pr_created_github",
+      "name": "A pull request is created",
+      "description": "Triggered when a pull request is created",
+      "type": "action",
+      "variables": ["url", "title", "created_at"],
+      "parameters": [
+        {
+          "name": "owner",
+          "description": "Owner of the repository",
+          "type": "string"
+        },
+        {
+          "name": "repo",
+          "description": "Name of the repository",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "short_name": "repo_created_github",
       "name": "An user repo is created",
       "description": "Triggered when an user create a repo",
       "type": "action",
+      "variables": ["name", "full_name", "html_url", "created_at"],
       "parameters": [
         {
           "name": "user",
           "description": "User who creates the repository",
-          "type": "string",
-          "is_required": true
+          "type": "string"
         }
       ]
     },
@@ -37,15 +62,16 @@
 
 
     {
+      "short_name": "create_repo_github",
       "name": "Create a repo",
       "description": "Create a repo on user profile",
       "type": "reaction",
+      "variables": ["name", "full_name", "html_url", "created_at"],
       "parameters": [
         {
           "name": "name",
           "description": "Name of the repo",
-          "type": "string",
-          "is_required": true
+          "type": "string"
         },
         {
           "name": "description",
@@ -56,8 +82,7 @@
         {
           "name": "public",
           "description": "Visibility of the repo",
-          "type": "boolean",
-          "is_required": true
+          "type": "boolean"
         },
         {
           "name": "gitignore_template",

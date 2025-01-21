@@ -114,6 +114,28 @@ const en_language: Translation = {
             success: {
                 registered: "Successfully registered!"
             }
+        },
+        twoFactor: {
+            title: "Two-Factor Authentication",
+            description: "Please enter the 6-digit code from your authenticator app",
+            form: {
+                code: {
+                    label: "verification code",
+                    placeholder: "Enter code",
+                    validation: {
+                        required: "Please enter the verification code",
+                        length: "Code must be 6 digits",
+                        numeric: "Code must contain only numbers"
+                    }
+                },
+                submitButton: "Verify"
+            },
+            errors: {
+                verificationFailed: "Invalid verification code"
+            },
+            success: {
+                verified: "Successfully verified!"
+            }
         }
     },
     header: {
@@ -122,6 +144,8 @@ const en_language: Translation = {
         register: "Register",
         dashboard: "Dashboard",
         createWorkflow: "Create Workflow",
+        accessibility: "Accessibility",
+        download: "Downloads",
         profile: {
             title: "Profile",
             settings: "Settings",
@@ -139,6 +163,14 @@ const en_language: Translation = {
             description: "This is your user page",
             logoutDescription: "Logout from your account",
             logoutButton: "Logout",
+            securitySettings: "Security Settings",
+            enableTOTP: "Enable TOTP Authentication",
+            verifyEmail: "Verify Email",
+            enableEmailAuth: "Enable Email Authentication",
+            disable2FA: "Disable 2FA",
+            setup2FATitle: "Setup Two-Factor Authentication",
+            scan2FAQRCode: "Scan the QR code with your authenticator app",
+            secretsManagement: "Secrets Management",
         },
         themeSettings: {
             title: "Theme Settings",
@@ -219,23 +251,27 @@ const en_language: Translation = {
                 edit: "Edit workflow",
                 activate: "Activate workflow",
                 deactivate: "Deactivate workflow",
-                delete: "Delete workflow"
+                delete: "Delete workflow",
+                trigger: "Trigger workflow"
             },
             ariaLabels: {
                 edit: "Edit workflow",
                 activate: "Activate workflow",
                 deactivate: "Deactivate workflow",
-                delete: "Delete workflow"
+                delete: "Delete workflow",
+                trigger: "Trigger workflow"
             }
         },
         notifications: {
             success: {
                 updated: "Workflow updated",
-                deleted: "Workflow deleted"
+                deleted: "Workflow deleted",
+                triggered: "Workflow triggered"
             },
             error: {
                 updateFailed: "Failed to update workflow",
-                deleteFailed: "Failed to delete workflow"
+                deleteFailed: "Failed to delete workflow",
+                triggerFailed: "Failed to trigger workflow"
             }
         },
         handler: {
@@ -255,6 +291,7 @@ const en_language: Translation = {
             sections: {
                 availableActions: "Available Actions",
                 availableReactions: "Available Reactions",
+                availableVariables: "Available Variables",
                 selectedItems: "Selected Items",
                 when: "When",
                 then: "Then"
@@ -359,7 +396,9 @@ const en_language: Translation = {
             close: "Close",
             triggerDesc: "Descending",
             triggerAsc: "Ascending",
-            cancelSort: "Cancel Sort"
+            cancelSort: "Cancel Sort",
+            previous: "Previous",
+            continue: "Continue",
         }
     },
     security: {
@@ -383,6 +422,50 @@ const en_language: Translation = {
             title: "Attack Detected",
             subtitle: "Sorry, the page you visited is not available.",
             backHome: "Back Home"
+        }
+    },
+    download: {
+        title: "Preparing Android App",
+        description: "Please wait while we prepare your download. This might take a few moments.",
+    },
+    accessibility: {
+        title: "Accessibility Statement",
+        introduction: {
+            title: "Introduction",
+            content: "This document provides an overview of the accessibility features implemented in the AREA Client Web project. Accessibility is a crucial aspect of web development, ensuring that all users, including those with disabilities, can access and interact with the website effectively."
+        },
+        importance: {
+            title: "Importance of Accessibility",
+            content: "Web accessibility is essential for creating an inclusive digital environment. It ensures that people with disabilities can perceive, understand, navigate, and interact with the web. By making the website accessible, we not only comply with legal requirements but also enhance the user experience for everyone."
+        },
+        features: {
+            title: "Accessibility Features and Considerations",
+            items: {
+                semantic: "The use of semantic HTML elements helps screen readers and other assistive technologies understand the structure and content of the web pages.",
+                keyboard: "All interactive elements are accessible via keyboard navigation, allowing users who cannot use a mouse to navigate the site.",
+                contrast: "The website ensures sufficient color contrast between text and background, making it easier for users with visual impairments to read the content.",
+                aria: "ARIA (Accessible Rich Internet Applications) attributes are used to enhance the accessibility of dynamic content and complex UI components.",
+                responsive: "The site is designed to be responsive, ensuring accessibility across various devices and screen sizes."
+            }
+        },
+        compliance: {
+            title: "Compliance with Accessibility Norms",
+            intro: "The AREA Client Web project complies with several accessibility standards, including:",
+            standards: {
+                wcag: "The project adheres to the guidelines set by WCAG 2.1, ensuring that the content is perceivable, operable, understandable, and robust.",
+                rgaa: "This is the French accessibility standard that aligns with WCAG 2.1 but includes additional requirements specific to France.",
+                en301: "This is the European standard for accessibility requirements for ICT products and services, which also aligns with WCAG 2.1."
+            }
+        },
+        scores: {
+            title: "Accessibility Scores",
+            intro: "The following are the accessibility scores for each page, as measured by Google Chrome Lighthouse:",
+            mean: "The mean accessibility score across all pages is 97, indicating a high level of accessibility compliance."
+        },
+        conclusion: {
+            title: "Conclusion",
+            content: "The AREA Client Web project is committed to providing an accessible experience for all users. By adhering to established accessibility standards and continuously evaluating our practices, we ensure that our website is inclusive and user-friendly.",
+            learnMore: "For more information on accessibility practices and guidelines, please refer to the"
         }
     },
 };

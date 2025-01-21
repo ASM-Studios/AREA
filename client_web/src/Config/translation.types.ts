@@ -113,6 +113,28 @@ export interface Translation {
                 registered: string;
             };
         };
+        twoFactor: {
+            title: string;
+            description: string;
+            form: {
+                code: {
+                    label: string;
+                    placeholder: string;
+                    validation: {
+                        required: string;
+                        length: string;
+                        numeric: string;
+                    };
+                };
+                submitButton: string;
+            };
+            errors: {
+                verificationFailed: string;
+            };
+            success: {
+                verified: string;
+            };
+        };
     };
     header: {
         home: string;
@@ -120,6 +142,8 @@ export interface Translation {
         register: string;
         dashboard: string;
         createWorkflow: string;
+        accessibility: string;
+        download: string;
         profile: {
             title: string;
             settings: string;
@@ -137,6 +161,14 @@ export interface Translation {
             description: string;
             logoutDescription: string;
             logoutButton: string;
+            securitySettings: string;
+            enableTOTP: string;
+            verifyEmail: string;
+            enableEmailAuth: string;
+            disable2FA: string;
+            setup2FATitle: string;
+            scan2FAQRCode: string;
+            secretsManagement: string;
         };
         themeSettings: {
             title: string;
@@ -218,22 +250,26 @@ export interface Translation {
                 activate: string;
                 deactivate: string;
                 delete: string;
+                trigger: string;
             };
             ariaLabels: {
                 edit: string;
                 activate: string;
                 deactivate: string;
                 delete: string;
+                trigger: string;
             };
         };
         notifications: {
             success: {
                 updated: string;
                 deleted: string;
+                triggered: string;
             };
             error: {
                 updateFailed: string;
                 deleteFailed: string;
+                triggerFailed: string;
             };
         };
         handler: {
@@ -253,6 +289,7 @@ export interface Translation {
             sections: {
                 availableActions: string;
                 availableReactions: string;
+                availableVariables: string;
                 selectedItems: string;
                 when: string;
                 then: string;
@@ -358,6 +395,8 @@ export interface Translation {
             triggerDesc: string;
             triggerAsc: string;
             cancelSort: string;
+            previous: string;
+            continue: string;
         }
     };
     security: {
@@ -381,6 +420,50 @@ export interface Translation {
             title: string;
             subtitle: string;
             backHome: string;
+        };
+    };
+    download: {
+        title: string;
+        description: string;
+    };
+    accessibility: {
+        title: string;
+        introduction: {
+            title: string;
+            content: string;
+        };
+        importance: {
+            title: string;
+            content: string;
+        };
+        features: {
+            title: string;
+            items: {
+                semantic: string;
+                keyboard: string;
+                contrast: string;
+                aria: string;
+                responsive: string;
+            };
+        };
+        compliance: {
+            title: string;
+            intro: string;
+            standards: {
+                wcag: string;
+                rgaa: string;
+                en301: string;
+            };
+        };
+        scores: {
+            title: string;
+            intro: string;
+            mean: string;
+        };
+        conclusion: {
+            title: string;
+            content: string;
+            learnMore: string;
         };
     };
 }

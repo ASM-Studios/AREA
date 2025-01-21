@@ -1,70 +1,69 @@
-import 'package:client_mobile/data/action.dart';
-import 'package:client_mobile/data/parameter.dart';
-import 'package:client_mobile/data/service.dart';
+import 'package:area/config/settings_config.dart';
+import 'package:area/config/translation_config.dart';
+import 'package:area/data/action.dart';
+import 'package:area/data/service.dart';
+import 'package:area/pages/dashboard/workflow_parameters_page.dart';
 import 'package:flutter/material.dart';
 
-class ActionSelectionPage extends StatelessWidget {
+class ActionSelectionPage extends StatefulWidget {
   final WorkflowService service;
-  final Function(WorkflowActionReaction, WorkflowService) onActionSelected;
+  final Function(WorkflowActionReaction) onActionSelected;
   final List<WorkflowActionReaction> actions;
 
-  const ActionSelectionPage(
-      {super.key,
-      required this.service,
-      required this.onActionSelected,
-      required this.actions});
+  const ActionSelectionPage({
+    super.key,
+    required this.service,
+    required this.onActionSelected,
+    required this.actions,
+  });
 
+  @override
+  State<ActionSelectionPage> createState() => _ActionSelectionPageState();
+}
+
+class _ActionSelectionPageState extends State<ActionSelectionPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Select Action/Reaction'),
+        title: Text(
+          TranslationConfig.translate("select_action", language: SettingsConfig.language),
+            style: const TextStyle(color: Colors.black, fontSize: 24, fontWeight: FontWeight.bold),
+        ),
       ),
-      body: ListView.builder(
-        itemCount: actions.length,
+      body: ListView.separated(
+        padding: const EdgeInsets.all(16),
+        itemCount: widget.actions.length,
+        separatorBuilder: (context, index) => const Divider(
+          color: Colors.black12,
+          thickness: 0.5,
+        ),
         itemBuilder: (context, index) {
           return ListTile(
-            title: Text(actions[index].name),
+            title: Text(
+              widget.actions[index].name,
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            trailing: const Icon(Icons.arrow_forward_ios,
+                color: Colors.black, size: 18),
             onTap: () async {
-              for (var param in actions[index].parameters) {
-                String? updatedValue =
-                    await _showParameterDialog(context, param);
-                param.value = updatedValue;
+              if (widget.actions[index].parameters.isNotEmpty) {
+                widget.actions[index] = await Navigator.of(context).push(
+                    MaterialPageRoute(
+                        builder: (ctx) => WorkflowParametersPage(
+                            action: widget.actions[index])));
               }
-              onActionSelected(actions[index], service);
-              Navigator.popUntil(context, (route) => route.isFirst);
+              widget.onActionSelected(widget.actions[index]);
+              Navigator.of(context).popUntil((route) {
+                return route.settings.name == "workflowCreation";
+              });
             },
           );
         },
       ),
-    );
-  }
-
-  Future<String?> _showParameterDialog(
-      BuildContext context, Parameter parameter) async {
-    TextEditingController controller = TextEditingController();
-
-    return showDialog<String>(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Enter value for ${parameter.name}'),
-          content: TextField(
-            controller: controller,
-            decoration: InputDecoration(
-              hintText: 'Enter value for ${parameter.name}',
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context, controller.text);
-              },
-              child: const Text('OK'),
-            ),
-          ],
-        );
-      },
     );
   }
 }

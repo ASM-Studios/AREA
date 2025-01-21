@@ -11,7 +11,7 @@ type SpotifyResponse struct {
         DisplayName string `json:"display_name"`
 }
 
-func GetSpotifyResponse(serviceRawResponse *http.Response) (*ServiceResponse, error) {
+func GetSpotifyResponse(serviceRawResponse *http.Response, token string) (*ServiceResponse, error) {
         var spotifyResponse SpotifyResponse
 
         body, err := io.ReadAll(serviceRawResponse.Body)

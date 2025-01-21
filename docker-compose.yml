@@ -46,6 +46,7 @@ services:
     ports:
       - "8080:8080"
     volumes:
+      - ./server:/app:rw
       - ./ssl:/app/ssl:ro
     environment:
       DB_HOST: ${DB_HOST}
@@ -53,6 +54,7 @@ services:
       DB_USER: ${DB_USER}
       DB_NAME: ${DB_NAME}
       DB_PASSWORD: ${DB_PASSWORD}
+      AIR_FORCE: "true"
     depends_on:
       mariadb:
         condition: service_healthy
@@ -71,11 +73,12 @@ services:
       start_period: 40s
     profiles: [ "server", "web", "mobile", "full" ]
 
-  server-action-consumer:
+  server_action_consumer:
     build:
       context: ./server
       dockerfile: Dockerfile_action_consumer
     volumes:
+      - ./server:/app:rw
       - ./ssl:/app/ssl:ro
     environment:
       DB_HOST: ${DB_HOST}
@@ -97,11 +100,12 @@ services:
     restart: always
     profiles: [ "server", "web", "mobile", "full" ]
 
-  server-reaction-consumer:
+  server_reaction_consumer:
     build:
       context: ./server
       dockerfile: Dockerfile_reaction_consumer
     volumes:
+      - ./server:/app:rw
       - ./ssl:/app/ssl:ro
     environment:
       DB_HOST: ${DB_HOST}
@@ -127,14 +131,12 @@ services:
     build:
       context: ./client_mobile
       dockerfile: Dockerfile
-      args:
-        - API_URL
-        - WEB_CLIENT_URL
-        - MOBILE_CLIENT_URL
-        - GITHUB_CLIENT_ID
-        - GITHUB_CLIENT_SECRET
     volumes:
       - mobile_builds:/app/build/app/outputs/flutter-apk
+      - ./client_mobile:/app
+      - ./client_mobile/.dart_tool:/app/.dart_tool
+    ports:
+      - "8082:8082"
     networks:
       - area_network
     env_file:
@@ -144,35 +146,28 @@ services:
       server:
         condition: service_healthy
     restart: "no"
+    healthcheck:
+      test: [ "CMD", "test", "-f", "/app/build/app/outputs/flutter-apk/client.apk" ]
+      interval: 10s
+      timeout: 10s
+      retries: 30
+      start_period: 150s
 
   client_web:
     build:
       context: ./client_web
       dockerfile: Dockerfile
-      args:
-        - VITE_PORT
-        - VITE_ENDPOINT
-        - VITE_GOOGLE_CLIENT_ID
-        - VITE_GOOGLE_CLIENT_SECRET
-        - VITE_MICROSOFT_CLIENT_ID
-        - VITE_LINKEDIN_CLIENT_ID
-        - VITE_LINKEDIN_CLIENT_SECRET
-        - VITE_SPOTIFY_CLIENT_ID
-        - VITE_SPOTIFY_CLIENT_SECRET
-        - API_URL
-        - WEB_CLIENT_URL
-        - MOBILE_CLIENT_URL
-        - GITHUB_CLIENT_ID
-        - GITHUB_CLIENT_SECRET
+    volumes:
+      - ./client_web:/app:rw
+      - /app/node_modules
+      - mobile_builds:/app/public:ro
     ports:
       - "${VITE_PORT}:${VITE_PORT}"
-    volumes:
-      - mobile_builds:/usr/share/nginx/html/mobile_builds:ro
     depends_on:
       server:
         condition: service_healthy
       client_mobile:
-        condition: service_completed_successfully
+        condition: service_started
         required: false # TODO: remove before final defense
     networks:
       - area_network
@@ -187,7 +182,7 @@ services:
       start_period: 60s
     profiles: [ "web", "full" ]
 
-  server-healthcheck:
+  server_healthcheck:
     image: alpine:3.20.3
     depends_on:
       mariadb:
@@ -199,7 +194,7 @@ services:
     profiles: [ "server" ]
     restart: "no"
 
-  web-healthcheck:
+  web_healthcheck:
     image: alpine:3.20.3
     depends_on:
       mariadb:
@@ -215,7 +210,7 @@ services:
     profiles: [ "web" ]
     restart: "no"
 
-  mobile-healthcheck:
+  mobile_healthcheck:
     image: alpine:3.20.3
     depends_on:
       mariadb:
@@ -225,11 +220,11 @@ services:
       server:
         condition: service_healthy
       client_mobile:
-        condition: service_completed_successfully
+        condition: service_healthy
     profiles: [ "mobile" ]
     restart: "no"
 
-  full-healthcheck:
+  full_healthcheck:
     image: alpine:3.20.3
     depends_on:
       mariadb:
@@ -241,7 +236,7 @@ services:
       client_web:
         condition: service_healthy
       client_mobile:
-        condition: service_completed_successfully
+        condition: service_healthy
     environment:
       - VITE_PORT=${VITE_PORT}
     profiles: [ "full" ]
@@ -250,6 +245,7 @@ services:
 volumes:
   mobile_builds:
   mariadb_data:
+
 
 networks:
   area_network:

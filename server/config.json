@@ -2,6 +2,7 @@
   "app_name": "AREA",
   "port": 8080,
   "gin_mode": "debug",
+  "trigger_interval": 60,
   "cors": true,
   "swagger": true,
   "cors_origins": [

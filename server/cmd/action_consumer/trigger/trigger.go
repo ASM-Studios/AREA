@@ -2,75 +2,63 @@ package trigger
 
 import (
 	"AREA/cmd/action_consumer/github"
+	"AREA/cmd/action_consumer/google"
+	"AREA/cmd/action_consumer/microsoft"
 	"AREA/cmd/action_consumer/spotify"
 	"AREA/cmd/action_consumer/twitch"
-	"AREA/cmd/action_consumer/vars"
 	"AREA/internal/models"
 	"AREA/internal/pkg"
-	"AREA/internal/utils"
-	"encoding/json"
 	"errors"
 	"fmt"
+	"reflect"
+	"strings"
 	"time"
-
-	"gorm.io/gorm"
 )
 
-func sendEvents(workflow *models.Workflow) {
-        rows, err := pkg.DB.Raw(`
-                SELECT
-                        workflow_events.id AS workflow_event_id,
-                        events.id AS event_id,
-                        services.id AS service_id,
-                        services.name AS service_name
-                FROM workflow_events
-                JOIN events ON events.id = workflow_events.event_id
-                JOIN services ON services.id = events.service_id
-                WHERE workflow_events.workflow_id = ? AND events.type = 'reaction'
-                `, workflow.ID).Rows()
-        if err != nil {
-                return
-        }
+var triggerCallbacks = map[uint]func(*models.Workflow, *models.User, map[string]string) (bool, []interface{}, error){
+        2: github.CommitCreated,
+        3: github.PRCreated,
+	4: github.UserRepoCreated,
 
-        var reaction struct {
-                WorkflowEventID uint
-                EventID         uint
-                ServiceID       uint
-                ServiceName     string
-        }
-        defer rows.Close()
-        for rows.Next() {
-                var workflowEvent models.WorkflowEvent
-                pkg.DB.ScanRows(rows, &reaction)
-                err := pkg.DB.Where("id = ?", reaction.WorkflowEventID).First(&workflowEvent).Error
-                if errors.Is(err, gorm.ErrRecordNotFound) {
-                        fmt.Println("NOT FOUND")
-                        continue
-                }
-                producer := utils.RMQProducer{
-                        Queue: reaction.ServiceName,
-                        ConnectionString: utils.GetEnvVar("RMQ_URL"),
-                }
-                body, _ := json.Marshal(workflowEvent)
-                fmt.Println("HERE")
-                producer.PublishMessage("json", body)
-        }
+	6: google.EmailReceived,
+
+	8: microsoft.MailReceived,
+	9: microsoft.NewChannelCreated,
+	10: microsoft.MeetingJoined,
+	11: microsoft.DriveFileAdded,
+	12: microsoft.DriveFileModified,
+	13: microsoft.CalendarEventStarted,
+	14: microsoft.CalendarEventCreated,
+	15: microsoft.ChangePresence,
+
+        24: spotify.StartPlaying,
+
+	29: twitch.StreamStart,
 }
 
-var triggerCallbacks = map[uint]func(*models.User, map[string]string) bool {
-        7: github.PRCreated,
-        8: github.UserRepoCreated,
-
-        30: spotify.StartPlaying,
-        35: twitch.StreamStart,
+type Parameter struct {
+        Name string
+        Value string
 }
 
-func triggerCallback(workflowEventId uint, refEventId uint, user *models.User) bool {
-        var parameters []struct {
-                Name    string
-                Value   string
+func setupParameters(user *models.User, parameters []Parameter) map[string]string {
+        parameterMap := make(map[string]string)
+        var secrets []models.Secret
+        pkg.DB.Table("secrets").Where("user_id = ?", user.ID).Find(&secrets)
+
+        for _, parameter := range parameters {
+                tmpValue := parameter.Value
+                for _, secret := range secrets {
+                        tmpValue = strings.ReplaceAll(tmpValue, fmt.Sprintf("$%s", secret.Key), fmt.Sprintf("%v", secret.Value))
+                }
+                parameterMap[parameter.Name] = tmpValue
         }
-        pkg.DB.Raw(`
+        return parameterMap
+}
+
+func callCallback(workflow *models.Workflow, workflowEventId uint, refEventId uint, user *models.User) (bool, []interface{}, error) {
+	var parameters []Parameter
+	pkg.DB.Raw(`
                 SELECT
                         parameters.name AS name,
                         parameters_values.value AS value
@@ -78,69 +66,81 @@ func triggerCallback(workflowEventId uint, refEventId uint, user *models.User) b
                 JOIN parameters_values ON parameters_values.workflow_event_id = workflow_events.id
                 JOIN parameters ON parameters.id = parameters_values.parameters_id
                 WHERE workflow_events.id = ?`,
-                workflowEventId).Scan(&parameters)
+		workflowEventId).Scan(&parameters)
 
-        parametersMap := make(map[string]string)
-        for _, parameter := range parameters {
-                parametersMap[parameter.Name] = parameter.Value
-        }
-
-        if callback, ok := triggerCallbacks[refEventId]; ok {
-                return callback(user, parametersMap)
-        } else {
-                fmt.Printf("Callback not found for workflow event id: %d\n", refEventId)
-        }
-        return false
+	parametersMap := setupParameters(user, parameters)
+	if callback, ok := triggerCallbacks[refEventId]; ok {
+		return callback(workflow, user, parametersMap)
+	} else {
+		fmt.Printf("Callback not found for workflow event id: %d\n", refEventId)
+		return false, nil, errors.New("Callback not implemented")
+	}
 }
 
-func detectWorkflowEvent(workflow *models.Workflow, user *models.User) bool {
-        var event struct {
-                ID              uint
-                RefEventID      uint
-        }
+type Event struct {
+	ID           uint
+	RefEventID   uint
+	RefEventName string
+	ServiceName  string
+}
 
-        query := `SELECT
+func uploadPayload(event Event, index int, result interface{}) map[string]interface{} {
+	reactionArgs := make(map[string]interface{})
+	t := reflect.TypeOf(result)
+	v := reflect.ValueOf(result)
+
+	for i := 0; i < t.NumField(); i++ {
+		field := t.Field(i)
+		value := v.Field(i)
+		reactionArgs[fmt.Sprintf("%s.%s.%d", event.RefEventName, field.Tag.Get("json"), index)] = fmt.Sprintf("%v", value)
+	}
+	return reactionArgs
+}
+
+func detectWorkflowEvent(workflow *models.Workflow, user *models.User) {
+	var event Event
+
+	query := `SELECT
                         workflow_events.id AS id,
-                        events.id AS ref_event_id
+                        events.id AS ref_event_id,
+                        events.short_name as ref_event_name,
+                        services.name AS service_name
                 FROM workflow_events
                 JOIN events ON events.id = workflow_events.event_id
                 JOIN services ON services.id = events.service_id
                 WHERE workflow_events.workflow_id = ? AND events.type = 'action'`
 
-        if vars.ServiceId != "*" {
-                query += fmt.Sprintf(" AND services.id = %s", vars.ServiceId)
-        }
-        rows, err := pkg.DB.Raw(query, workflow.ID) .Rows()
-        if err != nil {
-                return false
-        }
-        defer rows.Close()
-        for rows.Next() {
-                pkg.DB.ScanRows(rows, &event)
-                if triggerCallback(event.ID, event.RefEventID, user) {
-                        return true
-                }
-        }
-        return false
+	rows, err := pkg.DB.Raw(query, workflow.ID).Rows()
+	if err != nil {
+		return
+	}
+	defer rows.Close()
+	var i int = 0
+	for rows.Next() {
+		pkg.DB.ScanRows(rows, &event)
+		result, body, err := callCallback(workflow, event.ID, event.RefEventID, user)
+		if err != nil {
+			continue
+		}
+		if result == false {
+			continue
+		}
+		for _, payload := range body {
+			reactionArgs := uploadPayload(event, i, payload)
+			sendWorkflow(workflow, reactionArgs)
+		}
+		i += 1
+	}
+	return
 }
 
-func DetectWorkflowsEvent(serviceName string) {
-        var user models.User
-        var workflow models.Workflow
+func DetectWorkflowsEvent(workflow *models.Workflow) {
+	var user models.User
+	err := pkg.DB.Where("id = ?", workflow.UserID).First(&user).Error
+	if err != nil {
+		return
+	}
 
-        rows, err := pkg.DB.Table("workflows").Rows()
-        if err != nil {
-                return
-        }
-        defer rows.Close()
-        for rows.Next() {
-                pkg.DB.ScanRows(rows, &workflow)
-                pkg.DB.Where("id = ?", workflow.UserID).First(&user)
-                if detectWorkflowEvent(&workflow, &user) {
-                        sendEvents(&workflow)   // TODO RESTORE
-                        // TODO RESTORE HERE
-                }
-        }
-
-        vars.LastFetch = time.Now().Unix()
+	detectWorkflowEvent(workflow, &user)
+	workflow.LastTrigger = time.Now().Unix()
 }

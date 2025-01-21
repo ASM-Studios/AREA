@@ -2,15 +2,16 @@
   "name": "twitch",
   "events": [
     {
+      "short_name": "stream_started_twitch",
       "name": "Stream start",
       "description": "Detect stream start",
       "type": "action",
+      "variables": ["user_login", "user_name", "game_name", "title", "started_at"],
       "parameters": [
         {
           "name": "streamer",
           "description": "Streamer which will trigger the action",
-          "type": "string",
-          "is_required": true
+          "type": "string"
         }
       ]
     },
@@ -18,6 +19,7 @@
 
 
     {
+      "short_name": "send_message_twitch",
       "name": "Send message",
       "description": "Send a message on a tchat",
       "type": "reaction",
@@ -25,18 +27,17 @@
         {
           "name": "destination",
           "description": "Tchat on which message will be send",
-          "type": "string",
-          "is_required": true
+          "type": "string"
         },
         {
           "name": "content",
           "description": "Content of the message",
-          "type": "string",
-          "is_required": true
+          "type": "string"
         }
       ]
     },
     {
+      "short_name": "whisper_message_twitch",
       "name": "Whisper message",
       "description": "Whisper a message",
       "type": "reaction",
@@ -44,14 +45,12 @@
         {
           "name": "receiver",
           "description": "Receiver of the message",
-          "type": "string",
-          "is_required": true
+          "type": "string"
         },
         {
           "name": "content",
           "description": "Content of the message",
-          "type": "string",
-          "is_required": true
+          "type": "string"
         }
       ]
     }
