@@ -1,13 +1,15 @@
 package controllers
 
 import (
-    "AREA/internal/models"
-    "AREA/internal/pkg"
-    "fmt"
-    "github.com/gin-gonic/gin"
-    "github.com/goccy/go-json"
-    "net/http"
-    "strconv"
+	"AREA/internal/models"
+	"AREA/internal/pkg"
+	"fmt"
+	"net/http"
+	"strconv"
+	"time"
+
+	"github.com/gin-gonic/gin"
+	"github.com/goccy/go-json"
 )
 
 func SendWorkflowEventsToQueue(workflow models.Workflow) error {
@@ -78,6 +80,7 @@ func WorkflowCreate(c *gin.Context) {
         Description: request.Description,
         Status:      models.WorkflowStatusPending,
         IsActive:    true,
+        LastTrigger: time.Now().Unix(),
     }
     
     for _, eventReq := range request.Events {

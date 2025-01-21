@@ -2,6 +2,30 @@
   "name": "github",
   "events": [
     {
+      "short_name": "commit_created_github",
+      "name": "A commit is created",
+      "description": "Triggered when a commit is created",
+      "type": "action",
+      "variables": ["author_name", "author_email", "author_date", "message"],
+      "parameters": [
+        {
+          "name": "owner",
+          "description": "Owner of the repository",
+          "type": "string"
+        },
+        {
+          "name": "repo",
+          "description": "Name of the repository",
+          "type": "string"
+        },
+        {
+          "name": "branch",
+          "description": "Branch of the repository",
+          "type": "string"
+        }
+      ]
+    },
+    {
       "short_name": "pr_created_github",
       "name": "A pull request is created",
       "description": "Triggered when a pull request is created",

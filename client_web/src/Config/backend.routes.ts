@@ -50,6 +50,12 @@ const auth = {
     },
 };
 
+const secret = {
+    create: '/secret/create',
+    list: '/secret/list',
+    delete: '/secret/delete',
+};
+
 const user = {
     me: `${endpoint}/user/me`,
     delete: `${endpoint}/user/delete`,
@@ -99,6 +105,7 @@ export {
     instanceWithAuth,
     root,
     auth,
+    secret,
     user,
     oauth,
     workflow

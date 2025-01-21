@@ -168,6 +168,7 @@ export interface Translation {
             disable2FA: string;
             setup2FATitle: string;
             scan2FAQRCode: string;
+            secretsManagement: string;
         };
         themeSettings: {
             title: string;

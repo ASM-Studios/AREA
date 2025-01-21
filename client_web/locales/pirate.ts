@@ -170,6 +170,7 @@ const pirate_language: Translation = {
             disable2FA: "Remove Extra Protection",
             setup2FATitle: "Setup Extra Protection",
             scan2FAQRCode: "Scan the treasure map with yer auth device",
+            secretsManagement: "Manage Yer Secrets",
         },
         themeSettings: {
             title: "Ship's Colors",

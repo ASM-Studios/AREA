@@ -20,8 +20,8 @@ import {
     Typography
 } from 'antd';
 import { toast } from 'react-toastify';
-import { About, Action, filteredEvents, GetWorkflow, Parameter, Reaction, Workflow } from '@/types';
-import { instanceWithAuth, root, workflow as workflowRoute } from "@Config/backend.routes";
+import { About, Action, filteredEvents, GetWorkflow, Reaction, Secret, Workflow } from '@/types';
+import { instanceWithAuth, root, workflow as workflowRoute, secret as secretRoute } from "@Config/backend.routes";
 import Security from "@/Components/Security";
 import { useError, useUser} from "@/Context/ContextHooks";
 import LinkButton from "@/Components/LinkButton";
@@ -66,18 +66,6 @@ const WorkflowHandler: React.FC = () => {
             isWorkflowValid(availableVariables, formData, workflowActions, workflowReactions),
         [availableVariables, formData, workflowActions, workflowReactions]);
 
-    const memoizedRenderParameterInput = React.useMemo(() =>
-        (parameter: Parameter, value: string, onChange: (value: string) => void) => {
-            switch (parameter.type) {
-                case 'datetime':
-                    return <DatePicker onChange={(date) => onChange(date?.toISOString() || '')}/>;
-                case 'number':
-                    return <Input type="number" value={value} onChange={(e) => onChange(e.target.value)}/>;
-                default:
-                    return <Input value={value} onChange={(e) => onChange(e.target.value)}/>;
-            }
-        }, []);
-
     React.useEffect(() => {
         setLoading(true);
         instanceWithAuth.get(root.about)
@@ -92,6 +80,18 @@ const WorkflowHandler: React.FC = () => {
                     setFilteredActions,
                     setFilteredReactions
                 );
+
+                instanceWithAuth.get(secretRoute.list)
+                    .then((response) => {
+                        const secrets: Secret[] = response?.data?.secrets;
+                        const availableVariables = secrets?.map(secret => `$${secret.key}`) || [];
+                        setAvailableVariables(availableVariables);
+                    })
+                    .catch((error) => {
+                        console.error(error);
+                        setError({error: "API Error", errorDescription: "Could not fetch server information"});
+                        navigate('/error/fetch');
+                    });
             })
             .catch((error) => {
                 console.error(error);

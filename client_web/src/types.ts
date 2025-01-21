@@ -125,3 +125,11 @@ export type WorkflowTableDetail = {
     is_active: boolean;
     events: WorkflowEvent[];
 };
+
+/* --------------------------------- */
+
+export type Secret = {
+    ID: number;
+    key: string;
+    value: string;
+}
