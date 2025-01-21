@@ -31,11 +31,17 @@ func InitSMTPClient() error {
         SMTPClient.User = utils.GetEnvVar("SMTP_USER")
         SMTPClient.Password = utils.GetEnvVar("SMTP_PASSWORD")
         SMTPClient.Dialer = gomail.NewDialer(SMTPClient.Host, SMTPClient.Port, SMTPClient.User, SMTPClient.Password)
+        if SMTPClient.Dialer == nil {
+                return errors.New("Failed to create SMTP dialer")
+        }
         SMTPClient.Dialer.TLSConfig = &tls.Config{InsecureSkipVerify: true}
         return nil
 }
 
 func SendHTMLMail(to string, object string, content string) error {
+        if SMTPClient.Dialer == nil {
+                return errors.New("SMTP client not initialized")
+        }
         message := gomail.NewMessage()
         message.SetHeader("From", SMTPClient.User)
         message.SetHeader("To", to)
@@ -50,6 +56,9 @@ func SendHTMLMail(to string, object string, content string) error {
 }
 
 func SendMail(to string, object string, content string) error {
+        if SMTPClient.Dialer == nil {
+                return errors.New("SMTP client not initialized")
+        }
         message := gomail.NewMessage()
         message.SetHeader("From", SMTPClient.User)
         message.SetHeader("To", to)
