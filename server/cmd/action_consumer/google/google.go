@@ -26,19 +26,48 @@ type Message struct {
                         Name    string  `json:"name"`
                         Value   string  `json:"value"`
                 }       `json:"headers"`
+                Parts   []struct {
+                        MimeType        string  `json:"mimeType"`
+                        Body struct {
+                                Data    string  `json:"data"`
+                        }       `json:"body"`
+                }       `json:"parts"`
         }       `json:"payload"`
 }
 
 type MessageReturn struct {
         Id      string  `json:"id"`
         Date    string  `json:"date"`
+        From    string  `json:"from"`
+        Object  string  `json:"object"`
+        Content string  `json:"content"`
 }
 
-func browseMessages(workflow *models.Workflow, token *models.Token, messageId string) (bool, []interface{}, error) {
-        req, err := http.NewRequest("GET", fmt.Sprintf("https://gmail.googleapis.com/v1/users/me/messages/%s", messageId), nil)
+func extractMessage(message *Message) MessageReturn {
+        var messageReturn MessageReturn
+        for _, header := range message.Payload.Headers {
+                if header.Name == "Date" {
+                        messageReturn.Date = header.Value
+                } else if header.Name == "From" {
+                        messageReturn.From = header.Value
+                } else if header.Name == "Subject" {
+                        messageReturn.Object = header.Value
+                }
+        }
+        for _, part := range message.Payload.Parts {
+                if part.MimeType == "text/plain" {
+                        messageReturn.Content = part.Body.Data
+                }
+        }
+        return messageReturn
+}
+
+func browseMessages(workflow *models.Workflow, token *models.Token, messageId string) (bool, interface{}, error) {
+        req, err := http.NewRequest("GET", fmt.Sprintf("https://gmail.googleapis.com/gmail/v1/users/me/messages/%s", messageId), nil)
         if err != nil {
                 return false, nil, errors.New("Failed to create request")
         }
+        req.Header.Set("Authorization", "Bearer " + token.Token)
 
         resp, err := oauth.SendRequest(token, req)
         if err != nil {
@@ -51,7 +80,7 @@ func browseMessages(workflow *models.Workflow, token *models.Token, messageId st
         result, err := utils.ExtractBody[Message](resp)
         timestamp, _ := strconv.Atoi(result.InternalDate)
         if int64(timestamp / 1000) > workflow.LastTrigger {
-                return true, nil, nil
+                return true, extractMessage(result), nil
         } else {
                 return false, nil, nil
         }
@@ -61,7 +90,7 @@ func EmailReceived(workflow *models.Workflow, user *models.User, args map[string
         var token models.Token
         pkg.DB.Where("user_id = ? AND service_id = ?", user.ID, gconsts.ServiceMap["google"]).First(&token)
 
-        req, err := http.NewRequest("GET", "https://gmail.googleapis.com/v1/users/me/messages", nil)
+        req, err := http.NewRequest("GET", "https://gmail.googleapis.com/gmail/v1/users/me/messages?maxResults=10", nil)
         if err != nil {
                 return false, nil, errors.New("Failed to create request")
         }
@@ -76,11 +105,18 @@ func EmailReceived(workflow *models.Workflow, user *models.User, args map[string
                 return false, nil, errors.New("Failed to fetch google API")
         }
 
-        /*result, err := utils.ExtractBody[MessageList](resp)
+        callReaction := false
+        var interfaces []interface{}
+        result, err := utils.ExtractBody[MessageList](resp)
         for _, message := range result.Messages {
-                if browseMessages(workflow, &token, message.Id) {
-                        return true
+                status, body, err := browseMessages(workflow, &token, message.Id)
+                if err != nil {
+                        continue
                 }
-        }*/
-        return false, nil, nil
+                if status {
+                        callReaction = true
+                        interfaces = append(interfaces, body)
+                }
+        }
+        return callReaction, interfaces, nil
 }

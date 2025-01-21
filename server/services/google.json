@@ -6,6 +6,7 @@
       "name": "Email Received",
       "description": "Triggered when a new email is received in your Gmail inbox.",
       "type": "action",
+      "variables": ["id", "date", "from", "object", "content"],
       "parameters": []
     },
 
