@@ -21,6 +21,9 @@ func PauseTrack(user *models.User, token *models.Token, args map[string]string) 
         req.Header.Set("Authorization", "Bearer " + token.Token)
 
         resp, err := oauth.SendRequest(token, req)
+        if err != nil {
+                return
+        }
         defer resp.Body.Close()
 }
 
@@ -32,6 +35,9 @@ func ResumeTrack(user *models.User, token *models.Token, args map[string]string)
         req.Header.Set("Authorization", "Bearer " + token.Token)
 
         resp, err := oauth.SendRequest(token, req)
+        if err != nil {
+                return
+        }
         defer resp.Body.Close()
 }
 
