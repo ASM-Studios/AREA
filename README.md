@@ -112,21 +112,30 @@ make docs
 
 ### Tests
 
-For test coverage, we use the following tools:
+For test coverage, we use the following tools
 
-Jest for unit tests with React:
+- Jest for unit tests with React:
 
 ```sh
 make test_client_web
 ```
 
-or with coverage
+- or with coverage
     
-    ```sh
+```sh
 make coverage_client_web
-    ```
+```
 
-testify for unit tests with golang:
+- testify for unit tests with golang:
+```sh 
+make test_server
+```
+
+- or with coverage
+
+```sh
+make coverage_server
+```
 
 ## License
 
