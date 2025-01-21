@@ -38,7 +38,7 @@ class _WorkflowListPageState extends State<WorkflowListPage> {
                 TranslationConfig.translate(
                   "workflows",
                   language: SettingsConfig.language,
-                ),
+                ).toUpperCase(),
                 style: TextStyle(
                     color: Colors.black,
                     fontSize: 24,
