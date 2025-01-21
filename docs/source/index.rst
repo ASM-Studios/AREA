@@ -30,7 +30,7 @@ Table of Contents
 
     index
     contributing
-    Project/index
+    project/index
     client_web/index
     client_mobile/index
     server/index
