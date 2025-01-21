@@ -1,8 +1,10 @@
 package controllers
 
 import (
+	"AREA/internal/gconsts"
 	"AREA/internal/models"
 	"AREA/internal/pkg"
+	"errors"
 	"fmt"
 	"net/http"
 	"strconv"
@@ -10,6 +12,8 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/goccy/go-json"
+	"github.com/rabbitmq/amqp091-go"
+	"gorm.io/gorm"
 )
 
 func SendWorkflowEventsToQueue(workflow models.Workflow) error {
@@ -316,4 +320,49 @@ func WorkflowUpdate(c *gin.Context) {
         return
     }
     c.JSON(http.StatusOK, gin.H{"workflow": workflow})
+}
+
+func TriggerWorkflow(c *gin.Context) {
+        idParam := c.Param("id")
+
+        user, err := pkg.GetUserFromToken(c)
+        if err != nil {
+                c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get user from token"})
+        }
+
+        var workflow models.Workflow
+        err = pkg.DB.Table("workflows").Where("id = ?", idParam).First(&workflow).Error
+        if errors.Is(err, gorm.ErrRecordNotFound) {
+                c.JSON(http.StatusNotFound, gin.H{"error": "Workflow not found"})
+                return
+        }
+
+        if workflow.UserID != user.ID {
+                c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+                return
+        }
+
+        body, err := json.Marshal(workflow)
+        gconsts.Connection.Channel.Publish("", "action", false, false, amqp091.Publishing{
+                ContentType: "application/json",
+                Body:        body,
+        })
+}
+
+func TriggerWorkflows(c *gin.Context) {
+        user, err := pkg.GetUserFromToken(c)
+        if err != nil {
+                c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get user from token"})
+        }
+
+        var workflows []models.Workflow
+        pkg.DB.Table("workflows").Where("user_id = ?", user.ID).Find(&workflows)
+
+        for _, workflow := range workflows {
+                body, _ := json.Marshal(workflow)
+                gconsts.Connection.Channel.Publish("", "action", false, false, amqp091.Publishing{
+                        ContentType: "application/json",
+                        Body:        body,
+                })
+        }
 }
