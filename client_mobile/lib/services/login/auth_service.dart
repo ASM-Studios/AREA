@@ -138,8 +138,6 @@ class AuthService {
         body: jsonEncode(jsonInfos),
       ).timeout(Duration(seconds: 20));
 
-      print("reponse : ${response.statusCode}");
-
       if (response.statusCode == 200) {
         final responseData = jsonDecode(response.body);
         final String token = responseData['jwt'];
