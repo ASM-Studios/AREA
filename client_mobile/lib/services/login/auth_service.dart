@@ -136,7 +136,7 @@ class AuthService {
         url,
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode(jsonInfos),
-      );
+      ).timeout(Duration(seconds: 20));
 
       if (response.statusCode == 200) {
         final responseData = jsonDecode(response.body);
@@ -155,6 +155,15 @@ class AuthService {
         );
         return (true);
       } else {
+         ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("${TranslationConfig.translate(
+              "register_error",
+              language: SettingsConfig.language,
+            )} : Code ${response.statusCode}"),
+            backgroundColor: Colors.red,
+          ),
+        );
         return (false);
       }
     } catch (e) {

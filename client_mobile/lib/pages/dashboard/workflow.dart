@@ -89,7 +89,7 @@ class _WorkflowPageState extends State<WorkflowPage> {
               backgroundColor: Colors.black,
             ),
           );
-          GoRouter.of(context).pushReplacement("/workflow/list");
+          GoRouter.of(context).pop();
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
