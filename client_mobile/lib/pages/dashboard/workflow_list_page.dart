@@ -85,23 +85,30 @@ class _WorkflowListPageState extends State<WorkflowListPage> {
                         )
                       : Center(
                           child: Text(
-                            TranslationConfig.translate("no_workflow", language: SettingsConfig.language,),
+                            TranslationConfig.translate(
+                              "no_workflow",
+                              language: SettingsConfig.language,
+                            ),
                             maxLines: 2,
                             style: const TextStyle(
-                              
                                 color: Colors.black, fontSize: 24),
                           ),
                         ),
                 );
               }
-              return Center(child: Text(TranslationConfig.translate("no_workflow", language: SettingsConfig.language,)));
+              return Center(
+                  child: Text(TranslationConfig.translate(
+                "no_workflow",
+                language: SettingsConfig.language,
+              )));
             },
           ),
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          context.push("/workflow/create");
+        onPressed: () async {
+          await context.push("/workflow/create");
+          setState(() {});
         },
         tooltip: 'Ajouter',
         backgroundColor: Colors.black,

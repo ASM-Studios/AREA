@@ -110,7 +110,9 @@ class _RegisterPageState extends State<RegisterPage> {
                                       password: passwordController.text,
                                       username: userController.text)
                                   .toJson());
+                          print("is registered : ${isRegistered}");
                           if (isRegistered) {
+                            print("je suis register donc je push");
                             context.pushReplacement("/workflow/list");
                           }
                         }
