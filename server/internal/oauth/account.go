@@ -15,7 +15,13 @@ type ServiceInfo struct {
         DisplayName string
 }
 
-func createAccount(c *gin.Context, dbToken *models.Token) (*models.User) {
+func createAccount(c *gin.Context, dbToken *models.Token) (*models.User, error) {
+        var existingUsers []models.User
+        pkg.DB.Table("users").Where("email = ?", dbToken.Email).Find(&existingUsers)
+        if len(existingUsers) > 0 {
+                return nil, errors.New("User already exists")
+        }
+
         var user models.User
         user.Email = dbToken.Email
         user.Username = dbToken.DisplayName
@@ -26,7 +32,7 @@ func createAccount(c *gin.Context, dbToken *models.Token) (*models.User) {
 
         dbToken.UserID = user.ID
         pkg.DB.Create(&dbToken)
-        return &user
+        return &user, nil
 }
 
 func updateAccount(c *gin.Context, dbToken *models.Token) (*models.User) {
@@ -46,7 +52,7 @@ func OAuthRegisterAccount(c *gin.Context, dbToken *models.Token) (*models.User, 
 
         err := pkg.DB.Where("email = ? AND service_id = ?", dbToken.Email, serviceId).First(dbToken).Error
         if errors.Is(err, gorm.ErrRecordNotFound) {
-                return createAccount(c, dbToken), nil
+                return createAccount(c, dbToken)
         } else {
                 return updateAccount(c, dbToken), nil
         }
