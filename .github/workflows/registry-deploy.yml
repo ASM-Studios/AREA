@@ -52,13 +52,6 @@ jobs:
           docker build -t client-web:latest -f ./client_web/Dockerfile.prod ./client_web
           docker tag client-web:latest registry.digitalocean.com/area/client-web
           echo "Client web image built successfully"
-      
-      - name: Build client mobile builder image
-        run: |
-          echo "Building client mobile builder image..."
-          docker build -t client-mobile-builder:latest -f ./client_mobile/Dockerfile.prod ./client_mobile
-          docker tag client-mobile-builder:latest registry.digitalocean.com/area/client-mobile-builder
-          echo "Client mobile builder image built successfully"
 
       - name: Log in to DigitalOcean Container Registry
         run: doctl registry login --expiry-seconds 1200
@@ -78,9 +71,6 @@ jobs:
           
           echo "Pushing client web image..."
           docker push registry.digitalocean.com/area/client-web
-          
-          echo "Pushing client mobile builder image..."
-          docker push registry.digitalocean.com/area/client-mobile-builder
           
           echo "All images pushed successfully"
 
