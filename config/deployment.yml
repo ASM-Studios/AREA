@@ -1,0 +1,288 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: area-config
+data:
+  VITE_PORT: "8081"
+  DB_HOST: "mariadb"
+  DB_PORT: "3306"
+  DB_USER: "root"
+  DB_NAME: "area"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: server
+spec:
+  replicas: 1
+  progressDeadlineSeconds: 600
+  selector:
+    matchLabels:
+      app: server
+  template:
+    metadata:
+      labels:
+        app: server
+    spec:
+      containers:
+      - name: server
+        image: registry.digitalocean.com/area/server:latest
+        ports:
+        - containerPort: 8080
+        envFrom:
+        - configMapRef:
+            name: area-config
+        - secretRef:
+            name: area-secrets
+        volumeMounts:
+        - name: ssl-certs
+          mountPath: /app/ssl
+          readOnly: true
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          successThreshold: 1
+          failureThreshold: 3
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 60
+          periodSeconds: 15
+          timeoutSeconds: 5
+          failureThreshold: 3
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+      volumes:
+      - name: ssl-certs
+        secret:
+          secretName: ssl-certs
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: server-action-consumer
+spec:
+  replicas: 1
+  progressDeadlineSeconds: 600
+  selector:
+    matchLabels:
+      app: server-action-consumer
+  template:
+    metadata:
+      labels: 
+        app: server-action-consumer
+    spec:
+      containers:
+      - name: server-action-consumer
+        image: registry.digitalocean.com/area/server-action-consumer:latest
+        envFrom:
+        - configMapRef:
+            name: area-config
+        - secretRef:
+            name: area-secrets
+        volumeMounts:
+        - name: ssl-certs
+          mountPath: /app/ssl
+          readOnly: true
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+      volumes:
+      - name: ssl-certs
+        secret:
+          secretName: ssl-certs
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: server-reaction-consumer
+spec:
+  replicas: 1
+  progressDeadlineSeconds: 600
+  selector:
+    matchLabels:
+      app: server-reaction-consumer
+  template:
+    metadata:
+      labels:
+        app: server-reaction-consumer
+    spec:
+      containers:
+      - name: server-reaction-consumer
+        image: registry.digitalocean.com/area/server-reaction-consumer:latest
+        envFrom:
+        - configMapRef:
+            name: area-config
+        - secretRef:
+            name: area-secrets
+        volumeMounts:
+        - name: ssl-certs
+          mountPath: /app/ssl
+          readOnly: true
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+      volumes:
+      - name: ssl-certs
+        secret:
+          secretName: ssl-certs
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: client-mobile-builder
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+spec:
+  ttlSecondsAfterFinished: 100
+  template:
+    metadata:
+      labels:
+        app: client-mobile-builder
+    spec:
+      containers:
+      - name: client-mobile-builder
+        image: registry.digitalocean.com/area/client-mobile-builder:latest
+        volumeMounts:
+        - name: mobile-builds
+          mountPath: /app/build/app/outputs/flutter-apk
+        envFrom:
+        - configMapRef:
+            name: area-config
+        - secretRef:
+            name: area-secrets
+        resources:
+          requests:
+            memory: "2Gi"
+            cpu: "1"
+          limits:
+            memory: "4Gi"
+            cpu: "2"
+      volumes:
+      - name: mobile-builds
+        persistentVolumeClaim:
+          claimName: mobile-builds-pvc
+      restartPolicy: Never
+  backoffLimit: 3
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: client-web
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: client-web
+  template:
+    metadata:
+      labels:
+        app: client-web
+    spec:
+      containers:
+      - name: client-web
+        image: registry.digitalocean.com/area/client-web:latest
+        ports:
+        - containerPort: 80
+        - containerPort: 443
+        volumeMounts:
+        - name: mobile-builds
+          mountPath: /usr/share/nginx/html/public
+          readOnly: true
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "100m"
+          limits:
+            memory: "128Mi"
+            cpu: "200m"
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 443
+            scheme: HTTPS
+          initialDelaySeconds: 10
+          periodSeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 443
+            scheme: HTTPS
+          initialDelaySeconds: 5
+          periodSeconds: 10
+      volumes:
+      - name: mobile-builds
+        persistentVolumeClaim:
+          claimName: mobile-builds-pvc
+          readOnly: true
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: server
+spec:
+  selector:
+    app: server
+  ports:
+  - port: 8080
+    targetPort: 8080
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: client-web
+spec:
+  selector:
+    app: client-web
+  ports:
+  - name: http
+    port: 80
+    targetPort: 80
+  - name: https
+    port: 443
+    targetPort: 443
+  type: LoadBalancer
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: client-mobile
+spec:
+  selector:
+    app: client-mobile
+  ports:
+  - port: 8082
+    targetPort: 8082
+  type: ClusterIP
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mobile-builds-pvc
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: do-block-storage 
