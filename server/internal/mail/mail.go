@@ -2,7 +2,6 @@ package mail
 
 import (
 	"AREA/internal/utils"
-	"crypto/tls"
 	"errors"
 	"fmt"
 	"strconv"
@@ -34,7 +33,6 @@ func InitSMTPClient() error {
         if SMTPClient.Dialer == nil {
                 return errors.New("Failed to create SMTP dialer")
         }
-        SMTPClient.Dialer.TLSConfig = &tls.Config{InsecureSkipVerify: true}
         return nil
 }
 
