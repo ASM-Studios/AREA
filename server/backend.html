@@ -1,0 +1,299 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Backend Structure &mdash; AREA  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="RabbitMQ: Example Consumer" href="consumer.html" />
+    <link rel="prev" title="Project Documentation for Devs" href="developer.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            AREA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contribution Guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../project/index.html">AREA Project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../client_web/index.html">AREA Client Web</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../client_mobile/index.html">AREA Client Mobile</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">AREA Server</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="index.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#key-features">Key Features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#getting-started">Getting Started</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#developer-guide">Developer Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#deployment">Deployment</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html#contents">Contents</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="developer.html">Project Documentation for Devs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="deployment.html">Deployment Documentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="deployment.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l3"><a class="reference internal" href="deployment.html#deployment-scripts">Deployment Scripts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="deployment.html#environment-variables">Environment Variables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="deployment.html#docker-compose-services">Docker Compose Services</a></li>
+<li class="toctree-l3"><a class="reference internal" href="deployment.html#troubleshooting">Troubleshooting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="consumer.html">RabbitMQ: Example Consumer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="action_reaction.html">Action / Reaction Consumers</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Backend Structure</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#router">Router</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#controllers">Controllers</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#middleware">Middleware</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#models">Models</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="a2f.html">A2F: Implementation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="testing.html">Go Testing with Testify</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">AREA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">AREA Server</a></li>
+          <li class="breadcrumb-item"><a href="developer.html">Project Documentation for Devs</a></li>
+      <li class="breadcrumb-item active">Backend Structure</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/server/backend.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="backend-structure">
+<h1>Backend Structure<a class="headerlink" href="#backend-structure" title="Link to this heading"></a></h1>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
+<p>The backend is structured to follow the principles of separation of concerns. Each layer is responsible for a specific task, making the code more modular and easier to maintain.</p>
+</section>
+<section id="router">
+<h2>Router<a class="headerlink" href="#router" title="Link to this heading"></a></h2>
+<p>The router is set up using the <cite>gin-gonic</cite> framework. It includes routes for public and protected endpoints. Middleware (such as authentication) is applied at this level.</p>
+<p>Example:</p>
+<div class="highlight-go notranslate"><div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nx">routes</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="s">&quot;controllers&quot;</span>
+<span class="w">    </span><span class="s">&quot;github.com/gin-gonic/gin&quot;</span>
+<span class="p">)</span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">SetupRouter</span><span class="p">()</span><span class="w"> </span><span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Engine</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">router</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">gin</span><span class="p">.</span><span class="nx">Default</span><span class="p">()</span>
+
+<span class="w">    </span><span class="c1">// Public routes</span>
+<span class="w">    </span><span class="nx">public</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">router</span><span class="p">.</span><span class="nx">Group</span><span class="p">(</span><span class="s">&quot;/api&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">public</span><span class="p">.</span><span class="nx">POST</span><span class="p">(</span><span class="s">&quot;/login&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">controllers</span><span class="p">.</span><span class="nx">Login</span><span class="p">)</span>
+<span class="w">        </span><span class="nx">public</span><span class="p">.</span><span class="nx">POST</span><span class="p">(</span><span class="s">&quot;/register&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">controllers</span><span class="p">.</span><span class="nx">Register</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="c1">// Protected routes (requires authentication)</span>
+<span class="w">    </span><span class="nx">protected</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">router</span><span class="p">.</span><span class="nx">Group</span><span class="p">(</span><span class="s">&quot;/api&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="nx">protected</span><span class="p">.</span><span class="nx">Use</span><span class="p">(</span><span class="nx">AuthMiddleware</span><span class="p">())</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">protected</span><span class="p">.</span><span class="nx">GET</span><span class="p">(</span><span class="s">&quot;/profile&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">controllers</span><span class="p">.</span><span class="nx">GetProfile</span><span class="p">)</span>
+<span class="w">        </span><span class="nx">protected</span><span class="p">.</span><span class="nx">POST</span><span class="p">(</span><span class="s">&quot;/update-profile&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">controllers</span><span class="p">.</span><span class="nx">UpdateProfile</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">router</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<section id="route-groups">
+<h3>Route Groups<a class="headerlink" href="#route-groups" title="Link to this heading"></a></h3>
+<p>The <cite>gin-gonic</cite> framework allows organizing routes into groups. This improves readability and makes it easier to apply middleware to specific groups of routes.</p>
+<ol class="arabic simple">
+<li><p><strong>Public Routes</strong>: Do not require authentication. These routes are accessible to all users.</p></li>
+<li><p><strong>Protected Routes</strong>: Require the user to be authenticated. Middleware is used to enforce this requirement.</p></li>
+</ol>
+</section>
+<section id="middleware-in-the-router">
+<h3>Middleware in the Router<a class="headerlink" href="#middleware-in-the-router" title="Link to this heading"></a></h3>
+<p>Middleware can be applied to route groups or individual routes. For example:</p>
+<div class="highlight-go notranslate"><div class="highlight"><pre><span></span><span class="nx">protected</span><span class="p">.</span><span class="nx">Use</span><span class="p">(</span><span class="nx">AuthMiddleware</span><span class="p">())</span>
+</pre></div>
+</div>
+<p>This ensures that all routes under the <cite>protected</cite> group require a valid token for access.</p>
+</section>
+<section id="router-initialization">
+<h3>Router Initialization<a class="headerlink" href="#router-initialization" title="Link to this heading"></a></h3>
+<p>The router is initialized and run in the <cite>main.go</cite> file:</p>
+<div class="highlight-go notranslate"><div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nx">main</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="s">&quot;routes&quot;</span>
+<span class="p">)</span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">router</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">routes</span><span class="p">.</span><span class="nx">SetupRouter</span><span class="p">()</span>
+<span class="w">    </span><span class="nx">router</span><span class="p">.</span><span class="nx">Run</span><span class="p">(</span><span class="s">&quot;:8080&quot;</span><span class="p">)</span><span class="w"> </span><span class="c1">// Start the server on port 8080</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="controllers">
+<h2>Controllers<a class="headerlink" href="#controllers" title="Link to this heading"></a></h2>
+<p>Controllers handle incoming HTTP requests and return appropriate responses. They typically:</p>
+<ul class="simple">
+<li><p>Parse request data (e.g., JSON payloads).</p></li>
+<li><p>Call services or business logic layers to perform operations.</p></li>
+<li><p>Return HTTP responses to the client.</p></li>
+</ul>
+<p>Example:</p>
+<div class="highlight-go notranslate"><div class="highlight"><pre><span></span><span class="kd">func</span><span class="w"> </span><span class="nx">Login</span><span class="p">(</span><span class="nx">c</span><span class="w"> </span><span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">email</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">c</span><span class="p">.</span><span class="nx">PostForm</span><span class="p">(</span><span class="s">&quot;email&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="nx">password</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">c</span><span class="p">.</span><span class="nx">PostForm</span><span class="p">(</span><span class="s">&quot;password&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="nx">token</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">authService</span><span class="p">.</span><span class="nx">Login</span><span class="p">(</span><span class="nx">email</span><span class="p">,</span><span class="w"> </span><span class="nx">password</span><span class="p">)</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">c</span><span class="p">.</span><span class="nx">JSON</span><span class="p">(</span><span class="nx">http</span><span class="p">.</span><span class="nx">StatusUnauthorized</span><span class="p">,</span><span class="w"> </span><span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span><span class="s">&quot;error&quot;</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Invalid credentials&quot;</span><span class="p">})</span>
+<span class="w">        </span><span class="k">return</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="nx">c</span><span class="p">.</span><span class="nx">JSON</span><span class="p">(</span><span class="nx">http</span><span class="p">.</span><span class="nx">StatusOK</span><span class="p">,</span><span class="w"> </span><span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span><span class="s">&quot;token&quot;</span><span class="p">:</span><span class="w"> </span><span class="nx">token</span><span class="p">})</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="middleware">
+<h2>Middleware<a class="headerlink" href="#middleware" title="Link to this heading"></a></h2>
+<p>Middleware is used to handle cross-cutting concerns like authentication, logging, or error handling. Middleware functions are executed before or after controllers handle requests.</p>
+<p>Example Authentication Middleware:</p>
+<div class="highlight-go notranslate"><div class="highlight"><pre><span></span><span class="kd">func</span><span class="w"> </span><span class="nx">AuthMiddleware</span><span class="p">()</span><span class="w"> </span><span class="nx">gin</span><span class="p">.</span><span class="nx">HandlerFunc</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="nx">c</span><span class="w"> </span><span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">token</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">c</span><span class="p">.</span><span class="nx">GetHeader</span><span class="p">(</span><span class="s">&quot;Authorization&quot;</span><span class="p">)</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="nx">token</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="p">!</span><span class="nx">authService</span><span class="p">.</span><span class="nx">IsValidToken</span><span class="p">(</span><span class="nx">token</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="nx">c</span><span class="p">.</span><span class="nx">AbortWithStatusJSON</span><span class="p">(</span><span class="nx">http</span><span class="p">.</span><span class="nx">StatusUnauthorized</span><span class="p">,</span><span class="w"> </span><span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span><span class="s">&quot;error&quot;</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Unauthorized&quot;</span><span class="p">})</span>
+<span class="w">            </span><span class="k">return</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="nx">c</span><span class="p">.</span><span class="nx">Next</span><span class="p">()</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="models">
+<h2>Models<a class="headerlink" href="#models" title="Link to this heading"></a></h2>
+<p>Models represent the structure of data stored in the MariaDB database. They define the schema for each table and map the database structure to Go objects. Models are managed using the <cite>gorm</cite> library.</p>
+<p>Example User Model:</p>
+<div class="highlight-go notranslate"><div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nx">models</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="s">&quot;gorm.io/gorm&quot;</span>
+
+<span class="kd">type</span><span class="w"> </span><span class="nx">User</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">ID</span><span class="w">       </span><span class="kt">uint</span><span class="w">   </span><span class="s">`gorm:&quot;primaryKey&quot;`</span>
+<span class="w">    </span><span class="nx">Email</span><span class="w">    </span><span class="kt">string</span><span class="w"> </span><span class="s">`gorm:&quot;unique;not null&quot;`</span>
+<span class="w">    </span><span class="nx">Password</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="s">`gorm:&quot;not null&quot;`</span>
+<span class="w">    </span><span class="nx">Token</span><span class="w">    </span><span class="kt">string</span>
+<span class="p">}</span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">Migrate</span><span class="p">(</span><span class="nx">db</span><span class="w"> </span><span class="o">*</span><span class="nx">gorm</span><span class="p">.</span><span class="nx">DB</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">db</span><span class="p">.</span><span class="nx">AutoMigrate</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">User</span><span class="p">{})</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Explanation:</p>
+<ul class="simple">
+<li><p><strong>ID</strong>: The primary key for the <cite>users</cite> table.</p></li>
+<li><p><strong>Email</strong>: A unique and non-nullable field for storing user emails.</p></li>
+<li><p><strong>Password</strong>: A non-nullable field for storing hashed passwords.</p></li>
+<li><p><strong>Token</strong>: Used for authentication and session management.</p></li>
+</ul>
+<p>To migrate models to the database, run the migration function during initialization:</p>
+<div class="highlight-go notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="s">&quot;gorm.io/driver/mysql&quot;</span>
+<span class="w">    </span><span class="s">&quot;gorm.io/gorm&quot;</span>
+<span class="w">    </span><span class="s">&quot;models&quot;</span>
+<span class="p">)</span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">InitDB</span><span class="p">()</span><span class="w"> </span><span class="o">*</span><span class="nx">gorm</span><span class="p">.</span><span class="nx">DB</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">dsn</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="s">&quot;user:password@tcp(127.0.0.1:3306)/dbname?charset=utf8mb4&amp;parseTime=True&amp;loc=Local&quot;</span>
+<span class="w">    </span><span class="nx">db</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">gorm</span><span class="p">.</span><span class="nx">Open</span><span class="p">(</span><span class="nx">mysql</span><span class="p">.</span><span class="nx">Open</span><span class="p">(</span><span class="nx">dsn</span><span class="p">),</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">gorm</span><span class="p">.</span><span class="nx">Config</span><span class="p">{})</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nb">panic</span><span class="p">(</span><span class="s">&quot;Failed to connect to the database!&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="nx">models</span><span class="p">.</span><span class="nx">Migrate</span><span class="p">(</span><span class="nx">db</span><span class="p">)</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">db</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="developer.html" class="btn btn-neutral float-left" title="Project Documentation for Devs" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="consumer.html" class="btn btn-neutral float-right" title="RabbitMQ: Example Consumer" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Maël RABOT, Mathieu COULET, Mathieu BOREL, Charles MADJERI, Samuel BRUSCHET.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

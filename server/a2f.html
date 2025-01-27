@@ -1,0 +1,211 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>A2F: Implementation &mdash; AREA  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Go Testing with Testify" href="testing.html" />
+    <link rel="prev" title="Action / Reaction Consumers" href="action_reaction.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            AREA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contribution Guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../project/index.html">AREA Project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../client_web/index.html">AREA Client Web</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../client_mobile/index.html">AREA Client Mobile</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">AREA Server</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="index.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#key-features">Key Features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#getting-started">Getting Started</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#developer-guide">Developer Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#deployment">Deployment</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html#contents">Contents</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="developer.html">Project Documentation for Devs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="deployment.html">Deployment Documentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="deployment.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l3"><a class="reference internal" href="deployment.html#deployment-scripts">Deployment Scripts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="deployment.html#environment-variables">Environment Variables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="deployment.html#docker-compose-services">Docker Compose Services</a></li>
+<li class="toctree-l3"><a class="reference internal" href="deployment.html#troubleshooting">Troubleshooting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="consumer.html">RabbitMQ: Example Consumer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="action_reaction.html">Action / Reaction Consumers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="backend.html">Backend Structure</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">A2F: Implementation</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#implement-a2f-in-the-middleware">Implement A2F in the middleware</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#available-method">Available method</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#totp-code">TOTP code</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#email-code">Email code</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#select-a2f-method">Select A2F method</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#login-with-a2f">Login with A2F</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="testing.html">Go Testing with Testify</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">AREA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">AREA Server</a></li>
+      <li class="breadcrumb-item active">A2F: Implementation</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/server/a2f.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="a2f-implementation">
+<h1>A2F: Implementation<a class="headerlink" href="#a2f-implementation" title="Link to this heading"></a></h1>
+<section id="implement-a2f-in-the-middleware">
+<h2>Implement A2F in the middleware<a class="headerlink" href="#implement-a2f-in-the-middleware" title="Link to this heading"></a></h2>
+<p>A2F has beeb implemented in middleware using a level field in JWT.
+Level has two status: mid and full.</p>
+<p>Full gives you access to all routes while mid only gives you access to /login</p>
+<p>Depending on your a2f level, /login will give you a full or a mid level token.</p>
+</section>
+<section id="available-method">
+<h2>Available method<a class="headerlink" href="#available-method" title="Link to this heading"></a></h2>
+<p>Only two methods are available:
+- TOTP code
+- Email code</p>
+<p>To enable a method, you must generate and verify a code.</p>
+</section>
+<section id="totp-code">
+<h2>TOTP code<a class="headerlink" href="#totp-code" title="Link to this heading"></a></h2>
+<p>Use /totp/generate to generate a totp code</p>
+<p>The returned payload contains the following fields:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;url&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;otpauth://totp/AREA:email?secret=generated-secret&amp;issuer=AREA&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;secret&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;generated-secret&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>To verify the code, you must use /totp/validate</p>
+<p>When validated, totp is enabled by default for the user</p>
+<p>The payload must contain the following fields:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;code&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;code&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="email-code">
+<h2>Email code<a class="headerlink" href="#email-code" title="Link to this heading"></a></h2>
+<p>Use /email/generate to generate an email code</p>
+<p>An email will be sent to the user with a random code.</p>
+<p>To verify the code, you must use /email/validate with the following payload:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;code&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;code&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="select-a2f-method">
+<h2>Select A2F method<a class="headerlink" href="#select-a2f-method" title="Link to this heading"></a></h2>
+<p>To select an A2F method, you must use the route /2fa/method</p>
+<p>The payload must contain the following fields:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;method&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;method&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Where method is either totp, email or none</p>
+</section>
+<section id="login-with-a2f">
+<h2>Login with A2F<a class="headerlink" href="#login-with-a2f" title="Link to this heading"></a></h2>
+<p>To get full access token when using A2F, you must use the route /login/a2f</p>
+<p>The payload must contain the following fields:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;code&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;code&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Where code is the code generated by the selected method</p>
+<p>You must use the new token to access all routes</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="action_reaction.html" class="btn btn-neutral float-left" title="Action / Reaction Consumers" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="testing.html" class="btn btn-neutral float-right" title="Go Testing with Testify" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Maël RABOT, Mathieu COULET, Mathieu BOREL, Charles MADJERI, Samuel BRUSCHET.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

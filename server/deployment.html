@@ -1,0 +1,245 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Deployment Documentation &mdash; AREA  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Action / Reaction Consumers" href="action_reaction.html" />
+    <link rel="prev" title="RabbitMQ: Example Consumer" href="consumer.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            AREA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contribution Guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../project/index.html">AREA Project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../client_web/index.html">AREA Client Web</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../client_mobile/index.html">AREA Client Mobile</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">AREA Server</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="index.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#key-features">Key Features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#getting-started">Getting Started</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#developer-guide">Developer Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#deployment">Deployment</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html#contents">Contents</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="developer.html">Project Documentation for Devs</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Deployment Documentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#deployment-scripts">Deployment Scripts</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#start-the-server">Start the Server</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#stop-the-server">Stop the Server</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rebuilding-the-server">Rebuilding the Server</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#environment-variables">Environment Variables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#docker-compose-services">Docker Compose Services</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#troubleshooting">Troubleshooting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="consumer.html">RabbitMQ: Example Consumer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="action_reaction.html">Action / Reaction Consumers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="backend.html">Backend Structure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="a2f.html">A2F: Implementation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="testing.html">Go Testing with Testify</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">AREA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">AREA Server</a></li>
+      <li class="breadcrumb-item active">Deployment Documentation</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/server/deployment.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="deployment-documentation">
+<h1>Deployment Documentation<a class="headerlink" href="#deployment-documentation" title="Link to this heading"></a></h1>
+<p>This documentation outlines the steps for deploying and managing the project using the provided shell scripts. The deployment utilizes Docker Compose to run RabbitMQ, MariaDB, and the server application.</p>
+</section>
+<section id="prerequisites">
+<h1>Prerequisites<a class="headerlink" href="#prerequisites" title="Link to this heading"></a></h1>
+<p>Before deploying the project, ensure the following are installed on your system:</p>
+<ul class="simple">
+<li><p><cite>Docker</cite></p></li>
+<li><p><cite>Docker Compose</cite></p></li>
+<li><p><cite>.env</cite> file with the required environment variables (such as <cite>DB_USER</cite>, <cite>DB_PASSWORD</cite>, <cite>DB_NAME</cite>, etc.)</p></li>
+</ul>
+</section>
+<section id="deployment-scripts">
+<h1>Deployment Scripts<a class="headerlink" href="#deployment-scripts" title="Link to this heading"></a></h1>
+<section id="start-the-server">
+<h2>Start the Server<a class="headerlink" href="#start-the-server" title="Link to this heading"></a></h2>
+<p>To deploy and start all containers (RabbitMQ, MariaDB, and the server), use the <cite>./start_server.sh</cite> script.</p>
+<p>This script does the following:</p>
+<ol class="arabic simple">
+<li><p>Loads the <cite>.env</cite> file.</p></li>
+<li><p>Starts the Docker Compose setup defined in <cite>build/docker-compose.yml</cite>.</p></li>
+</ol>
+<p><strong>Command:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./start_server.sh
+</pre></div>
+</div>
+<p><strong>What Happens:</strong></p>
+<ul class="simple">
+<li><p>The RabbitMQ container starts on the configured ports.</p></li>
+<li><p>The MariaDB container starts with the credentials and database specified in <cite>.env</cite>.</p></li>
+<li><p>The server application is built (if necessary) and started.</p></li>
+</ul>
+</section>
+<section id="stop-the-server">
+<h2>Stop the Server<a class="headerlink" href="#stop-the-server" title="Link to this heading"></a></h2>
+<p>To stop and remove all running containers, use the <cite>./stop_server.sh</cite> script.</p>
+<p>This script does the following:</p>
+<ol class="arabic simple">
+<li><p>Stops all services defined in the Docker Compose file.</p></li>
+<li><p>Optionally cleans up unused containers.</p></li>
+</ol>
+<p><strong>Command:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./stop_server.sh
+</pre></div>
+</div>
+<p><strong>What Happens:</strong></p>
+<ul class="simple">
+<li><p>RabbitMQ, MariaDB, and the server containers are stopped.</p></li>
+<li><p>Docker networks and volumes are preserved unless explicitly removed.</p></li>
+</ul>
+</section>
+<section id="rebuilding-the-server">
+<h2>Rebuilding the Server<a class="headerlink" href="#rebuilding-the-server" title="Link to this heading"></a></h2>
+<p>If you need to rebuild the server application, you can do so by cleaning up and restarting the Docker Compose setup.</p>
+<ol class="arabic simple">
+<li><p>Run the following command to remove existing containers and their build cache:</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker-compose<span class="w"> </span>-f<span class="w"> </span>build/docker-compose.yml<span class="w"> </span>down<span class="w"> </span>--rmi<span class="w"> </span>all<span class="w"> </span>--volumes
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p>Restart the server:</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./start_server.sh
+</pre></div>
+</div>
+</section>
+</section>
+<section id="environment-variables">
+<h1>Environment Variables<a class="headerlink" href="#environment-variables" title="Link to this heading"></a></h1>
+<p>The <cite>.env</cite> file is essential for the deployment. It should define all required environment variables, such as:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>DB_HOST=
+DB_PORT=
+DB_NAME=
+DB_USER=
+DB_PASSWORD=
+SECRET_KEY=
+</pre></div>
+</div>
+<p>Ensure the <cite>.env</cite> file is placed in the root directory of the project.</p>
+</section>
+<section id="docker-compose-services">
+<h1>Docker Compose Services<a class="headerlink" href="#docker-compose-services" title="Link to this heading"></a></h1>
+<p>The <cite>build/docker-compose.yml</cite> file defines the following services:</p>
+<ol class="arabic simple">
+<li><p><strong>RabbitMQ</strong>: Message broker for managing asynchronous communication.
+- Management console exposed on <cite>http://localhost:15672</cite>.
+- Default ports: <cite>15672</cite> (management) and <cite>5672</cite> (message broker).</p></li>
+<li><p><strong>MariaDB</strong>: Database service for persistent storage.
+- Default port: <cite>3306</cite>.
+- Credentials and database name configured in <cite>.env</cite>.</p></li>
+<li><p><strong>Server</strong>: The Go-based backend application.
+- Default port: <cite>8080</cite>.</p></li>
+</ol>
+</section>
+<section id="troubleshooting">
+<h1>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Link to this heading"></a></h1>
+<ul>
+<li><p><strong>Port Conflicts:</strong> Ensure that the ports specified in the <cite>build/docker-compose.yml</cite> file are not already in use.
+Use the following command to list all running containers and their ports:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>ps
+</pre></div>
+</div>
+</li>
+</ul>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="consumer.html" class="btn btn-neutral float-left" title="RabbitMQ: Example Consumer" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="action_reaction.html" class="btn btn-neutral float-right" title="Action / Reaction Consumers" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Maël RABOT, Mathieu COULET, Mathieu BOREL, Charles MADJERI, Samuel BRUSCHET.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

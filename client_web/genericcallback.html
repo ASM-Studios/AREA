@@ -1,0 +1,192 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GenericCallback Component &mdash; AREA  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Key Features" href="features.html" />
+    <link rel="prev" title="GenericOAuth Component" href="genericoauth.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            AREA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contribution Guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../project/index.html">AREA Project</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">AREA Client Web</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="index.html#overview">Overview</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html#contents">Contents</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="overview.html">AREA Client Web Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation.html">Installation Guide</a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation.html#docker">Docker</a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation.html#standalone">Standalone</a></li>
+<li class="toctree-l3"><a class="reference internal" href="context.html">Context Management Documentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="workflowCreation.html">Create Workflow</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tests.html">Tests</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="development.html">Development Guide</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="development.html#project-structure">Project Structure</a></li>
+<li class="toctree-l4"><a class="reference internal" href="development.html#key-components">Key Components</a></li>
+<li class="toctree-l4"><a class="reference internal" href="development.html#oauth-authorization-code-flow">OAuth Authorization Code Flow</a></li>
+<li class="toctree-l4"><a class="reference internal" href="development.html#running-the-application">Running the Application</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="development.html#building-for-production">Building for Production</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="features.html">Key Features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="accessibility.html">Accessibility Documentation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../client_mobile/index.html">AREA Client Mobile</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../server/index.html">AREA Server</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">AREA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">AREA Client Web</a></li>
+          <li class="breadcrumb-item"><a href="development.html">Development Guide</a></li>
+      <li class="breadcrumb-item active">GenericCallback Component</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/client_web/genericcallback.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="genericcallback-component">
+<h1>GenericCallback Component<a class="headerlink" href="#genericcallback-component" title="Link to this heading"></a></h1>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
+<p>The <cite>GenericCallback</cite> component is responsible for handling the OAuth callback process. It manages the exchange of authorization codes for access tokens, ensuring secure authentication with third-party services.</p>
+</section>
+<section id="component-structure">
+<h2>Component Structure<a class="headerlink" href="#component-structure" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><strong>State Management</strong>:
+- <cite>error</cite>: Stores any error messages encountered during the callback process.
+- <cite>service</cite>: Identifies the OAuth service being used.
+- <cite>hasHandledCallback</cite>: A ref to ensure the callback is only processed once.</p></li>
+<li><p><strong>Key Functions</strong>:
+- <cite>getServiceFromLocation</cite>: Determines the service based on the current URL.
+- <cite>handleCallback</cite>: Processes the OAuth callback, exchanges the authorization code for an access token, and handles any errors.</p></li>
+<li><p><strong>Effects</strong>:
+- <cite>useEffect</cite>: Initializes the service and handles the callback when the component mounts.</p></li>
+</ul>
+</section>
+<section id="oauth-process">
+<h2>OAuth Process<a class="headerlink" href="#oauth-process" title="Link to this heading"></a></h2>
+<p>The <cite>GenericCallback</cite> component plays a crucial role in the OAuth 2.0 Authorization Code Flow:</p>
+<ol class="arabic simple">
+<li><p><strong>Service Identification</strong>: Determines which OAuth service is being used based on the URL.</p></li>
+<li><p><strong>State Verification</strong>: Ensures the state parameter matches the stored value to prevent CSRF attacks.</p></li>
+<li><p><strong>Token Exchange</strong>: Sends a request to the OAuth provider’s token endpoint to exchange the authorization code for an access token.</p></li>
+<li><p><strong>Error Handling</strong>: Manages errors during the callback process and provides user feedback.</p></li>
+</ol>
+</section>
+<section id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Link to this heading"></a></h2>
+<p>The <cite>GenericCallback</cite> component is used in the routing configuration to handle OAuth callbacks. It ensures that the application can securely authenticate users with various OAuth providers.</p>
+<p>Example:</p>
+<div class="highlight-jsx notranslate"><div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">Route</span><span class="w"> </span><span class="na">path</span><span class="o">=</span><span class="s">&quot;/auth/:service/callback&quot;</span><span class="w"> </span><span class="na">element</span><span class="o">=</span><span class="p">{&lt;</span><span class="nt">GenericCallback</span><span class="w"> </span><span class="p">/&gt;}</span><span class="w"> </span><span class="p">/&gt;</span>
+</pre></div>
+</div>
+</section>
+<section id="error-handling">
+<h2>Error Handling<a class="headerlink" href="#error-handling" title="Link to this heading"></a></h2>
+<p>The component provides user feedback in case of errors during the OAuth process. It displays error messages and redirects the user to the appropriate page after a short delay.</p>
+<p>Example Error Handling:</p>
+<div class="highlight-jsx notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="nx">error</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="p">&lt;&gt;</span>
+<span class="w">        </span><span class="p">&lt;</span><span class="nt">h3</span><span class="w"> </span><span class="na">style</span><span class="o">=</span><span class="p">{{</span><span class="w"> </span><span class="nx">color</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;#ff4d4f&#39;</span><span class="w"> </span><span class="p">}}&gt;</span>
+<span class="w">            </span><span class="p">{</span><span class="nx">error</span><span class="p">}</span>
+<span class="w">        </span><span class="p">&lt;/</span><span class="nt">h3</span><span class="p">&gt;</span>
+<span class="w">        </span><span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>
+<span class="w">            </span><span class="p">{</span><span class="nx">translations</span><span class="o">?</span><span class="p">.</span><span class="nx">callback</span><span class="p">.</span><span class="nx">redirect</span><span class="p">.</span><span class="nx">message</span><span class="p">}</span>
+<span class="w">        </span><span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+<span class="w">    </span><span class="p">&lt;/&gt;</span>
+<span class="p">)</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="p">&lt;</span><span class="nt">Spin</span><span class="w"> </span><span class="na">size</span><span class="o">=</span><span class="s">&quot;large&quot;</span><span class="w"> </span><span class="p">/&gt;</span>
+<span class="p">)}</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="genericoauth.html" class="btn btn-neutral float-left" title="GenericOAuth Component" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="features.html" class="btn btn-neutral float-right" title="Key Features" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Maël RABOT, Mathieu COULET, Mathieu BOREL, Charles MADJERI, Samuel BRUSCHET.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

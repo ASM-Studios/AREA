@@ -1,0 +1,197 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GenericOAuth Component &mdash; AREA  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="GenericCallback Component" href="genericcallback.html" />
+    <link rel="prev" title="App Component" href="app.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            AREA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contribution Guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../project/index.html">AREA Project</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">AREA Client Web</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="index.html#overview">Overview</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html#contents">Contents</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="overview.html">AREA Client Web Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation.html">Installation Guide</a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation.html#docker">Docker</a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation.html#standalone">Standalone</a></li>
+<li class="toctree-l3"><a class="reference internal" href="context.html">Context Management Documentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="workflowCreation.html">Create Workflow</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tests.html">Tests</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="development.html">Development Guide</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="development.html#project-structure">Project Structure</a></li>
+<li class="toctree-l4"><a class="reference internal" href="development.html#key-components">Key Components</a></li>
+<li class="toctree-l4"><a class="reference internal" href="development.html#oauth-authorization-code-flow">OAuth Authorization Code Flow</a></li>
+<li class="toctree-l4"><a class="reference internal" href="development.html#running-the-application">Running the Application</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="development.html#building-for-production">Building for Production</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="features.html">Key Features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="accessibility.html">Accessibility Documentation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../client_mobile/index.html">AREA Client Mobile</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../server/index.html">AREA Server</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">AREA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">AREA Client Web</a></li>
+          <li class="breadcrumb-item"><a href="development.html">Development Guide</a></li>
+      <li class="breadcrumb-item active">GenericOAuth Component</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/client_web/genericoauth.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="genericoauth-component">
+<h1>GenericOAuth Component<a class="headerlink" href="#genericoauth-component" title="Link to this heading"></a></h1>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
+<p>The <cite>GenericOAuth</cite> component is a reusable button component designed to handle OAuth authentication for various services. It provides a consistent interface for initiating OAuth login flows.</p>
+</section>
+<section id="component-structure">
+<h2>Component Structure<a class="headerlink" href="#component-structure" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><strong>Props</strong>: The component accepts several props to customize its behavior:
+- <cite>handleLogin</cite>: A function to be called when the button is clicked, initiating the OAuth flow.
+- <cite>buttonText</cite>: The text to display on the button.
+- <cite>disabled</cite>: A boolean indicating whether the button should be disabled.
+- <cite>service</cite>: The name of the OAuth service (e.g., Google, GitHub).
+- <cite>iconSrc</cite>: The source URL for the service’s icon.</p></li>
+<li><p><strong>Styling</strong>: The button is styled using Tailwind CSS classes to ensure a consistent look and feel across different services.</p></li>
+</ul>
+</section>
+<section id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Link to this heading"></a></h2>
+<p>The <cite>GenericOAuth</cite> component is used within the <cite>OAuthButtons</cite> component to render a list of OAuth buttons for different services. Each button is configured with a specific <cite>handleLogin</cite> function and icon.</p>
+<p>Example:</p>
+<div class="highlight-jsx notranslate"><div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">GenericOAuthButton</span>
+<span class="w">    </span><span class="na">handleLogin</span><span class="o">=</span><span class="p">{</span><span class="nx">handleGoogleLogin</span><span class="p">}</span>
+<span class="w">    </span><span class="na">buttonText</span><span class="o">=</span><span class="s">&quot;Sign in with Google&quot;</span>
+<span class="w">    </span><span class="na">service</span><span class="o">=</span><span class="s">&quot;google&quot;</span>
+<span class="w">    </span><span class="na">iconSrc</span><span class="o">=</span><span class="s">&quot;/google-icon.png&quot;</span>
+<span class="p">/&gt;</span>
+</pre></div>
+</div>
+</section>
+<section id="interaction-with-config-ts">
+<h2>Interaction with <cite>config.ts</cite><a class="headerlink" href="#interaction-with-config-ts" title="Link to this heading"></a></h2>
+<p>The <cite>config.ts</cite> file contains the configuration for each OAuth service, including the <cite>handleLogin</cite> functions. These functions are responsible for constructing the OAuth authorization URL and redirecting the user to the service’s login page.</p>
+<p>Key Functions in <cite>config.ts</cite>:</p>
+<ul class="simple">
+<li><p><strong>generateCodeChallenge</strong>: Generates a code challenge for PKCE (Proof Key for Code Exchange) to enhance security during the OAuth flow.</p></li>
+<li><p><strong>handleGoogleLogin</strong>: Constructs the Google OAuth URL and redirects the user.</p></li>
+<li><p><strong>handleGithubLogin</strong>: Constructs the GitHub OAuth URL and redirects the user.</p></li>
+</ul>
+<p>Each service’s configuration includes:</p>
+<ul class="simple">
+<li><p><cite>handler</cite>: The function to initiate the OAuth flow.</p></li>
+<li><p><cite>disabled</cite>: A boolean indicating whether the service is available (based on the presence of required credentials).</p></li>
+<li><p><cite>icon</cite>: The path to the service’s icon.</p></li>
+</ul>
+<p>Example Configuration:</p>
+<div class="highlight-typescript notranslate"><div class="highlight"><pre><span></span><span class="kd">const</span><span class="w"> </span><span class="nx">config</span><span class="o">:</span><span class="w"> </span><span class="kt">Record</span><span class="o">&lt;</span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="nx">AuthConfig</span><span class="o">&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="s2">&quot;google&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="s2">&quot;handler&quot;</span><span class="o">:</span><span class="w"> </span><span class="nx">handleGoogleLogin</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;disabled&quot;</span><span class="o">:</span><span class="w"> </span><span class="o">!</span><span class="nx">uri</span><span class="p">.</span><span class="nx">google</span><span class="p">.</span><span class="nx">auth</span><span class="p">.</span><span class="nx">clientId</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;icon&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;/google-icon.png&quot;</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="s2">&quot;github&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="s2">&quot;handler&quot;</span><span class="o">:</span><span class="w"> </span><span class="nx">handleGithubLogin</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;disabled&quot;</span><span class="o">:</span><span class="w"> </span><span class="o">!</span><span class="nx">uri</span><span class="p">.</span><span class="nx">github</span><span class="p">.</span><span class="nx">auth</span><span class="p">.</span><span class="nx">clientId</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;icon&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;/github-icon.png&quot;</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="app.html" class="btn btn-neutral float-left" title="App Component" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="genericcallback.html" class="btn btn-neutral float-right" title="GenericCallback Component" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Maël RABOT, Mathieu COULET, Mathieu BOREL, Charles MADJERI, Samuel BRUSCHET.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

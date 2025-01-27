@@ -1,0 +1,177 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Development Guide &mdash; AREA  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Create Workflow" href="workflowCreation.html" />
+    <link rel="prev" title="AREA Client Mobile Overview" href="overview.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            AREA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contribution Guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../project/index.html">AREA Project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../client_web/index.html">AREA Client Web</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">AREA Client Mobile</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="index.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#key-features">Key Features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#getting-started">Getting Started</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html#contents">Contents</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="overview.html">AREA Client Mobile Overview</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Development Guide</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#project-structure">Project Structure</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#key-components">Key Components</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#oauth-authorization-code-flow">OAuth Authorization Code Flow</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#running-the-application">Running the Application</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#building-for-production">Building for Production</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="workflowCreation.html">Create Workflow</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../server/index.html">AREA Server</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">AREA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">AREA Client Mobile</a></li>
+      <li class="breadcrumb-item active">Development Guide</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/client_mobile/development.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="development-guide">
+<h1>Development Guide<a class="headerlink" href="#development-guide" title="Link to this heading"></a></h1>
+<p>This guide provides information for developers working on the AREA Client Mobile project.</p>
+<section id="project-structure">
+<h2>Project Structure<a class="headerlink" href="#project-structure" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><strong>lib</strong>: Contains the main source code for the application.</p></li>
+<li><p><strong>widgets</strong>: Reusable UI components.</p></li>
+<li><p><strong>pages</strong>: Different pages of the application.</p></li>
+<li><p><strong>config</strong>: Configuration files for API endpoints and OAuth settings.</p></li>
+<li><p><strong>services</strong>: Services used to call backend (Login, Register, OAuth…)</p></li>
+</ul>
+</section>
+<section id="key-components">
+<h2>Key Components<a class="headerlink" href="#key-components" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><strong>main.dart</strong>: The main entry point of the application.</p></li>
+<li><p><strong>OAuthButtons</strong>: Handles OAuth authentication with various providers.</p></li>
+</ul>
+</section>
+<section id="oauth-authorization-code-flow">
+<h2>OAuth Authorization Code Flow<a class="headerlink" href="#oauth-authorization-code-flow" title="Link to this heading"></a></h2>
+<p>The AREA Client Mobile application uses the OAuth 2.0 Authorization Code Flow for secure authentication with third-party services. This flow involves the following steps:</p>
+<ol class="arabic simple">
+<li><p><strong>Authorization Request</strong>: The user is redirected to the OAuth provider’s authorization endpoint, where they log in and grant permissions to the application.</p></li>
+<li><p><strong>Authorization Code</strong>: After successful login, the provider redirects the user back to the application with an authorization code.</p></li>
+<li><p><strong>Token Exchange</strong>: The application uses the <cite>OAuthService.dart</cite> component to exchange the authorization code for an access token. This involves sending a request to the provider’s token endpoint.</p></li>
+<li><p><strong>Access Token</strong>: Once the access token is received, it can be used to authenticate API requests to the provider on behalf of the user.</p></li>
+</ol>
+<p>The <cite>OAuthService.dart</cite> component is responsible for handling the callback from the OAuth provider, verifying the state parameter, and exchanging the authorization code for an access token.</p>
+</section>
+<section id="running-the-application">
+<h2>Running the Application<a class="headerlink" href="#running-the-application" title="Link to this heading"></a></h2>
+<p>To run the application in development mode:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>flutter<span class="w"> </span>run
+</pre></div>
+</div>
+</section>
+<section id="building-for-production">
+<h2>Building for Production<a class="headerlink" href="#building-for-production" title="Link to this heading"></a></h2>
+<p>To build the application for production:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>flutter<span class="w"> </span>build<span class="w"> </span>apk<span class="w"> </span>--release
+</pre></div>
+</div>
+<div class="toctree-wrapper compound">
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="overview.html" class="btn btn-neutral float-left" title="AREA Client Mobile Overview" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="workflowCreation.html" class="btn btn-neutral float-right" title="Create Workflow" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Maël RABOT, Mathieu COULET, Mathieu BOREL, Charles MADJERI, Samuel BRUSCHET.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
