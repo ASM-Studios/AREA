@@ -45,7 +45,7 @@ Web: Vite + React + TypeScript
      - **Vue**
      - **Angular**
    * - Learning Curve
-     - Moderate
+     - Null
      - Easy
      - Steep
    * - Performance
@@ -222,7 +222,7 @@ Database: MariaDB
    * - Scalability
      - High
      - High
-     - Moderate
+     - Slightly less than mariadb
    * - Querying
      - SQL
      - JSON/BSON
