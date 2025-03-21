@@ -4,7 +4,7 @@ require (
 	github.com/gin-contrib/cors v1.7.2
 	github.com/gin-gonic/gin v1.10.0
 	github.com/goccy/go-json v0.10.3
-	github.com/golang-jwt/jwt/v5 v5.2.1
+	github.com/golang-jwt/jwt/v5 v5.2.2
 	github.com/gookit/config/v2 v2.2.5
 	github.com/microcosm-cc/bluemonday v1.0.27
 	github.com/pquerna/otp v1.4.0
